@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/panqiang/Documents/2018面试/头条_C/zs1.cpp
+iostream
+-
+vector
+-
+string
+-
+map
+-
+algorithm
+-
+
