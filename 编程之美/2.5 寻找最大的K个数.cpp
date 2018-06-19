@@ -83,13 +83,13 @@ int findK(int *arr, int low, int high, int k)
 
 int main()
 {
-
+    // test
     int arr[] = { 7, -3, 5, 2, 6, 8, -6, 1, 4 };
 
     int n = sizeof(arr)/sizeof(arr[0]);
 
     findK(arr, 0, n-1, 3);
-
+    
     printArray(arr, 3);
 
 
