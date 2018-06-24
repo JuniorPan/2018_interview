@@ -58,13 +58,12 @@ int main()
     srand((unsigned)time(NULL));
     for(int i = 0; i < 1000; i++)
     {
-        
-    int N = rand() % 5 + 5;
-    int P = rand() % N;
-    int K = rand() % 10 + 2;
-    int T  = rand() % N;
-    cout << f1(N, P, K, T) << endl;
-    cout << f2(N, P, K, T) << endl;
+        int N = rand() % 5 + 5;
+        int P = rand() % N;
+        int K = rand() % 10 + 2;
+        int T  = rand() % N;
+        cout << f1(N, P, K, T) << endl;
+        cout << f2(N, P, K, T) << endl;
     }
     
 
