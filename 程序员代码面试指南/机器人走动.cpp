@@ -55,8 +55,8 @@ int f2(int N, int P, int K, int T)
 
 int main()
 {
-    cout << f1(6, 2, 5, 5) << endl;
-    cout << f2(6, 2, 5, 5) << endl;
+    cout << f1(8, 3, 5, 2) << endl;
+    cout << f2(8, 3, 5, 2) << endl;
 
     return 0;
 }
