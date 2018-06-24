@@ -25,7 +25,7 @@ int getNum(vector<int> &arr, int num)
                 qmin.pop_back();
             qmin.push_back(i);
 
-            if (arr[qmax.front()] - arr[qmin.front] > num)
+            if (arr[qmax.front()] - arr[qmin.front()] > num)
                 break;
             j++;
         }
