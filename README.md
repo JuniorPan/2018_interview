@@ -2,5 +2,10 @@
 哈哈哈 不知道有没有人能看到
 争取秋招之前把刷过的每个题加上描述
  
-窗口的最大值更新问题： 利用双端队列去做， README.mdΩ
-  单调栈结构：
+窗口的最大值更新问题： 利用双端队列去做，https://github.com/JuniorPan/2018_interview/tree/master/%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BB%A3%E7%A0%81%E9%9D%A2%E8%AF%95%E6%8C%87%E5%8D%97/%E7%AC%AC%201%20%E7%AB%A0%20%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97
+
+https://github.com/JuniorPan/2018_interview/blob/master/%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BB%A3%E7%A0%81%E9%9D%A2%E8%AF%95%E6%8C%87%E5%8D%97/%E7%AC%AC%201%20%E7%AB%A0%20%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97/10.%E6%9C%80%E5%A4%A7%E5%80%BC%E5%87%8F%E6%9C%80%E5%B0%8F%E5%80%BC%E5%B0%8F%E4%BA%8E%E6%88%96%E7%AD%89%E4%BA%8Enum%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84%E6%95%B0%E9%87%8F.cpp
+ 
+ 
+ 
+ 单调栈结构：
