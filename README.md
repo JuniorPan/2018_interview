@@ -23,4 +23,4 @@
  最长递增子序列问题：  
  [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/description/)  
  [354. Russian Doll Envelopes](https://leetcode.com/problems/russian-doll-envelopes/description/)  
- [673. Number of Longest Increasing Subsequence(还没搞定](https://leetcode.com/problems/number-of-longest-increasing-subsequence/description/)
+ [673. Number of Longest Increasing Subsequence(还没搞定)](https://leetcode.com/problems/number-of-longest-increasing-subsequence/description/)
