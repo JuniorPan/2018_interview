@@ -12,7 +12,15 @@
  [单调栈结构](https://github.com/JuniorPan/2018_interview/blob/master/%E7%BB%8F%E5%85%B8%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/%E5%8D%95%E8%B0%83%E6%A0%88.cpp)  
  [MaximalRectangle](https://github.com/JuniorPan/2018_interview/blob/master/leetcode/85.MaximalRectangle.cpp)
  
- 
+ [给定一个数组序列, 需要求选出一个区间, 使得该区间是所有 区间中经过如下计算的值最大的一个： 区间中的最小数 * 区间所有数的和 最后程序输出经过计算后的最大值即可，不需要输出具体的区 间。如给定序列 [6 2 1]则根据上述公式, 可得到所有可以选 定各个区间的计算值:  
+[6] = 6 * 6 = 36;  
+[2] = 2 * 2 = 4;  
+[1] = 1 * 1 = 1;   
+[6,2] = 2 * 8 = 16;  
+[2,1] = 1 * 3 = 3;    
+[6, 2, 1] = 1 * 9 = 9;  
+从上述计算可见选定区间 [6] ，计算值为 36， 则程序输出 为 36。 区间内的所有数字都在[0, 100]的范围内;](http://www.cnblogs.com/pk28/p/7417558.html)
+
  子数组最大累加和问题:  
  [53.MaximumSubarray.cpp](https://github.com/JuniorPan/2018_interview/blob/master/leetcode/53.MaximumSubarray.cpp)  
  [18.子矩阵的最大累加和 两个不相交最大子数组和](https://github.com/JuniorPan/2018_interview/blob/master/%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BB%A3%E7%A0%81%E9%9D%A2%E8%AF%95%E6%8C%87%E5%8D%97/%E7%AC%AC%208%20%E7%AB%A0%20%E6%95%B0%E7%BB%84%E5%92%8C%E7%9F%A9%E9%98%B5%E9%97%AE%E9%A2%98/18.%E5%AD%90%E7%9F%A9%E9%98%B5%E7%9A%84%E6%9C%80%E5%A4%A7%E7%B4%AF%E5%8A%A0%E5%92%8C.cpp)
