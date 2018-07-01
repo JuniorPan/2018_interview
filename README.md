@@ -12,8 +12,6 @@
  [单调栈结构](https://github.com/JuniorPan/2018_interview/blob/master/%E7%BB%8F%E5%85%B8%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/%E5%8D%95%E8%B0%83%E6%A0%88.cpp)  
  [MaximalRectangle](https://github.com/JuniorPan/2018_interview/blob/master/leetcode/85.MaximalRectangle.cpp)
  
- 单调栈应用 给定一个数组序列, 需要求选出一个区间, 使得该区间是所有 区间中经过如下计算的值最大的一个： 区间中的最小数 * 区间所有数的和 最后程序输出经过计算后的最大值即可，不需要输出具体的区 间。如给定序列 [6 2 1]则根据上述公式, 可得到所有可以选 定各个区间的计算值:
- 
  
  子数组最大累加和问题:  
  [53.MaximumSubarray.cpp](https://github.com/JuniorPan/2018_interview/blob/master/leetcode/53.MaximumSubarray.cpp)  
@@ -24,4 +22,5 @@
  
  最长递增子序列问题：  
  [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/description/)  
- [354. Russian Doll Envelopes](https://leetcode.com/problems/russian-doll-envelopes/description/)
+ [354. Russian Doll Envelopes](https://leetcode.com/problems/russian-doll-envelopes/description/)  
+ [673. Number of Longest Increasing Subsequence(还没搞定](https://leetcode.com/problems/number-of-longest-increasing-subsequence/description/)
