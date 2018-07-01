@@ -19,3 +19,7 @@
  
  双指针问题：  
  [容器接水](https://github.com/JuniorPan/2018_interview/blob/master/leetcode/42.TrappingRainWater.cpp)
+ 
+ 最长递增子序列问题：  
+ [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/description/)  
+ [354. Russian Doll Envelopes](https://leetcode.com/problems/russian-doll-envelopes/description/)
