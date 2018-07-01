@@ -32,3 +32,12 @@
  [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/description/)  
  [354. Russian Doll Envelopes](https://leetcode.com/problems/russian-doll-envelopes/description/)  
  [673. Number of Longest Increasing Subsequence(还没搞定)](https://leetcode.com/problems/number-of-longest-increasing-subsequence/description/)
+
+
+经典DFS结构(深度优先搜索)  
+[经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
+[200. Number of Islands](https://leetcode.com/submissions/detail/103885458/)  
+[329. Longest Increasing Path in a Matrix](https://leetcode.com/problems/longest-increasing-path-in-a-matrix/submissions/1)  
+[576. Out of Boundary Paths](https://leetcode.com/submissions/detail/154021975/)   
+[688. Knight Probability in Chessboard](https://leetcode.com/submissions/detail/154023237/)    
+[827. Making A Large Island](https://leetcode.com/submissions/detail/153847279/)
