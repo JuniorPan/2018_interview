@@ -64,10 +64,7 @@ int KMP(string &s, string &m)
             mi = next[mi];
         }
     }
-
     return mi == m.length() ? si - mi : -1;
-
-
 }
 
 int main()
