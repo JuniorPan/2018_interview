@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
 int getFirstK(int data[], int length, int k, int start, int end)
@@ -27,6 +28,41 @@ int getFirstK(int data[], int length, int k, int start, int end)
     else
         start = mid+1;
     return getFirstK(data, length, k, start, end);
+}
+
+int getFirstK_2(int data[], int length, int k, int start, int end)
+{
+    if (start > end)
+    {
+        return -1;
+    }
+    int mid = (start + end) / 2;
+    int midData = data[mid];
+
+    while(end < start)
+    {
+        if (midData == k)
+        {
+            if ((mid < length-1 && data[mid+1] != k)|| mid == length-1)
+            {
+                return mid;
+            }  
+            else
+            {
+                start = mid+1;
+            }
+        }
+        else if (midData < k)
+        {
+        
+            start = mid + 1;
+        }    
+        else
+        {
+            end = mid - 1;
+        }
+    }
+    return  end;
 }
 
 int getLastK(int data[], int length, int k, int start, int end)
@@ -103,6 +139,50 @@ int getMissNumber(int data[], int len)
     return -1;
 }
 
+    int binary_search_first(vector<int> &nums, int low , int high, int x)
+    {
+        if (nums.empty() || low > high || low < 0)
+            return -1;
+    
+        while(low < high)
+        {
+            int mid = low + ((high - low) >> 1);
+
+            if (x > nums[mid])
+                low = mid+1;
+            else
+                high = mid;
+        }
+
+        if (nums[low] == x)
+            return low;
+        return -1;
+    }
+    
+    int binary_search_last(vector<int> &nums, int low , int high, int x)
+    {
+        if (nums.empty() || low > high || low < 0)
+            return -1;
+    
+        while(low+1 < high)
+        {
+            int mid = low + ((high - low) >> 1);
+
+            if(nums[mid]<=x) // <=x  
+                low = mid;  
+            else // >x  
+                high = mid-1; 
+        }
+
+        if(nums[high] == x)//先判断high  
+            return high;  
+        else if(nums[low] == x)  
+            return low;  
+        return -1;
+    
+}
+    
+
 
 int main_53_1()
 {
@@ -110,7 +190,7 @@ int main_53_1()
     int data[] = {1,2,3,3,3,3,4,5};
     int length = sizeof(data) / sizeof(data[0]);
 
-    cout << getFirstK(data, length,  3, 0, length-1) << endl;
+    cout << getFirstK_2(data, length,  3, 0, length-1) << endl;
     cout << getLastK(data, length,  3, 0, length-1) << endl;
     cout << getNumberOfK(data, length, 3) << endl;
 
