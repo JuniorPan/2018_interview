@@ -45,11 +45,10 @@ void printByLevel(TreeNode *root)
 
         if (root == last && !q.empty())
         {
-            cout << "\nlevel: " << level << ": ";
-            level ++;
+            // cout << "\nlevel " << level << " ";
+            // level ++;
+            cout << "\n";
             last = nlast;
-            
-            
         }
     }
 

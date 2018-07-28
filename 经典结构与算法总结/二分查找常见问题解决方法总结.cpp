@@ -56,16 +56,14 @@ int binary_search_first(vector<int> &nums, int low , int high, int x)
     {
         int mid = low + ((high - low) >> 1);
 
-        if (x > nums[mid])
+        if (nums[mid] < x)
             low = mid+1;
         else
             high = mid;
     }
-
     if (nums[low] == x)
         return low;
     return -1;
-    
 }
 
 // 二分查找返回x(可能有重复)最后一次出现的下标，如无return  -1
@@ -91,6 +89,8 @@ int binary_search_last(vector<int> &nums, int low , int high, int x)
     return -1;
     
 }
+
+
 
 int main()
 {

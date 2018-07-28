@@ -2,8 +2,6 @@
 #include <vector>
 using namespace std;
 
-
-
 void printEdge(vector<vector<int> > arr, int left_x, int left_y, int right_x, int right_y)
 {
 
@@ -61,7 +59,7 @@ int main()
         {5,7,4,11},
         {3,7,16,5}
     };
-    printEdge(matrix, 1,1,2,2);
+    printEdge(matrix, 0,0,3,3);
 
     return 0;
 }

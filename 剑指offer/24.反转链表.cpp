@@ -20,9 +20,8 @@ ListNode* reverseList(ListNode* head)
     while(pNode)
     {
         pNext = pNode->next;
-        if (pNext == nullptr)
+        if (pNext == nullptr)  //
             pReverseHead = pNode;
-
         pNode->next = pre;
         pre = pNode;
         pNode = pNext;
