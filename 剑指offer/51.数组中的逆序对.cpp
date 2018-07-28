@@ -27,10 +27,7 @@ int merge(vector<int> &arr, int l, int mid, int r)
             help[i++] = arr[p2++];
         }
         else
-        {
             help[i++] = arr[p1++];
-        }
-
     }
 
     while (p1 <= mid)
