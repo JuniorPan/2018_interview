@@ -3,79 +3,53 @@
 using namespace std;
 
 
-int Min(int *arr, int len)
+int minoforder(vector<int> nums, int left, int right)
 {
-    int low = 0;
-    int high = len-1;
-    int mid = 0;
-
-    while(low < high)
+    int res = nums[left];
+    for(int i = left+1; i <= right; i++)
     {
-        if (low == high - 1)
+        if (res>nums[i])
+            res = nums[i];
+    }
+    return res;
+}
+int minNumberInRotateArray(vector<int> nums) 
+{
+    if (nums.empty())
+        return 0;
+    int len = nums.size();
+    
+    int left = 0;
+    int right = len - 1;
+    int mid = left;
+    
+    while(nums[left] >= nums[right])
+    {
+        if (right - left == 1)
         {
-            mid = high;
+            mid = right;
             break;
         }
-
-        mid = (low + high) / 2;
-        if (arr[low] == arr[high] && arr[mid] == arr[low])
+        
+        mid = (left + right) / 2;
+        
+        if (nums[mid] == nums[left] && nums[mid] == nums[right])
         {
-            int res = 0;
-            for(int i = low; i <= high; i++)
-            {
-                if (res < arr[i])
-                {
-                    res = arr[i];
-                }
-                return res;
-            }
+            return minoforder(nums, left, right);
         }
         
-        if (arr[low] >= arr[mid])
+        if (nums[mid] >= nums[left])  // 若果中间的数大于left,则mid位于前面的递增子数组中
         {
-            high = mid;
-
+            left = mid;
         }
-        if (arr[mid] >= arr[high])
+        else if (nums[mid] <= nums[right])  // 若中间的数小于right,则mid位于后半部分的递增数组中
         {
-            low = mid;
+            right = mid;
         }
-
+        
     }
-    return arr[mid];
-
+    return nums[mid];
 }
-
-int minNumberInRotateArray(vector<int> rotateArray)
- {
-        int end = rotateArray.size() - 1;
-        if(end < 0)
-            return 0;
-        int start = 0;
-        int mid = start;
-        while(rotateArray[start] >= rotateArray[end]){
-             
-            if (start == end - 1) {
-                mid = end;
-                break;
-            }
-            mid = (start + end) / 2;
-            if (rotateArray[start] == rotateArray[end] && rotateArray[start] == rotateArray[mid]) {
-                int res = rotateArray[start];
-                for(int i = start + 1; i <= end; i++)
-                {
-                    if (res > rotateArray[i])
-                        res = rotateArray[i];
-                }
-                return res;
-            }
-            if (rotateArray[start] <= rotateArray[mid])
-                start = mid;
-            else if(rotateArray[mid] <= rotateArray[end])
-                end = mid;
-        }
-        return rotateArray[mid];
-    }
 
 int main()
 {
