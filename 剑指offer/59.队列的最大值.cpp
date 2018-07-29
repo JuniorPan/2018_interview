@@ -3,43 +3,34 @@
 #include <vector>
 using namespace std;
 
-void getMaxWindow(vector<int> arr, int w)
+vector<int> getMaxWindow(vector<int> arr, int w)
 {
-    vector<int> res(arr.size() - w  +1);
-
-    deque<int> qmax;
+    if (arr.empty() || arr.size() < w || w < 1)
+    {
+        vector<int> res;
+        return res;
+    }
+    deque<int> q;
+    vector<int> res(arr.size() - w + 1, 0);
 
     int index = 0;
     for(int i = 0; i < arr.size(); i++)
     {
-        if(!qmax.empty())
+        while(!q.empty() && arr[q.back()] <=  arr[i]) // 如果队列不空并且当前元素比队尾元素大，那么就一直弹出
+            q.pop_back();
+        q.push_back(i);
+
+        if (q.front() == i - w) // 如果队头元素下标过期了，直接弹出
         {
-            // 如果队列头元素不在滑动窗口中了，就删除头元素
-            if(i >= qmax.front() + w)
-            {
-                qmax.pop_front();
-            }
-            //// 如果当前数字大于队列尾，则删除队列尾，直到当前数字小于等于队列尾，或者队列空
-            while(!qmax.empty() && arr[qmax.back()] <= arr[i])   // 若队列不为空且队尾元素比当前元素小，则从队尾弹出
-            {
-                 qmax.pop_back();    
-            }
-                
-        }
-        qmax.push_back(i); 
-        //// 滑动窗 口经过三个元素，获取当前的最大值，也就是队列的头元素
-        if (i + 1 >= w)
+            q.pop_front();
+        }            
+        if (i >= w -1) // 表明开始形成窗口了
         {
-            res[index++] = arr[qmax.front()]; 
+            res[index++] = arr[q.front()];
         }
     }
-
-    for(int i = 0; i < index; i++)
-    {
-        cout << res[i] << " ";
-    }
-    cout << endl;
-
+    
+    return res;
 }
 
 

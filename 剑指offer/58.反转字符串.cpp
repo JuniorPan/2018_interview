@@ -45,7 +45,6 @@ string ReverseSentence(string &str)
         }
     }
     return str;
-
 }
 
 
