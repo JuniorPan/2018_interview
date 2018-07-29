@@ -3,133 +3,93 @@
 #include <set>
 using namespace std;
 
-void swap(int &a, int &b)
-{
-    int temp = a;
-    a = b;
-    b = temp;
-}
 
-int Partition(int *a, int n, int start, int end)
+void heapInsert(vector<int> &arr, int index, int value)
 {
-    int pivot = a[end];
-    while(start < end)
+    arr[index] = value;
+    while(index != 0)
     {
-        while(start < end && a[start] < pivot)
-            start++;
-        if (start < end)
-        {
-            a[end] = a[start];
-            end--;
-        }
+        int parent = (index-1) / 2; // 获取父节点
 
-        while(start < end && a[end] > pivot)
-            end--;
-        if (start < end)
+        if(arr[parent] < arr[index])
         {
-            a[start] = a[end];
-            start++;
+            int temp = arr[parent];
+            arr[parent] = arr[index];
+            arr[index] = temp;
+        
+            index = parent;
+        }
+        else
+        {
+            break;
         }
     }
-    a[start] = pivot;
-    return start;
 }
 
-void getLastKnumbers(int *a, int n, int k)
+void heapify(vector<int> &arr, int index, int size)
 {
-    int index = Partition(a, n, 0, n-1);
-
-    while(index != k-1)
+    int left = 2 * index + 1;
+    while(left < size)
     {
-        if (index > k-1)
-        {
-            index = Partition(a, n, 0, index-1);
-        }
-        else{
-            index = Partition(a, n, index+1, n-1);
-        }
-    }
+        int smallest = left + 1 < size && arr[left+1] < arr[left] ? left : left+1 ; // smallest记录左右子树中较小的那个
+        if (arr[smallest] < arr[index])
+            break;
+        
+        int temp = arr[smallest];
+        arr[smallest] = arr[index];
+        arr[index] = temp;
 
+        index = smallest;
+        left = 2 * index + 1;
+    }
+}
+
+int findKthLargest(vector<int>& nums, int k) 
+{
+    if (nums.empty() || nums.size() < k)
+        return 0;
+    
+    // int *heap = (int *)malloc(sizeof(int) * k);
+    vector<int> heap(k , 0);
+    
     for(int i = 0; i < k; i++)
     {
-        cout << a[i] << " ";
+        heapInsert(heap, i, nums[i]);
     }
-    cout << endl;
-}
-
-void TraverseArray(int *a, int n)
-{
-    for(int i = 0; i < n; i++)
+    
+    for(int j = k; j < nums.size(); j++)
     {
-        cout << a[i] << " "; 
+        if (nums[j] < heap[0])
+        {
+            heap[0] = nums[j];
+            heapify(heap, 0, k);
+        }
     }
-    cout << endl;
-}
 
+    sort(heap.begin(), heap.end());
+    for (int i = 0; i < k; i++)
+    {
+        cout << heap[i] << " "; 
+    }
+    cout << "----------" << endl;
+    return heap[0];
+}
 
 
 int main()
 {
 
+    vector<int> arr = {4,5,1,8,2,7,3,6};
 
-    int a[] = {4,5,1,8,2,7,3,6};
-    int n = sizeof(a)/sizeof(a[0]);
+    cout << findKthLargest(arr, 4) << endl;
+    // int a[] = {4,5,1,8,2,7,3,6};
+    // int n = sizeof(a)/sizeof(a[0]);
 
-    getLastKnumbers(a, n, 4);
-    TraverseArray(a, n);
+    // getLastKnumbers(a, n, 4);
+    // TraverseArray(a, n);
     // int index = Partition(a, n, 0, n-1);
   
     cout << "hello " << endl;
     return 0;
 }
-// // 利用最大堆
-// void getLastKnumbers_2(const vector<int> &data, multiset<int, greater<int>> &leastNumbers, int k)
-// {
 
-
-//     leastNumbers.clear();
-
-//     if (k < 1 || data.size() < k)
-//     {
-//         return;
-//     }
-
-    
-//     vector<int>::const_iterator iter = data.begin();
-
-//     for(; iter != data.end(); ++iter)
-//     {
-//         cout << *iter << endl;
-//         if (leastNumbers.size() < k)
-//         {
-//             leastNumbers.insert(*iter);
-            
-//         }
-//         else
-//         {
-            
-//             if ((*iter) < *(leastNumbers.begin()))
-//             {
-//                 leastNumbers.erase(leastNumbers.begin());
-//                 leastNumbers.insert(*iter);
-//             }
-//         }
-//     }
-
-
-// }
-// int main()
-// {
-//     vector<int> data = {4,5,1,8,2,7,3,6};
-//     multiset<int, greater<int>> leastNumbers;
-
-//     getLastKnumbers_2(data, leastNumbers, 4);
-
-//     multiset<int, greater<int>>::iterator setIter = leastNumbers.begin();
-//     while(setIter != leastNumbers.end())
-//     {
-//         cout << *setIter << " ";
-//         ++setIter;
-//     }
-//     cout << endl;
-// }

@@ -14,7 +14,7 @@ void reOrderArray(vector<int> &array) {
         
         while(low < high)
         {
-            while(low < high && (array[low] % 2) != 0)
+            while(low < high && (array[low] % 2) != 0) 
                 low ++;
             
             while(low < high && (array[high] % 2) == 0)

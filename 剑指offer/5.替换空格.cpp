@@ -2,6 +2,9 @@
 #include <string>
 using namespace std;
 
+
+
+
 void replaceSpace(char *str,int length) {
     if(str==NULL)
         return ;
