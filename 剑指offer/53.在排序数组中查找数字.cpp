@@ -17,12 +17,9 @@ using namespace std;
                     right = mid - 1;
             }
             else if (data[mid] > k)
-            {
                 right = mid-1;
-            }
-            else {
+            else
                 left = mid + 1;
-            }
         }
         return -1;
     }
