@@ -1,33 +1,46 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include <string>
+
 using namespace std;
 
-bool hasPath(vector<vector<char> > matrix, int x, int y, vector<vector<int> > visited, string str, int &len)
-{
-    if (len == str.length())
+class Solution {
+public:
+    int row,col;
+    bool hasPath(char* matrix, int rows, int cols, char* str)
     {
-        return true;
+        row = rows;
+        col = cols;
+        vector<int> visted(row*col,0);
+        for(int i = 0; i < rows; i++)
+            for(int j = 0 ; j < cols; j++)
+            {
+                if (Path(matrix,visted,i,j,str))
+                {
+                    return true;
+                }     
+            }
+        return false;
     }
 
-    bool haspath = false;
-
-    if (check(x, y, visited))
+    bool Path(char* matrix, vector<int> &visted ,int i, int j, char* str)
     {
-        ++len;
-        visited[x][y] = true;
-        haspath = hasPath(matrix, x-1,y, visited, str, len) ||
-                  hasPath(matrix, x,y-1, visited, str, len) || 
-                  hasPath(matrix, x,y+1, visited, str, len) || 
-                  hasPath(matrix, x+1,y, visited, str, len);
-
-        if (haspath == false)
-        {
-            len --;
-            visited[x][y] = false;
-        }
-
+        // 如果不满足条件直接返回
+        if(i<0||j<0||i>=row||j>=col)//越界
+            return false;
+        
+        if (matrix[i*col+j] != *str || visted[i*col+j] != 0)
+            return false;
+             
+        visted[i*col+j] = 1;
+        if(*(str+1) == 0)
+            return true;
+        bool flag = Path(matrix,visted,i,j+1,str+1)||
+            Path(matrix,visted,i+1,j,str+1)||
+            Path(matrix,visted,i-1,j,str+1)||
+            Path(matrix,visted,i,j-1,str+1);
+        if(flag == false)
+            visted[i*col+j] = 0;
+        return flag;
+        
     }
-    return haspath;
-}
+};
