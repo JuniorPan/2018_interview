@@ -35,7 +35,7 @@ int numDecodings(string s) {
  int main()
  {
 
-     string s = "10";
+     string s = "128";
      cout << numDecodings(s);
 
      return 0;

@@ -69,6 +69,4 @@ void FindContinousSum(int sum)
             cur += sum;
         }
     }
-
-
 }

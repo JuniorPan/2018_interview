@@ -16,7 +16,6 @@ void Reverse(string &str, int i, int j)
         j--;
     }
 }
-
 string ReverseSentence(string &str)
 {
     int len = str.length();
@@ -47,11 +46,25 @@ string ReverseSentence(string &str)
     return str;
 }
 
+string reverse2(string &s)
+{
+    int len = s.length();
+    for(int i, j = 0; j <= len; j++)
+    {
+        if (s[j] == ' ' || s[j] == '\0')
+        {
+            Reverse(s, i, j-1);
+            i = j + 1;
+        }
+    }
+    Reverse(s, 0, len -1);
+    return s;
+}
 
 int main()
 {
-    string str = "  hello   world  ";
-    cout << ReverseSentence(str) << endl;
+    string str = "hello world panqinag hh";
+    cout << reverse2(str) << endl;
 
     return 0;
 }
