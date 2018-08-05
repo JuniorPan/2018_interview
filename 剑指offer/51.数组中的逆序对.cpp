@@ -11,7 +11,6 @@ int merge(vector<int> &arr, int l, int mid, int r)
     int p1 = l;
     int p2 = mid + 1;
     int count = 0;
-
     while(p1 <= mid && p2 <= r)
     {
         // help[i++] = arr[p1] < arr[p2] ? arr[p1++] : arr[p2++];
@@ -29,7 +28,6 @@ int merge(vector<int> &arr, int l, int mid, int r)
         else
             help[i++] = arr[p1++];
     }
-
     while (p1 <= mid)
     {
         help[i++] = arr[p1++];

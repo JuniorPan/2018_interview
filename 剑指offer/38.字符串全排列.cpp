@@ -57,7 +57,7 @@ void dfs(string &str, int begin,vector<string> &res)
 int main()
 {
     char str[5] = "aa";
-    string s = "abc";
+    string s = "1234";
     vector<string> res = Permutation(s);
     for(int i = 0; i < res.size(); i++)
     {

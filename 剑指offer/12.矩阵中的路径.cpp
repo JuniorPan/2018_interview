@@ -6,7 +6,7 @@ using namespace std;
 class Solution {
 public:
     int row,col;
-    bool hasPath(char* matrix, int rows, int cols, char* str)
+    bool haspath(char* matrix, int rows, int cols, char* str)
     {
         row = rows;
         col = cols;
@@ -14,7 +14,7 @@ public:
         for(int i = 0; i < rows; i++)
             for(int j = 0 ; j < cols; j++)
             {
-                if (Path(matrix,visted,i,j,str))
+                if (dfs(matrix,visted,i,j,str))
                 {
                     return true;
                 }     
@@ -22,7 +22,7 @@ public:
         return false;
     }
 
-    bool Path(char* matrix, vector<int> &visted ,int i, int j, char* str)
+    bool dfs(char* matrix, vector<int> &visted ,int i, int j, char* str)
     {
         // 如果不满足条件直接返回
         if(i<0||j<0||i>=row||j>=col)//越界
@@ -34,10 +34,10 @@ public:
         visted[i*col+j] = 1;
         if(*(str+1) == 0)
             return true;
-        bool flag = Path(matrix,visted,i,j+1,str+1)||
-            Path(matrix,visted,i+1,j,str+1)||
-            Path(matrix,visted,i-1,j,str+1)||
-            Path(matrix,visted,i,j-1,str+1);
+        bool flag = dfs(matrix,visted,i,j+1,str+1)||
+                    dfs(matrix,visted,i+1,j,str+1)||
+                    dfs(matrix,visted,i-1,j,str+1)||
+                    dfs(matrix,visted,i,j-1,str+1);
         if(flag == false)
             visted[i*col+j] = 0;
         return flag;

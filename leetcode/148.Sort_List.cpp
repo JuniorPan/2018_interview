@@ -87,7 +87,7 @@ void printLinkList(ListNode *head)
     
 int main()
 {
-    int a[] = {2,34,4,5,43,6,3,56,7,43};
+    int a[] = {2,34,4,5,43,6,3,56,7,43,34,3,45};
     int n = sizeof(a) / sizeof(a[0]);
     ListNode *head = createListByArray(a, n);
     printLinkList(head);

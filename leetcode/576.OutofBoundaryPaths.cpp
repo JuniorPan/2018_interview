@@ -32,7 +32,6 @@ int findPaths(int m, int n, int N, int i, int j)
                     if ((c < 0 || c >= m || r < 0 || r >= n ) && (k - 1 > 0))
                     {
                         dp[k][x][y] += dp[k-1][c][r] % 1000000007;
-                        
                     }
                     else
                     {

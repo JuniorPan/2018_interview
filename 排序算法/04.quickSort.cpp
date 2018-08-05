@@ -1,12 +1,12 @@
 #include "../generateRandomArray.h"
 
 
-void swap(vector<int> &arr, int i, int j)
- {
-    int tmp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = tmp;
-}
+// void swap(vector<int> &arr, int i, int j)
+//  {
+//     int tmp = arr[i];
+//     arr[i] = arr[j];
+//     arr[j] = tmp;
+// }
 
 vector<int>  partition(vector<int> arr, int l, int r)
 {
@@ -34,7 +34,6 @@ vector<int>  partition(vector<int> arr, int l, int r)
     return res;
 }
 
-
 void quickSort(vector<int>  arr, int l, int r)
  {
     if (l < r)
@@ -50,16 +49,69 @@ void quickSort(vector<int>  arr, int l, int r)
     }
 }
 
-int main()
+
+int partrition(vector<int>& input, int start, int end)
 {
 
-    srand((unsigned)time(NULL));
-    int maxSize = rand() % 10 + 1;
-    int maxValue = rand() % 100 + 1;
-    vector<int> nums = generateRandomArray(maxSize, maxValue);
-    printArray(nums);
-    quickSort(nums, 0, nums.size()-1);
-    printArray(nums);
+    int small = start - 1;
+    
+    for(int i = start;i < end; i++)
+    {
+        if(input[i] < input[end])
+        {
+            small++;
+            if (i != small)
+                swap(input[small], input[i]);
+        }
+    }
+    small++;
+    swap(input[small],input[end]);
+    return small;
+}
+
+void quicksort2(vector<int> &nums, int start, int end)
+{   
+    if (start == end)
+        return;
+    int index = partrition(nums, start, end);
+    if (index > start)
+        quicksort2(nums, start, index - 1);
+    if (index < end)
+        quicksort2(nums, index+1, end);
+
+}
+
+int main()
+{
+    int count = 0;
+    while(true)
+    {
+        srand((unsigned)time(NULL));
+        int maxSize = rand() % 20 + 1;
+        int maxValue = rand() % 100 + 1;
+        vector<int> nums = generateRandomArray(maxSize, maxValue);
+
+        vector<int> nums2(nums);
+        // copyArray(nums, nums2);
+
+        quicksort2(nums, 0, nums.size()-1);
+        sort(nums2.begin(), nums2.end());
+
+        for (int i = 0; i < nums2.size(); i++)
+        {
+            if (nums2[i] != nums[i])
+            {
+                cout << "false" << " ";
+                break;
+            }
+        }
+
+
+        count ++;
+        if (count > 100)
+            break;
+    }
+    
 
 
     return 0;
