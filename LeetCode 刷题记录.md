@@ -1,5 +1,5 @@
-### LeetCode 刷题记录
-#### 滑动窗口问题
+## LeetCode 刷题记录
+### 滑动窗口问题
 核心思想: 我们可以用滑动窗口的思想解决这个问题，在滑动窗口类型的问题中都会有两个指针。一个用于「延伸」现有窗口的 rr 指针，和一个用于「收缩」窗口的 ll 指针。在任意时刻，只有一个指针运动，而另一个保持静止。我们在 ss 上滑动窗口，通过移动 rr 指针不断扩张窗口。当窗口包含 tt 全部所需的字符后，如果能收缩，我们就收缩窗口直到得到最小窗口。
 ![滑动窗口示意](https://assets.leetcode-cn.com/solution-static/76/76_fig1.gif)
 
@@ -19,7 +19,7 @@ while (right < s.size()) {
 }
 ```
 
-### [424. Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/)   
+#### [424. Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/)   
 见https://www.cnblogs.com/grandyang/p/5999050.html 
 
 **不太懂的地方在于窗口是如何移动的**
@@ -48,7 +48,7 @@ int characterReplacement(string s, int k)
 ```
 
 
-###[567. Permutation in String](https://leetcode.com/problems/permutation-in-string/)
+#### [567. Permutation in String](https://leetcode.com/problems/permutation-in-string/)
 
  解法一 其他解法见 [[LeetCode] Permutation in String 字符串中的全排列](https://www.cnblogs.com/grandyang/p/6815227.html)
 
@@ -80,5 +80,176 @@ bool checkInclusion(string s1, string s2)
     return false;
 }
 ```
+
+### 单调栈系列问题  [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
+
+**单调栈的两种写法**  
+
+```
+// 写法一
+int trap(vector<int>& height) 
+{
+    if (height.empty())
+        return 0;
+    
+    int res = 0;
+    int i = 0;
+    stack<int> monoStack;
+    while( i < height.size())
+    {
+        if (monoStack.empty() || height[i] <=height[monoStack.top()])
+        {
+            monoStack.push(i++);
+        }
+        else
+        {
+            int tmp =  monoStack.top();
+            monoStack.pop();
+            if (monoStack.empty())
+                continue;
+        
+            int h = min(height[i], height[monoStack.top()]);
+            res = res + (h - height[tmp]) * (i- monoStack.top() -1);
+        }   
+    }
+   return res;
+}
+// 写法二
+int largestRectangleArea(vector<int> height)
+{
+    stack<int> monoStack;
+    int res = 0; 
+    height.push_back(0);
+    for (int i = 0; i < height.size(); i++)
+    {
+        
+        while(!monoStack.empty() && height[i] <= height[monoStack.top()])  // 但栈非空时，且当前元素大于栈顶元素时，进行弹出操作，并且结算该弹出元素
+        {
+            int h = height[monoStack.top()]; 
+            monoStack.pop();
+            int left = monoStack.empty() ? -1 : monoStack.top();
+            // int left = monoStack.size() > 0 ? monoStack.top() : -1;
+            res = max(res, h * (i - left -1));
+        }
+        monoStack.push(i);
+    }
+    return res;
+}
+```
+
+
+#### [42. Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/)
+
+```
+int trap(vector<int> &height)
+{
+    if (height.empty())
+        return 0;
+    int res = 0;
+    int i = 0;
+    stack<int> monoStack; // 因为要求一个数左边比他大和右边比他大,所以应该是一个单调递减的栈, 这个栈需要保持严格单调递减
+    while (i < height.size())
+    {
+        // 如果满足入栈条件,则直接入栈 
+        if (monoStack.empty() || height[i] < height[monoStack.top()])
+        {
+            monoStack.push(i++);
+        }
+        else// 如果不满足入栈条件,则弹出栈顶元素,这个时候可以结算当前元素,栈顶元素的下一个元素则为左边界，当前遍历到的height[i]则为右边界
+        {
+            int tmp = monoStack.top();
+            monoStack.pop();
+            if (monoStack.empty())
+                continue;
+            int h = min(height[i], height[monoStack.top()]);
+            res = res + (h - height[tmp]) * (i - monoStack.top() - 1);
+        }
+    }
+    return res;
+}
+```
+####  [84. Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/) 
+
+```
+int largestRectangleArea(vector<int> &heights)
+{
+    int res = 0;
+    stack<int> st;
+    heights.push_back(0);
+    for (int i = 0; i < heights.size(); ++i)
+    {
+        while (!st.empty() && heights[st.top()] >= heights[i])
+        {
+            int cur = st.top();
+            st.pop();
+            res = max(res, heights[cur] * (st.empty() ? i : (i - st.top() - 1)));
+        }
+        st.push(i);
+    }
+    return res;
+}
+```
+
+
+
+#### [85. Maximal Rectangle](https://leetcode.com/problems/maximal-rectangle/)
+```
+class Solution {
+    
+    int largestRectangleArea(vector<int> height)
+    {
+        stack<int> monoStack;
+        int res = 0; 
+        height.push_back(0);
+        for (int i = 0; i < height.size(); i++)
+        {
+            while(!monoStack.empty() && height[i] <= height[monoStack.top()])  // 但栈非空时，且当前元素大于栈顶元素时，进行弹出操作，并且结算该弹出元素
+            {
+                int h = height[monoStack.top()]; 
+                monoStack.pop();
+                int left = monoStack.empty() ? -1 : monoStack.top();
+                // int left = monoStack.size() > 0 ? monoStack.top() : -1;
+                res = max(res, h * (i - left -1));
+                
+            }
+            monoStack.push(i);
+        
+        }
+        return res;
+    } 
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        if (matrix.empty())
+            return 0;
+        
+        vector<int> heights(matrix[0].size(), 0);
+        int res = 0;
+        int m = matrix.size();
+        int n = heights.size();
+        
+        for(int i = 0; i < m; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                if (matrix[i][j] == '1')
+                {
+                    heights[j] += 1;
+                }
+                else
+                {
+                    heights[j] = 0;
+                }
+            }
+            
+            res = max(largestRectangleArea(heights), res);
+            
+        }
+        return res;
+    }
+};
+```
+#### [402. Remove K Digits](https://leetcode.com/problems/remove-k-digits/)
+
+#### [768. Max Chunks To Make Sorted II](https://leetcode.com/problems/max-chunks-to-make-sorted-ii/)
 
 
