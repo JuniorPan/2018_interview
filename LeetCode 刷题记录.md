@@ -253,6 +253,32 @@ public:
 #### [768. Max Chunks To Make Sorted II](https://leetcode.com/problems/max-chunks-to-make-sorted-ii/)
 
 ### 二分查找 [LeetCode Binary Search Summary 二分搜索法小结](https://www.cnblogs.com/grandyang/p/6854825.html)
+```
+
+// 形成自己的套路，right 初始化为nums.size(), while判断就可以用left < right了
+int find(vector<int>& nums, int target) {
+    int left = 0, right = nums.size();
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target) return mid;
+        else if (nums[mid] < target) left = mid + 1;
+        else right = mid;
+    }
+    return -1;
+}
+
+int find(vector<int>& nums, int target) {
+    int left = 0, right = nums.size();
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] < target) left = mid + 1;
+        else right = mid;
+    }
+    return right;
+}
+```
+
+
 [378. Kth Smallest Element in a Sorted Matrix](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
 
 ```
