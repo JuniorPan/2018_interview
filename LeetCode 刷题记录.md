@@ -369,7 +369,9 @@ int kthSmallest(vector<vector<int>> &matrix, int k)
 }
 ```
 
-### 快速排序
+### 排序
+
+#### 快速排序
 
 [75. Sort Colors](https://leetcode.com/problems/sort-colors/) 快排partion 
 
@@ -453,7 +455,7 @@ void wiggleSort(vector<int> &nums)
 }
 ```
 
-### 链表排序  对归并排序还不是很清晰
+#### 链表排序  对归并排序还不是很清晰
 [148. Sort List](https://leetcode.com/problems/sort-list/)  对链表使用归并的方式排序
 
 ```
