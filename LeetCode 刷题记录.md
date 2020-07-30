@@ -508,3 +508,10 @@ ListNode *sortList(ListNode *head)
     return merge(sortList(head), sortList(fast));
 }
 ```
+
+
+### 动态规划 
+
+#### 坐标型动态规划 
+
+#### 单序列动态规划
