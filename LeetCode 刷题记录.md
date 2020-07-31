@@ -557,6 +557,47 @@ int minDistance(string word1, string word2)
 }
 ```
 
+[97. Interleaving String](https://leetcode.com/problems/interleaving-string/)  
+
+```
+        int m = s1.size();
+        int n = s2.size();
+        int k = s3.size();
+        
+        if (m + n != k)
+            return false;
+        
+        // dp[i][j] 表示s1[0...i-1] 和s2[0...j-1]能否交替表示成s3[i+j-1]
+        vector<vector<bool>> dp(m+1, vector<bool>(n+1, false));
+        
+        for(int i = 0; i <= m; i++)
+        {
+            if (s1[i-1] != s3[i-1])
+                break;
+            dp[i][0] = true;
+        }
+        
+        for(int j = 0; j <= n; j++)
+        {
+            if (s2[j-1]  != s3[j-1])
+                break;
+            dp[0][j] = true;
+        }
+        
+        for(int i = 1; i <= m; i++)
+        {
+            for(int j = 1; j <= n; j++)
+            {
+                if ((s1[i-1] == s3[i+j-1] && dp[i-1][j]) || (s2[j-1] == s3[i+j-1] && dp[i][j-1]))
+                    dp[i][j]  =true;
+                    
+            }
+        }
+        return dp[m][n];
+    }
+```
+
+
 [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/)  
 
 ```
