@@ -524,6 +524,46 @@ ListNode *sortList(ListNode *head)
 #### 双序列动态规划
 ***状态: f[i][j]表示第一个sequence的前i个数字/字符, 配上第二个sequence的前j个; 方程: f[i][j] = 研究第i个和第j个的匹配关系; 初始化: f[i][0]和f[0][i]; 答案: f[n][m], 其中n = s1.length(); m = s2.length();***  
 
+[10. Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching/)
+
+```
+bool isMatch(string s, string p) 
+{
+    
+    int m = s.length();
+    int n = p.length();
+    
+    
+    // dp[i][j] 表示 s[0...i-1]和p[0...j-1] 匹配
+    vector<vector<bool>> dp(m + 1, vector<bool>(n + 1, false));
+    
+    dp[0][0] = true;
+    for (int i = 1; i <= m; i++)
+        dp[i][0] = false;
+    
+    for(int j = 1; j <= n; j++)
+    {
+        dp[0][j] = j > 1 && '*' == p[j - 1] && dp[0][j - 2];
+    }
+    
+    for(int i = 1; i <= m; i++)
+    {
+        for(int j = 1; j <= n; j++)
+        {
+            if (p[j-1] != '*') // 如果p[j-1]的位置不是*的情况下， 如果s[i-1] == p[j-1] || p[j-1] == '.'， 则dp[i][j] 匹配
+                dp[i][j] = dp[i-1][j-1] && (s[i-1] == p[j-1] || p[j-1] == '.');
+            else
+            {
+                dp[i][j] = dp[i][j-2] || (s[i-1] == p[j-2] || '.' == p[j-2]) && dp[i-1][j];
+            }
+                
+        }
+    }
+    return dp[m][n];
+}
+```
+
+
 [72. Edit Distance](https://leetcode.com/problems/edit-distance/)  
 
 ```
