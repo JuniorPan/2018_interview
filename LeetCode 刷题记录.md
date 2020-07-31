@@ -522,7 +522,80 @@ ListNode *sortList(ListNode *head)
 
 
 #### 双序列动态规划
-***状态: f[i][j]表示第一个sequence的前i个数字/字符, 配上第二个sequence的前j个; 方程: f[i][j] = 研究第i个和第j个的匹配关系; 初始化: f[i][0]和f[0][i]; 答案: f[n][m], 其中n = s1.length(); m = s2.length();***
+***状态: f[i][j]表示第一个sequence的前i个数字/字符, 配上第二个sequence的前j个; 方程: f[i][j] = 研究第i个和第j个的匹配关系; 初始化: f[i][0]和f[0][i]; 答案: f[n][m], 其中n = s1.length(); m = s2.length();***  
+
+[72. Edit Distance](https://leetcode.com/problems/edit-distance/)  
+
+```
+int minDistance(string word1, string word2)
+{
+    int m = word1.size();
+    int n = word2.size();
+    // dp[i][j] 表示word1[0...i-1] 变换到word2[0...j-1]所需要的最小步骤
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0)); // 二维dp数组初始化大小为[m+1][n+1] 是为了初始化第0行和第0列
+
+    for (int i = 0; i <= m; i++)
+        dp[i][0] = i;
+    for (int j = 0; j <= n; j++)
+        dp[0][j] = j;
+
+    for (int i = 1; i <= m; i++)
+    {
+        for (int j = 1; j <= n; j++)
+        {
+            if (word1[i - 1] == word2[j - 1])
+            {
+                dp[i][j] = dp[i - 1][j - 1];
+            }
+            else
+            {
+                dp[i][j] = min(dp[i - 1][j] + 1, min(dp[i][j - 1] + 1, dp[i - 1][j - 1] + 1));
+            }
+        }
+    }
+    return dp[m][n];
+}
+```
+
+
+[1143. Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/)
+
+```
+int longestCommonSubsequence(string word1, string word2)
+{
+    int m = word1.size();
+    int n = word2.size();
+
+    if (m == 0 && n == 0)
+        return 0;
+
+    // dp[i][j] 表示word1[0...i-1]和word2[0...j-1]上的最长公共子序列长度
+    // 这里dp数组初始化长度为m+1,n+1,为了初始化方便考虑第0行和第0列
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+    for (int j = 0; j <= n; j++)
+    {
+        dp[0][j] = 0;
+    }
+    for (int i = 0; i <= m; i++)
+    {
+        dp[i][0] = 0;
+        ;
+    }
+
+    for (int i = 1; i <= m; i++) // 循环就得下标1开始
+    {
+        for (int j = 1; j <= n; j++)
+        {
+            if (word1[i - 1] == word2[j - 1])
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            else
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+        }
+    }
+    return dp[m][n];
+}
+```
+
 
 Longest Common Subsequence
 Edit Distance
