@@ -557,6 +557,36 @@ int minDistance(string word1, string word2)
 }
 ```
 
+[115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/)  
+
+```
+// 这一题的转移方程还没有理解
+int numDistinct(string s, string t)
+{
+    int m = t.size();
+    int n = s.size();
+   
+    // dp[i][j]表示S[0...j-1]中的子序列等于T[0..i-1]
+    vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+    
+    for(int j = 0; j < n; j++)
+    {
+        dp[0][j] = 1;
+    }
+    
+    for(int i = 1; i <= m; i++)
+    {
+        for(int j = 1; j <= n; j++)
+        {
+           if (t[i-1] != s[j-1])
+               dp[i][j] = dp[i][j-1];
+           else
+               dp[i][j] = dp[i-1][j-1] + dp[i][j-1];   
+        }
+    }  
+    return dp[m][n];
+}
+```
 
 [1143. Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/)
 
@@ -579,7 +609,6 @@ int longestCommonSubsequence(string word1, string word2)
     for (int i = 0; i <= m; i++)
     {
         dp[i][0] = 0;
-        ;
     }
 
     for (int i = 1; i <= m; i++) // 循环就得下标1开始
