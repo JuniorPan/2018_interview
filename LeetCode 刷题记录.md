@@ -753,9 +753,3 @@ int longestCommonSubsequence(string word1, string word2)
 }
 ```
 
-
-Longest Common Subsequence
-Edit Distance
-Distinct Subsequence
-Interleaving String
-
