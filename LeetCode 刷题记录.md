@@ -529,10 +529,8 @@ ListNode *sortList(ListNode *head)
 ```
 bool isMatch(string s, string p) 
 {
-    
     int m = s.length();
     int n = p.length();
-    
     
     // dp[i][j] 表示 s[0...i-1]和p[0...j-1] 匹配
     vector<vector<bool>> dp(m + 1, vector<bool>(n + 1, false));
@@ -555,8 +553,7 @@ bool isMatch(string s, string p)
             else
             {
                 dp[i][j] = dp[i][j-2] || (s[i-1] == p[j-2] || '.' == p[j-2]) && dp[i-1][j];
-            }
-                
+            }            
         }
     }
     return dp[m][n];
