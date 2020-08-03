@@ -795,3 +795,5 @@ int longestCommonSubsequence(string word1, string word2)
 }
 ```
 
+### 分治 （还不好 先总结着）
+#### [395. Longest Substring with At Least K Repeating Characters](https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/)
