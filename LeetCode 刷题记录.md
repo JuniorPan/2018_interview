@@ -292,7 +292,11 @@ public:
 
 #### [768. Max Chunks To Make Sorted II](https://leetcode.com/problems/max-chunks-to-make-sorted-ii/)
 
-### 二分查找 [LeetCode Binary Search Summary 二分搜索法小结](https://www.cnblogs.com/grandyang/p/6854825.html)
+### 二分查找 
+
+33 34 81 153 154 704 
+
+
 ```
 
 // 形成自己的套路，right 初始化为nums.size(), while判断就可以用left < right了
