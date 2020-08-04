@@ -265,7 +265,8 @@ int largestRectangleArea(vector<int> height)
     for (int i = 0; i < height.size(); i++)
     {
         
-        while(!monoStack.empty() && height[i] <= height[monoStack.top()])  // 但栈非空时，且当前元素大于栈顶元素时，进行弹出操作，并且结算该弹出元素
+        while(!monoStack.empty() && height[i] <= height[monoStack.top()])  // 但栈非空
+        时，且当前元素大于栈顶元素时，进行弹出操作，并且结算该弹出元素
         {
             int h = height[monoStack.top()]; 
             monoStack.pop();
@@ -289,7 +290,8 @@ int trap(vector<int> &height)
         return 0;
     int res = 0;
     int i = 0;
-    stack<int> monoStack; // 因为要求一个数左边比他大和右边比他大,所以应该是一个单调递减的栈, 这个栈需要保持严格单调递减
+    stack<int> monoStack; // 因为要求一个数左边比他大和右边比他大,所以应该是一个单调递减的栈,
+    这个栈需要保持严格单调递减
     while (i < height.size())
     {
         // 如果满足入栈条件,则直接入栈 
@@ -297,7 +299,8 @@ int trap(vector<int> &height)
         {
             monoStack.push(i++);
         }
-        else// 如果不满足入栈条件,则弹出栈顶元素,这个时候可以结算当前元素,栈顶元素的下一个元素则为左边界，当前遍历到的height[i]则为右边界
+        else// 如果不满足入栈条件,则弹出栈顶元素,这个时候可以结算当前元素,栈顶元素的下一个元素则为
+        左边界，当前遍历到的height[i]则为右边界
         {
             int tmp = monoStack.top();
             monoStack.pop();
@@ -345,7 +348,8 @@ class Solution {
         height.push_back(0);
         for (int i = 0; i < height.size(); i++)
         {
-            while(!monoStack.empty() && height[i] <= height[monoStack.top()])  // 但栈非空时，且当前元素大于栈顶元素时，进行弹出操作，并且结算该弹出元素
+            while(!monoStack.empty() && height[i] <= height[monoStack.top()])  // 但栈非
+            空时，且当前元素大于栈顶元素时，进行弹出操作，并且结算该弹出元素
             {
                 int h = height[monoStack.top()]; 
                 monoStack.pop();
@@ -429,10 +433,11 @@ int find(vector<int>& nums, int target) {
 
 ```
 //整个二维数组中 matrix[0][0]matrix[0][0] 为最小值，matrix[n - 1][n - 1]matrix[n−1][n−1] 为最大值，现在我们将其分别记作 ll 和 rr。
-可以发现一个性质：任取一个数 midmid 满足 l\leq mid \leq rl≤mid≤r，那么矩阵中不大于 midmid 的数，肯定全部分布在矩阵的左上角。
-初始位置在 matrix[n - 1][0]matrix[n−1][0]（即左下角；
-设当前位置为 matrix[i][j]matrix[i][j]。若 matrix[i][j] \leq midmatrix[i][j]≤mid，则将当前所在列的不大于 midmid 的数的数量（即 i + 1i+1）累加到答案中，并向右移动，否则向上移动；
-不断移动直到走出格子为止。
+可以发现一个性质：任取一个数 midmid 满足 l\leq mid \leq rl≤mid≤r，那么矩阵中不大于 midmid 的数，
+肯定全部分布在矩阵的左上角。初始位置在 matrix[n - 1][0]matrix[n−1][0]（即左下角；设当前位置为 
+matrix[i][j]matrix[i][j]。若 matrix[i][j] \leq midmatrix[i][j]≤mid，则将当前所在列的不大于
+midmid 的数的数量（即 i + 1i+1）累加到答案中，并向右移动，否则向上移动；不断移动直到走出格子为止。
+
 
 
 bool check(vector<vector<int>> &matrix, int mid, int k, int n)
@@ -514,7 +519,8 @@ void sortColors(vector<int>& nums)
 ```
 
 [324. Wiggle Sort II](https://leetcode.com/problems/wiggle-sort-ii/)   
-核心思想， 如果当前数小于num,当前数和小于区域的下一个数交换, 如果当前数大于num,当前数和大于区域的前一个数交换
+核心思想， 如果当前数小于num,当前数和小于区域的下一个数交换, 如果当前数大于num,当前数和大于区域的前一
+个数交换
 
 ```
 // 利用快速排序原理
@@ -667,7 +673,7 @@ bool isMatch(string s, string p)
 ```
 
 
-[44. Wildcard Matching](https://leetcode.com/problems/wildcard-matching/)
+#### [44. Wildcard Matching](https://leetcode.com/problems/wildcard-matching/)
 
 ```
 bool isMatch(string s, string p) 
@@ -710,7 +716,7 @@ bool isMatch(string s, string p)
 }
 ```
 
-[72. Edit Distance](https://leetcode.com/problems/edit-distance/)  
+#### [72. Edit Distance](https://leetcode.com/problems/edit-distance/)  
 
 ```
 int minDistance(string word1, string word2)
@@ -743,7 +749,7 @@ int minDistance(string word1, string word2)
 }
 ```
 
-[97. Interleaving String](https://leetcode.com/problems/interleaving-string/)  
+#### [97. Interleaving String](https://leetcode.com/problems/interleaving-string/)  
 
 ```
 //LeetCode 没过很奇怪
@@ -791,7 +797,7 @@ bool isInterleave(string s1, string s2, string s3)
 ```
 
 
-[115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/)  
+#### [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/)  
 
 ```
 // 这一题的转移方程还没有理解
@@ -822,7 +828,7 @@ int numDistinct(string s, string t)
 }
 ```
 
-[712. Minimum ASCII Delete Sum for Two Strings](https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/)
+#### [712. Minimum ASCII Delete Sum for Two Strings](https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/)
 
 ```
     int minimumDeleteSum(string s1, string s2) 
@@ -860,7 +866,7 @@ int numDistinct(string s, string t)
 ```
 
 
-[1143. Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/)
+#### [1143. Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/)
 
 ```
 int longestCommonSubsequence(string word1, string word2)
@@ -899,3 +905,224 @@ int longestCommonSubsequence(string word1, string word2)
 
 ### 分治 （还不好 先总结着）
 #### [395. Longest Substring with At Least K Repeating Characters](https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/)
+
+
+### 深度优先搜索
+#### [经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
+```
+int dirs[8][2] = {1,1,1,0,1,-1,0,1,0,-1,-1,1,-1,0,-1,-1};
+
+void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, int j, int& value)
+{
+    if ( nums[i][i] == 0 || visit[i][j])
+        return;
+    visit[i][j] = true;
+    value += nums[i][j];
+    for(int k = 0; k < 8; k++)
+    {
+        int x = i + dirs[k][0];
+        int y = j + dirs[k][1];
+        if (x < 0 || x > nums.size() || y < 0 || y > nums[0].size() || visit[x][y])
+            continue;
+        dfs(nums, visit, x, y, value);
+    }    
+}
+
+```
+#### [200. Number of Islands](https://leetcode.com/submissions/detail/103885458/)  
+```
+int numIslands(vector<vector<char>>& grid)
+{
+    int num = 0;
+    for (int i = 0; i < grid.size(); i++)
+    {
+        for (int j = 0; j < grid[i].size(); j++)
+        {
+            if (dfs(grid, i, j))
+            {
+                num++;
+            }
+        }
+    }
+    return num;
+}
+bool dfs(vector<vector<char>>& grid, int i, int j)
+{
+    if (i >= 0 && i < grid.size() && j >= 0 && j < grid[i].size() && grid[i][j] == '1')
+    {
+        grid[i][j] = '4';
+        dfs(grid, i-1, j);
+        dfs(grid, i+1, j);
+        dfs(grid, i, j-1);
+        dfs(grid, i, j+1);
+        return true;
+    }
+    return false;
+}
+```
+#### [329. Longest Increasing Path in a Matrix](https://leetcode.com/problems/longest-increasing-path-in-a-matrix/submissions/1)   
+
+```
+
+int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
+int dfs(vector<vector<int>>& matrix, vector<vector<int>>& dp, int i, int j)
+{
+    if (dp[i][j] > 0)
+        return dp[i][j];
+    int res = 1;
+    for(int k = 0; k < 4; k++)
+    {
+        int x = i + dirs[k][0];
+        int y = j + dirs[k][1];
+        if (x >= 0 && x < matrix.size() && y >= 0 && y < matrix[0].size() && matrix[x][y] > matrix[i][j])
+        {
+            int dist = 1 + dfs(matrix, dp, x, y); 
+            res = max(dist, res);
+        }    
+    }
+    dp[i][j] = res;
+    return res;     
+} 
+int longestIncreasingPath(vector<vector<int>>& matrix)
+{
+    if (matrix.empty())
+        return 0;
+    vector<vector<int> > dp( matrix.size(), vector<int>(matrix[0].size(), 0) );
+    int longest = INT_MIN;
+    int dist;
+    for(int i = 0; i < matrix.size(); i++)
+    {
+        for(int j = 0; j < matrix[0].size(); j++)
+        {
+            int len = dfs(matrix, dp, i, j);
+            longest = max(longest,len);
+        }
+    }
+    return longest;    
+}
+```
+#### [576. Out of Boundary Paths](https://leetcode.com/submissions/detail/154021975/)     
+
+```
+int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
+    int dfs(vector<vector<vector<uint>>> &dp, int x, int y, int step,int m, int n)
+    {
+        if (x < 0 || y < 0 || x >= m || y >= n)   // 一旦超出边界直接返回1
+            return 1;
+        if (x-step >= 0 && x + step < m && y - step >= 0 && y + step < n)   // 不管从哪个方向走step步之后 都到不了边界外
+            return 0;
+        if(step <= 0)  // 如果没得走了
+            return 0;
+        
+        if (dp[step][x][y] > 0)
+            return dp[step][x][y];
+        int count = 0;
+        for(int k = 0; k < 4; k++)
+        {
+            int i = x + dirs[k][0];
+            int j = y + dirs[k][1];
+            count += dfs(dp, i, j, step - 1, m, n);
+            count %= 1000000007;
+        }
+        
+        dp[step][x][y] = count;
+        return count;     
+    }
+    int findPaths(int m, int n, int N, int i, int j)
+    {
+        // dp[k][i][j]表示总共走k步，从(i,j)位置走出边界的总路径数
+        vector<vector<vector<uint>>> dp(N+1,vector<vector<uint>>(m,vector<uint>(n,0)));
+        int count = dfs(dp, i, j, N, m, n) % 1000000007;
+        return coun;
+    }
+```
+
+#### [688. Knight Probability in Chessboard](https://leetcode.com/submissions/detail/154023237/)    
+
+```
+
+vector<vector<int>> dirs{{-1,-2},{-2,-1},{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2}};
+double dfs(vector<vector<vector<double>>> &dp, int i, int j, int k, int N)
+{
+    if (i < 0 || i >= N || j < 0 || j >=N)
+        return 0.0;
+    if (k == 0)
+        return 1.0;
+    
+    if (dp[k][i][j] != 0.0)
+        return dp[k][i][j];
+    double count = 0.0;
+    
+    for (auto dir : dirs)
+    {
+        int x = i + dir[0];
+        int y = j + dir[1];
+        // if (x < 0 || x >= N || y < 0 || y >= N)
+        //     continue;
+        count += dfs(dp, x, y, k-1, N);;
+    }
+    dp[k][i][j] = count;
+    return count;
+}
+double knightProbability(int N, int K, int r, int c) 
+{
+    // dp[k][i][j]表示总共走k步，从(i,j)位置没有走出边界的总路径数
+    if (K == 0)
+        return 1;
+    vector<vector<vector<double>>> dp(K+1,vector<vector<double>>(N,vector<double>(N, 0.0)));
+    double total_step = dfs(dp, r, c, K, N);
+    return dp[K][r][c] / pow(8, K);  
+}
+```
+
+#### [827. Making A Large Island](https://leetcode.com/submissions/detail/153847279/)
+
+```
+
+int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
+int dfs(vector<vector<int>>& grid, vector<vector<bool>>& visited, int i, int j)
+{
+    int m = grid.size();
+    int n = grid[0].size();
+    if (i < 0 || i >= m || j < 0 || j >= n || visited[i][j] == true || grid[i][j] != 1 )
+        return 0;
+    visited[i][j]=true;
+    int curSize = 1;
+    
+    for(int k = 0; k < 4; k++)
+    {
+        int x = i + dirs[k][0];
+        int y = j + dirs[k][1];
+        curSize +=  dfs(grid, visited, x, y);  
+   }
+    return curSize;
+    // return 1 + dfs(grid, visited, i+1,j) + dfs(grid, visited, i-1,j) + dfs(grid, visited, i,j+1) + dfs(grid, visited, i,j-1);
+}
+int largestIsland(vector<vector<int>>& grid) 
+{
+    if (grid.empty())
+        return 0;
+    int m = grid.size();
+    int n = grid[0].size();
+    if(grid==vector<vector<int>>(m,vector<int>(n,1))) return m*n;  
+    vector<vector<bool>> visited(m, vector<bool>(n, false));
+    vector<vector<bool>> temp(m, vector<bool>(n, false));
+    int res = 0;
+    int maxSize = INT_MIN;
+    for(int i = 0; i < m; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            if (grid[i][j] == 0)
+            {
+           	    grid[i][j] = 1;    
+                res = dfs(grid, visited, i, j);
+                visited=temp;
+                maxSize = max(res, maxSize);
+                grid[i][j]=0;
+            }
+        }
+    }
+    return maxSize;
+}
+```
