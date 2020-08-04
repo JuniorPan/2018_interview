@@ -64,7 +64,7 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
     deque<int> q;
     vector<int> res(nums.size() - k + 1, 0);
     int count = 0;
-
+	 // 核心是保持队列单调有序即可
     for (int i = 0; i < nums.size(); i++)
     {
         while (!q.empty() && nums[i] >= nums[q.back()])
