@@ -1005,36 +1005,36 @@ int longestIncreasingPath(vector<vector<int>>& matrix)
 
 ```
 int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
-    int dfs(vector<vector<vector<uint>>> &dp, int x, int y, int step,int m, int n)
+int dfs(vector<vector<vector<uint>>> &dp, int x, int y, int step,int m, int n)
+{
+    if (x < 0 || y < 0 || x >= m || y >= n)   // 一旦超出边界直接返回1
+        return 1;
+    if (x-step >= 0 && x + step < m && y - step >= 0 && y + step < n)   // 不管从哪个方向走step步之后 都到不了边界外
+        return 0;
+    if(step <= 0)  // 如果没得走了
+        return 0;
+    
+    if (dp[step][x][y] > 0)
+        return dp[step][x][y];
+    int count = 0;
+    for(int k = 0; k < 4; k++)
     {
-        if (x < 0 || y < 0 || x >= m || y >= n)   // 一旦超出边界直接返回1
-            return 1;
-        if (x-step >= 0 && x + step < m && y - step >= 0 && y + step < n)   // 不管从哪个方向走step步之后 都到不了边界外
-            return 0;
-        if(step <= 0)  // 如果没得走了
-            return 0;
-        
-        if (dp[step][x][y] > 0)
-            return dp[step][x][y];
-        int count = 0;
-        for(int k = 0; k < 4; k++)
-        {
-            int i = x + dirs[k][0];
-            int j = y + dirs[k][1];
-            count += dfs(dp, i, j, step - 1, m, n);
-            count %= 1000000007;
-        }
-        
-        dp[step][x][y] = count;
-        return count;     
+        int i = x + dirs[k][0];
+        int j = y + dirs[k][1];
+        count += dfs(dp, i, j, step - 1, m, n);
+        count %= 1000000007;
     }
-    int findPaths(int m, int n, int N, int i, int j)
-    {
-        // dp[k][i][j]表示总共走k步，从(i,j)位置走出边界的总路径数
-        vector<vector<vector<uint>>> dp(N+1,vector<vector<uint>>(m,vector<uint>(n,0)));
-        int count = dfs(dp, i, j, N, m, n) % 1000000007;
-        return coun;
-    }
+    
+    dp[step][x][y] = count;
+    return count;     
+}
+int findPaths(int m, int n, int N, int i, int j)
+{
+    // dp[k][i][j]表示总共走k步，从(i,j)位置走出边界的总路径数
+    vector<vector<vector<uint>>> dp(N+1,vector<vector<uint>>(m,vector<uint>(n,0)));
+    int count = dfs(dp, i, j, N, m, n) % 1000000007;
+    return coun;
+}
 ```
 
 #### [688. Knight Probability in Chessboard](https://leetcode.com/submissions/detail/154023237/)    
