@@ -96,20 +96,23 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
 // 解法一
 int characterReplacement(string s, int k)
 {
-    int res = 0, maxCnt = 0, start = 0;
+    int res = 0, maxCnt = 0;
     vector<int> counts(26, 0);
-    for (int i = 0; i < s.size(); ++i)
+    int right = 0;
+    int left = 0;
+    while(right < s.size())
     {
-        maxCnt = max(maxCnt, ++counts[s[i] - 'A']); // 不断记录当前窗口中出现最多的字符的个数
-        while (i - start + 1 - maxCnt > k) // 不满足的条件已经理解了
+        maxCnt = max(maxCnt, ++counts[s[right] - 'A']);
+        while (right - left + 1 - maxCnt > k)
         {
-            --counts[s[start] - 'A'];
-            ++start;
+            --counts[s[left] - 'A'];
+            ++left;
         }
-        res = max(res, i - start + 1);
+        res = max(res, right - left + 1);
+        right ++;
     }
     return res;
-}  
+}
 
 
 // 解法二
@@ -119,7 +122,8 @@ int characterReplacement(string s, int k)
     vector<int> counts(26, 0);
     for (int i = 0; i < s.size(); ++i) {
         maxCnt = max(maxCnt, ++counts[s[i] - 'A']);
-        while (i - start + 1 - maxCnt > k) {
+        while (i - start + 1 - maxCnt > k) 
+        {
             --counts[s[start] - 'A'];
             ++start;
         }
