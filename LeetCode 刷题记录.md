@@ -188,19 +188,20 @@ vector<int> findAnagrams(string s, string p)
 每次都比较一下两个哈希表的情况，如果相等，说明存在
 bool checkInclusion(string s1, string s2)
 {
-    int n1 = s1.size(), n2 = s2.size();
-    vector<int> m1(128), m2(128);
-    for (int i = 0; i < n1; ++i)
+    if (s1.size() < s2.size())
+            return false;
+        vector<int> m1(128), m2(128);
+    for (int i = 0; i < s1.size(); ++i)
     {
         ++m1[s1[i]];
         ++m2[s2[i]];
     }
     if (m1 == m2)
         return true;
-    for (int i = n1; i < n2; ++i) // 窗口滑动
+    for (int i = s1.size(); i < s2.size(); i++)
     {
         ++m2[s2[i]];
-        --m2[s2[i - n1]];
+        --m2[s2[i - s1.size()]];
         if (m1 == m2)
             return true;
     }
