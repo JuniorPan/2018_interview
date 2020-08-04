@@ -103,7 +103,7 @@ int characterReplacement(string s, int k)
     while(right < s.size())
     {
         maxCnt = max(maxCnt, ++counts[s[right] - 'A']);
-        while (right - left + 1 - maxCnt > k)
+        while (right - left + 1 - maxCnt > k) // 缩减窗口直到不满足条件为止
         {
             --counts[s[left] - 'A'];
             ++left;
@@ -120,7 +120,8 @@ int characterReplacement(string s, int k)
 {
     int res = 0, maxCnt = 0, start = 0;
     vector<int> counts(26, 0);
-    for (int i = 0; i < s.size(); ++i) {
+    for (int i = 0; i < s.size(); ++i) 
+    {
         maxCnt = max(maxCnt, ++counts[s[i] - 'A']);
         while (i - start + 1 - maxCnt > k) 
         {
