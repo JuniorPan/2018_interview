@@ -228,25 +228,84 @@ bool checkInclusion(string s1, string s2)
 #### [11. Container With Most Water](https://leetcode.com/problems/container-with-most-water/)
 
 ```
-    int maxArea(vector<int>& height)
+int maxArea(vector<int>& height)
+{
+    if (height.empty())
+        return 0;
+
+    int res = 0;
+    int left = 0;
+    int right = height.size() -1;
+
+    while (left < right)
     {
-        if (height.empty())
-            return 0;
-
-        int res = 0;
-        int left = 0;
-        int right = height.size() -1;
-
-        while (left < right)
-        {
-            res  = max(res, min(height[left], height[right]) * (right - left));
-            if (height[left] <= height[right])
-                left++;
-            else
-                right--;
-        }
-        return res;
+        res  = max(res, min(height[left], height[right]) * (right - left));
+        if (height[left] <= height[right])
+            left++;
+        else
+            right--;
     }
+    return res;
+}
+```
+
+####  [167. Two Sum II - Input array is sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/submissions/)
+
+```
+vector<int> twoSum(vector<int>& numbers, int target)
+{
+    //使用双指针，一个指针指向值较小的元素，一个指针指向值较大的元素。指向较小元素的指针从头向尾遍历，指向较大元素的指针从尾向头遍历。
+    //如果两个指针指向元素的和 sum == target，那么得到要求的结果；
+    //如果 sum > target，移动较大的元素，使 sum 变小一些；
+    //如果 sum < target，移动较小的元素，使 sum 变大一些。
+    vector<int> res;
+    int n = numbers.size();
+    if (n <= 1)
+        return res;
+    
+    int left = 0;
+    int right = n-1;
+    while(left < right)
+    {
+        if (numbers[left] + numbers[right] == target)
+        {
+            res.push_back(left+1);
+            res.push_back(right+1);
+            break;
+        }
+        else if (numbers[left] + numbers[right] < target)
+            left++;
+        else
+            right--;
+    }
+    return res;
+}
+```
+
+#### [524. Longest Word in Dictionary through Deleting]()
+
+```
+string findLongestWord(string s, vector<string> &d)
+{
+    string res = "";
+    for (string str : d)
+    {
+        int i = 0;
+        for (char c : s)
+        {
+            if (i < str.size() && c == str[i])
+                ++i;
+        }
+        if (i == str.size() && str.size() >= res.size())
+        {
+            if (str.size() > res.size() || str < res)
+            {
+                res = str;
+            }
+        }
+    }
+    return res;
+}
 ```
 
 ### 单调栈系列问题  [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
@@ -645,6 +704,56 @@ ListNode *sortList(ListNode *head)
     slow->next = nullptr;
     return merge(sortList(head), sortList(fast));
 }
+```
+
+### 链表
+
+#### [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
+```
+class Solution
+{
+public:
+    ListNode *mergeKLists(vector<ListNode *> &lists)
+    {
+        if (lists.empty())
+            return NULL;
+        int n = lists.size();
+        while (n > 1)
+        {
+            int k = (n + 1) / 2;
+            for (int i = 0; i < n / 2; ++i)
+            {
+                lists[i] = mergeTwoLists(lists[i], lists[i + k]);
+            }
+            n = k;
+        }
+        return lists[0];
+    }
+    ListNode *mergeTwoLists(ListNode *l1, ListNode *l2)
+    {
+        ListNode *dummy = new ListNode(-1), *cur = dummy;
+        while (l1 && l2)
+        {
+            if (l1->val < l2->val)
+            {
+                cur->next = l1;
+                l1 = l1->next;
+            }
+            else
+            {
+                cur->next = l2;
+                l2 = l2->next;
+            }
+            cur = cur->next;
+        }
+        if (l1)
+            cur->next = l1;
+        if (l2)
+            cur->next = l2;
+        return dummy->next;
+    }
+};
+
 ```
 
 
