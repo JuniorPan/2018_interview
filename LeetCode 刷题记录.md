@@ -652,61 +652,36 @@ void wiggleSort(vector<int> &nums)
 }
 ```
 
-#### 链表排序  对归并排序还不是很清晰
-[148. Sort List](https://leetcode.com/problems/sort-list/)  对链表使用归并的方式排序
-
-```
-ListNode *merge(ListNode *l1, ListNode *l2)
-{
-    ListNode *fakeHead = new ListNode(-1);
-    ListNode *p = fakeHead;
-
-    while (l1 != nullptr && l2 != nullptr)
-    {
-        if (l1->val < l2->val)
-        {
-            p->next = l1;
-            l1 = l1->next;
-        }
-        else
-        {
-            p->next = l2;
-            l2 = l2->next;
-        }
-        p = p->next;
-    }
-    if (l1 != nullptr)
-    {
-        p->next = l1;
-    }
-    if (l2 != nullptr)
-    {
-        p->next = l2;
-    }
-
-    return fakeHead->next;
-}
-
-//O(nlogn)对链表排序 归并和递归的方式
-ListNode *sortList(ListNode *head)
-{
-    if (head == nullptr || head->next == nullptr)
-        return head;
-
-    ListNode *fast = head->next, *slow = head;
-    while (fast && fast->next)
-    {
-        slow = slow->next;
-        fast = fast->next->next;
-    }
-
-    fast = slow->next;
-    slow->next = nullptr;
-    return merge(sortList(head), sortList(fast));
-}
-```
 
 ### 链表
+
+#### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/)
+
+```
+ ListNode *reverseKGroup(ListNode *head, int k)
+{
+    ListNode *dummy = new ListNode(-1), *pre = dummy, *cur = pre;
+    dummy->next = head;
+    int num = 0;
+    while (cur = cur->next)
+        ++num;
+    while (num >= k)
+    {
+        cur = pre->next;
+        for (int i = 1; i < k; ++i)
+        {
+            ListNode *t = cur->next;
+            cur->next = t->next;
+            t->next = pre->next;
+            pre->next = t;
+        }
+        pre = cur;
+        num -= k;
+    }
+    return dummy->next;
+}
+```
+
 
 #### [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
 ```
@@ -777,6 +752,161 @@ public:
         return dummy->next;
     }
 };
+```
+
+#### [143. Reorder List](https://leetcode.com/problems/reorder-list/)
+
+```
+
+// 解法一  （https://github.com/grandyang/leetcode/issues/143）
+void reorderList(ListNode *head)
+{
+    if (!head || !head->next || !head->next->next)
+        return;
+    ListNode *fast = head, *slow = head;
+    while (fast->next && fast->next->next)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    ListNode *mid = slow->next;
+    slow->next = NULL;
+    ListNode *last = mid, *pre = NULL;
+    while (last)
+    {
+        ListNode *next = last->next;
+        last->next = pre;
+        pre = last;
+        last = next;
+    }
+    while (head && pre)
+    {
+        ListNode *next = head->next;
+        head->next = pre;
+        pre = pre->next;
+        head->next->next = next;
+        head = next;
+    }
+}
+
+// 解法二 
+void reorderList(ListNode *head)
+{
+    if (!head || !head->next || !head->next->next)
+        return;
+    stack<ListNode *> st;
+    ListNode *cur = head;
+    while (cur)
+    {
+        st.push(cur);
+        cur = cur->next;
+    }
+    int cnt = ((int)st.size() - 1) / 2;
+    cur = head;
+    while (cnt-- > 0)
+    {
+        auto t = st.top();
+        st.pop();
+        ListNode *next = cur->next;
+        cur->next = t;
+        t->next = next;
+        cur = next;
+    }
+    st.top()->next = NULL;
+}
+```
+
+
+#### 链表排序  对归并排序还不是很清晰
+[148. Sort List](https://leetcode.com/problems/sort-list/)  对链表使用归并的方式排序
+
+```
+ListNode *merge(ListNode *l1, ListNode *l2)
+{
+    ListNode *fakeHead = new ListNode(-1);
+    ListNode *p = fakeHead;
+
+    while (l1 != nullptr && l2 != nullptr)
+    {
+        if (l1->val < l2->val)
+        {
+            p->next = l1;
+            l1 = l1->next;
+        }
+        else
+        {
+            p->next = l2;
+            l2 = l2->next;
+        }
+        p = p->next;
+    }
+    if (l1 != nullptr)
+    {
+        p->next = l1;
+    }
+    if (l2 != nullptr)
+    {
+        p->next = l2;
+    }
+
+    return fakeHead->next;
+}
+
+//O(nlogn)对链表排序 归并和递归的方式
+ListNode *sortList(ListNode *head)
+{
+    if (head == nullptr || head->next == nullptr)
+        return head;
+
+    ListNode *fast = head->next, *slow = head;
+    while (fast && fast->next)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    fast = slow->next;
+    slow->next = nullptr;
+    return merge(sortList(head), sortList(fast));
+}
+```
+
+#### [147. Insertion Sort List](https://leetcode.com/problems/insertion-sort-list/)  对链表使用插入排序
+
+```
+ListNode *insertionSortList(ListNode *head)
+{
+    if (head == nullptr)
+        return head;
+
+    ListNode *fakeHead = new ListNode(-1);
+
+    ListNode *p = nullptr;
+    fakeHead->next = nullptr;
+    while (head)
+    {
+        p = head->next;
+        ListNode *q = fakeHead;
+
+        if (fakeHead->next == nullptr)
+        {
+            fakeHead->next = head;
+            head->next = nullptr;
+            head = p;
+        }
+        else
+        {
+            while (q->next && q->next->val < head->val)
+            {
+                q = q->next;
+            }
+            head->next = q->next;
+            q->next = head;
+            head = p;
+        }
+    }
+    return fakeHead->next;
+}
 ```
 
 
