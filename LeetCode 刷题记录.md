@@ -223,6 +223,32 @@ bool checkInclusion(string s1, string s2)
 }
 ```
 
+### 双指针问题
+
+#### [11. Container With Most Water](https://leetcode.com/problems/container-with-most-water/)
+
+```
+    int maxArea(vector<int>& height)
+    {
+        if (height.empty())
+            return 0;
+
+        int res = 0;
+        int left = 0;
+        int right = height.size() -1;
+
+        while (left < right)
+        {
+            res  = max(res, min(height[left], height[right]) * (right - left));
+            if (height[left] <= height[right])
+                left++;
+            else
+                right--;
+        }
+        return res;
+    }
+```
+
 ### 单调栈系列问题  [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
 
 **单调栈的两种写法**  
