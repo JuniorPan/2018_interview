@@ -1063,6 +1063,170 @@ int minimumTotal(vector<vector<int>>& triangle)
 ***状态: f[i]表示前i个位置/数字/字符, 第i个; 方程: f[i] = f(f[j]), j是i之前的一个位置; 初始化: f[0]; 答案: f[n-1]; 小技巧: 一般有N个数字/字符, 就开N+1个位置的数组, 第0个位置单独留出来作初始化.(跟坐标相关的动态规划除外)***
 
 
+#### [45. Jump Game II](https://leetcode.com/problems/jump-game-ii/)
+
+```
+int jump(vector<int>& nums) 
+{
+    int level = 0;
+    int cur_begin = 0;
+    int cur_end = 0;
+    int next_end = 0;    
+    
+    while(cur_end < nums.size() -1)
+    {
+        for(int i = cur_begin; i <= cur_end; i++)
+        {
+            next_end = max(next_end, i + nums[i]);
+        }
+        
+        ++level;
+        cur_begin = cur_end + 1;
+        cur_end = next_end;
+    }
+    
+    return level;
+}
+```
+
+
+#### [55. Jump Game](https://leetcode.com/problems/jump-game/)
+
+```
+
+ bool canJump(vector<int>& nums) 
+{
+    vector<int> dp(nums.size(), 0);
+    for (int i = 1; i < nums.size(); ++i) 
+    {
+        dp[i] = max(dp[i - 1], nums[i - 1]) - 1;
+        if (dp[i] < 0) 
+            return false;
+    }
+    return true;
+}
+``` 
+
+#### [132. Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/)
+
+```
+ int minCut(string s) 
+{
+    int n = s.size();
+    if (n <= 0)
+        return 0;
+    
+    // dp[i]表示s[i...n-1]的最小分割次数
+    vector<int> dp(n+1, 0);
+    dp[n] = -1;
+    
+    vector<vector<bool>> p(n, vector<bool>(n, false));
+    
+    for(int i = n-1; i >= 0; i--)
+    {
+        dp[i] = INT_MAX;
+        for(int j = i; j < n; j++)
+        {
+            if (s[i] == s[j] && (j - i < 2 || p[i+1][j-1]) ) // 判断s[i...j]是不是回文子串
+            {
+                p[i][j] = true;
+                dp[i] = min(dp[j+1] + 1, dp[i]);
+            }
+        }
+    }
+    return dp[0];
+}
+
+```
+
+#### [139. Word Break](https://leetcode.com/problems/word-break/)
+
+```
+bool wordBreak(string s, vector<string> &wordDict)
+{
+    if (wordDict.size() == 0)
+        return false;
+
+    int n = s.size();
+    // bool dp[n+1];
+    vector<bool> dp(n + 1, false);
+    dp[0] = true;
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            if (dp[j])
+            {
+                string subword = s.substr(j, i - j);
+                if (count(wordDict.begin(), wordDict.end(), subword) != 0)
+                {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+    }
+    return dp[n];
+}
+
+```
+
+#### [198. House Robber](https://leetcode.com/problems/house-robber/)
+
+```
+int rob(vector<int> &nums)
+{
+    int n = nums.size();
+    if (n <= 0)
+        return 0;
+    if (n == 1)
+    {
+        return nums[0];
+    }
+    if (n == 2)
+    {
+        return max(nums[0], nums[1]);
+    }
+    int dp[n] = {0};
+    dp[0] = nums[0];
+    dp[1] = max(nums[0], nums[1]);
+    for (int i = 2; i < n; i++)
+    {
+        dp[i] = max(dp[i - 2] + nums[i], dp[i - 1]);
+    }
+    return dp[n - 1];
+}
+```
+
+#### [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/)
+
+```
+int lengthOfLIS(vector<int> &nums)
+{
+    if (nums.empty())
+        return 0;
+
+    int n = nums.size();
+    // dp[i] 表示已nums[i]结尾的最长公共子序列
+    vector<int> dp(n, 0);
+    int max2 = INT_MIN;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        dp[i] = 1;
+        for (int j = 0; j < i; j++)
+        {
+            if (nums[i] > nums[j])
+            {
+                dp[i] = max(dp[i], dp[j] + 1);
+            }
+        }
+        max2 = max(dp[i], max2);
+    }
+    return max2;
+}
+```
+
+
 #### 双序列动态规划
 ***状态: f[i][j]表示第一个sequence的前i个数字/字符, 配上第二个sequence的前j个; 方程: f[i][j] = 研究第i个和第j个的匹配关系; 初始化: f[i][0]和f[0][i]; 答案: f[n][m], 其中n = s1.length(); m = s2.length();***  
 
