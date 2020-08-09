@@ -1888,3 +1888,86 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 }
 
 ```
+
+
+### 回溯 
+
+
+#### [17. Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/)
+
+```
+class Solution {
+    vector<string> dict = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+
+    void dfs(string &digits, int start, string &temp, vector<string> &res)
+    {
+        if (start == digits.size() && temp.size() == digits.size())
+        {
+            res.push_back(temp);
+            return;
+        }
+
+        for(int i = start; i < digits.size(); i++)
+        {
+            int digit = digits[i] - '0' - 2;
+            
+            for(int j = 0; j < dict[digit].size(); j++)
+            {
+                temp.push_back(dict[digit][j]);
+                dfs(digits, i+1, temp, res);
+                temp.pop_back();
+            }
+        }
+    }
+public:
+    vector<string> letterCombinations(string digits) {
+        string temp;
+        vector<string> res;
+        if (digits.empty())
+            return res;
+
+        dfs(digits, 0, temp, res);
+        return res;
+    }
+};
+```
+#### [93. Restore IP Addresses](https://leetcode.com/problems/restore-ip-addresses/)
+
+```
+class Solution
+{
+public:
+    vector<string> restoreIpAddresses(string s)
+    {
+        vector<string> result;
+        string ip;
+        dfs(s, 0, 0, ip, result); //paras:string s,start index of s,step(from0-3),intermediate ip,final result
+        return result;
+    }
+    void dfs(string s, int start, int step, string ip, vector<string> &result)
+    {
+        if (start == s.size() && step == 4)
+        {
+            ip.erase(ip.end() - 1); //remove the last '.' from the last decimal number
+            result.push_back(ip);
+            return;
+        }
+        if (s.size() - start > (4 - step) * 3)
+            return;
+        if (s.size() - start < (4 - step))
+            return;
+        int num = 0;
+        for (int i = start; i < start + 3; i++)
+        {
+            num = num * 10 + (s[i] - '0');
+            if (num <= 255)
+            {
+                ip += s[i];
+                dfs(s, i + 1, step + 1, ip + '.', result);
+            }
+            if (num == 0)
+                break;
+        }
+    }
+};
+```
