@@ -916,6 +916,148 @@ ListNode *insertionSortList(ListNode *head)
 
 ***状态: f(x)表示从起点走到坐标x, f[x][y]表示我从起点走到坐标x,y; 方程: 研究走到x, y这个点之前的一步; 初始化: 起点; 答案: 终点***
 
+#### [64. Minimum Path Sum](https://leetcode.com/problems/minimum-path-sum/)
+
+```
+int minPathSum(vector<vector<int>> &grid)
+{
+    int m = grid.size();
+    int n = grid[0].size();
+
+    // dp[i][j] 表示从[0][0]-->[i][j]的最短路径和
+    vector<vector<int>> dp(grid); // 这里使用grid直接初始化是为了累加数组方便
+
+    for (int j = 1; j < n; ++j)
+    {
+        dp[0][j] += dp[0][j - 1];
+    }
+    for (int j = 1; j < m; ++j)
+    {
+        dp[j][0] += dp[j - 1][0];
+    }
+
+    for (int i = 1; i < m; i++)
+    {
+        for (int j = 1; j < n; j++)
+        {
+            dp[i][j] = min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+        }
+    }
+    return dp[m - 1][n - 1];
+}
+
+```
+
+#### [70. Climbing Stairs](https://leetcode.com/problems/climbing-stairs/)
+
+```
+int climbStairs(int n)
+{
+    if (n <= 1)
+        return 1;
+    vector<int> dp(n, 0);
+    dp[0] = 1;
+    dp[1] = 2;
+    for (int i = 2; i < n; i++)
+    {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+    return dp[n - 1];
+}
+```
+
+
+#### [62. Unique Paths](https://leetcode.com/problems/unique-paths/)
+```
+
+int uniquePaths(int m, int n) 
+{
+    // int dp[m][n];
+    // dp[0][0] = 0;
+    // dp[0][1] = 1;
+    // dp[1][0] = 1;
+    // dp[1][1] = 2;
+    
+    
+    // dp[i][j] 表示从[0][0]--->[i][j] 有多少种走法
+    vector<vector<int>> dp(m, vector<int>(n, 1));
+    
+    for(int i = 1; i < m; i++)
+    {
+        for(int j = 1; j < n; j++)
+        {
+            dp[i][j] = dp[i-1][j] + dp[i][j-1];
+        }
+    }
+    return dp[m-1][n-1];
+}
+```
+
+
+#### [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/)
+
+```
+
+int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
+{
+    int m = obstacleGrid.size();
+    int n = obstacleGrid[0].size();
+    if (obstacleGrid.empty() || obstacleGrid[0].empty() || obstacleGrid[0][0] == 1)
+    {
+        return 0;
+    }
+    vector<vector<int>> dp(m, vector<int>(n, 0));
+    for (int i = 0; i < m; i++)
+    {
+        if (obstacleGrid[i][0] != 1)
+            dp[i][0] = 1;
+        else
+            break;
+    }
+    for (int j = 0; j < n; j++)
+    {
+        if (obstacleGrid[0][j] != 1)
+            dp[0][j] = 1;
+        else
+            break;
+    }
+
+    // dp[i][j] 表示从[0][0]--->[i][j] 有多少种走法
+    for (int i = 1; i < m; i++)
+    {
+        for (int j = 1; j < n; j++)
+        {
+            if (obstacleGrid[i][j] == 1)
+                dp[i][j] = 0;
+            else
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+        }
+    }
+    return dp[m - 1][n - 1];
+}
+```
+
+
+#### [120. Triangle](https://leetcode.com/problems/triangle/)
+
+```
+
+int minimumTotal(vector<vector<int>>& triangle) 
+{
+    int n = triangle.size();
+    for (int i = n-2; i >=0; --i)
+    {
+        for (int j = 0; j <= i;  j++)
+        {
+            
+            triangle[i][j] += min(triangle[i+1][j+1], triangle[i+1][j]);
+        }
+    }
+    return triangle[0][0];
+}
+```
+
+
 #### 单序列动态规划
 
 ***状态: f[i]表示前i个位置/数字/字符, 第i个; 方程: f[i] = f(f[j]), j是i之前的一个位置; 初始化: f[0]; 答案: f[n-1]; 小技巧: 一般有N个数字/字符, 就开N+1个位置的数组, 第0个位置单独留出来作初始化.(跟坐标相关的动态规划除外)***
