@@ -771,8 +771,7 @@ bool hasCycle(ListNode *head)
         if (fast->next == nullptr || fast->next->next == nullptr)
             return false;
         slow = slow->next;
-        fast =  fast->next->next;
-            
+        fast =  fast->next->next;         
     }
     return true;
 }
