@@ -1740,3 +1740,34 @@ int largestIsland(vector<vector<int>>& grid)
     return maxSize;
 }
 ```
+
+
+### 二叉树
+
+####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)
+
+```
+void flatten(TreeNode* root)
+{
+	while(root)
+	{
+	    if (root->left && root->right)
+	    {
+	        TreeNode *t = root->left;
+	        while(t->right)
+	        {
+	            t = t->right;
+	        }
+	        t->right = root->right;
+	    }
+	    
+	    if (root->left)
+	    {
+	        root->right = root->left;
+	
+	    }
+	    root->left = nullptr;
+	    root = root->right;
+	}
+}
+```
