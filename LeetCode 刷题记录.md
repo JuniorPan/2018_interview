@@ -2112,7 +2112,7 @@ public:
     {
         if (!uesd[i])
         {
-            if (i > 0 && nums[i] == nums[i-1] && uesd[i-1] )
+            if (i > 0 && nums[i] == nums[i-1] && uesd[i-1])
                 continue;
             uesd[i] = true;
             temp.push_back(nums[i]);   
