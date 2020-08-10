@@ -1896,9 +1896,10 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 #### [17. Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/)
 
 ```
-class Solution {
+class Solution 
+{
+public:
     vector<string> dict = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-
     void dfs(string &digits, int start, string &temp, vector<string> &res)
     {
         if (start == digits.size() && temp.size() == digits.size())
@@ -1906,7 +1907,6 @@ class Solution {
             res.push_back(temp);
             return;
         }
-
         for(int i = start; i < digits.size(); i++)
         {
             int digit = digits[i] - '0' - 2;
@@ -1925,7 +1925,6 @@ public:
         vector<string> res;
         if (digits.empty())
             return res;
-
         dfs(digits, 0, temp, res);
         return res;
     }
@@ -1938,6 +1937,7 @@ public:
 ```
 class Solution
 {
+public:
     void backtrack(vector<string> &res, string &cur, int open, int close, int n)
     {
         if (cur.size() == 2 * n)
@@ -1975,8 +1975,9 @@ public:
 #### [39. Combination Sum](https://leetcode.com/problems/combination-sum/)
 
 ```
-class Solution {
-    
+class Solution 
+{
+public:   
     void backtrack(vector<int>& candidates, int target, vector<int> &temp, vector<vector<int>> &res, int start)
     {
         if (target < 0)
@@ -2012,7 +2013,9 @@ public:
 #### [40. Combination Sum II](https://leetcode.com/problems/combination-sum-ii/)
 
 ```
-class Solution {
+class Solution 
+{
+public:
     void backtrack(vector<int>& candidates, int target, vector<int> &temp, vector<vector<int>> &res, int start)
     {
         if (target < 0)
@@ -2047,7 +2050,9 @@ public:
 #### [46. Permutations](https://leetcode.com/problems/permutations/)
 
 ```
-class Solution {
+class Solution 
+{
+public:
 	void dfs(vector<vector<int>> &res, vector<int> &temp, vector<int> &nums, vector<bool> &uesd, int start)
 {
     
@@ -2091,7 +2096,9 @@ public:
 
 ```
 
-class Solution {   
+class Solution 
+{  
+public: 
 	void dfs(vector<vector<int>> &res, vector<int> &temp, vector<int> &nums, vector<bool> &uesd, int start)
 {
     
@@ -2168,8 +2175,8 @@ public:
 
 
 ```
-class Solution {
-    
+class Solution 
+{  
     void dfs(vector<int>& nums, int i, vector<int> &temp, vector<vector<int>> &res )
     {    
         if (i == nums.size())
@@ -2181,8 +2188,7 @@ class Solution {
         dfs(nums, i+1, temp, res);
         temp.pop_back();
         dfs(nums, i+1, temp, res);   
-    }
-    
+    }    
 public:
     vector<vector<int>> subsets(vector<int>& nums)
     {
@@ -2200,7 +2206,8 @@ public:
 #### [90. Subsets II](https://leetcode.com/problems/subsets-ii/)
 
 ```
-class Solution {
+class Solution 
+{
     void dfs(vector<int>& nums, int start, vector<int>& temp, vector<vector<int>>& res)
     {
         res.push_back(temp);
@@ -2231,7 +2238,8 @@ public:
 #### [79. Word Search](https://leetcode.com/problems/word-search/) 注意和经典dfs结构中的区别
 
 ```
-class Solution {
+class Solution 
+{
     bool dfs(vector<vector<char>>& board, string &word, int i, int j, int w)
     {
         if ( i >= board.size() || j >= board[0].size() || i < 0 || j < 0 || w >= word.size() || word[w] != board[i][j] )
@@ -2326,7 +2334,6 @@ class Solution
         }
         return true;
     }
-
     void dfs(string &s, int index, vector<string> &temp, vector<vector<string>> &res)
     {
         if (index == s.size())
