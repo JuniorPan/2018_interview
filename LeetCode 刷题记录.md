@@ -2093,7 +2093,6 @@ public:
 
 #### [47. Permutations II](https://leetcode.com/problems/permutations-ii/)
 
-
 ```
 
 class Solution 
@@ -2122,7 +2121,6 @@ public:
         }
     } 
 }
-
 public:
     vector<vector<int>> permuteUnique(vector<int>& nums) 
     {
@@ -2145,21 +2143,17 @@ class Solution
 private:    
     void dfs(vector<vector<int>> &res,vector<int>& nums, int n, int k, int first)
     {
-        
         if (nums.size() == k)
         {
             res.push_back(nums);
             return;
-        }
-        
+        }      
         for (int i = first; i <= n; i ++)
         {
             nums.push_back(i);
             dfs(res, nums, n, k, i+1);
             nums.pop_back();
         }
-        
-        
     }
 public:
     vector<vector<int>> combine(int n, int k) {
