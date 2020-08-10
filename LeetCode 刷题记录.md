@@ -1931,6 +1931,347 @@ public:
     }
 };
 ```
+
+
+#### [22. Generate Parentheses](https://leetcode.com/problems/generate-parentheses/)
+
+```
+class Solution
+{
+    void backtrack(vector<string> &res, string &cur, int open, int close, int n)
+    {
+        if (cur.size() == 2 * n)
+        {
+            res.push_back(cur);
+            return;
+        }
+        if (open < n)
+        {
+            cur.push_back('(');
+            backtrack(res, cur, open + 1, close, n);
+            cur.pop_back();
+        }
+
+        if (close < open)
+        {
+            cur.push_back(')');
+            backtrack(res, cur, open, close + 1, n);
+            cur.pop_back();
+        }
+    }
+
+public:
+    vector<string> generateParenthesis(int n)
+    {
+        vector<string> res;
+        string current;
+        backtrack(res, current, 0, 0, n);
+        return res;
+    }
+};
+```
+
+
+#### [39. Combination Sum](https://leetcode.com/problems/combination-sum/)
+
+```
+class Solution {
+    
+    void backtrack(vector<int>& candidates, int target, vector<int> &temp, vector<vector<int>> &res, int start)
+    {
+        if (target < 0)
+            return;
+        if (target == 0) // 满足条件了 直接返回
+        {
+            res.push_back(temp);
+            return ;
+        }
+        
+        for(int i = start; i < candidates.size(); i++)
+        {
+            temp.push_back(candidates[i]);
+            backtrack(candidates, target - candidates[i], temp, res, i); // i表示每个数字可以用多次
+            temp.pop_back();
+        }
+    }
+    
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) 
+    {
+        
+        sort(candidates.begin(), candidates.end()); // 为什么要先排序
+        vector<vector<int>> res;
+        vector<int> tmp; // 用来存放每一次满足条件的结果
+        backtrack(candidates, target, tmp, res, 0);
+        return res;
+    }
+};
+
+```
+
+#### [40. Combination Sum II](https://leetcode.com/problems/combination-sum-ii/)
+
+```
+class Solution {
+    void backtrack(vector<int>& candidates, int target, vector<int> &temp, vector<vector<int>> &res, int start)
+    {
+        if (target < 0)
+            return;
+        if (target == 0)
+        {
+            res.push_back(temp);
+            return ;
+        }
+        
+        for(int i = start; i < candidates.size(); i++)
+        {
+            if(candidates[i] > target) return;
+            if(i && candidates[i] == candidates[i-1] && i > start) continue; // check duplicate combination
+            
+            temp.push_back(candidates[i]);
+            backtrack(candidates, target - candidates[i], temp, res, i+1);
+            temp.pop_back();
+        }
+    }
+public:
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
+        vector<vector<int>> res;
+        vector<int> tmp;
+        backtrack(candidates, target, tmp, res, 0);
+        return res;
+    }
+};
+```
+
+#### [46. Permutations](https://leetcode.com/problems/permutations/)
+
+```
+class Solution {
+	void dfs(vector<vector<int>> &res, vector<int> &temp, vector<int> &nums, vector<bool> &uesd, int start)
+{
+    
+    if (temp.size() == nums.size())
+    {
+        res.push_back(temp);
+        return;
+    }
+
+    for(int i = 0; i < nums.size(); i++)
+    {
+        if (!uesd[i])
+        {
+            uesd[i] = true;
+            temp.push_back(nums[i]);   
+            dfs(res, temp, nums, uesd, i+1);
+            uesd[i] = false;
+            temp.pop_back();
+        }
+    } 
+}
+
+public:
+    vector<vector<int>> permute(vector<int>& nums) 
+    {
+        vector<vector<int>> res; 
+        vector<int> temp;
+        vector<bool> uesd(nums.size());
+
+        dfs(res, temp, nums, uesd, 0);
+        return res;
+        
+    }
+};
+
+```
+
+
+#### [47. Permutations II](https://leetcode.com/problems/permutations-ii/)
+
+
+```
+
+class Solution {   
+	void dfs(vector<vector<int>> &res, vector<int> &temp, vector<int> &nums, vector<bool> &uesd, int start)
+{
+    
+    if (temp.size() == nums.size())
+    {
+        res.push_back(temp);
+        return;
+    }
+
+    for(int i = 0; i < nums.size(); i++)
+    {
+        if (!uesd[i])
+        {
+            if (i > 0 && nums[i] == nums[i-1] && uesd[i-1] )
+                continue;
+            uesd[i] = true;
+            temp.push_back(nums[i]);   
+            dfs(res, temp, nums, uesd, i+1);
+            uesd[i] = false;
+            temp.pop_back();
+        }
+    } 
+}
+
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) 
+    {
+        vector<vector<int>> res; 
+        vector<int> temp;
+        vector<bool> uesd(nums.size());
+        sort(nums.begin(), nums.end());
+        dfs(res, temp, nums, uesd, 0);
+        return res;
+        
+    }
+};
+```
+
+#### [77. Combinations](https://leetcode.com/problems/combinations/)
+
+```
+class Solution 
+{
+private:    
+    void dfs(vector<vector<int>> &res,vector<int>& nums, int n, int k, int first)
+    {
+        
+        if (nums.size() == k)
+        {
+            res.push_back(nums);
+            return;
+        }
+        
+        for (int i = first; i <= n; i ++)
+        {
+            nums.push_back(i);
+            dfs(res, nums, n, k, i+1);
+            nums.pop_back();
+        }
+        
+        
+    }
+public:
+    vector<vector<int>> combine(int n, int k) {
+        vector<vector<int>> res;
+        vector<int> nums;
+        dfs(res, nums, n, k, 1);
+        return res;
+    }
+};
+```
+
+#### [78. Subsets](https://leetcode.com/problems/subsets/)
+
+
+```
+class Solution {
+    
+    void dfs(vector<int>& nums, int i, vector<int> &temp, vector<vector<int>> &res )
+    {    
+        if (i == nums.size())
+        {
+            res.push_back(temp);
+            return;
+        }     
+        temp.push_back(nums[i]);
+        dfs(nums, i+1, temp, res);
+        temp.pop_back();
+        dfs(nums, i+1, temp, res);   
+    }
+    
+public:
+    vector<vector<int>> subsets(vector<int>& nums)
+    {
+        vector<vector<int>> res;
+        if (nums.empty())
+            return res;
+        
+        vector<int> temp;
+        dfs(nums,0, temp, res);
+        return res;
+    }
+};
+```
+
+#### [90. Subsets II](https://leetcode.com/problems/subsets-ii/)
+
+```
+class Solution {
+    void dfs(vector<int>& nums, int start, vector<int>& temp, vector<vector<int>>& res)
+    {
+        res.push_back(temp);
+        for(int i = start; i < nums.size(); i++)
+        {
+            if (i == start || nums[i] != nums[i-1])
+            {
+            
+                temp.push_back(nums[i]);
+                dfs(nums, i+1, temp, res);
+                temp.pop_back();          
+            }
+        }
+    }
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums)
+    {
+        vector<int> temp;
+        vector<vector<int>> res;
+        sort(nums.begin(), nums.end());
+        dfs(nums, 0, temp, res);
+        return res;
+    }
+};
+```
+
+
+#### [79. Word Search](https://leetcode.com/problems/word-search/) 注意和经典dfs结构中的区别
+
+```
+class Solution {
+    bool dfs(vector<vector<char>>& board, string &word, int i, int j, int w)
+    {
+        if ( i >= board.size() || j >= board[0].size() || i < 0 || j < 0 || w >= word.size() || word[w] != board[i][j] )
+        {
+            return false;
+        }
+
+        if (w == word.size() -1 && word[w] == board[i][j])
+        {
+            return true;
+        }
+        char temp=board[i][j];
+        board[i][j]='0';
+        bool flag = dfs(board, word, i, j+1, w+1) || 
+                    dfs(board, word, i, j-1, w+1) || 
+                    dfs(board,word, i+1,j, w+1) || 
+                    dfs(board, word, i-1, j, w+1);
+        board[i][j] = temp;
+        return flag;
+    }
+public:
+    bool exist(vector<vector<char>>& board, string word) 
+    {
+        if(board.size() == 0) return false;
+        for (int i = 0;i < board.size(); i++)
+        {
+            for(int j = 0; j<board[0].size(); j++)
+            {
+                if (dfs(board, word, i, j, 0))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+};
+```
+
+
 #### [93. Restore IP Addresses](https://leetcode.com/problems/restore-ip-addresses/)
 
 ```
@@ -1968,6 +2309,51 @@ public:
             if (num == 0)
                 break;
         }
+    }
+};
+```
+
+#### [131. Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning/)
+
+```
+class Solution 
+{
+    bool isPalindrome(const string& s, int start, int end) 
+    {
+        while(start <= end) {
+            if(s[start++] != s[end--])
+                return false;
+        }
+        return true;
+    }
+
+    void dfs(string &s, int index, vector<string> &temp, vector<vector<string>> &res)
+    {
+        if (index == s.size())
+        {
+            res.push_back(temp);
+            return;
+        }
+        for(int i = index; i < s.size(); i++)
+        {
+            if (isPalindrome(s, index, i)) // 这个地方可以用动态规划去优化
+            {
+                temp.push_back(s.substr(index, i - index + 1));
+                dfs(s, i + 1, temp, res);
+                temp.pop_back();
+            }
+        }
+    }
+public:
+    vector<vector<string>> partition(string s)
+    {
+        vector<vector<string> > res;
+        if(s.empty()) return res;
+        
+        vector<string> temp;
+        dfs(s, 0, temp, res);
+        
+        return res;
     }
 };
 ```
