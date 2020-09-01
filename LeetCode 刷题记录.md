@@ -1747,7 +1747,7 @@ double knightProbability(int N, int K, int r, int c)
 }
 ```
 
-#### [827. Making A Large Island](https://leetcode.com/submissions/detail/153847279/)
+#### [827. Making A Large Island](https://leetcode.com/submissions/detail/153847279/) 类似于回溯
 
 ```
 
