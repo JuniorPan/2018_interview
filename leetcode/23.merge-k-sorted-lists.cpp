@@ -51,7 +51,7 @@ public:
         if (lists.empty())
             return NULL;
         int n = lists.size();
-        while (n > 1)
+        while (n > 1) // 这个while循环有点巧妙
         {
             int k = (n + 1) / 2;
             for (int i = 0; i < n / 2; ++i)

@@ -15,11 +15,41 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class Solution {
+class Solution
+{
 public:
-    ListNode* insertionSortList(ListNode* head) {
-        
+    ListNode *insertionSortList(ListNode *head)
+    {
+        if (head == nullptr)
+            return head;
+
+        ListNode *fakeHead = new ListNode(-1);
+
+        ListNode *p = nullptr;
+        fakeHead->next = nullptr;
+        while (head)
+        {
+            p = head->next;
+            ListNode *q = fakeHead;
+
+            if (fakeHead->next == nullptr)
+            {
+                fakeHead->next = head;
+                head->next = nullptr;
+                head = p;
+            }
+            else
+            {
+                while (q->next && q->next->val < head->val)
+                {
+                    q = q->next;
+                }
+                head->next = q->next;
+                q->next = head;
+                head = p;
+            }
+        }
+        return fakeHead->next;
     }
 };
 // @lc code=end
-
