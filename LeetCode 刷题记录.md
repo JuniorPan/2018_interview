@@ -655,7 +655,7 @@ void wiggleSort(vector<int> &nums)
 
 ### 链表
 
-#### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/)
+#### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) (hard 这题还不会)
 
 ```
  ListNode *reverseKGroup(ListNode *head, int k)
