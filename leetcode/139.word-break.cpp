@@ -57,14 +57,11 @@
 class Solution
 {
 public:
-
     /**
      * 解法一: 
      * memo[i] 定义为范围为 [i, n] 的子字符串是否可以拆分，初始化为 -1，表示没有计算过，如果可以拆分，则赋值为1，反之为0
-     * 
-     * 
      */
-    bool wordBreak(string s, vector<string> &wordDict)
+    bool wordBreak_1(string s, vector<string> &wordDict)
     {
         unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
         vector<int> memo(s.size(), -1);
@@ -84,6 +81,30 @@ public:
             }
         }
         return memo[start] = 0;
+    }
+
+    /**
+     * 解法二: 
+     * 其中 dp[i] 表示范围 [0, i) 内的子串是否可以拆分，注意这里 dp 数组的长度比s串的长度大1，是因为我们要 handle 空串的情况，我们初始化 dp[0] 为 true，然后开始遍历
+     */
+
+    bool wordBreak(string s, vector<string> &wordDict)
+    {
+        unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+        vector<bool> dp(s.size() + 1);
+        dp[0] = true;
+        for (int i = 0; i < dp.size(); ++i)
+        {
+            for (int j = 0; j < i; ++j)
+            {
+                if (dp[j] && wordSet.count(s.substr(j, i - j)))
+                {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp.back();
     }
 };
 // @lc code=end
