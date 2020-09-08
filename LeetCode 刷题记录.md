@@ -2021,53 +2021,48 @@ public:
 ```
 
 #### [46. Permutations](https://leetcode.com/problems/permutations/)
-
 ```
-class Solution 
+class Solution
 {
 public:
-	void dfs(vector<vector<int>> &res, vector<int> &temp, vector<int> &nums, vector<bool> &uesd, int start)
-{
-    
-    if (temp.size() == nums.size())
+    vector<vector<int>> res;
+    vector<int> temp;
+
+    void dfs(vector<int> &nums, vector<bool> &uesd)
     {
-        res.push_back(temp);
-        return;
+
+        if (temp.size() == nums.size())
+        {
+            res.push_back(temp);
+            return;
+        }
+
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (!uesd[i])
+            {
+                temp.push_back(nums[i]);
+                uesd[i] = true;
+                dfs(nums,uesd);
+                uesd[i] = false;
+                temp.pop_back();
+            }
+        }
     }
 
-    for(int i = 0; i < nums.size(); i++)
-    {
-        if (!uesd[i])
-        {
-            uesd[i] = true;
-            temp.push_back(nums[i]);   
-            dfs(res, temp, nums, uesd, i+1);
-            uesd[i] = false;
-            temp.pop_back();
-        }
-    } 
-}
-
-public:
-    vector<vector<int>> permute(vector<int>& nums) 
-    {
-        vector<vector<int>> res; 
-        vector<int> temp;
+    vector<vector<int>> permute(vector<int> &nums)
+    {   
         vector<bool> uesd(nums.size());
-
-        dfs(res, temp, nums, uesd, 0);
+        dfs(nums,uesd);
         return res;
-        
     }
 };
-
 ```
 
 
 #### [47. Permutations II](https://leetcode.com/problems/permutations-ii/)
 
 ```
-
 class Solution 
 {  
 public: 
@@ -2205,35 +2200,39 @@ public:
 #### [79. Word Search](https://leetcode.com/problems/word-search/) 注意和经典dfs结构中的区别
 
 ```
-class Solution 
+class Solution
 {
-    bool dfs(vector<vector<char>>& board, string &word, int i, int j, int w)
+    bool dfs(vector<vector<char>> &board, string &word, int i, int j, int pos)
     {
-        if ( i >= board.size() || j >= board[0].size() || i < 0 || j < 0 || w >= word.size() || word[w] != board[i][j] )
+        if (i >= board.size() || j >= board[0].size() || i < 0 || j < 0 || pos >= word.size() || word[pos] != board[i][j])
         {
             return false;
         }
 
-        if (w == word.size() -1 && word[w] == board[i][j])
+        if (pos == word.size() - 1 && word[pos] == board[i][j])
         {
             return true;
         }
-        char temp=board[i][j];
-        board[i][j]='0';
-        bool flag = dfs(board, word, i, j+1, w+1) || 
-                    dfs(board, word, i, j-1, w+1) || 
-                    dfs(board,word, i+1,j, w+1) || 
-                    dfs(board, word, i-1, j, w+1);
+
+        char temp = board[i][j];
+        board[i][j] = '0';
+        bool flag = dfs(board, word, i, j + 1, pos + 1) ||
+                    dfs(board, word, i, j - 1, pos + 1) ||
+                    dfs(board, word, i + 1, j, pos + 1) ||
+                    dfs(board, word, i - 1, j, pos + 1);
         board[i][j] = temp;
+
         return flag;
     }
+
 public:
-    bool exist(vector<vector<char>>& board, string word) 
+    bool exist(vector<vector<char>> &board, string word)
     {
-        if(board.size() == 0) return false;
-        for (int i = 0;i < board.size(); i++)
+        if (board.size() == 0)
+            return false;
+        for (int i = 0; i < board.size(); i++)
         {
-            for(int j = 0; j<board[0].size(); j++)
+            for (int j = 0; j < board[0].size(); j++)
             {
                 if (dfs(board, word, i, j, 0))
                 {
