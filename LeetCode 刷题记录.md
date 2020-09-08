@@ -873,6 +873,46 @@ void reorderList(ListNode *head)
 ```
 
 
+
+#### [147. Insertion Sort List](https://leetcode.com/problems/insertion-sort-list/)  对链表使用插入排序
+
+```
+ListNode *insertionSortList(ListNode *head)
+{
+    if (head == nullptr)
+        return head;
+
+    ListNode *fakeHead = new ListNode(-1);
+
+    ListNode *p = nullptr;
+    fakeHead->next = nullptr;
+    while (head)
+    {
+        p = head->next;
+        ListNode *q = fakeHead;
+
+        if (fakeHead->next == nullptr)
+        {
+            fakeHead->next = head;
+            head->next = nullptr;
+            head = p;
+        }
+        else
+        {
+            while (q->next && q->next->val < head->val)
+            {
+                q = q->next;
+            }
+            head->next = q->next;
+            q->next = head;
+            head = p;
+        }
+    }
+    return fakeHead->next;
+}
+```
+
+
 #### 链表排序  对归并排序还不是很清晰
 [148. Sort List](https://leetcode.com/problems/sort-list/)  对链表使用归并的方式排序
 
@@ -924,44 +964,6 @@ ListNode *sortList(ListNode *head)
     fast = slow->next;
     slow->next = nullptr;
     return merge(sortList(head), sortList(fast));
-}
-```
-
-#### [147. Insertion Sort List](https://leetcode.com/problems/insertion-sort-list/)  对链表使用插入排序
-
-```
-ListNode *insertionSortList(ListNode *head)
-{
-    if (head == nullptr)
-        return head;
-
-    ListNode *fakeHead = new ListNode(-1);
-
-    ListNode *p = nullptr;
-    fakeHead->next = nullptr;
-    while (head)
-    {
-        p = head->next;
-        ListNode *q = fakeHead;
-
-        if (fakeHead->next == nullptr)
-        {
-            fakeHead->next = head;
-            head->next = nullptr;
-            head = p;
-        }
-        else
-        {
-            while (q->next && q->next->val < head->val)
-            {
-                q = q->next;
-            }
-            head->next = q->next;
-            q->next = head;
-            head = p;
-        }
-    }
-    return fakeHead->next;
 }
 ```
 
@@ -1860,97 +1862,6 @@ int largestIsland(vector<vector<int>>& grid)
 ```
 
 
-### 二叉树
-
-####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)
-
-```
-void flatten(TreeNode* root)
-{
-	while(root)
-	{
-	    if (root->left && root->right)
-	    {
-	        TreeNode *t = root->left;
-	        while(t->right)
-	        {
-	            t = t->right;
-	        }
-	        t->right = root->right;
-	    }
-	    
-	    if (root->left)
-	    {
-	        root->right = root->left;
-	
-	    }
-	    root->left = nullptr;
-	    root = root->right;
-	}
-}
-```
-
-### 区间合并
-
-####  [56. Merge Intervals](https://leetcode.com/problems/merge-intervals/)
-
-```
-vector<vector<int>> merge(vector<vector<int>>& intervals) {
-    if (intervals.size() == 0)
-    {
-        return {};
-    }
-    // 首先将列表中的区间按左端点排序, 然后将第一个区间加入到merged数组中
-    // 1: 如果当前区间的左端点在merged数组中最后一个区间的右端点之后,那么他们不会重合,则直接将该区间加入数组merged中
-    // 2: 如果当前区间的左端点在merged数组中最后一个区间的右端点之前, 需要更新当前区间的右端点更新数组中merged中最后一个区间的右端点，取二者的最大值
-    sort(intervals.begin(), intervals.end());
-    vector<vector<int>> merged;
-    for(int i = 0; i < intervals.size(); i++)
-    {
-        int left = intervals[i][0];
-        int right = intervals[i][1];
-
-        if(!merged.size() || merged.back()[1] < left) // 条件1
-            merged.push_back({left, right});
-        else // 条件2
-            merged.back()[1] = max(merged.back()[1], right);
-    }
-    return merged;
-
-}
-```
-
-
-#### [57. Insert Interval](https://leetcode.com/problems/insert-interval/)
-
-```
-vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInterval)
-{
-    vector<vector<int>> res;
-    int n = intervals.size(), cur = 0;
-    for (int i = 0; i < n; ++i)
-    {
-        if (intervals[i][1] < newInterval[0])
-        {
-            res.push_back(intervals[i]);
-            ++cur;
-        }
-        else if (intervals[i][0] > newInterval[1])
-        {
-            res.push_back(intervals[i]);
-        }
-        else
-        {
-            newInterval[0] = min(newInterval[0], intervals[i][0]);
-            newInterval[1] = max(newInterval[1], intervals[i][1]);
-        }
-    }
-    res.insert(res.begin() + cur, newInterval);
-    return res;
-}
-
-```
-
 
 ### 回溯 
 
@@ -2420,3 +2331,95 @@ public:
     }
 };
 ```
+
+### 二叉树
+
+####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)
+
+```
+void flatten(TreeNode* root)
+{
+	while(root)
+	{
+	    if (root->left && root->right)
+	    {
+	        TreeNode *t = root->left;
+	        while(t->right)
+	        {
+	            t = t->right;
+	        }
+	        t->right = root->right;
+	    }
+	    
+	    if (root->left)
+	    {
+	        root->right = root->left;
+	
+	    }
+	    root->left = nullptr;
+	    root = root->right;
+	}
+}
+```
+
+### 区间合并
+
+####  [56. Merge Intervals](https://leetcode.com/problems/merge-intervals/)
+
+```
+vector<vector<int>> merge(vector<vector<int>>& intervals) {
+    if (intervals.size() == 0)
+    {
+        return {};
+    }
+    // 首先将列表中的区间按左端点排序, 然后将第一个区间加入到merged数组中
+    // 1: 如果当前区间的左端点在merged数组中最后一个区间的右端点之后,那么他们不会重合,则直接将该区间加入数组merged中
+    // 2: 如果当前区间的左端点在merged数组中最后一个区间的右端点之前, 需要更新当前区间的右端点更新数组中merged中最后一个区间的右端点，取二者的最大值
+    sort(intervals.begin(), intervals.end());
+    vector<vector<int>> merged;
+    for(int i = 0; i < intervals.size(); i++)
+    {
+        int left = intervals[i][0];
+        int right = intervals[i][1];
+
+        if(!merged.size() || merged.back()[1] < left) // 条件1
+            merged.push_back({left, right});
+        else // 条件2
+            merged.back()[1] = max(merged.back()[1], right);
+    }
+    return merged;
+
+}
+```
+
+
+#### [57. Insert Interval](https://leetcode.com/problems/insert-interval/)
+
+```
+vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInterval)
+{
+    vector<vector<int>> res;
+    int n = intervals.size(), cur = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        if (intervals[i][1] < newInterval[0])
+        {
+            res.push_back(intervals[i]);
+            ++cur;
+        }
+        else if (intervals[i][0] > newInterval[1])
+        {
+            res.push_back(intervals[i]);
+        }
+        else
+        {
+            newInterval[0] = min(newInterval[0], intervals[i][0]);
+            newInterval[1] = max(newInterval[1], intervals[i][1]);
+        }
+    }
+    res.insert(res.begin() + cur, newInterval);
+    return res;
+}
+
+```
+
