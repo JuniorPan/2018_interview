@@ -67,7 +67,7 @@ public:
         vector<int> memo(s.size(), -1);
         return dfs(s, wordSet, 0, memo);
     }
-    // dfs 比赛 字符串s[start,n] 是否可分
+    // dfs 表示字符串s[start,n] 是否可分
     bool dfs(string s, unordered_set<string> &wordSet, int start, vector<int> &memo)
     {
         if (start >= s.size())
