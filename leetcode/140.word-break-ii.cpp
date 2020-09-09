@@ -68,12 +68,21 @@
 class Solution
 {
 public:
+
+    /**
+     * 解法一:
+     * 先扫一遍wordDict数组，看有没有单词可以当s的开头，那么我们可以发现cat和cats都可以，比如我们先选了cat，那么此时s就变成了 "sanddog" 
+     * 
+     */
     vector<string> wordBreak(string s, vector<string> &wordDict)
     {
         unordered_map<string, vector<string>> m;
-        return helper(s, wordDict, m);
+        return dfs(s, wordDict, m);
     }
-    vector<string> helper(string s, vector<string> &wordDict, unordered_map<string, vector<string>> &m)
+
+    // dfs表示 s在wordDict中的拆分方式, 遍历wordDict中每一个字符串,是否是s的开头,如果是 
+    // 在s中去掉该字符串,剩下的继续递归
+    vector<string> dfs(string s, vector<string> &wordDict, unordered_map<string, vector<string>> &m)
     {
         if (m.count(s))
             return m[s];
