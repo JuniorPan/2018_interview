@@ -67,6 +67,7 @@ public:
         vector<int> memo(s.size(), -1);
         return dfs(s, wordSet, 0, memo);
     }
+    // dfs 比赛 字符串s[start,n] 是否可分
     bool dfs(string s, unordered_set<string> &wordSet, int start, vector<int> &memo)
     {
         if (start >= s.size())
@@ -87,7 +88,6 @@ public:
      * 解法二: 
      * 其中 dp[i] 表示范围 [0, i) 内的子串是否可以拆分，注意这里 dp 数组的长度比s串的长度大1，是因为我们要 handle 空串的情况，我们初始化 dp[0] 为 true，然后开始遍历
      */
-
     bool wordBreak(string s, vector<string> &wordDict)
     {
         unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
