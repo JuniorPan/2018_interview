@@ -2300,6 +2300,7 @@ class Solution
         }
         return true;
     }
+    // dfs含义是 表示s 从index开始的子串拆成回文的方式
     void dfs(string &s, int index, vector<string> &temp, vector<vector<string>> &res)
     {
         if (index == s.size())
