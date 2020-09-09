@@ -2331,6 +2331,106 @@ public:
 };
 ```
 
+#### [139. Word Break](https://leetcode.com/problems/word-break/)
+```
+class Solution
+{
+public:
+    /**
+     * 解法一: 
+     * memo[i] 定义为范围为 [i, n] 的子字符串是否可以拆分，初始化为 -1，表示没有计算过，如果可以拆分，则赋值为1，反之为0
+     */
+    bool wordBreak_1(string s, vector<string> &wordDict)
+    {
+        unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+        vector<int> memo(s.size(), -1);
+        return dfs(s, wordSet, 0, memo);
+    }
+    // dfs 表示字符串s[start,n] 是否可分
+    bool dfs(string s, unordered_set<string> &wordSet, int start, vector<int> &memo)
+    {
+        if (start >= s.size())
+            return true;
+        if (memo[start] != -1)
+            return memo[start];
+        for (int i = start + 1; i <= s.size(); ++i)
+        {
+            if (wordSet.count(s.substr(start, i - start)) && dfs(s, wordSet, i, memo))
+            {
+                return memo[start] = 1;
+            }
+        }
+        return memo[start] = 0;
+    }
+
+    /**
+     * 解法二: 
+     * 其中 dp[i] 表示范围 [0, i) 内的子串是否可以拆分，注意这里 dp 数组的长度比s串的长度大1，是因为我们要 handle 空串的情况，我们初始化 dp[0] 为 true，然后开始遍历
+     */
+    bool wordBreak(string s, vector<string> &wordDict)
+    {
+        unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+        vector<bool> dp(s.size() + 1);
+        dp[0] = true;
+        for (int i = 0; i < dp.size(); ++i)
+        {
+            for (int j = 0; j < i; ++j)
+            {
+                if (dp[j] && wordSet.count(s.substr(j, i - j)))
+                {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp.back();
+    }
+};
+```
+
+
+
+#### [140. Word Break II](https://leetcode.com/problems/word-break-ii/) 注意和139的区别
+```
+class Solution
+{
+public:
+
+    /**
+     * 解法一:
+     * 先扫一遍wordDict数组，看有没有单词可以当s的开头，那么我们可以发现cat和cats都可以，比如我们先选了cat，那么此时s就变成了 "sanddog" 
+     * 
+     */
+    vector<string> wordBreak(string s, vector<string> &wordDict)
+    {
+        unordered_map<string, vector<string>> m;
+        return dfs(s, wordDict, m);
+    }
+
+    // dfs表示 s在wordDict中的拆分方式, 遍历wordDict中每一个字符串,是否是s的开头,如果是 
+    // 在s中去掉该字符串,剩下的继续递归
+    vector<string> dfs(string s, vector<string> &wordDict, unordered_map<string, vector<string>> &m)
+    {
+        if (m.count(s))
+            return m[s];
+        if (s.empty())
+            return {""};
+        vector<string> res;
+        for (string word : wordDict)
+        {
+            if (s.substr(0, word.size()) != word)
+                continue;
+            vector<string> rem = helper(s.substr(word.size()), wordDict, m);
+            for (string str : rem)
+            {
+                res.push_back(word + (str.empty() ? "" : " ") + str);
+            }
+        }
+        return m[s] = res;
+    }
+};
+```
+
 ### 二叉树
 
 ####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)
