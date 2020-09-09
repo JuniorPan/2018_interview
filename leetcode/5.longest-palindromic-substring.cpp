@@ -52,7 +52,7 @@ public:
         int right = 0;
         // dp[i][j] 表示字符串区间 [i, j] 是否为回文串
         vector<vector<bool>> dp(s.size(), vector<bool>(s.size(), false));
-        for (int j = 0; j < s.size(); j++) // 遍历所有的子串
+        for (int j = 0; j < s.size(); j++) // 遍历所有的的子串
         {
             for (int i = 0; i < j; i++)
             {

@@ -89,7 +89,9 @@ public:
         if (s.empty())
             return 0;
         int n = s.size();
+        //p[i][j] 表示区间 [i, j] 内的子串是否为回文串，
         vector<vector<bool>> p(n, vector<bool>(n));
+        // dp[i]表示子串 [0, i] 范围内的最小分割数
         vector<int> dp(n);
         for (int i = 0; i < n; ++i)
         {
