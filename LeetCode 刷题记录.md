@@ -1565,9 +1565,68 @@ int longestCommonSubsequence(string word1, string word2)
 #### 背包型动态规划
 **特点: 1). 用值作为DP维度, 2). DP过程就是填写矩阵, 3). 可以滚动数组优化 状态: f[i][S]前i个物品, 取出一些能否组成和为S; 方程: f[i][S] = f[i-1][S-a[i]] or f[i-1][S]; 初始化: f[i][0]=true; f[0][1...target]=false; 答案: 检查所有f[n][j]**
 
-#### 区间型动态规划
+### 区间型动态规划
 
 *** 特点: 1). 求一段区间的解max/min/count; 2). 转移方程通过区间更新; 3). 从大到小的更新; 这种题目共性就是区间最后求[0, n-1]这样一个区间逆向思维分析, 从大到小就能迎刃而解 ***
+
+
+#### [132. Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/)
+
+```
+class Solution
+{
+public:
+    // 解法一:
+    int minCut(string s)
+    {
+        int n = s.size();
+        if (n <= 0)
+            return 0;
+
+        // dp[i]表示s[i...n-1]的最小分割次数
+        vector<int> dp(n + 1, 0);
+        dp[n] = -1;
+        vector<vector<bool>> p(n, vector<bool>(n, false));
+
+        for (int i = n - 1; i >= 0; i--)
+        {
+            dp[i] = INT_MAX;
+            for (int j = i; j < n; j++)
+            {
+                if (s[i] == s[j] && (j - i < 2 || p[i + 1][j - 1])) // 判断s[i...j]是不是回文子串
+                {
+                    p[i][j] = true;
+                    dp[i] = min(dp[j + 1] + 1, dp[i]);
+                }
+            }
+        }
+        return dp[0];
+    }
+
+    // // 解法二:
+    int minCut_2(string s)
+    {
+        if (s.empty())
+            return 0;
+        int n = s.size();
+        vector<vector<bool>> p(n, vector<bool>(n));
+        vector<int> dp(n);
+        for (int i = 0; i < n; ++i)
+        {
+            dp[i] = i;
+            for (int j = 0; j <= i; ++j)
+            {
+                if (s[i] == s[j] && (i - j < 2 || p[j + 1][i - 1]))
+                {
+                    p[j][i] = true;
+                    dp[i] = (j == 0) ? 0 : min(dp[i], dp[j - 1] + 1);
+                }
+            }
+        }
+        return dp[n - 1];
+    }
+};
+```
 
 
 ### 博弈型动态规划状态
