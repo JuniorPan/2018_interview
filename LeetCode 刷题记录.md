@@ -970,7 +970,7 @@ ListNode *sortList(ListNode *head)
 
 ### 动态规划 
 
-#### 坐标型动态规划  120不会
+#### 1.坐标型动态规划  120不会
 
 ***状态: f(x)表示从起点走到坐标x, f[x][y]表示我从起点走到坐标x,y; 方程: 研究走到x, y这个点之前的一步; 初始化: 起点; 答案: 终点***
 
@@ -1116,7 +1116,7 @@ int minimumTotal(vector<vector<int>>& triangle)
 ```
 
 
-#### 单序列动态规划
+#### 2.单序列动态规划
 
 ***状态: f[i]表示前i个位置/数字/字符, 第i个; 方程: f[i] = f(f[j]), j是i之前的一个位置; 初始化: f[0]; 答案: f[n-1]; 小技巧: 一般有N个数字/字符, 就开N+1个位置的数组, 第0个位置单独留出来作初始化.(跟坐标相关的动态规划除外)***
 
@@ -1285,7 +1285,7 @@ int lengthOfLIS(vector<int> &nums)
 ```
 
 
-#### 双序列动态规划
+#### 3.双序列动态规划
 ***状态: f[i][j]表示第一个sequence的前i个数字/字符, 配上第二个sequence的前j个; 方程: f[i][j] = 研究第i个和第j个的匹配关系; 初始化: f[i][0]和f[0][i]; 答案: f[n][m], 其中n = s1.length(); m = s2.length();***  
 
 [10. Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching/)
@@ -1556,16 +1556,16 @@ int longestCommonSubsequence(string word1, string word2)
 ```
 
 
-#### 划分型动态规划
+#### 4.划分型动态规划
 ***状态: f[i]表示前i个元素的最大值; 方程: f[i] = 前i个元素里面选一个区间的最大值; 初始化: f[0]; 答案: f[n - 1]***
 
 #### [188. Best Time to Buy and Sell Stock IV](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/)
 
 
-#### 背包型动态规划
+#### 6.背包型动态规划
 **特点: 1). 用值作为DP维度, 2). DP过程就是填写矩阵, 3). 可以滚动数组优化 状态: f[i][S]前i个物品, 取出一些能否组成和为S; 方程: f[i][S] = f[i-1][S-a[i]] or f[i-1][S]; 初始化: f[i][0]=true; f[0][1...target]=false; 答案: 检查所有f[n][j]**
 
-### 区间型动态规划
+#### 5.区间型动态规划
 
 *** 特点: 1). 求一段区间的解max/min/count; 2). 转移方程通过区间更新; 3). 从大到小的更新; 这种题目共性就是区间最后求[0, n-1]这样一个区间逆向思维分析, 从大到小就能迎刃而解 ***
 
@@ -1629,8 +1629,54 @@ public:
 ```
 
 
-### 博弈型动态规划状态
+####  6.博弈型动态规划状态
 ***定义一个人的状态; 方程: 考虑两个人的状态做状态更新; 初始化: 暂无; 答案: 先思考最小状态, 再思考大的状态 -> 往小的递推, 适合记忆话搜索 动态规划, 循环(从小到大递推), 记忆化搜索(从大到小搜索, 画搜索树); 什么时候 用记忆化搜索: 1). 状态转移特别麻烦, 不是顺序性, 2). 初始化状态不是很容易找到; 题目类型: 1). 博弈类问题, 2). 区间类问题; 适合解决题目: 1). 状态特别复杂, 2). 不好初始化***
+
+[486. Predict the Winner](https://leetcode.com/problems/predict-the-winner/)
+
+```
+class Solution {
+    // 作为先发者 在i...j范围上先发获得的收益
+    int f(vector<int>& nums, int i, int j)
+    {
+        if (i == j) // 如果只有一个数并且又是先发者，则直接拿走该数
+            return nums[i];
+        
+        else return max(s(nums, i+1, j) + nums[i], s(nums, i, j-1) + nums[j]);
+        
+        
+    }
+    // / 作为后发者 在i...j范围上后发获得的收益
+    int s(vector<int>& nums, int i, int j)
+    {
+        if (i == j)
+        {
+            return 0;
+        }
+        else
+            return min(f(nums, i+1, j), f(nums, i, j-1));
+    }    
+public:
+    bool PredictTheWinner(vector<int>& nums) {
+        
+        if (nums.empty())
+            return false;
+        
+        int sum = 0;
+        for(int i = 0; i < nums.size(); i++)
+            sum += nums[i];
+        
+        
+        int res = f(nums, 0, nums.size()-1);
+        
+        return sum -res > res ? false: true;
+        
+        
+    }
+};
+
+```
+
 
 
 
