@@ -1635,43 +1635,39 @@ public:
 [486. Predict the Winner](https://leetcode.com/problems/predict-the-winner/)
 
 ```
-class Solution {
+class Solution
+{
     // 作为先发者 在i...j范围上先发获得的收益
-    int f(vector<int>& nums, int i, int j)
+    int f(vector<int> &nums, int i, int j)
     {
         if (i == j) // 如果只有一个数并且又是先发者，则直接拿走该数
             return nums[i];
-        
-        else return max(s(nums, i+1, j) + nums[i], s(nums, i, j-1) + nums[j]);
-        
-        
+
+        else
+            return max(s(nums, i + 1, j) + nums[i], s(nums, i, j - 1) + nums[j]);
     }
     // / 作为后发者 在i...j范围上后发获得的收益
-    int s(vector<int>& nums, int i, int j)
+    int s(vector<int> &nums, int i, int j)
     {
         if (i == j)
         {
             return 0;
         }
-        else
-            return min(f(nums, i+1, j), f(nums, i, j-1));
-    }    
+        else // 对方也是绝顶聪明,作为后发者,此时只能选先发者拿完之后 剩下最小的
+            return min(f(nums, i + 1, j), f(nums, i, j - 1));
+    }
 public:
-    bool PredictTheWinner(vector<int>& nums) {
-        
+    bool PredictTheWinner(vector<int> &nums)
+    {
+
         if (nums.empty())
             return false;
-        
         int sum = 0;
-        for(int i = 0; i < nums.size(); i++)
+        for (int i = 0; i < nums.size(); i++)
             sum += nums[i];
-        
-        
-        int res = f(nums, 0, nums.size()-1);
-        
-        return sum -res > res ? false: true;
-        
-        
+
+        int res = f(nums, 0, nums.size() - 1);
+        return sum - res > res ? false : true;
     }
 };
 
@@ -1682,7 +1678,7 @@ public:
 
 
 
-### 分治 （还不好 先总结着）
+## 分治 （还不会 先总结着）
 #### [395. Longest Substring with At Least K Repeating Characters](https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/)
 
 
@@ -2537,7 +2533,7 @@ public:
 };
 ```
 
-### 二叉树
+## 二叉树
 
 ####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)
 
@@ -2628,3 +2624,4 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 
 ```
 
+ 
