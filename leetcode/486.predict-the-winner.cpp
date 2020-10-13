@@ -67,7 +67,6 @@ class Solution
     {
         if (i == j) // 如果只有一个数并且又是先发者，则直接拿走该数
             return nums[i];
-
         else
             return max(s(nums, i + 1, j) + nums[i], s(nums, i, j - 1) + nums[j]);
     }
@@ -84,13 +83,11 @@ class Solution
 public:
     bool PredictTheWinner(vector<int> &nums)
     {
-
         if (nums.empty())
             return false;
         int sum = 0;
         for (int i = 0; i < nums.size(); i++)
             sum += nums[i];
-
         int res = f(nums, 0, nums.size() - 1);
         return sum - res > res ? false : true;
     }
