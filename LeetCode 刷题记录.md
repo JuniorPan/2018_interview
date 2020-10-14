@@ -569,8 +569,8 @@ int kthSmallest(vector<vector<int>> &matrix, int k)
 
 #### 归并排序
 [493. Reverse Pairs](https://leetcode.com/problems/reverse-pairs/)
-```
 
+```
 class Solution {
     int merge(vector<int> &arr, int left, int mid, int right)
     {
