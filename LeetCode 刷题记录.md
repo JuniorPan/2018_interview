@@ -567,6 +567,84 @@ int kthSmallest(vector<vector<int>> &matrix, int k)
 
 ### 排序
 
+#### 归并排序
+[493. Reverse Pairs](https://leetcode.com/problems/reverse-pairs/)
+```
+
+class Solution {
+    int merge(vector<int> &arr, int left, int mid, int right)
+    {
+        vector<int> help(right- left + 1);
+        int i = left;
+        int j = mid + 1;
+        int count = 0;
+        while(i <= mid && j <= right)
+        {
+            // help[i++] = arr[i] < arr[j] ? arr[i++] : arr[j++];
+
+            if (arr[i] <= 2 *  arr[j])
+            {
+                ++j;
+            }
+            else
+            {
+                count += right - j + 1;
+                ++i;
+            }
+        }
+        i = left;
+        j = mid + 1;
+        int k = left;
+        while(i <= mid && j <= right)
+        {
+            // help[i++] = arr[i] < arr[j] ? arr[i++] : arr[j++];
+            if (arr[i] <= arr[j])
+            {
+                help[k++] = arr[i++];
+            }
+            else
+            {
+                help[k++] = arr[j++];
+            }
+        }
+        while (i <= mid)
+        {
+            help[k++] = arr[i++];
+        }
+        while (j <= right)
+        {
+            help[k++] = arr[j++];
+        }
+
+        for (i = left; i <= right; i++) 
+        {
+            arr[i] = help[i];
+        }
+
+        return count;
+    }
+
+    int mergeSort(vector<int> &arr, int l, int r)
+    {
+        if (l == r)
+        {
+            return 0;
+        }
+        int mid = l + ((r -l ) >> 1);
+        int left = mergeSort(arr, l, mid);
+        int right = mergeSort(arr, mid+1, r);
+        int count = merge(arr, l, mid, r);
+        return left + right + count;
+    }
+public:
+    // 思路: 利用归并排序，但是代码写不出来
+    int reversePairs(vector<int>& nums) 
+    {
+        return mergeSort(nums, 0, nums.size()-1);
+    }
+};
+```
+
 #### 快速排序
 
 [75. Sort Colors](https://leetcode.com/problems/sort-colors/) 快排partion 
