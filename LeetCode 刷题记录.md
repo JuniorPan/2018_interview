@@ -1120,6 +1120,34 @@ int minimumTotal(vector<vector<int>>& triangle)
 
 ***状态: f[i]表示前i个位置/数字/字符, 第i个; 方程: f[i] = f(f[j]), j是i之前的一个位置; 初始化: f[0]; 答案: f[n-1]; 小技巧: 一般有N个数字/字符, 就开N+1个位置的数组, 第0个位置单独留出来作初始化.(跟坐标相关的动态规划除外)***
 
+[32. Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses/)
+
+```
+int longestValidParentheses(string s)
+{
+    int n = s.length();
+    vector<int> dp(n, 0);  //dp[i]表示以s[i]结尾的最长有效字符串长度
+    int res = 0;
+    for(int i = 1; i < n; i++)
+    {
+        if (s[i] == '(') // 如果遇到左括号，说明以当前字符结尾不可能形成有效括号字符串，所以dp[i] = 0;
+            dp[i] = 0; 
+
+        if (s[i] == ')')  // 当前字符为右括号时，那么找到前一个字符位置形成的最长有效括号字符串的长度，在这个长度之前的字符串如果是左括号，那么可以形成有效括号字符串
+            // 即 dp[i] = dp[i-1] + 2, 需要注意的是 需要加上 前一个字符位置形成的有效括号字符串；
+        {
+            int pre = i - dp[i-1] - 1;
+            if (pre >= 0 && s[pre] == '(')
+            {
+                dp[i] = dp[i-1] + 2 + (pre > 0 ? dp[pre-1] : 0);
+            }
+        }
+        res = max(res, dp[i]);
+    }
+    return res;
+}
+```
+
 
 #### [45. Jump Game II](https://leetcode.com/problems/jump-game-ii/)
 
