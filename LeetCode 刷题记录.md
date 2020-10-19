@@ -2669,7 +2669,7 @@ void flatten(TreeNode* root)
 }
 ```
 
-
+todo: 没看懂
 #### [236. Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/)
 
 ```
