@@ -223,7 +223,9 @@ bool checkInclusion(string s1, string s2)
 }
 ```
 
-### 双指针问题
+### 双指针问题 
+
+todo: 11和42的区别
 
 #### [11. Container With Most Water](https://leetcode.com/problems/container-with-most-water/)
 
@@ -397,6 +399,40 @@ int trap(vector<int> &height)
     }
     return res;
 }
+
+
+
+// 解法二：还不太懂
+int trap(vector<int>& height) 
+ {
+    if (height.empty())
+        return 0;
+    
+    int n = height.size();
+    int res = 0;
+    int left_max = height[0];
+    int right_max = height[n-1];
+    
+    int l = 1;
+    int r = n - 2;
+    while(l <= r)
+    {
+        if (left_max <= right_max)
+        {
+            res += max(0, left_max - height[l]);
+            left_max = max(left_max, height[l]);
+            l++;
+        }
+        else
+        {
+            res += max(0, right_max - height[r]);
+            right_max = max(height[r], right_max);
+            r--;
+        }
+    }
+   return res;
+}
+
 ```
 ####  [84. Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/) 
 
