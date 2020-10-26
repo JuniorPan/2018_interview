@@ -28,7 +28,6 @@
  * Output: 6
  * 
  */
-
 // @lc code=start
 class Solution
 {
@@ -37,7 +36,6 @@ public:
     {
         if (height.empty())
             return 0;
-
         int res = 0;
         int i = 0;
         stack<int> monoStack;
