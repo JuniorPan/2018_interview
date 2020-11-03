@@ -251,6 +251,77 @@ int maxArea(vector<int>& height)
 }
 ```
 
+
+#### [42. Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/)
+
+```
+// 解法二：还不太懂
+int trap(vector<int>& height) 
+ {
+    if (height.empty())
+        return 0;
+    
+    int n = height.size();
+    int res = 0;
+    int left_max = height[0];
+    int right_max = height[n-1];
+    
+    int l = 1;
+    int r = n - 2;
+    while(l <= r)
+    {
+        if (left_max <= right_max)
+        {
+            res += max(0, left_max - height[l]);
+            left_max = max(left_max, height[l]);
+            l++;
+        }
+        else
+        {
+            res += max(0, right_max - height[r]);
+            right_max = max(height[r], right_max);
+            r--;
+        }
+    }
+   return res;
+}
+
+int trap(vector<int> &height)
+{
+    if (height.empty())
+        return 0;
+    int res = 0;
+    int i = 0;
+    stack<int> monoStack; // 因为要求一个数左边比他大和右边比他大,所以应该是一个单调递减的栈,
+    这个栈需要保持严格单调递减
+    while (i < height.size())
+    {
+        // 如果满足入栈条件,则直接入栈 
+        if (monoStack.empty() || height[i] < height[monoStack.top()])
+        {
+            monoStack.push(i++);
+        }
+        else// 如果不满足入栈条件,则弹出栈顶元素,这个时候可以结算当前元素,栈顶元素的下一个元素则为
+        左边界，当前遍历到的height[i]则为右边界
+        {
+            int tmp = monoStack.top();
+            monoStack.pop();
+            if (monoStack.empty())
+                continue;
+            int h = min(height[i], height[monoStack.top()]);
+            res = res + (h - height[tmp]) * (i - monoStack.top() - 1);
+        }
+    }
+    return res;
+}
+
+
+
+
+
+```
+
+
 ####  [167. Two Sum II - Input array is sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/submissions/)
 
 ```
@@ -515,10 +586,11 @@ public:
     }
 };
 ```
-#### [402. Remove K Digits](https://leetcode.com/problems/remove-k-digits/)
+#### [402. Remove K Digits](https://leetcode.com/problems/remove-k-digits/) 
+https://www.cnblogs.com/grandyang/p/5883736.html
 
 #### [768. Max Chunks To Make Sorted II](https://leetcode.com/problems/max-chunks-to-make-sorted-ii/)
-
+https://www.cnblogs.com/grandyang/p/8850299.html
 ### 二分查找 
 
 33 34 81 153 154 704 
