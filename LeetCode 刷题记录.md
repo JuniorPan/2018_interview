@@ -355,7 +355,7 @@ vector<int> twoSum(vector<int>& numbers, int target)
 }
 ```
 
-#### [524. Longest Word in Dictionary through Deleting]()
+#### [524. Longest Word in Dictionary through Deleting](https://leetcode.com/problems/longest-word-in-dictionary-through-deleting/)
 
 ```
 string findLongestWord(string s, vector<string> &d)
@@ -1920,34 +1920,41 @@ void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, 
 ```
 #### [200. Number of Islands](https://leetcode.com/submissions/detail/103885458/)  
 ```
-int numIslands(vector<vector<char>>& grid)
+class Solution
 {
-    int num = 0;
-    for (int i = 0; i < grid.size(); i++)
+    void dfs(vector<vector<char>> &grid, int i, int j, int m, int n)
     {
-        for (int j = 0; j < grid[i].size(); j++)
+        if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] != '1')
+            return;
+        grid[i][j] = '2';
+        dfs(grid, i + 1, j, m, n);
+        dfs(grid, i - 1, j, m, n);
+        dfs(grid, i, j + 1, m, n);
+        dfs(grid, i, j - 1, m, n);
+    }
+
+public:
+    int numIslands(vector<vector<char>> &grid)
+    {
+        if (grid.empty())
+            return 0;
+        int m = grid.size();
+        int n = grid[0].size();
+        int res = 0;
+        for (int i = 0; i < m; i++)
         {
-            if (dfs(grid, i, j))
+            for (int j = 0; j < n; j++)
             {
-                num++;
+                if (grid[i][j] == '1')
+                {
+                    res++;
+                    dfs(grid, i, j, m, n);
+                }
             }
         }
+        return res;
     }
-    return num;
-}
-bool dfs(vector<vector<char>>& grid, int i, int j)
-{
-    if (i >= 0 && i < grid.size() && j >= 0 && j < grid[i].size() && grid[i][j] == '1')
-    {
-        grid[i][j] = '4';
-        dfs(grid, i-1, j);
-        dfs(grid, i+1, j);
-        dfs(grid, i, j-1);
-        dfs(grid, i, j+1);
-        return true;
-    }
-    return false;
-}
+};
 ```
 
 [212. Word Search II](https://leetcode.com/problems/word-search-ii/) dfs+字典树

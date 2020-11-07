@@ -62,10 +62,8 @@ class Solution
 {
     void dfs(vector<vector<char>> &grid, int i, int j, int m, int n)
     {
-
         if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] != '1')
             return;
-
         grid[i][j] = '2';
         dfs(grid, i + 1, j, m, n);
         dfs(grid, i - 1, j, m, n);
