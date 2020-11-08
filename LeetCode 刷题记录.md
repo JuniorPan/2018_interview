@@ -931,40 +931,51 @@ void wiggleSort(vector<int> &nums)
 }
 ```
 
-
 ### 链表
 
-#### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) (hard 这题还不会)
+#### K路归并
+
+##### [21. Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/)
 
 ```
- ListNode *reverseKGroup(ListNode *head, int k)
-{
-    ListNode *dummy = new ListNode(-1), *pre = dummy, *cur = pre;
-    dummy->next = head;
-    int num = 0;
-    while (cur = cur->next)
-        ++num;
-    while (num >= k)
-    {
-        cur = pre->next;
-        for (int i = 1; i < k; ++i)
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        
+        if (l1 == NULL && l2 == NULL)
+            return NULL;
+        
+        ListNode *pHead = new ListNode(-1);
+        ListNode *tail = pHead;
+        
+        ListNode *p = l1;
+        ListNode *q = l2;
+        
+        while (p && q)
         {
-            ListNode *t = cur->next;
-            cur->next = t->next;
-            t->next = pre->next;
-            pre->next = t;
+            if (p->val < q->val)
+            {
+                tail->next = p;
+                p = p->next;
+                
+            }
+            else
+            {
+                tail->next = q;
+                q = q->next;
+            }
+            tail= tail->next;
         }
-        pre = cur;
-        num -= k;
+       
+        tail->next = p ? p : q;
+        return pHead->next;
     }
-    return dummy->next;
-}
+};
 ```
 
+##### [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
 
-#### [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
 ```
-
 // 解法一
 class Solution
 {
@@ -1033,8 +1044,37 @@ public:
 };
 ```
 
+##### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) (hard 这题还不会)
 
-#### [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
+```
+ ListNode *reverseKGroup(ListNode *head, int k)
+{
+    ListNode *dummy = new ListNode(-1), *pre = dummy, *cur = pre;
+    dummy->next = head;
+    int num = 0;
+    while (cur = cur->next)
+        ++num;
+    while (num >= k)
+    {
+        cur = pre->next;
+        for (int i = 1; i < k; ++i)
+        {
+            ListNode *t = cur->next;
+            cur->next = t->next;
+            t->next = pre->next;
+            pre->next = t;
+        }
+        pre = cur;
+        num -= k;
+    }
+    return dummy->next;
+}
+```
+
+
+#### 快慢指针
+
+##### [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
 
 ```
 bool hasCycle(ListNode *head) 
@@ -1054,10 +1094,9 @@ bool hasCycle(ListNode *head)
     }
     return true;
 }
-
 ```
 
-#### [142. Linked List Cycle II](https://leetcode.com/problems/linked-list-cycle-ii/)
+##### [142. Linked List Cycle II](https://leetcode.com/problems/linked-list-cycle-ii/)
 
 ```
  ListNode *detectCycle(ListNode *head) 
@@ -1088,7 +1127,7 @@ bool hasCycle(ListNode *head)
 ```
 
 
-#### [143. Reorder List](https://leetcode.com/problems/reorder-list/)
+##### [143. Reorder List](https://leetcode.com/problems/reorder-list/)
 
 ```
 
@@ -1150,9 +1189,9 @@ void reorderList(ListNode *head)
 }
 ```
 
+#### 链表排序  
 
-
-#### [147. Insertion Sort List](https://leetcode.com/problems/insertion-sort-list/)  对链表使用插入排序
+##### [147. Insertion Sort List](https://leetcode.com/problems/insertion-sort-list/)  对链表使用插入排序
 
 ```
 ListNode *insertionSortList(ListNode *head)
@@ -1190,9 +1229,7 @@ ListNode *insertionSortList(ListNode *head)
 }
 ```
 
-
-#### 链表排序  对归并排序还不是很清晰
-[148. Sort List](https://leetcode.com/problems/sort-list/)  对链表使用归并的方式排序
+##### [148. Sort List](https://leetcode.com/problems/sort-list/)  对链表使用归并的方式排序
 
 ```
 ListNode *merge(ListNode *l1, ListNode *l2)
@@ -2938,4 +2975,4 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 }
 ```
 
- 
+####  [986. Interval List Intersections](https://leetcode.com/problems/interval-list-intersections/)
