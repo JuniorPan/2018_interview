@@ -1,4 +1,4 @@
-## LeetCode 刷题记录
+# LeetCode 刷题记录
 ### 滑动窗口问题
 核心思想: 我们可以用滑动窗口的思想解决这个问题，在滑动窗口类型的问题中都会有两个指针。一个用于「延伸」现有窗口的 r 指针，和一个用于「收缩」窗口的 l 指针。在任意时刻，只有一个指针运动，而另一个保持静止。我们在 ss上滑动窗口，通过移动 r 指针不断扩张窗口。当窗口包含 t 全部所需的字符后，如果能收缩，我们就收缩窗口直到得到最小窗口。
 ![滑动窗口示意](https://assets.leetcode-cn.com/solution-static/76/76_fig1.gif)
@@ -19,7 +19,38 @@ while (right < s.size()) {
 }
 ```
 
-#### [76. Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/)
+#### [3. Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/description/) 不会
+
+参考 https://www.cnblogs.com/grandyang/p/4480780.html
+
+
+
+#### [53. Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
+
+```
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) 
+    {
+        if (nums.empty())
+            return 0;
+        int res = INT_MIN;
+        int n = nums.size();
+        int cur = 0;
+        for(int i = 0; i < n; i++)
+        {
+            cur += nums[i];
+            res = max(cur, res);
+            cur = cur < 0 ? 0 : cur;
+        }
+        return res;
+    }
+};
+```
+
+
+
+####  [76. Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/)
 
 ```
 string minWindow(string s, string t)
@@ -58,7 +89,7 @@ string minWindow(string s, string t)
 
 #### [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/)  
 
-```
+```c++
 vector<int> maxSlidingWindow(vector<int> &nums, int k)
 {
     if (nums.empty() || nums.size() < k || k < 1)
@@ -75,16 +106,14 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
         while (!q.empty() && nums[i] >= nums[q.back()])
             q.pop_back();
         q.push_back(i);
-
+        // 队首元素过期则直接弹出
         if (q.front() == i - k)
             q.pop_front();
-
         if (i >= k - 1)
             res[count++] = nums[q.front()];
     }
     return res;
 }
-
 ```
 
 #### [424. Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/)   
@@ -92,7 +121,7 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
 
 **不太懂的地方在于窗口是如何移动的**
 
-```
+```c++
  
 /*
 如果没有k的限制，让我们求把字符串变成只有一个字符重复的字符串需要的最小置换次数，那么就是字符串的总
@@ -314,11 +343,6 @@ int trap(vector<int> &height)
     }
     return res;
 }
-
-
-
-
-
 ```
 
 
@@ -471,8 +495,6 @@ int trap(vector<int> &height)
     return res;
 }
 
-
-
 // 解法二：还不太懂
 int trap(vector<int>& height) 
  {
@@ -527,8 +549,6 @@ int largestRectangleArea(vector<int> &heights)
 }
 ```
 
-
-
 #### [85. Maximal Rectangle](https://leetcode.com/problems/maximal-rectangle/)
 ```
 class Solution {
@@ -547,11 +567,9 @@ class Solution {
                 monoStack.pop();
                 int left = monoStack.empty() ? -1 : monoStack.top();
                 // int left = monoStack.size() > 0 ? monoStack.top() : -1;
-                res = max(res, h * (i - left -1));
-                
+                res = max(res, h * (i - left -1));            
             }
             monoStack.push(i);
-        
         }
         return res;
     } 
@@ -591,7 +609,7 @@ https://www.cnblogs.com/grandyang/p/5883736.html
 
 #### [768. Max Chunks To Make Sorted II](https://leetcode.com/problems/max-chunks-to-make-sorted-ii/)
 https://www.cnblogs.com/grandyang/p/8850299.html
-### 二分查找 
+#### 二分查找 
 
 33 34 81 153 154 704 
 
@@ -731,7 +749,6 @@ class Solution {
 
         return count;
     }
- 
     int mergeSort(vector<int> &arr, int l, int r)
     {
         if (l == r)
@@ -992,7 +1009,6 @@ bool hasCycle(ListNode *head)
     }
     return slow;
 }
-
 ```
 
 
@@ -1189,7 +1205,6 @@ int minPathSum(vector<vector<int>> &grid)
     }
     return dp[m - 1][n - 1];
 }
-
 ```
 
 #### [70. Climbing Stairs](https://leetcode.com/problems/climbing-stairs/)
@@ -1222,7 +1237,6 @@ int uniquePaths(int m, int n)
     // dp[1][0] = 1;
     // dp[1][1] = 2;
     
-    
     // dp[i][j] 表示从[0][0]--->[i][j] 有多少种走法
     vector<vector<int>> dp(m, vector<int>(n, 1));
     
@@ -1241,7 +1255,6 @@ int uniquePaths(int m, int n)
 #### [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/)
 
 ```
-
 int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
 {
     int m = obstacleGrid.size();
@@ -1377,7 +1390,7 @@ int jump(vector<int>& nums)
     }
     return true;
 }
-``` 
+```
 
 #### [132. Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/)
 
@@ -1408,7 +1421,6 @@ int jump(vector<int>& nums)
     }
     return dp[0];
 }
-
 ```
 
 #### [139. Word Break](https://leetcode.com/problems/word-break/)
@@ -1440,7 +1452,6 @@ bool wordBreak(string s, vector<string> &wordDict)
     }
     return dp[n];
 }
-
 ```
 
 #### [198. House Robber](https://leetcode.com/problems/house-robber/)
@@ -1696,39 +1707,39 @@ int numDistinct(string s, string t)
 
 #### [712. Minimum ASCII Delete Sum for Two Strings](https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/)
 
-```
-    int minimumDeleteSum(string s1, string s2) 
-    {   
-        int m = s1.size();
-        int n = s2.size();
-        
-        //dp[i][j]表示s1[0...i-1]和s2[0...j-1]需要的最小cost
-        vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
-        
-        for(int i = 1; i <= m; i++)
-        {
-            dp[i][0] = dp[i-1][0] + s1[i-1];
-        }
-        
+```c++
+int minimumDeleteSum(string s1, string s2) 
+{   
+    int m = s1.size();
+    int n = s2.size();
+
+    //dp[i][j]表示s1[0...i-1]和s2[0...j-1]需要的最小cost
+    vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+
+    for(int i = 1; i <= m; i++)
+    {
+        dp[i][0] = dp[i-1][0] + s1[i-1];
+    }
+
+    for(int j = 1; j <= n; j++)
+    {
+        dp[0][j] = dp[0][j-1] + s2[j-1];
+    }
+
+    for(int i = 1; i <= m; i++)
+    {
         for(int j = 1; j <= n; j++)
         {
-            dp[0][j] = dp[0][j-1] + s2[j-1];
-        }
-        
-        for(int i = 1; i <= m; i++)
-        {
-            for(int j = 1; j <= n; j++)
+            if (s1[i-1] == s2[j-1]) // 表示不需要删除
+                dp[i][j] = dp[i-1][j-1];
+            else
             {
-                if (s1[i-1] == s2[j-1]) // 表示不需要删除
-                    dp[i][j] = dp[i-1][j-1];
-                else
-                {
-                    dp[i][j] = min(dp[i-1][j] + s1[i-1], dp[i][j-1] + s2[j-1]);
-                }
+                dp[i][j] = min(dp[i-1][j] + s1[i-1], dp[i][j-1] + s2[j-1]);
             }
         }
-        return dp[m][n];
     }
+    return dp[m][n];
+}
 ```
 
 
@@ -1884,15 +1895,10 @@ public:
         return sum - res > res ? false : true;
     }
 };
-
 ```
 
 
-
-
-
-
-## 分治 （还不会 先总结着）
+####  分治 （还不会 先总结着）
 #### [395. Longest Substring with At Least K Repeating Characters](https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/)
 
 
@@ -2134,7 +2140,6 @@ double knightProbability(int N, int K, int r, int c)
 #### [827. Making A Large Island](https://leetcode.com/submissions/detail/153847279/) 类似于回溯
 
 ```
-
 int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
 int dfs(vector<vector<int>>& grid, vector<vector<bool>>& visited, int i, int j)
 {
@@ -2182,8 +2187,6 @@ int largestIsland(vector<vector<int>>& grid)
     return maxSize;
 }
 ```
-
-
 
 ### 回溯 
 
@@ -2289,12 +2292,10 @@ public:
             backtrack(candidates, target - candidates[i], temp, res, i); // i表示每个数字可以用多次
             temp.pop_back();
         }
-    }
-    
+    }  
 public:
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) 
-    {
-        
+    {       
         sort(candidates.begin(), candidates.end()); // 为什么要先排序
         vector<vector<int>> res;
         vector<int> tmp; // 用来存放每一次满足条件的结果
@@ -2371,7 +2372,6 @@ public:
             }
         }
     }
-
     vector<vector<int>> permute(vector<int> &nums)
     {   
         vector<bool> uesd(nums.size());
@@ -2389,28 +2389,28 @@ class Solution
 {  
 public: 
 	void dfs(vector<vector<int>> &res, vector<int> &temp, vector<int> &nums, vector<bool> &uesd, int start)
-{
-    
-    if (temp.size() == nums.size())
     {
-        res.push_back(temp);
-        return;
-    }
 
-    for(int i = 0; i < nums.size(); i++)
-    {
-        if (!uesd[i])
+        if (temp.size() == nums.size())
         {
-            if (i > 0 && nums[i] == nums[i-1] && uesd[i-1])
-                continue;
-            uesd[i] = true;
-            temp.push_back(nums[i]);   
-            dfs(res, temp, nums, uesd, i+1);
-            uesd[i] = false;
-            temp.pop_back();
+            res.push_back(temp);
+            return;
         }
-    } 
-}
+
+        for(int i = 0; i < nums.size(); i++)
+        {
+            if (!uesd[i])
+            {
+                if (i > 0 && nums[i] == nums[i-1] && uesd[i-1])
+                    continue;
+                uesd[i] = true;
+                temp.push_back(nums[i]);   
+                dfs(res, temp, nums, uesd, i+1);
+                uesd[i] = false;
+                temp.pop_back();
+            }
+        } 
+    }
 public:
     vector<vector<int>> permuteUnique(vector<int>& nums) 
     {
@@ -2754,7 +2754,7 @@ public:
 };
 ```
 
-## 二叉树
+####  二叉树
 
 ####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)
 
@@ -2860,7 +2860,6 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
     res.insert(res.begin() + cur, newInterval);
     return res;
 }
-
 ```
 
  
