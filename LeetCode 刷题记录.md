@@ -116,24 +116,19 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
 }
 ```
 
+
+
+
+
 #### [424. Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/)   
+
 见https://www.cnblogs.com/grandyang/p/5999050.html 
 
 **不太懂的地方在于窗口是如何移动的**
 
 ```c++
- 
 /*
-如果没有k的限制，让我们求把字符串变成只有一个字符重复的字符串需要的最小置换次数，那么就是字符串的总
-长度减去出现次数最多的字符的个数。如果加上k的限制，我们其实就是求满足 (子字符串的长度减去出现次数最
-多的字符个数)<=k 的最大子字符串长度即可，搞清了这一点，我们也就应该知道怎么用滑动窗口来解了吧。我
-们用一个变量 start 记录滑动窗口左边界，初始化为0，然后遍历字符串，每次累加出现字  符的个数，然后
-更新出现最多字符的个数，然后我们判断当前滑动窗口是否满足之前说的那个条件，如果不满足，我们就把滑动
-窗口左边界向右移动一个，并注意去掉的字符要在 counts 里减一，直到满足条件，我们更新结果 res 即可。
-需要注意的是，当滑动窗口的左边界向右移动了后，窗口内的相同字母的最大数貌似可能会改变啊，为啥这里不
-用更新 maxCnt 呢？这是个好问题，原因是此题让求的是最长的重复子串，maxCnt 相当于卡了一个窗口大
-小，我们并不希望窗口变小，虽然窗口在滑动，但是之前是出现过跟窗口大小相同的符合题意的子串，缩小窗口
-没有意义，并不会使结果 res 变大，所以我们才不更新 maxCnt 的
+如果没有k的限制，让我们求把字符串变成只有一个字符重复的字符串需要的最小置换次数，那么就是字符串的总长度减去出现次数最多的字符的个数。如果加上k的限制，我们其实就是求满足 (子字符串的长度减去出现次数最多的字符个数)<=k 的最大子字符串长度即可，搞清了这一点，我们也就应该知道怎么用滑动窗口来解了吧。我们用一个变量 start 记录滑动窗口左边界，初始化为0，然后遍历字符串，每次累加出现字  符的个数，然后更新出现最多字符的个数，然后我们判断当前滑动窗口是否满足之前说的那个条件，如果不满足，我们就把滑动窗口左边界向右移动一个，并注意去掉的字符要在 counts 里减一，直到满足条件，我们更新结果 res 即可。需要注意的是，当滑动窗口的左边界向右移动了后，窗口内的相同字母的最大数貌似可能会改变啊，为啥这里不用更新 maxCnt 呢？这是个好问题，原因是此题让求的是最长的重复子串，maxCnt 相当于卡了一个窗口大小，我们并不希望窗口变小，虽然窗口在滑动，但是之前是出现过跟窗口大小相同的符合题意的子串，缩小窗口没有意义，并不会使结果 res 变大，所以我们才不更新 maxCnt 的
 */
 
 // 解法一
@@ -156,7 +151,6 @@ int characterReplacement(string s, int k)
     }
     return res;
 }
-
 
 // 解法二
 int characterReplacement(string s, int k) 
@@ -233,7 +227,7 @@ bool checkInclusion(string s1, string s2)
 {
     if (s1.size() < s2.size())
             return false;
-        vector<int> m1(128), m2(128);
+    vector<int> m1(128), m2(128);
     for (int i = 0; i < s1.size(); ++i)
     {
         ++m1[s1[i]];
@@ -258,19 +252,18 @@ todo: 11和42的区别
 
 #### [11. Container With Most Water](https://leetcode.com/problems/container-with-most-water/)
 
-```
+```c++
 int maxArea(vector<int>& height)
 {
     if (height.empty())
         return 0;
-
     int res = 0;
     int left = 0;
     int right = height.size() -1;
-
     while (left < right)
     {
         res  = max(res, min(height[left], height[right]) * (right - left));
+        // todo: 为什么是谁小谁移动
         if (height[left] <= height[right])
             left++;
         else
@@ -405,9 +398,9 @@ string findLongestWord(string s, vector<string> &d)
 }
 ```
 
-### 单调栈系列问题  [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
+### 单调栈系列问题 
 
-**单调栈的两种写法**  
+**单调栈的两种写法**   [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
 
 ```
 // 写法一
@@ -775,35 +768,29 @@ public:
 [75. Sort Colors](https://leetcode.com/problems/sort-colors/) 快排partion 
 
 ```
-void sortColors(vector<int>& nums)
+class Solution
 {
-    if (nums.empty())
-        return;
-    
-    int n = nums.size();
-    int left = 0;  // 小于区域的下一个位置
-    int index = 0;
-    int right = n - 1;  // 大于区域的上一个位置
-    
-    while(index <= right)
+public:
+    void sortColors(vector<int> &nums)
     {
-        if (nums[index] < 1)
+        if (nums.size() < 0)
+            return;
+        int left = 0; // 小于区域的下一个位置
+        int right = nums.size() -1; // 大于区域的上一个位置
+        int index = 0;
+        while(index <= right)
         {
-            swap(nums[index], nums[left]);
-            index++;
-            left++;
+            if(nums[index] < 1)
+                swap(nums[index++], nums[left++]);
+            else if (nums[index] == 1)
+            {
+                index ++;
+            }
+            else 
+                swap(nums[index], nums[right--]);
         }
-        else if (nums[index] > 1)
-        {
-            swap(nums[index], nums[right]); 
-            right--;
-        }
-        else
-        {
-            index++;
-        }     
     }
-}
+};
 ```
 
 [324. Wiggle Sort II](https://leetcode.com/problems/wiggle-sort-ii/)   
