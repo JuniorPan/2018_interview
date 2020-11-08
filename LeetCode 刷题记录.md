@@ -61,13 +61,10 @@ string minWindow(string s, string t)
         ++letterCnt[c];
     for (int i = 0; i < s.size(); ++i)
     {
-        //对于S中的每个遍历到的字母，都在 HashMap   
-        中的映射值减1，如果减1后的映射值仍大于等于0，
-        说明当前遍历到的字母是T串中的字母，使用一个计数器 cnt，使其自增1
+        //对于S中的每个遍历到的字母，都在 HashMap中的映射值减1，如果减1后的映射值仍大于等于0，说明当前遍历到的字母是T串中的字母，使用一个计数器 cnt，使其自增1
         if (--letterCnt[s[i]] >= 0) 
             ++cnt;
-        // 当 cnt 和T串字母个数相等时，说明此时的窗口已经包含了T串中的所有字母，此时更新一个
-         minLen 和结果 res，
+        // 当 cnt 和T串字母个数相等时，说明此时的窗口已经包含了T串中的所有字母，此时更新一个minLen 和结果 res，
         while (cnt == t.size()) 
         {
             if (minLen > i - left + 1)
@@ -75,9 +72,7 @@ string minWindow(string s, string t)
                 minLen = i - left + 1;
                 minLeft = left;
             }
-            //然后开始收缩左边界，由于遍历的时候，对映射值减了1，所以此时去除字母的时候，就要把
-            减去的1加回来，此时如果加1后的值大于0了，说明此时少了一个T中的字母，那么 cnt 值就要减1
-            了，然后移动左边界 left
+            //然后开始收缩左边界，由于遍历的时候，对映射值减了1，所以此时去除字母的时候，就要把减去的1加回来，此时如果加1后的值大于0了，说明此时少了一个T中的字母，那么 cnt 值就要减1了，然后移动左边界 left
             if (++letterCnt[s[left]] > 0) 
                 --cnt;
             ++left;
