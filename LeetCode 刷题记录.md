@@ -338,6 +338,100 @@ int trap(vector<int> &height)
 }
 ```
 
+#### [75. Sort Colors](https://leetcode.com/problems/sort-colors/) 
+
+```c++
+class Solution
+{
+public:
+    void sortColors(vector<int> &nums)
+    {
+        if (nums.size() < 0)
+            return;
+        int left = 0; // 小于区域的下一个位置
+        int right = nums.size() -1; // 大于区域的上一个位置
+        int index = 0;
+        while(index <= right)
+        {
+            if(nums[index] < 1)
+                swap(nums[index++], nums[left++]);
+            else if (nums[index] == 1)
+            {
+                index ++;
+            }
+            else 
+                swap(nums[index], nums[right--]);
+        }
+    }
+};
+```
+
+
+
+#### [86. Partition List](https://leetcode.com/problems/partition-list/)
+
+```c++
+class Solution {
+public:
+    // 解法一: 把所有小于给定值的节点都移到前面，大于该值的节点顺序不变，相当于一个局部排序的问题。那么可以想到的一种解法是首先找到第一个大于或等于给定值的节点，用题目中给的例子来说就是先找到4，然后再找小于3的值，每找到一个就将其取出置于4之前即可
+    ListNode *partition(ListNode *head, int x) 
+    {
+        ListNode *dummy = new ListNode(-1);
+        dummy->next = head;
+        ListNode *pre = dummy, *cur = head;;
+        while (pre->next && pre->next->val < x) pre = pre->next;
+        cur = pre;
+        while (cur->next) 
+        {
+            if (cur->next->val < x) 
+            {
+                ListNode *tmp = cur->next;
+                cur->next = tmp->next;
+                tmp->next = pre->next;
+                pre->next = tmp;
+                pre = pre->next;
+            } 
+            else 
+            {
+                cur = cur->next;
+            }
+        }
+        return dummy->next;
+    }
+};
+  // 解法二: 
+    // 将所有小于给定值的节点取出组成一个新的链表，此时原链表中剩余的节点的值都大于或等于给定值，只要将原链表直接接在新链表后
+class Solution 
+{
+public:
+    ListNode *partition(ListNode *head, int x) 
+    {
+        if (!head) return head;
+        ListNode *dummy = new ListNode(-1);
+        ListNode *newDummy = new ListNode(-1);
+        dummy->next = head;
+        ListNode *cur = dummy, *p = newDummy;
+        while (cur->next)
+        {
+            if (cur->next->val < x)
+            {
+                p->next = cur->next;
+                p = p->next;
+                cur->next = cur->next->next;
+                p->next = NULL;
+            } 
+            else
+            {
+                cur = cur->next;
+            }
+        }
+        p->next = dummy->next;
+        return newDummy->next;
+    }
+};
+```
+
+
 
 ####  [167. Two Sum II - Input array is sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/submissions/)
 
