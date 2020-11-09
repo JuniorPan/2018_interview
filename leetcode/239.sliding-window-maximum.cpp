@@ -67,12 +67,12 @@ public:
         {
             while (!q.empty() && nums[i] >= nums[q.back()])
                 q.pop_back();
-            q.push_back(i);
+            q.push_back(i);  // 入队列相当于窗口多了一个数
 
-            if (q.front() == i - k)
+            if (q.front() == i - k) // 检查队首元素是否过期，如果过期则弹出
                 q.pop_front();
 
-            if (i >= k - 1)
+            if (i >= k - 1)  // 开始形成窗口
                 res.push_back(nums[q.front()]);
         }
         return res;
