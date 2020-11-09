@@ -933,6 +933,7 @@ void wiggleSort(vector<int> &nums)
 
 ### 链表
 
+<<<<<<< HEAD
 #### 快慢指针
 
 #### K路归并
@@ -940,6 +941,11 @@ void wiggleSort(vector<int> &nums)
 
 
 ##### [21. Merge Two Sorted Lists]()
+=======
+#### K路归并
+
+##### [21. Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/)
+>>>>>>> a0ed7bf1f50286b0283078104fb78bbf92ebab4d
 
 ```
 class Solution {
@@ -977,10 +983,14 @@ public:
 };
 ```
 
+##### [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
 
+<<<<<<< HEAD
 
 ##### [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
 
+=======
+>>>>>>> a0ed7bf1f50286b0283078104fb78bbf92ebab4d
 ```
 // 解法一
 class Solution
@@ -1050,10 +1060,14 @@ public:
 };
 ```
 
+##### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) (hard 这题还不会)
 
+<<<<<<< HEAD
 
 #### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) (hard 这题还不会)
 
+=======
+>>>>>>> a0ed7bf1f50286b0283078104fb78bbf92ebab4d
 ```
  ListNode *reverseKGroup(ListNode *head, int k)
 {
@@ -1080,9 +1094,15 @@ public:
 ```
 
 
+<<<<<<< HEAD
 #### 
 
 #### [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
+=======
+#### 快慢指针
+
+##### [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
+>>>>>>> a0ed7bf1f50286b0283078104fb78bbf92ebab4d
 
 ```
 bool hasCycle(ListNode *head) 
@@ -1102,10 +1122,9 @@ bool hasCycle(ListNode *head)
     }
     return true;
 }
-
 ```
 
-#### [142. Linked List Cycle II](https://leetcode.com/problems/linked-list-cycle-ii/)
+##### [142. Linked List Cycle II](https://leetcode.com/problems/linked-list-cycle-ii/)
 
 ```
  ListNode *detectCycle(ListNode *head) 
@@ -1136,7 +1155,7 @@ bool hasCycle(ListNode *head)
 ```
 
 
-#### [143. Reorder List](https://leetcode.com/problems/reorder-list/)
+##### [143. Reorder List](https://leetcode.com/problems/reorder-list/)
 
 ```
 
@@ -1198,9 +1217,9 @@ void reorderList(ListNode *head)
 }
 ```
 
+#### 链表排序  
 
-
-#### [147. Insertion Sort List](https://leetcode.com/problems/insertion-sort-list/)  对链表使用插入排序
+##### [147. Insertion Sort List](https://leetcode.com/problems/insertion-sort-list/)  对链表使用插入排序
 
 ```
 ListNode *insertionSortList(ListNode *head)
@@ -1238,9 +1257,7 @@ ListNode *insertionSortList(ListNode *head)
 }
 ```
 
-
-#### 链表排序  对归并排序还不是很清晰
-[148. Sort List](https://leetcode.com/problems/sort-list/)  对链表使用归并的方式排序
+##### [148. Sort List](https://leetcode.com/problems/sort-list/)  对链表使用归并的方式排序
 
 ```
 ListNode *merge(ListNode *l1, ListNode *l2)
@@ -2986,4 +3003,4 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 }
 ```
 
- 
+####  [986. Interval List Intersections](https://leetcode.com/problems/interval-list-intersections/)
