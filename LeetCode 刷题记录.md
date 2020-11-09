@@ -931,40 +931,57 @@ void wiggleSort(vector<int> &nums)
 }
 ```
 
-
 ### 链表
 
-#### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) (hard 这题还不会)
+#### 快慢指针
+
+#### K路归并
+
+
+
+##### [21. Merge Two Sorted Lists]()
 
 ```
- ListNode *reverseKGroup(ListNode *head, int k)
-{
-    ListNode *dummy = new ListNode(-1), *pre = dummy, *cur = pre;
-    dummy->next = head;
-    int num = 0;
-    while (cur = cur->next)
-        ++num;
-    while (num >= k)
-    {
-        cur = pre->next;
-        for (int i = 1; i < k; ++i)
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        
+        if (l1 == NULL && l2 == NULL)
+            return NULL;
+        
+        ListNode *pHead = new ListNode(-1);
+        ListNode *tail = pHead;
+        
+        ListNode *p = l1;
+        ListNode *q = l2;
+        
+        while (p && q)
         {
-            ListNode *t = cur->next;
-            cur->next = t->next;
-            t->next = pre->next;
-            pre->next = t;
+            if (p->val < q->val)
+            {
+                tail->next = p;
+                p = p->next;
+                
+            }
+            else
+            {
+                tail->next = q;
+                q = q->next;
+            }
+            tail= tail->next;
         }
-        pre = cur;
-        num -= k;
+       
+        tail->next = p ? p : q;
+        return pHead->next;
     }
-    return dummy->next;
-}
+};
 ```
 
 
-#### [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
-```
 
+##### [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
+
+```
 // 解法一
 class Solution
 {
@@ -1033,6 +1050,37 @@ public:
 };
 ```
 
+
+
+#### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) (hard 这题还不会)
+
+```
+ ListNode *reverseKGroup(ListNode *head, int k)
+{
+    ListNode *dummy = new ListNode(-1), *pre = dummy, *cur = pre;
+    dummy->next = head;
+    int num = 0;
+    while (cur = cur->next)
+        ++num;
+    while (num >= k)
+    {
+        cur = pre->next;
+        for (int i = 1; i < k; ++i)
+        {
+            ListNode *t = cur->next;
+            cur->next = t->next;
+            t->next = pre->next;
+            pre->next = t;
+        }
+        pre = cur;
+        num -= k;
+    }
+    return dummy->next;
+}
+```
+
+
+#### 
 
 #### [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
 
