@@ -356,7 +356,7 @@ public:
             }
             else 
                 swap(nums[index], nums[right--]);
-        }
+       }
     }
 };
 ```
@@ -366,7 +366,7 @@ public:
 #### [86. Partition List](https://leetcode.com/problems/partition-list/)
 
 ```c++
-// 将所有小于给定值的节点取出组成一个新的链表，此时原链表中剩余的节点的值都大于或等于给定值，只要将原链表直接接在新链表后
+ // 将所有小于给定值的节点取出组成一个新的链表，此时原链表中剩余的节点的值都大于或等于给定值，只要将原链表直接接在新链表后
 class Solution 
 {
 public:
@@ -930,19 +930,9 @@ void wiggleSort(vector<int> &nums)
 
 ### 链表
 
-<<<<<<< HEAD
-#### 快慢指针
-
-#### K路归并
-
-
-
-##### [21. Merge Two Sorted Lists]()
-=======
 #### K路归并
 
 ##### [21. Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/)
->>>>>>> a0ed7bf1f50286b0283078104fb78bbf92ebab4d
 
 ```
 class Solution {
@@ -980,14 +970,8 @@ public:
 };
 ```
 
-##### [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
+#####  [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
 
-<<<<<<< HEAD
-
-##### [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
-
-=======
->>>>>>> a0ed7bf1f50286b0283078104fb78bbf92ebab4d
 ```
 // 解法一
 class Solution
@@ -1059,48 +1043,39 @@ public:
 
 ##### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) (hard 这题还不会)
 
-<<<<<<< HEAD
-
-#### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) (hard 这题还不会)
-
-=======
->>>>>>> a0ed7bf1f50286b0283078104fb78bbf92ebab4d
 ```
- ListNode *reverseKGroup(ListNode *head, int k)
-{
-    ListNode *dummy = new ListNode(-1), *pre = dummy, *cur = pre;
-    dummy->next = head;
-    int num = 0;
-    while (cur = cur->next)
-        ++num;
-    while (num >= k)
+class Solution {
+public:
+     ListNode *reverseKGroup(ListNode *head, int k)
     {
-        cur = pre->next;
-        for (int i = 1; i < k; ++i)
+        ListNode *dummy = new ListNode(-1), *pre = dummy, *cur = pre;
+        dummy->next = head;
+        int num = 0;
+        while (cur = cur->next)
+            ++num;
+        while (num >= k)
         {
-            ListNode *t = cur->next;
-            cur->next = t->next;
-            t->next = pre->next;
-            pre->next = t;
+            cur = pre->next;
+            for (int i = 1; i < k; ++i)
+            {
+                ListNode *t = cur->next;
+                cur->next = t->next;
+                t->next = pre->next;
+                pre->next = t;
+            }
+            pre = cur;
+            num -= k;
         }
-        pre = cur;
-        num -= k;
+        return dummy->next;
     }
-    return dummy->next;
-}
+};
 ```
 
 
-<<<<<<< HEAD
-#### 
 
-#### [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
-=======
 #### 快慢指针
 
 ##### [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
->>>>>>> a0ed7bf1f50286b0283078104fb78bbf92ebab4d
-
 ```
 bool hasCycle(ListNode *head) 
 {
@@ -1306,6 +1281,9 @@ ListNode *sortList(ListNode *head)
     return merge(sortList(head), sortList(fast));
 }
 ```
+
+#### 原地链表翻转
+
 
 
 ### 动态规划 
