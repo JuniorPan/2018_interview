@@ -461,6 +461,32 @@ vector<int> twoSum(vector<int>& numbers, int target)
 }
 ```
 
+#### [240. Search a 2D Matrix II](https://leetcode.com/problems/search-a-2d-matrix-ii/)
+
+```
+bool searchMatrix(vector<vector<int>> &matrix, int target)
+{
+    if (matrix.empty())
+        return false;
+    int m = matrix.size();
+    int n = matrix[0].size();
+
+    int row = 0;
+    int col = n - 1;
+    // 从右上角或者左下角开始比较
+    while (row < m && col >= 0)
+    {
+        if (target == matrix[row][col])
+            return true;
+        else if (matrix[row][col] < target)
+            row++;
+        else 
+            col--;
+    }
+    return false;
+}
+```
+
 #### [524. Longest Word in Dictionary through Deleting](https://leetcode.com/problems/longest-word-in-dictionary-through-deleting/)
 
 ```
