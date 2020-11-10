@@ -22,9 +22,9 @@ public:
             int left = intervals[i][0];
             int right = intervals[i][1];
 
-            if(!merged.size() || merged.back()[1] < left) // 条件1
+            if(!merged.size() || merged.back()[1] < left) // 条件1，不会重合
                 merged.push_back({left, right});
-            else // 条件2
+            else // 条件2 重合,已有区间的右端点和当前右端点取最大值
                 merged.back()[1] = max(merged.back()[1], right);
         }
         return merged;
