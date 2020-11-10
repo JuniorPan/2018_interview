@@ -2420,6 +2420,46 @@ int ladderLength(string beginWord, string endWord, vector<string> &wordList)
 
 #### [207. Course Schedule](https://leetcode.com/problems/course-schedule/)【拓扑排序】
 
+```
+ bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) 
+{
+    vector<vector<int>> graph(numCourses); // 构建图 领接表的形式
+    vector<int> indegree(numCourses,0);    // 顶点的入度表
+
+    for(int i = 0; i < prerequisites.size(); i++)
+    {
+        graph[prerequisites[i].second].push_back(prerequisites[i].first);
+        ++indegree[prerequisites[i].first];   
+    }
+
+    queue<int> q; // 所有入度为0的结点入队列
+    for(int i = 0; i < numCourses; i++)
+    {
+        if (indegree[i] == 0)
+        {
+            q.push(i);
+        }
+    }
+    int counter = 0;
+    while(!q.empty())
+    {
+        int u = q.front();
+        q.pop();
+        ++counter;
+        for(int i = 0; i < graph[u].size(); i++)
+        {
+            if (--indegree[graph[u][i]] == 0)
+            {
+               q.push(graph[u][i]); 
+            }
+        }
+    }
+    return counter==numCourses;
+}
+```
+
+
+
 #### [297. Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)
 
 
@@ -2434,6 +2474,8 @@ int ladderLength(string beginWord, string endWord, vector<string> &wordList)
 #### [17. Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/)
 
 ```
+//Input: digits = "23"
+//Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
 class Solution 
 {
 public:
@@ -2994,7 +3036,7 @@ public:
 };
 ```
 
-####  二叉树
+###  二叉树
 
 ####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)
 
