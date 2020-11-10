@@ -2304,6 +2304,90 @@ int largestIsland(vector<vector<int>>& grid)
 }
 ```
 
+### BFS
+
+#### [102. Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/)
+
+```
+vector<vector<int>> levelOrder(TreeNode *root)
+{
+    vector<vector<int>> ret;
+    if (root == NULL)
+        return ret;
+
+    queue<TreeNode *> q;
+    q.push(root);
+    while (!q.empty())
+    {
+        int size = q.size();
+        vector<int> level;
+        for (int i = 0; i < size; i++)
+        {
+            TreeNode *node = q.front();
+            level.push_back(node->val);
+            q.pop();
+
+            if (node->left)
+                q.push(node->left);
+            if (node->right)
+                q.push(node->right);
+        }
+        ret.push_back(level);
+    }
+    return ret;
+}
+```
+
+
+
+#### [103. Binary Tree Zigzag Level Order Traversal](https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/)
+
+```c++
+//使用一个变量 leftToRight 来标记顺序，初始时是 true，当此变量为 true 的时候，每次加入数组的位置就是i本身，若变量为 false 了，则加入到 size-1-i 位置上，这样就直接相当于翻转了数组
+vector<vector<int>> zigzagLevelOrder(TreeNode *root)
+{
+    vector<vector<int>> res;
+    if (root == NULL)
+        return res;
+    queue<TreeNode *> q;
+    q.push(root);
+    bool leftToRight = true;
+    while (!q.empty())
+    {
+        int size = q.size();
+        vector<int> oneLevel(size); // 这个地方注意 要给定数组大小
+        for (int i = 0; i < size; ++i)
+        {
+            TreeNode *t = q.front();
+            q.pop();
+            int idx = leftToRight ? i : (size - 1 - i);
+            oneLevel[idx] = t->val;
+            if (t->left)
+                q.push(t->left);
+            if (t->right)
+                q.push(t->right);
+        }
+        leftToRight = !leftToRight;
+        res.push_back(oneLevel);
+    }
+    return res;
+}
+```
+
+
+
+#### [127. Word Ladder I ](https://leetcode.com/problems/word-ladder/)
+
+#### [207. Course Schedule](https://leetcode.com/problems/course-schedule/)【拓扑排序】
+
+#### [297. Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)
+
+
+
+
+
+
+
 ### 回溯 
 
 
