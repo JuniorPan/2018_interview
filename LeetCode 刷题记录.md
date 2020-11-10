@@ -2376,7 +2376,47 @@ vector<vector<int>> zigzagLevelOrder(TreeNode *root)
 
 
 
-#### [127. Word Ladder I ](https://leetcode.com/problems/word-ladder/)
+#### [127. Word Ladder I ](https://leetcode.com/problems/word-ladder/)   todo: 还有种解法不是很懂
+
+```
+//用BFS来求最短路径的长度
+int ladderLength(string beginWord, string endWord, vector<string> &wordList)
+{
+    unordered_set<string> wordSet(wordList.begin(), wordList.end());
+    if (!wordSet.count(endWord))
+        return 0;
+    queue<string> q;
+    q.push(beginWord);
+    int res = 0;
+    while (!q.empty())
+    {
+        for (int k = q.size(); k > 0; --k)
+        {
+            string word = q.front();
+            q.pop();
+            if (word == endWord)
+                return res + 1;
+            for (int i = 0; i < word.size(); ++i)
+            {
+                string newWord = word;
+                for (char ch = 'a'; ch <= 'z'; ++ch)
+                {
+                    newWord[i] = ch;
+                    if (wordSet.count(newWord) && newWord != word)
+                    {
+                        q.push(newWord);
+                        wordSet.erase(newWord);
+                    }
+                }
+            }
+        }
+        ++res;
+    }
+    return 0;
+}
+```
+
+
 
 #### [207. Course Schedule](https://leetcode.com/problems/course-schedule/)【拓扑排序】
 

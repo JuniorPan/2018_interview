@@ -67,11 +67,56 @@
  */
 
 // @lc code=start
-class Solution {
+class Solution
+{
+private:
+    inline bool good(const string &str1, const string &str2)
+    {
+        int diff = 0;
+        for (int i = 0; i < str1.size(); ++i)
+        {
+            if (str1[i] != str2[i])
+                ++diff;
+            if (diff > 1)
+                return false; // perhaps quicker
+        }
+        return diff == 1;
+    }
+
 public:
-    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        
+    int ladderLength(string beginWord, string endWord, vector<string> &wordList)
+    {
+        unordered_set<string> wordSet(wordList.begin(), wordList.end());
+        if (!wordSet.count(endWord))
+            return 0;
+        queue<string> q;
+        q.push(beginWord);
+        int res = 0;
+        while (!q.empty())
+        {
+            for (int k = q.size(); k > 0; --k)
+            {
+                string word = q.front();
+                q.pop();
+                if (word == endWord)
+                    return res + 1;
+                for (int i = 0; i < word.size(); ++i)
+                {
+                    string newWord = word;
+                    for (char ch = 'a'; ch <= 'z'; ++ch)
+                    {
+                        newWord[i] = ch;
+                        if (wordSet.count(newWord) && newWord != word)
+                        {
+                            q.push(newWord);
+                            wordSet.erase(newWord);
+                        }
+                    }
+                }
+            }
+            ++res;
+        }
+        return 0;
     }
 };
 // @lc code=end
-
