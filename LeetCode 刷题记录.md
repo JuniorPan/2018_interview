@@ -2945,7 +2945,7 @@ public:
 };
 ```
 
-#### [139. Word Break](https://leetcode.com/problems/word-break/)
+#### [139. Word Break](https://leetcode.com/problems/word-break/)  实际上是动态规划
 ```
 class Solution
 {
