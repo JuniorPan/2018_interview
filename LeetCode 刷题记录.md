@@ -2900,6 +2900,8 @@ public:
 
 #### [131. Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning/)
 
+![image.png](/Users/panqiang/Library/Mobile Documents/3L68KQB4HG~com~readdle~CommonDocuments/Documents/面试相关/刷题/298a80282ac3505fec3710abdc1e656c591cf7acaa3ba976151480729244b649-image.png)
+
 ```
 class Solution 
 {

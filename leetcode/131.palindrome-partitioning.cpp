@@ -34,7 +34,7 @@
 // @lc code=start
 class Solution
 {
-
+    vector<vector<string>> res;
     bool isPalindrome(const string &s, int start, int end)
     {
         while (start <= end)
@@ -46,33 +46,30 @@ class Solution
     }
 
     // dfs含义是 表示s 从index开始的子串拆成回文的方式
-    void dfs(string &s, int index, vector<string> &temp, vector<vector<string>> &res)
+    void dfs(string &s, int index, vector<string> &temp)
     {
         if (index == s.size())
         {
             res.push_back(temp);
             return;
         }
-
         for (int i = index; i < s.size(); i++)
         {
-            if (isPalindrome(s, index, i)) // 取子串 这个地方可以用动态规划去优化
+            if (isPalindrome(s, index, i))
             {
                 temp.push_back(s.substr(index, i - index + 1));
-                dfs(s, i + 1, temp, res);
+                dfs(s, i+1, temp);
                 temp.pop_back();
             }
         }
-    }
+    }  
 public:
     vector<vector<string>> partition(string s)
-    {
-        vector<vector<string>> res;
+    {      
         if (s.empty())
             return res;
-
         vector<string> temp;
-        dfs(s, 0, temp, res);
+        dfs(s, 0, temp);
 
         return res;
     }
