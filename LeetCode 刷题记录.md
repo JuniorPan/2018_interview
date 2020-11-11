@@ -2425,6 +2425,38 @@ vector<vector<int>> zigzagLevelOrder(TreeNode *root)
 }
 ```
 
+#### [111. Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree/)
+
+```
+int minDepth(TreeNode *root)
+{
+    if (!root)
+        return 0;
+
+    queue<TreeNode *> q;
+    q.push(root);
+    int res = 1;
+    while (!q.empty())
+    {
+        int size = q.size();
+        for (int i = 0; i < size; i++)
+        {
+            root = q.front();
+            q.pop();
+            if (!root->left && !root->right)
+                return res;
+            if (root->left)
+                q.push(root->left);
+
+            if (root->right)
+                q.push(root->right);
+        }
+        res++;
+    }
+    return -1;
+}
+```
+
 
 
 #### [127. Word Ladder I ](https://leetcode.com/problems/word-ladder/)   todo: 还有种解法不是很懂
@@ -3159,7 +3191,7 @@ public:
 
 #### [110. Balanced Binary Tree](https://leetcode.com/problems/balanced-binary-tree/)
 
-#### [111. Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree/)
+#### 
 
 #### [112. Path Sum](https://leetcode.com/problems/path-sum/)
 
