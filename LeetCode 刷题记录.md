@@ -3093,6 +3093,90 @@ TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 }
 ```
 
+### 树的DFS
+
+通常采用递归
+
+#### [100. Same Tree](https://leetcode.com/problems/same-tree/)
+
+```
+bool isSameTree(TreeNode *p, TreeNode *q)
+{
+    if (p == nullptr && q == nullptr)
+        return true;
+
+    if ((p == nullptr && q != nullptr) || (p != nullptr && q == nullptr))
+        return false;
+
+    if (!p && !q && p->val != q->val)
+        return false;
+    else
+    {
+        return p->val == q->val && isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
+    }
+}
+```
+
+
+
+#### [101. Symmetric Tree](https://leetcode.com/problems/symmetric-tree/)
+
+```
+class Solution
+{
+    bool isSymmetricTree(TreeNode *root1, TreeNode *root2)
+    {
+        if (!root1 && !root2)
+            return true;
+
+        if (!root1 || !root2)
+            return false;
+
+        if (root1 && root2)
+        {
+            return root1->val == root2->val && isSymmetricTree(root1->left, root2->right) && isSymmetricTree(root1->right, root2->left);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+public:
+    bool isSymmetric(TreeNode *root)
+    {
+        if (!root)
+            return true;
+
+        return isSymmetricTree(root->left, root->right);
+    }
+};
+```
+
+
+
+#### [104. Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
+
+#### [110. Balanced Binary Tree](https://leetcode.com/problems/balanced-binary-tree/)
+
+#### [111. Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree/)
+
+#### [112. Path Sum](https://leetcode.com/problems/path-sum/)
+
+#### [113. Path Sum II](https://leetcode.com/problems/path-sum-ii/)（和[剑指 Offer 34. 二叉树中和为某一值的路径](https://leetcode-cn.com/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/)一样）
+
+#### [437. Path Sum III](https://leetcode.com/problems/path-sum-iii/submissions/)
+
+
+
+[剑指 Offer 26. 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
+
+[剑指 Offer 33. 二叉搜索树的后序遍历序列](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/)
+
+[剑指 Offer 54. 二叉搜索树的第k大节点](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/)(inorder)
+
+
+
 ### 区间合并
 
 ####  [56. Merge Intervals](https://leetcode.com/problems/merge-intervals/)
