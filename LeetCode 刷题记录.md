@@ -3149,8 +3149,6 @@ bool isSameTree(TreeNode *p, TreeNode *q)
 }
 ```
 
-
-
 #### [101. Symmetric Tree](https://leetcode.com/problems/symmetric-tree/)
 
 ```
@@ -3185,11 +3183,32 @@ public:
 };
 ```
 
-
-
 #### [104. Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
 
+```
+int maxDepth(TreeNode* root)
+{
+    if (root == NULL)
+        return 0;
+    else return max(maxDepth(root->left), maxDepth(root->right)) + 1;
+}
+```
+
 #### [110. Balanced Binary Tree](https://leetcode.com/problems/balanced-binary-tree/)
+
+```
+int height(TreeNode *root)
+{
+    if(root == NULL)return 0;
+        return max(height(root->left), height(root->right)) + 1;
+}
+bool isBalanced(TreeNode* root) 
+{
+    if(root == NULL)
+        return true;
+    else return isBalanced(root->right) && isBalanced(root->left) && abs(height(root->left) - height(root->right)) <= 1;
+}
+```
 
 #### [112. Path Sum](https://leetcode.com/problems/path-sum/)
 
