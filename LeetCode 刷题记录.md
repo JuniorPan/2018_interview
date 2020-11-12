@@ -3193,7 +3193,52 @@ public:
 
 #### [112. Path Sum](https://leetcode.com/problems/path-sum/)
 
+```
+bool hasPathSum(TreeNode *root, int sum)
+{
+    if (root == NULL)
+        return false;
+    if (root->left == NULL && root->right == NULL && sum == root->val)
+        return true;
+    else
+        return hasPathSum(root->right, sum - root->val) || hasPathSum(root->left, sum - root->val);
+}
+```
+
+
+
 #### [113. Path Sum II](https://leetcode.com/problems/path-sum-ii/)（和[剑指 Offer 34. 二叉树中和为某一值的路径](https://leetcode-cn.com/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/)一样）
+
+```
+// 本质上还是回溯
+class Solution
+{
+public:
+    void dfs(TreeNode *node, int sum, vector<int> &temp, vector<vector<int>> &res)
+    {
+        if (!node)
+            return;
+        temp.push_back(node->val);
+        if (sum == node->val && !node->left && !node->right)
+        {
+            res.push_back(temp);
+        }
+
+        dfs(node->left, sum-node->val, temp, res);
+        dfs(node->right, sum-node->val, temp, res);
+        temp.pop_back();
+    }
+    vector<vector<int>> pathSum(TreeNode *root, int sum)
+    {
+        vector<vector<int>> res;
+        vector<int> temp;
+        dfs(root, sum, temp, res);
+        return res;
+    }
+};
+```
+
+
 
 #### [437. Path Sum III](https://leetcode.com/problems/path-sum-iii/submissions/)
 

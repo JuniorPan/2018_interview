@@ -16,14 +16,32 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-class Solution {
+class Solution
+{
 public:
-    vector<vector<int>> pathSum(TreeNode* root, int sum) {
-        if (root == NULL) return {};
-        if (root->left == NULL && root->right == NULL && sum == root->val)
-            return true;
-        else return hasPathSum(root->right,sum-root->val) || hasPathSum(root->left,sum-root->val);
+    void dfs(TreeNode *node, int sum, vector<int> &temp, vector<vector<int>> &res)
+    {
+        if (!node)
+            return;
+
+        temp.push_back(node->val);
+
+        if (sum == node->val && !node->left && !node->right)
+        {
+            res.push_back(temp);
+        }
+
+        dfs(node->left, sum-node->val, temp, res);
+        dfs(node->right, sum-node->val, temp, res);
+        temp.pop_back();
+    }
+
+    vector<vector<int>> pathSum(TreeNode *root, int sum)
+    {
+        vector<vector<int>> res;
+        vector<int> temp;
+        dfs(root, sum, temp, res);
+        return res;
     }
 };
 // @lc code=end
-
