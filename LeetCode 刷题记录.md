@@ -1292,7 +1292,7 @@ ListNode *sortList(ListNode *head)
 
 ***状态: f(x)表示从起点走到坐标x, f[x][y]表示我从起点走到坐标x,y; 方程: 研究走到x, y这个点之前的一步; 初始化: 起点; 答案: 终点***
 
-#### [64. Minimum Path Sum](https://leetcode.com/problems/minimum-path-sum/)
+##### [64. Minimum Path Sum](https://leetcode.com/problems/minimum-path-sum/)
 
 ```
 int minPathSum(vector<vector<int>> &grid)
@@ -1323,7 +1323,7 @@ int minPathSum(vector<vector<int>> &grid)
 }
 ```
 
-#### [70. Climbing Stairs](https://leetcode.com/problems/climbing-stairs/)
+##### [70. Climbing Stairs](https://leetcode.com/problems/climbing-stairs/)
 
 ```
 int climbStairs(int n)
@@ -1342,7 +1342,7 @@ int climbStairs(int n)
 ```
 
 
-#### [62. Unique Paths](https://leetcode.com/problems/unique-paths/)
+##### [62. Unique Paths](https://leetcode.com/problems/unique-paths/)
 ```
 
 int uniquePaths(int m, int n) 
@@ -1368,7 +1368,7 @@ int uniquePaths(int m, int n)
 ```
 
 
-#### [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/)
+##### [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/)
 
 ```
 int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
@@ -1411,7 +1411,7 @@ int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
 ```
 
 
-#### [120. Triangle](https://leetcode.com/problems/triangle/)
+##### [120. Triangle](https://leetcode.com/problems/triangle/)
 
 ```
 
@@ -1435,7 +1435,7 @@ int minimumTotal(vector<vector<int>>& triangle)
 
 ***状态: f[i]表示前i个位置/数字/字符, 第i个; 方程: f[i] = f(f[j]), j是i之前的一个位置; 初始化: f[0]; 答案: f[n-1]; 小技巧: 一般有N个数字/字符, 就开N+1个位置的数组, 第0个位置单独留出来作初始化.(跟坐标相关的动态规划除外)***
 
-[32. Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses/)
+##### [32. Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses/)
 
 ```
 int longestValidParentheses(string s)
@@ -1464,7 +1464,7 @@ int longestValidParentheses(string s)
 ```
 
 
-#### [45. Jump Game II](https://leetcode.com/problems/jump-game-ii/)
+##### [45. Jump Game II](https://leetcode.com/problems/jump-game-ii/)
 
 ```
 int jump(vector<int>& nums) 
@@ -1491,7 +1491,7 @@ int jump(vector<int>& nums)
 ```
 
 
-#### [55. Jump Game](https://leetcode.com/problems/jump-game/)
+##### [55. Jump Game](https://leetcode.com/problems/jump-game/)
 
 ```
 
@@ -1508,7 +1508,7 @@ int jump(vector<int>& nums)
 }
 ```
 
-#### [132. Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/)
+##### [132. Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/)
 
 ```
  int minCut(string s) 
@@ -1539,7 +1539,7 @@ int jump(vector<int>& nums)
 }
 ```
 
-#### [139. Word Break](https://leetcode.com/problems/word-break/)
+##### [139. Word Break](https://leetcode.com/problems/word-break/)
 
 ```
 bool wordBreak(string s, vector<string> &wordDict)
@@ -1570,7 +1570,7 @@ bool wordBreak(string s, vector<string> &wordDict)
 }
 ```
 
-#### [198. House Robber](https://leetcode.com/problems/house-robber/)
+##### [198. House Robber](https://leetcode.com/problems/house-robber/)
 
 ```
 int rob(vector<int> &nums)
@@ -1597,7 +1597,7 @@ int rob(vector<int> &nums)
 }
 ```
 
-#### [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/)
+##### [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/)
 
 ```
 int lengthOfLIS(vector<int> &nums)
@@ -1629,7 +1629,7 @@ int lengthOfLIS(vector<int> &nums)
 #### 3.双序列动态规划
 ***状态: f[i][j]表示第一个sequence的前i个数字/字符, 配上第二个sequence的前j个; 方程: f[i][j] = 研究第i个和第j个的匹配关系; 初始化: f[i][0]和f[0][i]; 答案: f[n][m], 其中n = s1.length(); m = s2.length();***  
 
-[10. Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching/)
+##### [10. Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching/)
 
 ```
 bool isMatch(string s, string p) 
@@ -1666,7 +1666,7 @@ bool isMatch(string s, string p)
 ```
 
 
-#### [44. Wildcard Matching](https://leetcode.com/problems/wildcard-matching/)
+##### [44. Wildcard Matching](https://leetcode.com/problems/wildcard-matching/)
 
 ```
 bool isMatch(string s, string p) 
@@ -1709,7 +1709,7 @@ bool isMatch(string s, string p)
 }
 ```
 
-#### [72. Edit Distance](https://leetcode.com/problems/edit-distance/)  
+##### [72. Edit Distance](https://leetcode.com/problems/edit-distance/)  
 
 ```
 int minDistance(string word1, string word2)
@@ -1742,7 +1742,7 @@ int minDistance(string word1, string word2)
 }
 ```
 
-#### [97. Interleaving String](https://leetcode.com/problems/interleaving-string/)  
+##### [97. Interleaving String](https://leetcode.com/problems/interleaving-string/)  
 
 ```
 //LeetCode 没过很奇怪
@@ -1790,7 +1790,7 @@ bool isInterleave(string s1, string s2, string s3)
 ```
 
 
-#### [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/)  
+##### [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/)  
 
 ```
 // 这一题的转移方程还没有理解
@@ -1821,7 +1821,7 @@ int numDistinct(string s, string t)
 }
 ```
 
-#### [712. Minimum ASCII Delete Sum for Two Strings](https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/)
+##### [712. Minimum ASCII Delete Sum for Two Strings](https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/)
 
 ```c++
 int minimumDeleteSum(string s1, string s2) 
@@ -1859,7 +1859,7 @@ int minimumDeleteSum(string s1, string s2)
 ```
 
 
-#### [1143. Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/)
+##### [1143. Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/)
 
 ```
 int longestCommonSubsequence(string word1, string word2)
@@ -1900,7 +1900,7 @@ int longestCommonSubsequence(string word1, string word2)
 #### 4.划分型动态规划
 ***状态: f[i]表示前i个元素的最大值; 方程: f[i] = 前i个元素里面选一个区间的最大值; 初始化: f[0]; 答案: f[n - 1]***
 
-#### [188. Best Time to Buy and Sell Stock IV](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/)
+##### [188. Best Time to Buy and Sell Stock IV](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/)
 
 
 #### 6.背包型动态规划
@@ -1911,7 +1911,7 @@ int longestCommonSubsequence(string word1, string word2)
 *** 特点: 1). 求一段区间的解max/min/count; 2). 转移方程通过区间更新; 3). 从大到小的更新; 这种题目共性就是区间最后求[0, n-1]这样一个区间逆向思维分析, 从大到小就能迎刃而解 ***
 
 
-#### [132. Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/)
+##### [132. Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/)
 
 ```
 class Solution
@@ -1973,7 +1973,7 @@ public:
 ####  6.博弈型动态规划状态
 ***定义一个人的状态; 方程: 考虑两个人的状态做状态更新; 初始化: 暂无; 答案: 先思考最小状态, 再思考大的状态 -> 往小的递推, 适合记忆话搜索 动态规划, 循环(从小到大递推), 记忆化搜索(从大到小搜索, 画搜索树); 什么时候 用记忆化搜索: 1). 状态转移特别麻烦, 不是顺序性, 2). 初始化状态不是很容易找到; 题目类型: 1). 博弈类问题, 2). 区间类问题; 适合解决题目: 1). 状态特别复杂, 2). 不好初始化***
 
-[486. Predict the Winner](https://leetcode.com/problems/predict-the-winner/)
+##### [486. Predict the Winner](https://leetcode.com/problems/predict-the-winner/)
 
 ```
 class Solution
@@ -2014,7 +2014,7 @@ public:
 ```
 
 
-####  分治 （还不会 先总结着）
+###  分治 （还不会 先总结着）
 #### [395. Longest Substring with At Least K Repeating Characters](https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/)
 
 
