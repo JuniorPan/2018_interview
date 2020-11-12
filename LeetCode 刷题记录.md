@@ -3210,7 +3210,7 @@ bool hasPathSum(TreeNode *root, int sum)
 #### [113. Path Sum II](https://leetcode.com/problems/path-sum-ii/)（和[剑指 Offer 34. 二叉树中和为某一值的路径](https://leetcode-cn.com/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/)一样）
 
 ```
-// 本质上还是回溯
+// **本质上还是回溯**
 class Solution
 {
 public:
@@ -3238,9 +3238,44 @@ public:
 };
 ```
 
-
-
 #### [437. Path Sum III](https://leetcode.com/problems/path-sum-iii/submissions/)
+
+```
+class Solution
+{
+public:
+    // 本质上还是回溯
+    void dfs(TreeNode *node, int sum, int curSum, vector<TreeNode *>& path, int &res)
+    {
+        if (!node)
+            return;
+
+        curSum += node->val;
+        path.push_back(node);
+        if (curSum == sum)
+            res++;
+        int t = curSum;
+        for (int i = 0; i < path.size() - 1; ++i) {
+            t -= path[i]->val;
+            if (t == sum) ++res;
+        }
+        dfs(node->left, sum, curSum, path, res);
+        dfs(node->right, sum, curSum, path, res);
+        path.pop_back();
+        
+    }
+
+    int pathSum(TreeNode *root, int sum)
+    {
+        int res = 0;
+        vector<TreeNode*> path;
+        dfs(root, sum, 0, path, res);
+        return res;
+    }
+};
+```
+
+
 
 [剑指 Offer 26. 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
 
