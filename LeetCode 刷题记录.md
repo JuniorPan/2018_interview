@@ -1292,6 +1292,74 @@ ListNode *sortList(ListNode *head)
 
 ***状态: f(x)表示从起点走到坐标x, f[x][y]表示我从起点走到坐标x,y; 方程: 研究走到x, y这个点之前的一步; 初始化: 起点; 答案: 终点***
 
+
+
+##### [62. Unique Paths](https://leetcode.com/problems/unique-paths/)
+```
+int uniquePaths(int m, int n) 
+{
+    // int dp[m][n];
+    // dp[0][0] = 0;
+    // dp[0][1] = 1;
+    // dp[1][0] = 1;
+    // dp[1][1] = 2;
+    
+    // dp[i][j] 表示从[0][0]--->[i][j] 有多少种走法
+    vector<vector<int>> dp(m, vector<int>(n, 1));
+    
+    for(int i = 1; i < m; i++)
+    {
+        for(int j = 1; j < n; j++)
+        {
+            dp[i][j] = dp[i-1][j] + dp[i][j-1];
+        }
+    }
+    return dp[m-1][n-1];
+}
+```
+
+##### [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/)
+
+```
+int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
+{
+    int m = obstacleGrid.size();
+    int n = obstacleGrid[0].size();
+    if (obstacleGrid.empty() || obstacleGrid[0].empty() || obstacleGrid[0][0] == 1)
+    {
+        return 0;
+    }
+    vector<vector<int>> dp(m, vector<int>(n, 0));
+    for (int i = 0; i < m; i++)
+    {
+        if (obstacleGrid[i][0] != 1)
+            dp[i][0] = 1;
+        else
+            break;
+    }
+    for (int j = 0; j < n; j++)
+    {
+        if (obstacleGrid[0][j] != 1)
+            dp[0][j] = 1;
+        else
+            break;
+    }
+
+    // dp[i][j] 表示从[0][0]--->[i][j] 有多少种走法
+    for (int i = 1; i < m; i++)
+    {
+        for (int j = 1; j < n; j++)
+        {
+            if (obstacleGrid[i][j] == 1)
+                dp[i][j] = 0;
+            else
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+        }
+    }
+    return dp[m - 1][n - 1];
+}
+```
+
 ##### [64. Minimum Path Sum](https://leetcode.com/problems/minimum-path-sum/)
 
 ```
@@ -1338,75 +1406,6 @@ int climbStairs(int n)
         dp[i] = dp[i - 1] + dp[i - 2];
     }
     return dp[n - 1];
-}
-```
-
-
-##### [62. Unique Paths](https://leetcode.com/problems/unique-paths/)
-```
-
-int uniquePaths(int m, int n) 
-{
-    // int dp[m][n];
-    // dp[0][0] = 0;
-    // dp[0][1] = 1;
-    // dp[1][0] = 1;
-    // dp[1][1] = 2;
-    
-    // dp[i][j] 表示从[0][0]--->[i][j] 有多少种走法
-    vector<vector<int>> dp(m, vector<int>(n, 1));
-    
-    for(int i = 1; i < m; i++)
-    {
-        for(int j = 1; j < n; j++)
-        {
-            dp[i][j] = dp[i-1][j] + dp[i][j-1];
-        }
-    }
-    return dp[m-1][n-1];
-}
-```
-
-
-##### [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/)
-
-```
-int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
-{
-    int m = obstacleGrid.size();
-    int n = obstacleGrid[0].size();
-    if (obstacleGrid.empty() || obstacleGrid[0].empty() || obstacleGrid[0][0] == 1)
-    {
-        return 0;
-    }
-    vector<vector<int>> dp(m, vector<int>(n, 0));
-    for (int i = 0; i < m; i++)
-    {
-        if (obstacleGrid[i][0] != 1)
-            dp[i][0] = 1;
-        else
-            break;
-    }
-    for (int j = 0; j < n; j++)
-    {
-        if (obstacleGrid[0][j] != 1)
-            dp[0][j] = 1;
-        else
-            break;
-    }
-
-    // dp[i][j] 表示从[0][0]--->[i][j] 有多少种走法
-    for (int i = 1; i < m; i++)
-    {
-        for (int j = 1; j < n; j++)
-        {
-            if (obstacleGrid[i][j] == 1)
-                dp[i][j] = 0;
-            else
-                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
-        }
-    }
-    return dp[m - 1][n - 1];
 }
 ```
 
