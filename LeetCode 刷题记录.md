@@ -1290,7 +1290,7 @@ ListNode *sortList(ListNode *head)
 
 #### 1.坐标型动态规划  120不会
 
-***状态: f(x)表示从起点走到坐标x, f[x][y]表示我从起点走到坐标x,y; 方程: 研究走到x, y这个点之前的一步; 初始化: 起点; 答案: 终点***
+**状态: f(x)表示从起点走到坐标x, f\[x][y]表示我从起点走到坐标x,y; 方程: 研究走到x, y这个点之前的一步; 初始化: 起点; 答案: 终点**
 
 
 
@@ -1605,7 +1605,7 @@ int lengthOfLIS(vector<int> &nums)
         return 0;
 
     int n = nums.size();
-    // dp[i] 表示已nums[i]结尾的最长公共子序列
+    // dp[i] 表示以nums[i]结尾的最长公共子序列
     vector<int> dp(n, 0);
     int max2 = INT_MIN;
     for (int i = 0; i < nums.size(); i++)
@@ -1626,7 +1626,13 @@ int lengthOfLIS(vector<int> &nums)
 
 
 #### 3.双序列动态规划
-***状态: f[i][j]表示第一个sequence的前i个数字/字符, 配上第二个sequence的前j个; 方程: f[i][j] = 研究第i个和第j个的匹配关系; 初始化: f[i][0]和f[0][i]; 答案: f[n][m], 其中n = s1.length(); m = s2.length();***  
+**状态: f\[i][j]表示第一个sequence的前i个数字/字符, 配上第二个sequence的前j个; **
+
+**方程: f\[i][j] = 研究第i个和第j个的匹配关系; **
+
+**初始化: f\[i][0]和f\[0][i]; **
+
+**答案: f\[n][m], 其中n = s1.length(); m = s2.length();**
 
 ##### [10. Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching/)
 
