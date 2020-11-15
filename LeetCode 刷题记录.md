@@ -1908,10 +1908,62 @@ int longestCommonSubsequence(string word1, string word2)
 ##### [188. Best Time to Buy and Sell Stock IV](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/)
 
 
-#### 6.背包型动态规划
-**特点: 1). 用值作为DP维度, 2). DP过程就是填写矩阵, 3). 可以滚动数组优化 状态: f[i][S]前i个物品, 取出一些能否组成和为S; 方程: f[i][S] = f[i-1][S-a[i]] or f[i-1][S]; 初始化: f[i][0]=true; f[0][1...target]=false; 答案: 检查所有f[n][j]**
+#### 5.背包型动态规划
+**特点: 1). 用值作为DP维度, 2). DP过程就是填写矩阵, 3). 可以滚动数组优化 状态: f\[i][S]前i个物品, 取出一些能否组成和为S; 方程: f\[i][S] = f\[i-1][S-a[i]] or f\[i-1][S]; 初始化: f\[i][0]=true; f\[0][1...target]=false; 答案: 检查所有f\[n][j]**
 
-#### 5.区间型动态规划
+#### [322. Coin Change](https://leetcode.com/problems/coin-change/description/)
+
+```c++
+int coinChange(vector<int> &coins, int amount)
+{
+    // int dp[amount+1] = {amount+1};
+    // dp[i] 表示钱数为i时的最小硬币数的找零，注意由于数组是从0开始的，所以要多申请一位，数组大小为 amount+1，这样最终结果就可以保存在 dp[amount] 中了
+    vector<int> dp(amount + 1, amount + 1);
+    int size = coins.size();
+    dp[0] = 0;
+    for (int i = 1; i <= amount; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            if (coins[j] <= i)
+            {
+                dp[i] = min(dp[i], dp[i - coins[j]] + 1);
+            }
+        }
+    }
+    return dp[amount] > amount ? -1 : dp[amount];
+}
+```
+
+#### [518. Coin Change 2](https://leetcode.com/problems/coin-change)  注意和322的区别
+
+todo: **还不懂后面的这个去掉当前硬币的这种情况**
+
+```c++
+int change(int amount, vector<int> &coins)
+{
+    //dp[i][j] 表示用前i个硬币组成钱数为j的不同组合方法
+    vector<vector<int>> dp(coins.size() + 1, vector<int>(amount + 1, 0));
+    dp[0][0] = 1;
+    // 采用的方法是一个硬币一个硬币的增加，每增加一个硬币，都从1遍历到 amount，对于遍历到的当前钱数j，组成方法就是不加上当前硬币的拼法 dp[i-1][j]，还要加上去掉当前硬币值的钱数的组成方法 
+    for (int i = 1; i <= coins.size(); ++i)
+    {
+        dp[i][0] = 1;
+        for (int j = 1; j <= amount; ++j)
+        {
+            if(j >= coins[i - 1])
+                dp[i][j] = dp[i - 1][j] +  dp[i][j - coins[i - 1]]; // 第i个硬币有 使用和不使用两种情况
+            else
+                dp[i][j] = dp[i - 1][j];
+        }
+    }
+    return dp[coins.size()][amount];
+}
+```
+
+
+
+#### 6.区间型动态规划
 
 *** 特点: 1). 求一段区间的解max/min/count; 2). 转移方程通过区间更新; 3). 从大到小的更新; 这种题目共性就是区间最后求[0, n-1]这样一个区间逆向思维分析, 从大到小就能迎刃而解 ***
 
