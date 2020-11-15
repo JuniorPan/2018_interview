@@ -74,13 +74,14 @@ public:
         //dp[i][j] 表示用前i个硬币组成钱数为j的不同组合方法
         vector<vector<int>> dp(coins.size() + 1, vector<int>(amount + 1, 0));
         dp[0][0] = 1;
+        // 采用的方法是一个硬币一个硬币的增加，每增加一个硬币，都从1遍历到 amount，对于遍历到的当前钱数j，组成方法就是不加上当前硬币的拼法 dp[i-1][j]，还要加上去掉当前硬币值的钱数的组成方法
         for (int i = 1; i <= coins.size(); ++i)
         {
             dp[i][0] = 1;
             for (int j = 1; j <= amount; ++j)
             {
-                if(j >= coins[i - 1])
-                    dp[i][j] = dp[i - 1][j] +  dp[i][j - coins[i - 1]];
+                if (j >= coins[i - 1])
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - coins[i - 1]]; // 第i个硬币有 使用和不使用两种情况
                 else
                     dp[i][j] = dp[i - 1][j];
             }
