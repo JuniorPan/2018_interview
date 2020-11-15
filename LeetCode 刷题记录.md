@@ -1937,7 +1937,7 @@ int coinChange(vector<int> &coins, int amount)
 
 #### [518. Coin Change 2](https://leetcode.com/problems/coin-change)  注意和322的区别
 
-todo: **还不懂后面的这个去掉当前硬币的这种情况 **   还有空间优化
+todo: **还不懂后面的这个去掉当前硬币的这种情况 **   还有空间优化需要看
 
 ```c++
 int change(int amount, vector<int> &coins)
