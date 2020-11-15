@@ -1963,6 +1963,23 @@ int change(int amount, vector<int> &coins)
 
 
 
+#### [494. Target Sum](https://leetcode.com/problems/target-sum/)
+
+```c++
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int S) {
+        
+        // dp[i][j] 选前i个数 组成和为j的方法 思路有了 实际代码写不出来
+        // dp[i][j] = dp[i-1][j-num[i]] + dp[ i - 1 ][ j + nums[ i ] ]
+        
+        
+    }
+};
+```
+
+
+
 #### 6.区间型动态规划
 
 *** 特点: 1). 求一段区间的解max/min/count; 2). 转移方程通过区间更新; 3). 从大到小的更新; 这种题目共性就是区间最后求[0, n-1]这样一个区间逆向思维分析, 从大到小就能迎刃而解 ***
