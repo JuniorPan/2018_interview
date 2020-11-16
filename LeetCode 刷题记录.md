@@ -1911,7 +1911,7 @@ int longestCommonSubsequence(string word1, string word2)
 #### 5.背包型动态规划
 **特点: 1). 用值作为DP维度, 2). DP过程就是填写矩阵, 3). 可以滚动数组优化 状态: f\[i][S]前i个物品, 取出一些能否组成和为S; 方程: f\[i][S] = f\[i-1][S-a[i]] or f\[i-1][S]; 初始化: f\[i][0]=true; f\[0][1...target]=false; 答案: 检查所有f\[n][j]**
 
-#### [322. Coin Change](https://leetcode.com/problems/coin-change/description/)
+##### [322. Coin Change](https://leetcode.com/problems/coin-change/description/)
 
 ```c++
 int coinChange(vector<int> &coins, int amount)
@@ -1935,7 +1935,7 @@ int coinChange(vector<int> &coins, int amount)
 }
 ```
 
-#### [518. Coin Change 2](https://leetcode.com/problems/coin-change)  注意和322的区别
+##### [518. Coin Change 2](https://leetcode.com/problems/coin-change)  注意和322的区别
 
 todo: **还不懂后面的这个去掉当前硬币的这种情况 **   还有空间优化需要看   
 
@@ -1961,9 +1961,37 @@ int change(int amount, vector<int> &coins)
 }
 ```
 
+##### [416. Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/)
 
+```c++
+bool canPartition(vector<int> &nums)
+{
+    int sum = 0;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        sum += nums[i];
+    }
+    if (sum % 2 == 1)
+        return false;
+    int targetSum = sum / 2;
+    // dp[i] 表示原数组是否可以取出若干个数字，其和为i
+    vector<bool> dp(targetSum + 1, false);
+    dp[0] = true;
+    for (int i = 1; i < nums.size(); i++)
+    {
+        for (int j = targetSum; j > 0; j--)
+        {
+            if (j >= nums[i])
+            {
+                dp[j] = dp[j] || dp[j - nums[i]]; // 两种情况 分别是使用当前数字nums[i] 和不使用当前数字nums[i]
+            }
+        }
+    }
+    return dp[targetSum];
+}
+```
 
-#### [494. Target Sum](https://leetcode.com/problems/target-sum/)
+##### [494. Target Sum](https://leetcode.com/problems/target-sum/)
 
 ```c++
 class Solution {
