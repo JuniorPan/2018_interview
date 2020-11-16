@@ -48,6 +48,7 @@ public:
 
         for (int i = 0; i < s.size(); i++)
         {
+            dp[i][i] = true;
             for (int j = 0; j < i; j++)
             {
                 dp[j][i] = s[i] == s[j] && ( i - j < 2 || dp[j+1][i-1]); 
@@ -58,7 +59,7 @@ public:
                     right = i;
                 }
             }
-            dp[i][i] = true;
+           
         }
         return s.substr(left,right - left + 1);
     }

@@ -56,8 +56,40 @@
 class Solution
 {
 public:
-    // 解法一:
+
+    // 解法1:
     int minCut(string s)
+    {
+        if (s.empty())
+            return 0;
+        int n = s.size();
+        //p[i][j] 表示区间 [i, j] 内的子串是否为回文串，
+        vector<vector<bool>> p(n, vector<bool>(n));
+        // dp[i]表示子串 [0, i] 范围内的最小分割数
+        vector<int> dp(n);
+
+        for (int j = 0; j < n; j++)
+        {
+            dp[j] = j;
+            for(int i = 0; i <= j; i++)
+            {
+                p[i][j] = s[i] == s[j] && (j - i < 2 || p[i+1][j-1]);
+
+                if (p[i][j])
+                {
+                    dp[j] = (i == 0) ? 0 : min(dp[i-1] + 1, dp[j]);
+                }
+            }
+        }
+        return dp[n-1];
+    }
+
+
+
+
+
+    // 解法2:
+    int minCut_2(string s)
     {
         int n = s.size();
         if (n <= 0)
@@ -81,31 +113,6 @@ public:
             }
         }
         return dp[0];
-    }
-
-    // // 解法二:
-    int minCut_2(string s)
-    {
-        if (s.empty())
-            return 0;
-        int n = s.size();
-        //p[i][j] 表示区间 [i, j] 内的子串是否为回文串，
-        vector<vector<bool>> p(n, vector<bool>(n));
-        // dp[i]表示子串 [0, i] 范围内的最小分割数
-        vector<int> dp(n);
-        for (int i = 0; i < n; ++i)
-        {
-            dp[i] = i;
-            for (int j = 0; j <= i; ++j)
-            {
-                if (s[i] == s[j] && (i - j < 2 || p[j + 1][i - 1]))
-                {
-                    p[j][i] = true;
-                    dp[i] = (j == 0) ? 0 : min(dp[i], dp[j - 1] + 1);
-                }
-            }
-        }
-        return dp[n - 1];
     }
 };
 // @lc code=end
