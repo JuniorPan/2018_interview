@@ -39,34 +39,28 @@ class Solution
 public:
     string longestPalindrome(string s)
     {
-        
-        // dp[i, j] = 1                                   if i == j
-        //          = s[i] == s[j]                        if j = i + 1
-        //          = s[i] == s[j] && dp[i + 1][j - 1]    if j > i + 1
-
         if (s.empty())
             return "";
-
-        int len = 0;
-        int left = 0;
-        int right = 0;
-        // dp[i][j] 表示字符串区间 [i, j] 是否为回文串
+        int len = 0;  // 记录最长回文子串的长度
+        int left = 0, right = 0; // 记录最长回文子串的左右边界
+        // dp[i][j] 表示 s[i...j]上是否为回文子串
         vector<vector<bool>> dp(s.size(), vector<bool>(s.size(), false));
-        for (int j = 0; j < s.size(); j++) // 遍历所有的的子串
+
+        for (int i = 0; i < s.size(); i++)
         {
-            for (int i = 0; i < j; i++)
+            for (int j = 0; j < i; j++)
             {
-                dp[i][j] = s[i] == s[j] && (j - i < 2 || dp[i + 1][j - 1]);
-                if (dp[i][j] && len < j - i + 1)
+                dp[j][i] = s[i] == s[j] && ( i - j < 2 || dp[j+1][i-1]); 
+                if (dp[j][i] && i - j + 1 > len)
                 {
-                    len = j - i + 1;
-                    left = i;
-                    right = j;
+                    len = i - j +1;
+                    left = j;
+                    right = i;
                 }
             }
-            dp[j][j] = true;
+            dp[i][i] = true;
         }
-        return s.substr(left, right - left + 1);
+        return s.substr(left,right - left + 1);
     }
 };
 // @lc code=end
