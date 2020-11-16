@@ -2036,7 +2036,44 @@ public:
 
 #### 6.区间型动态规划
 
-*** 特点: 1). 求一段区间的解max/min/count; 2). 转移方程通过区间更新; 3). 从大到小的更新; 这种题目共性就是区间最后求[0, n-1]这样一个区间逆向思维分析, 从大到小就能迎刃而解 ***
+**特点: 1). 求一段区间的解max/min/count; 2). 转移方程通过区间更新; 3). 从大到小的更新; 这种题目共性就是区间最后求[0, n-1]这样一个区间逆向思维分析, 从大到小就能迎刃而解** 
+
+##### [5. Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)
+
+```
+string longestPalindrome(string s)
+{
+    // dp[i, j] = 1                                   if i == j
+    //          = s[i] == s[j]                        if j = i + 1
+    //          = s[i] == s[j] && dp[i + 1][j - 1]    if j > i + 1
+
+    if (s.empty())
+        return "";
+
+    int len = 0;
+    int left = 0;
+    int right = 0;
+    // dp[i][j] 表示字符串区间 [i, j] 是否为回文串
+    vector<vector<bool>> dp(s.size(), vector<bool>(s.size(), false));
+    for (int j = 0; j < s.size(); j++) // 遍历所有的的子串
+    {
+        for (int i = 0; i < j; i++)
+        {
+            dp[i][j] = s[i] == s[j] && (j - i < 2 || dp[i + 1][j - 1]);
+            if (dp[i][j] && len < j - i + 1)
+            {
+                len = j - i + 1;
+                left = i;
+                right = j;
+            }
+        }
+        dp[j][j] = true;
+    }
+    return s.substr(left, right - left + 1);
+}
+```
+
+
 
 
 ##### [132. Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/)
@@ -2097,8 +2134,64 @@ public:
 };
 ```
 
+##### [516. Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence/)
+
+```
+int longestPalindromeSubseq(string s)
+{
+    int n = s.size();
+    // dp[i][j]表示[i,j]区间内的字符串的最长回文子序列
+    vector<vector<int>> dp(n, vector<int>(n));
+    for (int i = n - 1; i >= 0; --i)
+    {
+        dp[i][i] = 1;
+        for (int j = i + 1; j < n; ++j)
+        {
+            if (s[i] == s[j])
+            {
+                dp[i][j] = dp[i + 1][j - 1] + 2;
+            }
+            else
+            {
+                dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
+            }
+        }
+    }
+    return dp[0][n - 1];
+}
+```
+
+##### [647. Palindromic Substrings](https://leetcode.com/problems/palindromic-substrings/)
+
+```
+int countSubstrings(string s) 
+{
+    int n = s.size();
+    if (n <= 0)
+        return 0;
+    int res = 0;
+
+    vector<vector<bool>> dp(n, vector<bool>(n, false));
+
+    for(int i = n-1; i >= 0; i--)
+    {
+        for(int j = i; j < n; j++)
+        {
+            dp[i][j] = s[i] == s[j] && (j - i < 2 || dp[i+1][j-1]);
+            {
+                if (dp[i][j])
+                    res++;
+            }
+        }
+    }
+    return res;
+}
+```
+
+
 
 ####  6.博弈型动态规划状态
+
 ***定义一个人的状态; 方程: 考虑两个人的状态做状态更新; 初始化: 暂无; 答案: 先思考最小状态, 再思考大的状态 -> 往小的递推, 适合记忆话搜索 动态规划, 循环(从小到大递推), 记忆化搜索(从大到小搜索, 画搜索树); 什么时候 用记忆化搜索: 1). 状态转移特别麻烦, 不是顺序性, 2). 初始化状态不是很容易找到; 题目类型: 1). 博弈类问题, 2). 区间类问题; 适合解决题目: 1). 状态特别复杂, 2). 不好初始化***
 
 ##### [486. Predict the Winner](https://leetcode.com/problems/predict-the-winner/)
