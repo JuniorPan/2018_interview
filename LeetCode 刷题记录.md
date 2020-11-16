@@ -1991,6 +1991,32 @@ bool canPartition(vector<int> &nums)
 }
 ```
 
+##### [474. Ones and Zeroes](https://leetcode.com/problems/ones-and-zeroes/)
+
+```
+int findMaxForm(vector<string> &strs, int m, int n)
+{
+    //dp[i][j]表示有i个0和j个1时能组成的最多字符串的个数
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+    for (string str : strs)
+    {
+        int zeros = 0, ones = 0;
+        for (char c : str)
+            (c == '0') ? ++zeros : ++ones;
+        for (int i = m; i >= zeros; --i)
+        {
+            for (int j = n; j >= ones; --j)
+            {
+                dp[i][j] = max(dp[i][j], dp[i - zeros][j - ones] + 1);
+            }
+        }
+    }
+    return dp[m][n];
+}
+```
+
+
+
 ##### [494. Target Sum](https://leetcode.com/problems/target-sum/)
 
 ```c++
