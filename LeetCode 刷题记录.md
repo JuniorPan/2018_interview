@@ -2053,7 +2053,7 @@ string longestPalindrome(string s) // todo: 时间上还得优化
     vector<vector<bool>> dp(s.size(), vector<bool>(s.size(), false));、
     for (int i = 0; i < s.size(); i++)
     {
-        for (int j = 0; j < i; j++)
+        for (int j = 0; j <= i; j++)
         {
             dp[j][i] = s[i] == s[j] && ( i - j < 2 || dp[j+1][i-1]); 
             if (dp[j][i] && i - j + 1 > len)
@@ -2063,7 +2063,6 @@ string longestPalindrome(string s) // todo: 时间上还得优化
                 right = i;
             }
         }
-        dp[i][i] = true;
     }
     return s.substr(left,right - left + 1);
 }
@@ -2132,7 +2131,9 @@ public:
 };
 ```
 
-##### [516. Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence/)   后面两题 逆向遍历 为什么？？？
+##### [516. Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence/)   后面两题 逆向遍历 为什么？？？ 重点是画图
+
+<img src="https://pic.leetcode-cn.com/1600677121-aGPcPu-file_1600677121456" alt="img" style="zoom:50%;" />
 
 ```
 int longestPalindromeSubseq(string s)
@@ -2140,47 +2141,50 @@ int longestPalindromeSubseq(string s)
     int n = s.size();
     // dp[i][j]表示[i,j]区间内的字符串的最长回文子序列
     vector<vector<int>> dp(n, vector<int>(n));
-    for (int i = n - 1; i >= 0; --i)
+
+    //如果s[i]==s[j]，那么i和j就可以增加2个回文串的长度，我们知道中间dp[i + 1][j - 1]的值，那么其加上2就是dp[i][j]的值。如果s[i] != s[j]，那么我们可以去掉i或j其中的一个字符，然后比较两种情况下所剩的字符串谁dp值大，就赋给dp[i][j]
+
+    for (int i = 0; i < n; i++)
     {
         dp[i][i] = 1;
-        for (int j = i + 1; j < n; ++j)
+        for (int j = i-1; j >= 0; j--)
         {
             if (s[i] == s[j])
             {
-                dp[i][j] = dp[i + 1][j - 1] + 2;
+                dp[j][i] = dp[j+1][i-1] + 2;
             }
             else
             {
-                dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
+                dp[j][i] = max(dp[j][i-1], dp[j+1][i]);
             }
         }
     }
-    return dp[0][n - 1];
+    return dp[0][n-1];
 }
 ```
 
 ##### [647. Palindromic Substrings](https://leetcode.com/problems/palindromic-substrings/)
 
 ```
-int countSubstrings(string s) 
+int countSubstrings(string s)
 {
     int n = s.size();
     if (n <= 0)
         return 0;
     int res = 0;
-
+    // dp[i][j] 表示区间s[i...j]上是否为回文子串
     vector<vector<bool>> dp(n, vector<bool>(n, false));
 
-    for(int i = n-1; i >= 0; i--)
+    for (int i = 0; i < n; i++)
     {
-        for(int j = i; j < n; j++)
+        // dp[i][i] = true;
+        for (int j = 0; j <= i; j++)
         {
-            dp[i][j] = s[i] == s[j] && (j - i < 2 || dp[i+1][j-1]);
-            {
-                if (dp[i][j])
-                    res++;
-            }
+            dp[j][i] = s[i] == s[j] && (i - j < 2 || dp[j + 1][i - 1]);
+            if (dp[j][i])
+                res++;
         }
+
     }
     return res;
 }

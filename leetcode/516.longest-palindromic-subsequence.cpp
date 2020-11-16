@@ -61,23 +61,27 @@ public:
     {
         int n = s.size();
         // dp[i][j]表示[i,j]区间内的字符串的最长回文子序列
-        vector<vector<int>> dp(n, vector<int>(n));
-        for (int i = n - 1; i >= 0; --i)
+        vector<vector<int>> dp(n, vector<int>(n,0));
+        dp[0][0]=1;
+
+        //如果s[i]==s[j]，那么i和j就可以增加2个回文串的长度，我们知道中间dp[i + 1][j - 1]的值，那么其加上2就是dp[i][j]的值。如果s[i] != s[j]，那么我们可以去掉i或j其中的一个字符，然后比较两种情况下所剩的字符串谁dp值大，就赋给dp[i][j]
+
+        for (int i = 1; i < n; i++)
         {
             dp[i][i] = 1;
-            for (int j = i + 1; j < n; ++j)
+            for (int j = i-1; j >= 0; j--)
             {
                 if (s[i] == s[j])
                 {
-                    dp[i][j] = dp[i + 1][j - 1] + 2;
+                    dp[j][i] = dp[j+1][i-1] + 2;
                 }
                 else
                 {
-                    dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
+                    dp[j][i] = max(dp[j][i-1], dp[j+1][i]);
                 }
             }
         }
-        return dp[0][n - 1];
+        return dp[0][n-1];
     }
 };
 // @lc code=end
