@@ -2132,7 +2132,7 @@ public:
 };
 ```
 
-##### [516. Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence/)
+##### [516. Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence/)   后面两题 逆向遍历 为什么？？？
 
 ```
 int longestPalindromeSubseq(string s)
