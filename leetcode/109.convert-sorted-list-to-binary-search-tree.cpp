@@ -87,23 +87,22 @@ class Solution
 {
     TreeNode *sortedListToBST(ListNode *head, ListNode *tail)
     {
-        if (head == tail)
-            return NULL;
-        if (head->next == tail)
-        {
-            TreeNode *root = new TreeNode(head->val);
-            return root;
-        }
-        // 寻找中间节点
+       if (head == tail) return nullptr;
+       if( head->next == tail )
+    	{	
+    		TreeNode *root = new TreeNode( head->val );
+    		return root;
+    	}
         ListNode *mid = head;
         ListNode *fast = head;
 
-        while (fast->next != tail && fast->next->next != tail)
+        // 寻找中间结点
+        while(fast->next != tail && fast->next->next != tail )
         {
-            fast = fast->next->next;
             mid = mid->next;
+            fast = fast->next->next;
+            
         }
-
         TreeNode *root = new TreeNode(mid->val);
         root->left = sortedListToBST(head, mid);
         root->right = sortedListToBST(mid->next, tail);

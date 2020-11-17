@@ -1,7 +1,7 @@
 # LeetCode 刷题记录
 ### 滑动窗口问题
 核心思想: 我们可以用滑动窗口的思想解决这个问题，在滑动窗口类型的问题中都会有两个指针。一个用于「延伸」现有窗口的 r 指针，和一个用于「收缩」窗口的 l 指针。在任意时刻，只有一个指针运动，而另一个保持静止。我们在 ss上滑动窗口，通过移动 r 指针不断扩张窗口。当窗口包含 t 全部所需的字符后，如果能收缩，我们就收缩窗口直到得到最小窗口。
-![滑动窗口示意](https://assets.leetcode-cn.com/solution-static/76/76_fig1.gif)
+<img src="https://assets.leetcode-cn.com/solution-static/76/76_fig1.gif" alt="滑动窗口示意"  />
 
 ```
 // 基本框架
@@ -3525,7 +3525,112 @@ public:
 
 [剑指 Offer 54. 二叉搜索树的第k大节点](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/)(inorder)
 
+### 树和链表结合
 
+##### [剑指 Offer 36. 二叉搜索树与双向链表](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/)  没看懂 感觉非递归方式可能好理解点 424 收费题
+
+```c++
+class Solution {
+public:
+    Node* treeToDoublyList(Node* root) 
+    {
+        if(root == NULL)    return NULL;
+        inorder(root);
+        head->left = pre;   //链表头的前驱指向链表尾
+        pre->right = head;  //链表尾的后继指向链表头
+        return head;
+    }
+private:
+    Node* pre = NULL;   //前驱节点
+    Node* head = NULL;  //双向链表的头节点
+    void inorder(Node* cur)
+    {
+        if(cur == NULL)    return;
+        inorder(cur->left);
+        //当前前驱节点为空，说明这是双向链表的头节点（树中最左节点）
+        if(pre == NULL) 
+            head = cur;
+        //此时已有前驱，说明这是链表中的某个中间节点，将前驱的右指针指向cur
+        else
+            pre->right = cur;
+        //把cur（当前节点）的左指针指向其前驱
+        cur->left = pre;
+        //当前节点成为前驱
+        pre = cur;
+        //递归结束后，pre指向链表的尾节点
+        inorder(cur->right);
+    }
+};
+
+// 二叉树中序遍历非递归还不是很熟悉
+Node* treeToDoublyList(Node* root) 
+{
+    if (!root) return NULL;
+    Node *head = NULL, *pre = NULL;
+    stack<Node*> st;
+    while (root || !st.empty())
+    {
+        while (root)
+        {
+            st.push(root);
+            root = root->left;
+        }
+        Node* cur = st.top(); st.pop();
+        if (!head) head = cur;
+        if (pre)
+        {
+            pre->right = cur;
+            root->left = pre;
+        }
+        pre = cur;
+        cur = cur->right;
+    }
+    head->left = pre;
+    pre->right = head;
+    return head;
+}
+```
+
+##### [109. Convert Sorted List to Binary Search Tree](https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/)
+
+```
+class Solution
+{
+    TreeNode *sortedListToBST(ListNode *head, ListNode *tail)
+    {
+       if (head == tail) return nullptr;
+       if( head->next == tail )
+    	{	
+    		TreeNode *root = new TreeNode( head->val );
+    		return root;
+    	}
+        ListNode *mid = head;
+        ListNode *fast = head;
+
+        // 寻找中间结点
+        while(fast->next != tail && fast->next->next != tail )
+        {
+            mid = mid->next;
+            fast = fast->next->next;
+            
+        }
+        TreeNode *root = new TreeNode(mid->val);
+        root->left = sortedListToBST(head, mid);
+        root->right = sortedListToBST(mid->next, tail);
+        return root;
+    }
+
+public:
+    TreeNode *sortedListToBST(ListNode *head)
+    {
+        return sortedListToBST(head, NULL);
+    }
+};
+```
+
+
+
+##### [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)  不会
 
 ### 区间合并
 
