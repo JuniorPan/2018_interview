@@ -2402,11 +2402,13 @@ public:
 
 ```
 
-#### [329. Longest Increasing Path in a Matrix](https://leetcode.com/problems/longest-increasing-path-in-a-matrix/submissions/1)   
+#### [329. Longest Increasing Path in a Matrix](https://leetcode.com/problems/longest-increasing-path-in-a-matrix/submissions/1)   记忆化搜索
 
 ```
 
 int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
+
+// 表示从（i，j）出发的最长路径长度
 int dfs(vector<vector<int>>& matrix, vector<vector<int>>& dp, int i, int j)
 {
     if (dp[i][j] > 0)
@@ -2429,9 +2431,9 @@ int longestIncreasingPath(vector<vector<int>>& matrix)
 {
     if (matrix.empty())
         return 0;
+    // dp[i][j]表示数组中以(i,j)为起点的最长递增路径的长度，初始将dp数组都赋为0，当我们用递归调用时，遇到某个位置(x, y), 如果dp[x][y]不为0的话，我们直接返回dp[x][y]即可，不需要重复计算。
     vector<vector<int> > dp( matrix.size(), vector<int>(matrix[0].size(), 0) );
     int longest = INT_MIN;
-    int dist;
     for(int i = 0; i < matrix.size(); i++)
     {
         for(int j = 0; j < matrix[0].size(); j++)
@@ -2443,7 +2445,7 @@ int longestIncreasingPath(vector<vector<int>>& matrix)
     return longest;    
 }
 ```
-#### [576. Out of Boundary Paths](https://leetcode.com/submissions/detail/154021975/)     
+#### [576. Out of Boundary Paths](https://leetcode.com/submissions/detail/154021975/)    记忆化搜索
 
 ```
 int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
