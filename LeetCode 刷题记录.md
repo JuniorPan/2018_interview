@@ -777,73 +777,63 @@ int kthSmallest(vector<vector<int>> &matrix, int k)
 
 ```
 class Solution {
-    int merge(vector<int> &arr, int left, int mid, int right)
+    int merge(vector<int> &nums, int left, int mid, int right)
     {
-        vector<int> help(right- left + 1);
+        int index = 0, count = 0;
+        vector<int> help(right - left + 1); // 开辟一个辅助数组
         int i = left;
-        int j = mid + 1;
-        int count = 0;
-        while(i <= mid && j <= right)
-        {
-            // help[i++] = arr[i] < arr[j] ? arr[i++] : arr[j++];
+        int j = mid+1;
 
-            if (arr[i] <= 2 *  arr[j])
+        // 按照升序的方式处理
+        while( i <= mid && j <= right)
+        {
+            if (nums[i] > 2LL * nums[j])
             {
-                ++j;
+                count += mid - i + 1;
+                j++;
             }
             else
             {
-                count += right - j + 1;
-                ++i;
+                i++;
             }
         }
+        // 真正的归并排序从这里开始
         i = left;
-        j = mid + 1;
-        int k = left;
-        while(i <= mid && j <= right)
+        j = mid+1;
+        while( i <= mid && j <= right)
         {
-            // help[i++] = arr[i] < arr[j] ? arr[i++] : arr[j++];
-            if (arr[i] <= arr[j])
-            {
-                help[k++] = arr[i++];
-            }
-            else
-            {
-                help[k++] = arr[j++];
-            }
+           help[index++] = nums[i] < nums[j] ? nums[i++] :nums[j++];
         }
-        while (i <= mid)
+        while(i <= mid)
         {
-            help[k++] = arr[i++];
+            help[index++] = nums[i++]; 
         }
-        while (j <= right)
+        while(j <= right)
         {
-            help[k++] = arr[j++];
+            help[index++] = nums[j++]; 
         }
-
-        for (i = left; i <= right; i++) 
+        for(int i = 0; i < help.size(); i++)
         {
-            arr[i] = help[i];
+            nums[i+left] = help[i];
         }
-
         return count;
     }
-    int mergeSort(vector<int> &arr, int l, int r)
+
+
+    int mergeSort(vector<int> &nums, int left, int right)
     {
-        if (l == r)
+        if (left == right)
         {
             return 0;
         }
-        int mid = l + ((r -l ) >> 1);
-        int left = mergeSort(arr, l, mid);
-        int right = mergeSort(arr, mid+1, r);
-        int count = merge(arr, l, mid, r);
-        return left + right + count;
+        int mid = left + ((right -left ) >> 1);
+        return mergeSort(nums, left, mid) +  mergeSort(nums, mid+1, right) + merge(nums, left, mid, right);
     }
+
 public:
-    // 思路: 利用归并排序，但是代码写不出来
-    int reversePairs(vector<int>& nums) 
-    {
+    int reversePairs(vector<int>& nums) {
+        if (nums.size() <= 1)
+            return 0;
         return mergeSort(nums, 0, nums.size()-1);
     }
 };
