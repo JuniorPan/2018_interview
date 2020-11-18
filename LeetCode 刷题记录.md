@@ -2411,6 +2411,7 @@ int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
 // 表示从（i，j）出发的最长路径长度
 int dfs(vector<vector<int>>& matrix, vector<vector<int>>& dp, int i, int j)
 {
+    
     if (dp[i][j] > 0)
         return dp[i][j];
     int res = 1;
@@ -2481,7 +2482,7 @@ int findPaths(int m, int n, int N, int i, int j)
 }
 ```
 
-#### [688. Knight Probability in Chessboard](https://leetcode.com/submissions/detail/154023237/)    
+#### [688. Knight Probability in Chessboard](https://leetcode.com/submissions/detail/154023237/)     记忆化搜索
 
 ```
 
