@@ -484,7 +484,7 @@ string findLongestWord(string s, vector<string> &d)
 }
 ```
 
-### 单调栈系列问题 
+### 单调栈系列问题  (5)
 
 **单调栈的两种写法**   [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
 
@@ -970,7 +970,7 @@ int kthSmallest(vector<vector<int>> &matrix, int k)
 }
 ```
 
-### 排序
+### 排序 (3)
 
 #### 归并排序
 [493. Reverse Pairs](https://leetcode.com/problems/reverse-pairs/)
@@ -1118,7 +1118,7 @@ void wiggleSort(vector<int> &nums)
 }
 ```
 
-### 链表
+### 链表 (8)
 
 #### K路归并
 
@@ -1476,7 +1476,7 @@ ListNode *sortList(ListNode *head)
 
 
 
-### 动态规划 
+### 动态规划  (29)
 
 #### 1.坐标型动态规划  120不会
 
@@ -2431,7 +2431,7 @@ public:
 #### [395. Longest Substring with At Least K Repeating Characters](https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/)
 
 
-### 深度优先搜索
+### 深度优先搜索 (6)
 #### [经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
 ```
 int dirs[8][2] = {1,1,1,0,1,-1,0,1,0,-1,-1,1,-1,0,-1,-1};
@@ -2771,7 +2771,7 @@ int largestIsland(vector<vector<int>>& grid)
 }
 ```
 
-### BFS
+### BFS (6)
 
 #### [102. Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/)
 
@@ -2967,7 +2967,7 @@ int ladderLength(string beginWord, string endWord, vector<string> &wordList)
 
 
 
-### 回溯 
+### 回溯  (13)
 
 #### [17. Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/)
 
@@ -3493,7 +3493,7 @@ public:
 };
 ```
 
-###  二叉树
+###  二叉树 (2)
 
 ####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)
 
@@ -3541,7 +3541,7 @@ TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 }
 ```
 
-### 树的DFS
+### 树的DFS (7)
 
 通常采用递归
 
@@ -3718,7 +3718,7 @@ public:
 
 [剑指 Offer 54. 二叉搜索树的第k大节点](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/)(inorder)
 
-### 树和链表结合
+### 树和链表结合 (3)
 
 ##### [剑指 Offer 36. 二叉搜索树与双向链表](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/)  没看懂 感觉非递归方式可能好理解点 424 收费题
 
@@ -3825,7 +3825,7 @@ public:
 
 ##### [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)  不会
 
-### 区间合并
+### 区间合并 (3)
 
 ####  [56. Merge Intervals](https://leetcode.com/problems/merge-intervals/)
 
