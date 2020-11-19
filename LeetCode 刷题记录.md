@@ -1,5 +1,5 @@
 # LeetCode 刷题记录
-### 滑动窗口问题
+### 滑动窗口问题 (7)
 核心思想: 我们可以用滑动窗口的思想解决这个问题，在滑动窗口类型的问题中都会有两个指针。一个用于「延伸」现有窗口的 r 指针，和一个用于「收缩」窗口的 l 指针。在任意时刻，只有一个指针运动，而另一个保持静止。我们在 ss上滑动窗口，通过移动 r 指针不断扩张窗口。当窗口包含 t 全部所需的字符后，如果能收缩，我们就收缩窗口直到得到最小窗口。
 <img src="https://assets.leetcode-cn.com/solution-static/76/76_fig1.gif" alt="滑动窗口示意"  />
 
@@ -241,7 +241,7 @@ bool checkInclusion(string s1, string s2)
 }
 ```
 
-### 双指针问题 
+### 双指针问题  (7)
 
 todo: 11和42的区别
 
@@ -688,9 +688,209 @@ https://www.cnblogs.com/grandyang/p/5883736.html
 
 #### [768. Max Chunks To Make Sorted II](https://leetcode.com/problems/max-chunks-to-make-sorted-ii/)
 https://www.cnblogs.com/grandyang/p/8850299.html
-#### 二分查找 
+### 二分查找  (6)
 
-33 34 81 153 154 704 
+#### [33. Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+
+```
+int search(vector<int>& nums, int target) 
+{
+    //可以得出出规律，如果中间的数小于最右边的数，则右半段是有序的，若中间数大于最右边数，则左半段是有序的，我们只要在有序的半段里用首尾两个数组来判断目标值是否在这一区域内，这样就可以确定保留哪半边了
+    int l = 0, r = nums.size()-1;
+    while (l <= r) {
+        int mid = (l+r) / 2;
+        if (target == nums[mid])
+            return mid;
+        // there exists rotation; the middle element is in the left part of the array
+        if (nums[mid] > nums[r])
+        {
+            if (target < nums[mid] && target >= nums[l])
+                r = mid - 1;
+            else
+                l = mid + 1;
+        }
+        // there exists rotation; the middle element is in the right part of the array
+        else if (nums[mid] < nums[l])
+        {
+            if (target > nums[mid] && target <= nums[r])
+                l = mid + 1;
+            else
+                r = mid - 1;
+        }
+        // there is no rotation; just like normal binary search
+        else
+        {
+            if (target < nums[mid])
+                r = mid - 1;
+            else
+                l = mid + 1;
+        }
+    }
+    return -1;
+}
+```
+
+
+
+#### [34. Find First and Last Position of Element in Sorted Array](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+```
+class Solution
+{   
+    // 找第一个大于等于target的值得位置
+    int getFirstK(vector<int> &nums, int target) 
+    {
+        int left = 0, right = nums.size();
+        while (left < right)
+        {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target)
+                left = mid + 1;
+            else
+                right = mid;
+        }
+        return right; // 这个地方 right和left都可以
+    }
+    
+    int lower_bound(vector<int> &nums, int target)
+    {
+        int left = 0;
+        int right = nums.size();
+        while (left < right)
+        {
+            int mid = left + (right - left) / 2;
+            if (target <= nums[mid])
+                right = mid;
+            else
+            {
+                left = mid + 1;
+            }
+        }
+        return right; // 这个地方 right和left都可以
+    }
+
+    int upper_bound(vector<int> &nums, int target)
+    {
+        int left = 0;
+        int right = nums.size();
+        while (left < right)
+        {
+            int mid = left + (right - left) / 2;
+            if (target < nums[mid])
+                right = mid;
+            else
+            {
+                left = mid + 1;
+            }
+        }
+        return right; // 这个地方 right和left都可以
+    }
+
+public:
+    vector<int> searchRange(vector<int> &nums, int target)
+    {
+        int start = getFirstK(nums, target);
+        if (start == nums.size() || nums[start] != target)
+            return {-1, -1};
+        return {start, getFirstK(nums, target + 1) - 1};
+    }
+};
+```
+
+
+
+#### [81. Search in Rotated Sorted Array II](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)
+
+```
+bool search(vector<int> &nums, int target)
+{
+    // 如果中间的数小于最右边的数，则右半段是有序的，若中间数大于最右边数，则左半段是有序的。
+    int n = nums.size(), left = 0, right = n - 1;
+    while (left <= right)
+    {
+        int mid = (left + right) / 2;
+        if (nums[mid] == target)
+            return true;
+        if (nums[mid] < nums[right])
+        {
+            if (nums[mid] < target && nums[right] >= target)
+                left = mid + 1;
+            else
+                right = mid - 1;
+        }
+        else if (nums[mid] > nums[right])
+        {
+            if (nums[left] <= target && nums[mid] > target)
+                right = mid - 1;
+            else
+                left = mid + 1;
+        }
+        else
+            --right;
+    }
+    return false;
+}
+```
+
+#### [153. Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)   while条件 懵逼了
+
+```
+int findMin(vector<int> &nums)
+{
+    int left = 0, right = (int)nums.size() - 1;
+    while (left < right)
+    {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] > nums[right])
+            left = mid + 1;
+        else
+            right = mid;
+    }
+    return nums[right];
+}
+```
+
+#### [154. Find Minimum in Rotated Sorted Array II](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)  while条件 懵逼了
+
+```
+int findMin(vector<int> &nums)
+{
+    int left = 0, right = (int)nums.size() - 1;
+    while (left < right)
+    {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] > nums[right])
+            left = mid + 1;
+        else if (nums[mid] < nums[right])
+            right = mid;
+        else
+            --right;
+    }
+    return nums[right];
+}
+```
+
+#### [704. Binary Search ](https://leetcode.com/problems/binary-search/)
+
+```
+int search(vector<int> &nums, int target)
+{
+    int left = 0, right = nums.size();
+    while (left < right)
+    {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target)
+            return mid;
+        else if (nums[mid] < target)
+            left = mid + 1;
+        else
+            right = mid;
+    }
+    return -1;
+}
+```
+
+
 
 
 ```
