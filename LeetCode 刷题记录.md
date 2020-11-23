@@ -2224,7 +2224,7 @@ public:
 
 
 
-#### 6.区间型动态规划   关键在于画图
+#### 6.区间型动态规划   关键在于画图 
 
 **特点: 1). 求一段区间的解max/min/count; 2). 转移方程通过区间更新; 3). 从大到小的更新; 这种题目共性就是区间最后求[0, n-1]这样一个区间逆向思维分析, 从大到小就能迎刃而解** 
 
@@ -3824,6 +3824,66 @@ public:
 
 
 ##### [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)  不会
+
+### 树的重新构建
+
+[105. Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal)
+
+```
+TreeNode *buildTree(vector<int> &preorder, int preStart, int preEnd, vector<int> &inorder, int inStart, int inEnd)
+{
+    if (preStart > preEnd ||inStart > inEnd )
+        return nullptr;
+
+    // 先建立根节点
+    TreeNode *root = new TreeNode(preorder[preStart]);
+    // 在中序遍历中找到根节点所在位置，然后就可以确定左右子树的节点数目
+    int i = find(inorder.begin(), inorder.end(), preorder[preStart]) - inorder.begin();
+    root->left = buildTree(preorder, preStart + 1, preStart + i - inStart, inorder, inStart, i - 1);
+    root->right = buildTree(preorder, preStart + i - inStart + 1, preEnd, inorder, i + 1, inEnd);
+
+    return root;
+}
+
+TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder)
+{
+    return buildTree(preorder, 0, preorder.size() - 1, inorder, 0, inorder.size() - 1);
+}
+```
+
+
+
+[106. Construct Binary Tree from Inorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
+
+```
+TreeNode *buildTree(vector<int> &inorder, int inStart, int inEnd, vector<int> &postorder, int postStart, int postEnd)
+{
+    if (postStart > postEnd || inStart > inEnd)
+        return nullptr;
+
+    TreeNode *root = new TreeNode(postorder[postEnd]);
+
+    int i = find(inorder.begin(), inorder.end(), postorder[postEnd]) - inorder.begin();
+    // 注意推导一下下标公式就👌
+    root->left = buildTree(inorder, inStart, i - 1, postorder, postStart, i+ postStart-inStart-1 ); // 左子树
+    root->right = buildTree(inorder, i+1 ,inEnd, postorder, i+postStart-inStart, postEnd-1);  // 右子树
+
+    return root;
+}
+
+TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder)
+{
+    return buildTree(inorder,0, inorder.size()-1, postorder, 0, postorder.size()-1);
+}
+```
+
+
+
+[606. Construct String from Binary Tree](https://leetcode.com/problems/construct-string-from-binary-tree/)
+
+[1008. Construct Binary Search Tree from Preorder Traversal](https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/)
+
+[889.	Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal)
 
 ### 区间合并 (3)
 
