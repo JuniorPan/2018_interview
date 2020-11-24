@@ -58,7 +58,7 @@ public:
 
         TreeNode *root = new TreeNode(postorder[postEnd]);
 
-        int i = find(inorder.begin(), inorder.end(), postorder[postEnd]) - inorder.begin();\
+        int i = find(inorder.begin(), inorder.end(), postorder[postEnd]) - inorder.begin();
         root->left = buildTree(inorder, inStart, i - 1, postorder, postStart, i+ postStart-inStart-1 ); // 左子树
         root->right = buildTree(inorder, i+1 ,inEnd, postorder, i+postStart-inStart, postEnd-1);  // 右子树
 
