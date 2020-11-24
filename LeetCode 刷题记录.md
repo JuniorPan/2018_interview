@@ -3523,12 +3523,46 @@ void flatten(TreeNode* root)
 }
 ```
 
-todo: 没看懂
+
+
+#### [235. Lowest Common Ancestor of a Binary Search Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
+
+```
+TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
+{
+    //如果跟节点的值 比pq都大,那么最近公共祖先只能在左子树上，否则在右子树上，只有当root->val 在pq之间的话，root才是最近公共祖先
+    while (true)
+    {
+        if (root->val > p->val && root->val > q->val)
+            root = root->left;
+        else if (root->val < p->val && root->val < q->val)
+            root = root->right;
+        else
+            break;
+    }
+    return root;
+}
+
+ // 如果根节点的值大于p和q之间的较大值，说明p和q都在左子树中，那么此时我们就进入根节点的左子节点继续递归，如果根节点小于p和q之间的较小值，说明p和q都在右子树中，那么此时我们就进入根节点的右子节点继续递归，如果都不是，则说明当前根节点就是最小共同父节点，直接返回即可 递归版本
+    TreeNode *lowestCommonAncestor_2(TreeNode *root, TreeNode *p, TreeNode *q)
+    {
+        if (!root)
+            return NULL;
+        if (root->val > max(p->val, q->val))
+            return lowestCommonAncestor(root->left, p, q);
+        else if (root->val < min(p->val, q->val))
+            return lowestCommonAncestor(root->right, p, q);
+        else
+            return root;
+    }
+```
+
 #### [236. Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/)
 
 ```
 TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 {
+	// 看当前结点是否为空，若为空则直接返回空，若为p或q中的任意一个，也直接返回当前结点。否则的话就对其左右子结点分别调用递归函数，由于这道题限制了p和q一定都在二叉树中存在，那么如果当前结点不等于p或q，p和q要么分别位于左右子树中，要么同时位于左子树，或者同时位于右子树
     if (root == nullptr || root == p || root == q)
         return root;
     TreeNode *left = lowestCommonAncestor(root->left, p, q);
