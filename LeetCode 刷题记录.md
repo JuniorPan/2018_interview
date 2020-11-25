@@ -3837,22 +3837,19 @@ Node* treeToDoublyList(Node* root)
     if (!root) return NULL;
     Node *head = NULL, *pre = NULL;
     stack<Node*> st;
-    while (root || !st.empty())
-    {
-        while (root)
-        {
+    while (root || !st.empty()) {
+        while (root) {
             st.push(root);
             root = root->left;
         }
-        Node* cur = st.top(); st.pop();
-        if (!head) head = cur;
-        if (pre)
-        {
-            pre->right = cur;
+        root = st.top(); st.pop();
+        if (!head) head = root;
+        if (pre) {
+            pre->right = root;
             root->left = pre;
         }
-        pre = cur;
-        cur = cur->right;
+        pre = root;
+        root = root->right;
     }
     head->left = pre;
     pre->right = head;
