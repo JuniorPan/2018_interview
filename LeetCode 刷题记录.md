@@ -3493,9 +3493,9 @@ public:
 };
 ```
 
-###  二叉树 (2)
+###  二叉树 (3)
 
-####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)
+####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)  todo: 没看懂
 
 ```
 void flatten(TreeNode* root)
@@ -3646,7 +3646,7 @@ int maxDepth(TreeNode* root)
 
 #### [110. Balanced Binary Tree](https://leetcode.com/problems/balanced-binary-tree/)
 
-```
+```c++
 int height(TreeNode *root)
 {
     if(root == NULL)return 0;
@@ -3662,12 +3662,12 @@ bool isBalanced(TreeNode* root)
 
 #### [112. Path Sum](https://leetcode.com/problems/path-sum/)
 
-```
+```c++
 bool hasPathSum(TreeNode *root, int sum)
 {
     if (root == NULL)
         return false;
-    if (root->left == NULL && root->right == NULL && sum == root->val)
+    if (root->left == NULL && root->right == NULL && sum == root->val) // 叶子节点
         return true;
     else
         return hasPathSum(root->right, sum - root->val) || hasPathSum(root->left, sum - root->val);
@@ -3678,23 +3678,24 @@ bool hasPathSum(TreeNode *root, int sum)
 
 #### [113. Path Sum II](https://leetcode.com/problems/path-sum-ii/)（和[剑指 Offer 34. 二叉树中和为某一值的路径](https://leetcode-cn.com/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/)一样）
 
-```
+```c++
 // **本质上还是回溯**
 class Solution
 {
 public:
     void dfs(TreeNode *node, int sum, vector<int> &temp, vector<vector<int>> &res)
     {
-        if (!node)
+        if (node == nullptr)
             return;
         temp.push_back(node->val);
-        if (sum == node->val && !node->left && !node->right)
+        // 叶子节点
+        if (sum == node->val && node->left == nullptr  && node->right == nullptr)
         {
             res.push_back(temp);
         }
 
-        dfs(node->left, sum-node->val, temp, res);
-        dfs(node->right, sum-node->val, temp, res);
+        dfs(node->left, sum - node->val, temp, res);
+        dfs(node->right, sum - node->val, temp, res);
         temp.pop_back();
     }
     vector<vector<int>> pathSum(TreeNode *root, int sum)
@@ -3707,16 +3708,57 @@ public:
 };
 ```
 
+#### [124. Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/) todo: 还不是很懂
+
+```c++
+class Solution
+{
+public:
+    // 递归函数表示 从node出发能得到的最大路径和
+    // 1) Max path sum lies only in the right half.
+    // 2) Max path sum lies only in the left half.
+    // 3) Max path passes from left to right half (or vice versa) through the root node.
+    int dfs(TreeNode *node, int &res)
+    {
+        if (node == nullptr)
+            return 0;
+
+        // 分别求出左右子树上的最大路径和
+        int left = max(dfs(node->left, res), 0);
+        int right = max(dfs(node->right, res), 0);
+
+        // todo: 这个地方不理解
+        res = max(left + right + node->val, res);
+
+        // 对当前node来说, 它的最大路径和就是当前节点值加上 其左右子树上的最大值
+        return max(left, right) + node->val;
+    }
+
+    int maxPathSum(TreeNode *root)
+    {
+        int res = INT_MIN;
+
+        dfs(root, res);
+        return res;
+    }
+};
+```
+
+
+
 #### [437. Path Sum III](https://leetcode.com/problems/path-sum-iii/submissions/)
 
-```
+```c++
 class Solution
 {
 public:
     // 本质上还是回溯
+    // 每一个节点都有记录了一条从根节点到当前节点到路径 path
+    // 用一个变量 curSum 记录路径节点总和，然后看 curSum 和 sum 是否相等，相等的话结果 res 加1，
+    // 不等的话继续查看子路径和有没有满足题意的，做法就是每次去掉一个节点，看路径和是否等于给定值
     void dfs(TreeNode *node, int sum, int curSum, vector<TreeNode *>& path, int &res)
     {
-        if (!node)
+        if (node == nullptr)
             return;
 
         curSum += node->val;
