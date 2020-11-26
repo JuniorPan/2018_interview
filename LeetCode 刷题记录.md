@@ -973,7 +973,7 @@ int kthSmallest(vector<vector<int>> &matrix, int k)
 ### 排序 (3)
 
 #### 归并排序
-[493. Reverse Pairs](https://leetcode.com/problems/reverse-pairs/)
+##### [493. Reverse Pairs](https://leetcode.com/problems/reverse-pairs/)
 
 ```
 class Solution {
@@ -1041,7 +1041,7 @@ public:
 
 #### 快速排序
 
-[75. Sort Colors](https://leetcode.com/problems/sort-colors/) 快排partion 
+##### [75. Sort Colors](https://leetcode.com/problems/sort-colors/) 快排partion 
 
 ```
 class Solution
@@ -1069,7 +1069,8 @@ public:
 };
 ```
 
-[324. Wiggle Sort II](https://leetcode.com/problems/wiggle-sort-ii/)   
+##### [324. Wiggle Sort II](https://leetcode.com/problems/wiggle-sort-ii/)   
+
 核心思想， 如果当前数小于num,当前数和小于区域的下一个数交换, 如果当前数大于num,当前数和大于区域的前一
 个数交换
 
@@ -1118,7 +1119,7 @@ void wiggleSort(vector<int> &nums)
 }
 ```
 
-### 链表 (13)
+### 链表 (8)
 
 #### K路归并
 
