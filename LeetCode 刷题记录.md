@@ -1118,13 +1118,13 @@ void wiggleSort(vector<int> &nums)
 }
 ```
 
-### 链表 (8)
+### 链表 (13)
 
 #### K路归并
 
 ##### [21. Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/)
 
-```
+```C++
 class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
@@ -1144,7 +1144,6 @@ public:
             {
                 tail->next = p;
                 p = p->next;
-                
             }
             else
             {
@@ -1153,7 +1152,6 @@ public:
             }
             tail= tail->next;
         }
-       
         tail->next = p ? p : q;
         return pHead->next;
     }
@@ -1162,7 +1160,7 @@ public:
 
 #####  [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
 
-```
+```c++
 // 解法一
 class Solution
 {
@@ -1185,7 +1183,7 @@ public:
     }
     ListNode *mergeTwoLists(ListNode *l1, ListNode *l2)
     {
-        ListNode *dummy = new ListNode(-1), *cur = dummy;
+        ListNode *pHead = new ListNode(-1), *cur = pHead;
         while (l1 && l2)
         {
             if (l1->val < l2->val)
@@ -1204,13 +1202,14 @@ public:
             cur->next = l1;
         if (l2)
             cur->next = l2;
-        return dummy->next;
+        return pHead->next;
     }
 };
 
 // 解法二 （https://github.com/grandyang/leetcode/issues/23）
 class Solution {
 public:
+    // 利用了最小堆这种数据结构，首先把k个链表的首元素都加入最小堆中，它们会自动排好序。然后每次取出最小的那个元素加入最终结果的链表中，然后把取出元素的下一个元素再加入堆中，下次仍从堆中取出最小的元素做相同的操作，以此类推，直到堆中没有元素了，此时k个链表也合并为了一个链表，返回首节点即可
     ListNode* mergeKLists(vector<ListNode*>& lists) {
         auto cmp = [](ListNode*& a, ListNode*& b) {
             return a->val > b->val;
@@ -1264,6 +1263,40 @@ public:
 
 
 #### 快慢指针
+
+
+
+##### [61. Rotate List](https://leetcode.com/problems/rotate-list/)
+
+```c++
+ListNode *rotateRight(ListNode *head, int k)
+{
+    if (!head) return NULL;
+    int n = 0;
+    ListNode *cur = head;
+    while (cur)
+    {
+        ++n;
+        cur = cur->next;
+    }
+    k %= n;
+    ListNode *fast = head, *slow = head;
+    for (int i = 0; i < k; ++i)
+    {
+        if (fast) fast = fast->next;
+    }
+    if (!fast) return head;
+    while (fast->next)
+    {
+        fast = fast->next;
+        slow = slow->next;
+    }
+    fast->next = head;
+    fast = slow->next;
+    slow->next = NULL;
+    return fast;
+}
+```
 
 ##### [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
 ```
@@ -1421,7 +1454,8 @@ ListNode *insertionSortList(ListNode *head)
 
 ##### [148. Sort List](https://leetcode.com/problems/sort-list/)  对链表使用归并的方式排序
 
-```
+```c++
+// 合并两个有序链表
 ListNode *merge(ListNode *l1, ListNode *l2)
 {
     ListNode *fakeHead = new ListNode(-1);
@@ -1460,6 +1494,7 @@ ListNode *sortList(ListNode *head)
         return head;
 
     ListNode *fast = head->next, *slow = head;
+    // 找到中间结点
     while (fast && fast->next)
     {
         slow = slow->next;
@@ -1473,6 +1508,103 @@ ListNode *sortList(ListNode *head)
 ```
 
 #### 原地链表翻转
+
+##### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/)
+
+##### [92. Reverse Linked List II](https://leetcode.com/problems/reverse-linked-list-ii/)
+
+```
+ListNode *reverseBetween(ListNode *head, int m, int n)
+{
+    ListNode *dummy = new ListNode(-1), *pre = dummy;
+    dummy->next = head;
+    for (int i = 0; i < m - 1; ++i)
+        pre = pre->next;
+    ListNode *cur = pre->next;
+    for (int i = m; i < n; ++i)
+    {
+        ListNode *t = cur->next;
+        cur->next = t->next;
+        t->next = pre->next;
+        pre->next = t;
+    }
+    return dummy->next;
+}
+```
+
+
+
+##### [206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/)
+
+```c++
+// 非递归
+ListNode* reverseList(ListNode* head) 
+{
+    ListNode *newHead = NULL;
+    while (head)
+    {
+        ListNode *t = head->next;
+        head->next = newHead;
+        newHead = head;
+        head = t;
+    }
+    return newHead;
+}
+
+// 递归
+ListNode* reverseList(ListNode* head) 
+{
+    if (!head || !head->next) return head;
+    ListNode *newHead = reverseList(head->next);
+    head->next->next = head;
+    head->next = NULL;
+    return newHead;
+}
+```
+
+
+
+##### [234. Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list/)
+
+```c++
+bool isPalindrome(ListNode *head)
+{
+    if (head == NULL || head->next == NULL)
+        return true;
+    ListNode *slow = head;
+    ListNode *fast = head;
+    while (fast->next != NULL && fast->next->next != NULL)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    slow->next = reverseList(slow->next);
+    slow = slow->next;
+    while (slow != NULL)
+    {
+        if (head->val != slow->val)
+            return false;
+        head = head->next;
+        slow = slow->next;
+    }
+    return true;
+}
+ListNode *reverseList(ListNode *head)
+{
+    ListNode *pre = NULL;
+    ListNode *next = NULL;
+    while (head != NULL)
+    {
+        next = head->next;
+        head->next = pre;
+        pre = head;
+        head = next;
+    }
+    return pre;
+}
+```
+
+
 
 
 
