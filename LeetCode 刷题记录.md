@@ -39,11 +39,7 @@ int lengthOfLongestSubstring(string s)
 }
 ```
 
-
-
 参考 https://www.cnblogs.com/grandyang/p/4480780.html
-
-
 
 #### [53. Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
 
@@ -67,8 +63,6 @@ public:
     }
 };
 ```
-
-
 
 ####  [76. Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/)
 
@@ -136,10 +130,6 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
 }
 ```
 
-
-
-
-
 #### [424. Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/)   
 
 见https://www.cnblogs.com/grandyang/p/5999050.html 
@@ -193,51 +183,36 @@ int characterReplacement(string s, int k)
 ```
 #### [438. Find All Anagrams in a String](https://leetcode.com/problems/find-all-anagrams-in-a-string/)
 
-```
+```c++
 vector<int> findAnagrams(string s, string p)
 {
-    vector<int> pv(26, 0), sv(26, 0), res;
-    if (s.size() < p.size())
-        return res;
-    // fill pv, vector of counters for pattern string and sv, vector of counters for the sliding window
+    if (s.empty() || s.size() < p.size())
+        return {};
+    vector<int> res, m1(256, 0), m2(256, 0);
     for (int i = 0; i < p.size(); ++i)
     {
-        ++pv[p[i] - 'a'];
-        ++sv[s[i] - 'a'];
+        ++m1[s[i]];
+        ++m2[p[i]];
     }
-    if (pv == sv)
+    if (m1 == m2)
         res.push_back(0);
-
-    //here window is moving from left to right across the string.
-    //window size is p.size(), so s.size()-p.size() moves are made
+    // 在s上形成窗口 进行滑动 窗口大小为p.size()
     for (int i = p.size(); i < s.size(); ++i)
     {
-        // window extends one step to the right. counter for s[i] is incremented
-        ++sv[s[i] - 'a'];
-
-        // since we added one element to the right,
-        // one element to the left should be discarded.
-        //counter for s[i-p.size()] is decremented
-        --sv[s[i - p.size()] - 'a'];
-
-        // if after move to the right the anagram can be composed,
-        // add new position of window's left point to the result
-        if (pv == sv) // this comparison takes O(26), i.e O(1), since both vectors are of fixed size 26. Total complexity O(n)*O(1) = O(n)
+        ++m1[s[i]];
+        --m1[s[i - p.size()]];
+        if (m1 == m2)
             res.push_back(i - p.size() + 1);
     }
     return res;
 }
 ```
 
-
-
-
-
-#### [567. Permutation in String](https://leetcode.com/problems/permutation-in-string/)
+#### [567. Permutation in String](https://leetcode.com/problems/permutation-in-string/)  (和438 差不多)
 
  解法一 其他解法见 [[LeetCode] Permutation in String 字符串中的全排列](https://www.cnblogs.com/grandyang/p/6815227.html)
 
-```
+```c++
 // 解法一 
 // 先来分别统计s1和s2中前n1个字符串中各个字符出现的次数，其中n1为字符串s1的长度，  
 这样如果二者字符出现次数的情况完全相同，说明s1和s2中前n1的字符互为全排列关系，那么符合题意了，
