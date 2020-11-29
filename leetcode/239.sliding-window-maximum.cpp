@@ -62,6 +62,7 @@ public:
         }
         deque<int> q;
         vector<int> res;
+
         // 核心是保持队列单调有序即可
         for (int i = 0; i < nums.size(); i++)
         {

@@ -118,19 +118,19 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
         return res;
     }
     deque<int> q;
-    vector<int> res(nums.size() - k + 1, 0);
-    int count = 0;
-	 // 核心是保持队列单调有序即可
+    vector<int> res;
+    // 核心是保持队列单调有序即可
     for (int i = 0; i < nums.size(); i++)
     {
         while (!q.empty() && nums[i] >= nums[q.back()])
             q.pop_back();
-        q.push_back(i);
-        // 队首元素过期则直接弹出
-        if (q.front() == i - k)
+        q.push_back(i);  // 入队列相当于窗口多了一个数
+
+        if (q.front() == i - k) // 检查队首元素是否过期，如果过期则弹出
             q.pop_front();
-        if (i >= k - 1)
-            res[count++] = nums[q.front()];
+
+        if (i >= k - 1)  // 开始形成窗口
+            res.push_back(nums[q.front()]);
     }
     return res;
 }
@@ -154,6 +154,27 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
 // 解法一
 int characterReplacement(string s, int k)
 {
+    int res = 0, maxCnt = 0, left = 0;
+    vector<int> m(128,0); // 用来记录窗口中每个字符出现的次数
+
+    for (int i = 0; i < s.size(); i++)
+    {
+        maxCnt = max(maxCnt, ++m[s[i]]);
+        // 判断当前窗口 left...i 是否满足条件
+        if (i - left + 1 - maxCnt > k)  // 不满足 从左开始收缩窗口
+        {
+            --m[s[left]];
+            left ++;
+        }
+
+        res = max(res, i - left + 1);
+    }
+    return res;
+}
+
+// 解法二
+int characterReplacement(string s, int k)
+{
     int res = 0, maxCnt = 0;
     vector<int> counts(26, 0);
     int right = 0;
@@ -172,23 +193,7 @@ int characterReplacement(string s, int k)
     return res;
 }
 
-// 解法二
-int characterReplacement(string s, int k) 
-{
-    int res = 0, maxCnt = 0, start = 0;
-    vector<int> counts(26, 0);
-    for (int i = 0; i < s.size(); ++i) 
-    {
-        maxCnt = max(maxCnt, ++counts[s[i] - 'A']);
-        while (i - start + 1 - maxCnt > k) 
-        {
-            --counts[s[start] - 'A'];
-            ++start;
-        }
-        res = max(res, i - start + 1);
-    }
-    return res;
-}
+
 ```
 #### [438. Find All Anagrams in a String](https://leetcode.com/problems/find-all-anagrams-in-a-string/)
 
