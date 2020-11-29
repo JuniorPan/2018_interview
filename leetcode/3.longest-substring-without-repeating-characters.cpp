@@ -56,6 +56,17 @@ class Solution
 public:
     int lengthOfLongestSubstring(string s)
     {
+        vector<int> m(128, -1);
+        //  res 用来记录最长无重复子串的长度，left 指向该无重复子串左边的起始位置的前一个
+        int res = 0, left = -1;
+        // [left...i] 维护了一个窗口
+        for (int i = 0; i < s.size(); ++i)
+        {
+            left = max(left, m[s[i]]);
+            m[s[i]] = i;
+            res = max(res, i - left);
+        }
+        return res;
     }
 };
 // @lc code=end
