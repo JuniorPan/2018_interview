@@ -73,32 +73,37 @@ public:
 ####  [76. Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/)
 
 ```
-string minWindow(string s, string t)
+string minWindow(string s, string t) 
 {
-    vector<int> letterCnt(128, 0);
-    int left = 0, cnt = 0, minLeft = -1, minLen = INT_MAX;
+    vector<int> m(128,0);  // m 可以理解 需要多少个 如m[a] = -1,说明多了一个a, m[a] = 0,正好， m[a]=1说明缺一个a
+    // 记录t中每个字符出现的次数
     for (char c : t)
-        ++letterCnt[c];
-    for (int i = 0; i < s.size(); ++i)
-    {
-        //对于S中的每个遍历到的字母，都在 HashMap中的映射值减1，如果减1后的映射值仍大于等于0，说明当前遍历到的字母是T串中的字母，使用一个计数器 cnt，使其自增1
-        if (--letterCnt[s[i]] >= 0) 
-            ++cnt;
-        // 当 cnt 和T串字母个数相等时，说明此时的窗口已经包含了T串中的所有字母，此时更新一个minLen 和结果 res，
-        while (cnt == t.size()) 
+        m[c]++;
+    int count = 0;
+    int left = 0;
+    int min_len = INT_MAX; // 记录窗口的最小值，
+    int min_left = -1; // 记录窗口的最小值对应的左边界
+    for(int i = 0; i < s.size(); i++)
+    {   
+        //减1后的映射值仍大于等于0，说明当前遍历到的字母是T串中的字母
+        if (--m[s[i]] >= 0) 
+            count ++;
+        while (count == t.size()) // 形成窗口了, 并且当前窗口包含t中的所有字符
         {
-            if (minLen > i - left + 1)
+            if (i - left + 1 < min_len)
             {
-                minLen = i - left + 1;
-                minLeft = left;
+                min_len = i - left + 1;
+                min_left = left;
+            } 
+            // 开始收缩左边界
+            if (++m[s[left]] > 0)
+            {   
+                count--;
             }
-            //然后开始收缩左边界，由于遍历的时候，对映射值减了1，所以此时去除字母的时候，就要把减去的1加回来，此时如果加1后的值大于0了，说明此时少了一个T中的字母，那么 cnt 值就要减1了，然后移动左边界 left
-            if (++letterCnt[s[left]] > 0) 
-                --cnt;
-            ++left;
+            ++left;                
         }
     }
-    return minLeft == -1 ? "" : s.substr(minLeft, minLen);
+    return  min_left == -1 ? "" : s.substr(min_left, min_len); 
 }
 ```
 
