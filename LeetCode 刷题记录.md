@@ -962,65 +962,75 @@ int kthSmallest(vector<vector<int>> &matrix, int k)
 ##### [493. Reverse Pairs](https://leetcode.com/problems/reverse-pairs/)
 
 ```
-class Solution {
-    int merge(vector<int> &nums, int left, int mid, int right)
+class Solution
+{
+    int merge(vector<int> &arr, int left, int mid, int right)
     {
-        int index = 0, count = 0;
-        vector<int> help(right - left + 1); // 开辟一个辅助数组
+        vector<int> help;
+        int index = 0;
         int i = left;
-        int j = mid+1;
-
-        // 按照升序的方式处理
-        while( i <= mid && j <= right)
+        int j = mid + 1;
+        int count = 0;
+        // todo: 核心是这个循环
+        while (i <= mid && j <= right)
         {
-            if (nums[i] > 2LL * nums[j])
+            if (arr[i] > 2LL * arr[j])
             {
                 count += mid - i + 1;
-                j++;
+                ++j;
             }
             else
-            {
-                i++;
-            }
+                ++i;
         }
-        // 真正的归并排序从这里开始
+
         i = left;
-        j = mid+1;
-        while( i <= mid && j <= right)
+        j = mid + 1;
+        index = 0;
+        while (i <= mid && j <= right)
         {
-           help[index++] = nums[i] < nums[j] ? nums[i++] :nums[j++];
+            // help[index++] = arr[i] < arr[j] ? arr[i++] : arr[j++];
+            // int temp =
+
+            help.push_back(arr[i] < arr[j] ? arr[i++] : arr[j++]);
         }
-        while(i <= mid)
+
+        while (i <= mid)
         {
-            help[index++] = nums[i++]; 
+            help.push_back(arr[i++]);
         }
-        while(j <= right)
+        while (j <= right)
         {
-            help[index++] = nums[j++]; 
+            help.push_back(arr[j++]);
         }
-        for(int i = 0; i < help.size(); i++)
+
+        for (index = 0; index < help.size(); index++)
         {
-            nums[i+left] = help[i];
+            arr[left + index] = help[index];
         }
         return count;
     }
 
-
-    int mergeSort(vector<int> &nums, int left, int right)
+    int mergeSort(vector<int> &arr, int l, int r)
     {
-        if (left == right)
+        if (l == r)
         {
             return 0;
         }
-        int mid = left + ((right -left ) >> 1);
-        return mergeSort(nums, left, mid) +  mergeSort(nums, mid+1, right) + merge(nums, left, mid, right);
+        int mid = l + ((r - l) >> 1);
+        int left = mergeSort(arr, l, mid);
+        int right = mergeSort(arr, mid + 1, r);
+        int count = merge(arr, l, mid, r);
+        return left + right + count;
     }
 
 public:
-    int reversePairs(vector<int>& nums) {
+    // 思路: 利用归并排序，但是代码写不出来
+    int reversePairs(vector<int> &nums)
+    {
         if (nums.size() <= 1)
             return 0;
-        return mergeSort(nums, 0, nums.size()-1);
+
+        return mergeSort(nums, 0, nums.size() - 1);
     }
 };
 ```
@@ -1055,7 +1065,7 @@ public:
 };
 ```
 
-##### [324. Wiggle Sort II](https://leetcode.com/problems/wiggle-sort-ii/)   
+##### [324. Wiggle Sort II](https://leetcode.com/problems/wiggle-sort-ii/)    #todo
 
 核心思想， 如果当前数小于num,当前数和小于区域的下一个数交换, 如果当前数大于num,当前数和大于区域的前一
 个数交换
@@ -1105,7 +1115,7 @@ void wiggleSort(vector<int> &nums)
 }
 ```
 
-### 链表 (8)
+### 链表 (14)
 
 #### K路归并
 
@@ -1217,7 +1227,7 @@ public:
 };
 ```
 
-##### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) (hard 这题还不会)
+##### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) (hard 这题还不会)  #todo
 
 ```
 class Solution {
@@ -1247,11 +1257,7 @@ public:
 };
 ```
 
-
-
 #### 快慢指针
-
-
 
 ##### [61. Rotate List](https://leetcode.com/problems/rotate-list/)
 
@@ -1401,7 +1407,7 @@ void reorderList(ListNode *head)
 
 #### 链表排序  
 
-##### [86. Partition List](https://leetcode.com/problems/partition-list/)
+##### [86. Partition List](https://leetcode.com/problems/partition-list/)  # todo?
 
 ```c++
  // 将所有小于给定值的节点取出组成一个新的链表，此时原链表中剩余的节点的值都大于或等于给定值，只要将原链表直接接在新链表后
