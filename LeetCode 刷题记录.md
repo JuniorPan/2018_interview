@@ -364,42 +364,6 @@ public:
 
 
 
-#### [86. Partition List](https://leetcode.com/problems/partition-list/)
-
-```c++
- // 将所有小于给定值的节点取出组成一个新的链表，此时原链表中剩余的节点的值都大于或等于给定值，只要将原链表直接接在新链表后
-class Solution 
-{
-public:
-    ListNode *partition(ListNode *head, int x) 
-    {
-        if (!head) return head;
-        ListNode *dummy = new ListNode(-1);
-        ListNode *newDummy = new ListNode(-1);
-        dummy->next = head;
-        ListNode *cur = dummy, *p = newDummy;
-        while (cur->next)
-        {
-            if (cur->next->val < x)
-            {
-                p->next = cur->next;
-                p = p->next;
-                cur->next = cur->next->next;
-                p->next = NULL;
-            } 
-            else
-            {
-                cur = cur->next;
-            }
-        }
-        p->next = dummy->next;
-        return newDummy->next;
-    }
-};
-```
-
-
-
 ####  [167. Two Sum II - Input array is sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/submissions/)
 
 ```
@@ -435,7 +399,7 @@ vector<int> twoSum(vector<int>& numbers, int target)
 
 #### [240. Search a 2D Matrix II](https://leetcode.com/problems/search-a-2d-matrix-ii/)
 
-```
+```c++
 bool searchMatrix(vector<vector<int>> &matrix, int target)
 {
     if (matrix.empty())
@@ -459,7 +423,7 @@ bool searchMatrix(vector<vector<int>> &matrix, int target)
 }
 ```
 
-#### [524. Longest Word in Dictionary through Deleting](https://leetcode.com/problems/longest-word-in-dictionary-through-deleting/)
+#### [524. Longest Word in Dictionary through Deleting](https://leetcode.com/problems/longest-word-in-dictionary-through-deleting/)  #todo
 
 ```
 string findLongestWord(string s, vector<string> &d)
@@ -528,7 +492,7 @@ int largestRectangleArea(vector<int> height)
     {
         
         while(!monoStack.empty() && height[i] <= height[monoStack.top()])  // 但栈非空
-        时，且当前元素大于栈顶元素时，进行弹出操作，并且结算该弹出元素
+        时，且当前元素大于栈顶元素时，进行弹出操作，并且结算该弹出元素  弹出谁就结算谁
         {
             int h = height[monoStack.top()]; 
             monoStack.pop();
@@ -545,32 +509,57 @@ int largestRectangleArea(vector<int> height)
 
 #### [42. Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/)
 
-```
+```c++
+int trap_1(vector<int> &height)
+{
+    if (height.empty())
+        return 0;
+    int res = 0;
+    int i = 0;
+
+    stack<int> monoStack;
+    // height.push_back(0);
+    for (int i = 0; i < height.size(); i++)
+    {
+        while (!monoStack.empty() && height[i] > height[monoStack.top()]) // 但栈非空时，且当前元素大于栈顶元素时，进行弹出操作，并且结算该弹出元素
+        // 栈顶元素的下一个元素则为左边界，当前遍历到的height[i]则为右边界
+        {
+            int tmp = monoStack.top();
+            monoStack.pop();
+            if (monoStack.empty())
+                continue;
+
+            int h = min(height[i], height[monoStack.top()]);
+            res = res + (h - height[tmp]) * (i - monoStack.top() - 1);
+        }
+        monoStack.push(i);
+    }
+    return res;
+}
+
 int trap(vector<int> &height)
 {
     if (height.empty())
         return 0;
     int res = 0;
     int i = 0;
-    stack<int> monoStack; // 因为要求一个数左边比他大和右边比他大,所以应该是一个单调递减的栈,
-    这个栈需要保持严格单调递减
+    stack<int> monoStack; // 因为要求一个数左边比他大和右边比他大,所以应该是一个单调递减的栈, 这个栈需要保持严格单调递减
     while (i < height.size())
     {
-        // 如果满足入栈条件,则直接入栈 
+        // 如果满足入栈条件,则直接入栈
         if (monoStack.empty() || height[i] < height[monoStack.top()])
         {
             monoStack.push(i++);
         }
-        else// 如果不满足入栈条件,则弹出栈顶元素,这个时候可以结算当前元素,栈顶元素的下一个元素则为
-        左边界，当前遍历到的height[i]则为右边界
-        {
-            int tmp = monoStack.top();
-            monoStack.pop();
-            if (monoStack.empty())
-                continue;
-            int h = min(height[i], height[monoStack.top()]);
-            res = res + (h - height[tmp]) * (i - monoStack.top() - 1);
-        }
+        else // 如果不满足入栈条件,则弹出栈顶元素,这个时候可以结算当前元素,栈顶元素的下一个元素则为左边界，当前遍历到的height[i] 则为右边界
+            {
+                int tmp = monoStack.top();
+                monoStack.pop();
+                if (monoStack.empty())
+                    continue;
+                int h = min(height[i], height[monoStack.top()]);
+                res = res + (h - height[tmp]) * (i - monoStack.top() - 1);
+            }
     }
     return res;
 }
@@ -630,7 +619,7 @@ int largestRectangleArea(vector<int> &heights)
 ```
 
 #### [85. Maximal Rectangle](https://leetcode.com/problems/maximal-rectangle/)
-```
+```c++
 class Solution {
     
     int largestRectangleArea(vector<int> height)
@@ -675,10 +664,8 @@ public:
                 {
                     heights[j] = 0;
                 }
-            }
-            
-            res = max(largestRectangleArea(heights), res);
-            
+            }   
+            res = max(largestRectangleArea(heights), res);     
         }
         return res;
     }
@@ -730,8 +717,6 @@ int search(vector<int>& nums, int target)
     return -1;
 }
 ```
-
-
 
 #### [34. Find First and Last Position of Element in Sorted Array](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -922,7 +907,7 @@ int find(vector<int>& nums, int target) {
 
 [378. Kth Smallest Element in a Sorted Matrix](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
 
-```
+```c++
 //整个二维数组中 matrix[0][0]matrix[0][0] 为最小值，matrix[n - 1][n - 1]matrix[n−1][n−1] 为最大值，现在我们将其分别记作 ll 和 rr。
 可以发现一个性质：任取一个数 midmid 满足 l\leq mid \leq rl≤mid≤r，那么矩阵中不大于 midmid 的数，
 肯定全部分布在矩阵的左上角。初始位置在 matrix[n - 1][0]matrix[n−1][0]（即左下角；设当前位置为 
@@ -1415,6 +1400,40 @@ void reorderList(ListNode *head)
 ```
 
 #### 链表排序  
+
+##### [86. Partition List](https://leetcode.com/problems/partition-list/)
+
+```c++
+ // 将所有小于给定值的节点取出组成一个新的链表，此时原链表中剩余的节点的值都大于或等于给定值，只要将原链表直接接在新链表后
+class Solution 
+{
+public:
+    ListNode *partition(ListNode *head, int x) 
+    {
+        if (!head) return head;
+        ListNode *dummy = new ListNode(-1);
+        ListNode *newDummy = new ListNode(-1);
+        dummy->next = head;
+        ListNode *cur = dummy, *p = newDummy;
+        while (cur->next)
+        {
+            if (cur->next->val < x)
+            {
+                p->next = cur->next;
+                p = p->next;
+                cur->next = cur->next->next;
+                p->next = NULL;
+            } 
+            else
+            {
+                cur = cur->next;
+            }
+        }
+        p->next = dummy->next;
+        return newDummy->next;
+    }
+};
+```
 
 ##### [147. Insertion Sort List](https://leetcode.com/problems/insertion-sort-list/)  对链表使用插入排序
 

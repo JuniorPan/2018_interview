@@ -32,28 +32,56 @@
 class Solution
 {
 public:
+    int trap_1(vector<int> &height)
+    {
+        if (height.empty())
+            return 0;
+        int res = 0;
+        int i = 0;
+
+        stack<int> monoStack;
+        // height.push_back(0);
+        for (int i = 0; i < height.size(); i++)
+        {
+            while (!monoStack.empty() && height[i] > height[monoStack.top()]) // 但栈非空时，且当前元素大于栈顶元素时，进行弹出操作，并且结算该弹出元素
+            // 栈顶元素的下一个元素则为左边界，当前遍历到的height[i]则为右边界
+            {
+                int tmp = monoStack.top();
+                monoStack.pop();
+                if (monoStack.empty())
+                    continue;
+
+                int h = min(height[i], height[monoStack.top()]);
+                res = res + (h - height[tmp]) * (i - monoStack.top() - 1);
+            }
+            monoStack.push(i);
+        }
+        return res;
+    }
+
     int trap(vector<int> &height)
     {
         if (height.empty())
             return 0;
         int res = 0;
         int i = 0;
-        stack<int> monoStack;
+        stack<int> monoStack; // 因为要求一个数左边比他大和右边比他大,所以应该是一个单调递减的栈, 这个栈需要保持严格单调递减
         while (i < height.size())
         {
-            if (monoStack.empty() || height[i] <= height[monoStack.top()])
+            // 如果满足入栈条件,则直接入栈
+            if (monoStack.empty() || height[i] < height[monoStack.top()])
             {
                 monoStack.push(i++);
             }
-            else
-            {
-                int tmp = monoStack.top();
-                monoStack.pop();
-                if (monoStack.empty())
-                    continue;
-                int h = min(height[i], height[monoStack.top()]);
-                res = res + (h - height[tmp]) * (i - monoStack.top() - 1);
-            }
+            else // 如果不满足入栈条件,则弹出栈顶元素,这个时候可以结算当前元素,栈顶元素的下一个元素则为左边界，当前遍历到的height[i] 则为右边界
+                {
+                    int tmp = monoStack.top();
+                    monoStack.pop();
+                    if (monoStack.empty())
+                        continue;
+                    int h = min(height[i], height[monoStack.top()]);
+                    res = res + (h - height[tmp]) * (i - monoStack.top() - 1);
+                }
         }
         return res;
     }

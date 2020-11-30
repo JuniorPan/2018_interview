@@ -14,19 +14,25 @@ public:
             return;
 
         int left = 0; // 小于区域的下一个位置
-        int right = nums.size() -1; // 大于区域的上一个位置
+        int right = nums.size() - 1; // 大于区域的上一个位置
         int index = 0;
-
-        while(index <= right)
+        while (index <= right)
         {
-            if(nums[index] < 1)
-                swap(nums[index++], nums[left++]);
+            if (nums[index] == 0)
+            {
+                swap(nums[left], nums[index]);
+                left++;
+                index++;
+            }
             else if (nums[index] == 1)
             {
-                index ++;
+                index++;
             }
-            else 
-                swap(nums[index], nums[right--]);
+            else if (nums[index] == 2)
+            {
+                swap(nums[index], nums[right]);
+                right--;
+            }
         }
     }
 };
