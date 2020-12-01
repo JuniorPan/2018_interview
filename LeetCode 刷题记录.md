@@ -1124,11 +1124,10 @@ void wiggleSort(vector<int> &nums)
 ```C++
 class Solution {
 public:
-    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2)
+    {
         if (l1 == NULL && l2 == NULL)
             return NULL;
-        
         ListNode *pHead = new ListNode(-1);
         ListNode *tail = pHead;
         
@@ -2011,7 +2010,7 @@ int lengthOfLIS(vector<int> &nums)
 ```
 
 
-#### 3.双序列动态规划
+#### 3.双序列动态规划  (7)
 **状态: f\[i][j]表示第一个sequence的前i个数字/字符, 配上第二个sequence的前j个; **
 
 **方程: f\[i][j] = 研究第i个和第j个的匹配关系; **
@@ -2059,40 +2058,34 @@ bool isMatch(string s, string p)
 
 ##### [44. Wildcard Matching](https://leetcode.com/problems/wildcard-matching/)
 
-```
-bool isMatch(string s, string p) 
+```c++
+bool isMatch(string s, string p)
 {
     int m = s.size();
     int n = p.size();
-    
+
+    // dp[i][j] 表示s[0...i-1] 和 p[0...j-1]是否能够匹配
+    // vector<vector<bool>> dp(m+1, vector<bool>(n+1, false));
     vector<vector<bool>> dp(m + 1, vector<bool>(n + 1, false));
-    
-    dp[0][0] = true;
-    
-    for(int i = 1; i <= m; i++)
+    dp[0][0] = true; // 空串能匹配
+
+    for (int j = 1; j <= n; j++)
     {
-        dp[i][0] = false;
+        if (p[j - 1] == '*')
+            dp[0][j] = dp[0][j - 1];
     }
-    
-    for(int j = 1; j <= n; j++)
+    // * 可以匹配空串和任意字符串
+    // dp[i-1][j] 表示 s[0...i-2] 和p[0...j-1]匹配成功， 因为星号可以匹配任意字符串，再多加一个任意字符也没问题
+    // dp[i][j-1] 表示 s[0...i-1] 和p[0...j-2]匹配成功，星号可以匹配空串
+    for (int i = 1; i <= m; i++)
     {
-        if (p[j-1] == '*')
-            dp[0][j] = true;
-        else
-            break;
-    }
-     
-    for(int i = 1; i <= m; i++)
-    {
-        for(int j = 1; j <= n; j++)
+        for (int j = 1; j <= n; j++)
         {
-            if (p[j-1] != '*')
-            {
-                dp[i][j] = dp[i-1][j-1] && (s[i-1] == p[j-1] || p[j-1] == '?');
-            }
+            if (p[j - 1] == '*')
+                dp[i][j] = dp[i - 1][j] || dp[i][j - 1];
             else
             {
-                dp[i][j] = dp[i][j-1] || dp[i-1][j];
+                dp[i][j] = dp[i - 1][j - 1] && (s[i - 1] == p[j - 1] || p[j - 1] == '?');
             }
         }
     }
