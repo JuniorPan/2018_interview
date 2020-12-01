@@ -678,7 +678,7 @@ https://www.cnblogs.com/grandyang/p/5883736.html
 https://www.cnblogs.com/grandyang/p/8850299.html
 ### 二分查找  (6)
 
-#### [33. Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+#### [33. Search in Rotated Sorted Array ](https://leetcode.com/problems/search-in-rotated-sorted-array/) #todo
 
 ```
 int search(vector<int>& nums, int target) 
@@ -785,7 +785,7 @@ public:
 
 
 
-#### [81. Search in Rotated Sorted Array II](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)
+#### [81. Search in Rotated Sorted Array II](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)  #todo
 
 ```
 bool search(vector<int> &nums, int target)
@@ -879,7 +879,7 @@ int search(vector<int> &nums, int target)
 
 
 
-```
+```c++
 
 // 形成自己的套路，right 初始化为nums.size(), while判断就可以用left < right了
 int find(vector<int>& nums, int target) {
@@ -1538,9 +1538,42 @@ ListNode *sortList(ListNode *head)
 
 ##### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/)
 
+```c++
+// 每k组翻转
+ListNode *reverseKGroup(ListNode *head, int k)
+{
+    ListNode *dummy = new ListNode(-1), *pre = dummy, *cur = pre;
+    dummy->next = head;
+    int num = -1;
+    // 统计链表长度,因为是从假的头结点开始所以num从-1开始
+    while (cur)
+    {
+        ++num;
+        cur = cur->next;
+    }
+    while (num >= k)
+    {
+        cur = pre->next;
+        for (int i = 1; i < k; ++i)
+        {
+            // 这个地方相当于头插法
+            ListNode *t = cur->next;
+            cur->next = t->next;
+            t->next = pre->next;
+            pre->next = t;
+        }
+        pre = cur;
+        num -= k;
+    }
+    return dummy->next;
+}
+```
+
+
+
 ##### [92. Reverse Linked List II](https://leetcode.com/problems/reverse-linked-list-ii/)
 
-```
+```c++
 ListNode *reverseBetween(ListNode *head, int m, int n)
 {
     ListNode *dummy = new ListNode(-1), *pre = dummy;
@@ -1550,6 +1583,7 @@ ListNode *reverseBetween(ListNode *head, int m, int n)
     ListNode *cur = pre->next;
     for (int i = m; i < n; ++i)
     {
+    	// 这个地方依然是头插法
         ListNode *t = cur->next;
         cur->next = t->next;
         t->next = pre->next;
@@ -1559,23 +1593,26 @@ ListNode *reverseBetween(ListNode *head, int m, int n)
 }
 ```
 
-
-
 ##### [206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/)
 
 ```c++
 // 非递归
-ListNode* reverseList(ListNode* head) 
+ListNode *reverseList(ListNode *head)
 {
-    ListNode *newHead = NULL;
-    while (head)
+    if(!head)
+        return nullptr;
+
+    ListNode *pre = nullptr;
+    ListNode *cur = head;
+
+    while(cur)
     {
-        ListNode *t = head->next;
-        head->next = newHead;
-        newHead = head;
-        head = t;
+        ListNode *temp = cur->next;
+        cur->next = pre;
+        pre = cur;
+        cur = temp;
     }
-    return newHead;
+    return pre;
 }
 
 // 递归
@@ -1596,36 +1633,36 @@ ListNode* reverseList(ListNode* head)
 ```c++
 bool isPalindrome(ListNode *head)
 {
-    if (head == NULL || head->next == NULL)
+    if (head == nullptr || head->next == nullptr)
         return true;
     ListNode *slow = head;
     ListNode *fast = head;
-    while (fast->next != NULL && fast->next->next != NULL)
+    while (fast->next != nullptr && fast->next->next != nullptr)
     {
         slow = slow->next;
         fast = fast->next->next;
     }
     slow->next = reverseList(slow->next);
     slow = slow->next;
-    while (slow != NULL)
+    fast = head;
+    while (slow)
     {
-        if (head->val != slow->val)
+        if (fast->val != slow->val)
             return false;
-        head = head->next;
+        fast = fast->next;
         slow = slow->next;
     }
     return true;
 }
 ListNode *reverseList(ListNode *head)
 {
-    ListNode *pre = NULL;
-    ListNode *next = NULL;
-    while (head != NULL)
+    ListNode *pre = nullptr, *cur=head;
+    while (cur)
     {
-        next = head->next;
-        head->next = pre;
-        pre = head;
-        head = next;
+        ListNode *temp = cur->next;
+        cur->next = pre;
+        pre = cur;
+        cur = temp;
     }
     return pre;
 }
