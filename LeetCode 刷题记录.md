@@ -1667,20 +1667,14 @@ ListNode *reverseList(ListNode *head)
 }
 ```
 
-
-
-
-
 ### 动态规划  (29)
 
-#### 1.坐标型动态规划  120不会
+#### 1.坐标型动态规划  (5)
 
 **状态: f(x)表示从起点走到坐标x, f\[x][y]表示我从起点走到坐标x,y; 方程: 研究走到x, y这个点之前的一步; 初始化: 起点; 答案: 终点**
 
-
-
 ##### [62. Unique Paths](https://leetcode.com/problems/unique-paths/)
-```
+```c++
 int uniquePaths(int m, int n) 
 {
     // int dp[m][n];
@@ -1690,6 +1684,7 @@ int uniquePaths(int m, int n)
     // dp[1][1] = 2;
     
     // dp[i][j] 表示从[0][0]--->[i][j] 有多少种走法
+    // 第0行和第0列 在边界上所以只有一种方法
     vector<vector<int>> dp(m, vector<int>(n, 1));
     
     for(int i = 1; i < m; i++)
@@ -1705,7 +1700,7 @@ int uniquePaths(int m, int n)
 
 ##### [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/)
 
-```
+```c++
 int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
 {
     int m = obstacleGrid.size();
@@ -1715,6 +1710,7 @@ int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
         return 0;
     }
     vector<vector<int>> dp(m, vector<int>(n, 0));
+    // 先初始化边界
     for (int i = 0; i < m; i++)
     {
         if (obstacleGrid[i][0] != 1)
@@ -1795,7 +1791,7 @@ int climbStairs(int n)
 ```
 
 
-##### [120. Triangle](https://leetcode.com/problems/triangle/)
+##### [120. Triangle](https://leetcode.com/problems/triangle/) #todo
 
 ```
 
@@ -1815,13 +1811,13 @@ int minimumTotal(vector<vector<int>>& triangle)
 ```
 
 
-#### 2.单序列动态规划
+#### 2.单序列动态规划 (7)
 
 ***状态: f[i]表示前i个位置/数字/字符, 第i个; 方程: f[i] = f(f[j]), j是i之前的一个位置; 初始化: f[0]; 答案: f[n-1]; 小技巧: 一般有N个数字/字符, 就开N+1个位置的数组, 第0个位置单独留出来作初始化.(跟坐标相关的动态规划除外)***
 
 ##### [32. Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses/)
 
-```
+```c++
 int longestValidParentheses(string s)
 {
     int n = s.length();
@@ -1848,7 +1844,7 @@ int longestValidParentheses(string s)
 ```
 
 
-##### [45. Jump Game II](https://leetcode.com/problems/jump-game-ii/)
+##### [45. Jump Game II](https://leetcode.com/problems/jump-game-ii/)  好像不是dp
 
 ```
 int jump(vector<int>& nums) 
@@ -1877,10 +1873,11 @@ int jump(vector<int>& nums)
 
 ##### [55. Jump Game](https://leetcode.com/problems/jump-game/)
 
-```
-
- bool canJump(vector<int>& nums) 
+```c++
+bool canJump(vector<int>& nums) 
 {
+	// dp[i] 表示达到i位置时剩余的跳力，若到达某个位置时跳力为负了，说明无法到达该位置
+    // 所以当前位置的剩余跳力（dp 值）和当前位置新的跳力中的较大那个数决定了当前能到的最远距离，而下一个位置的剩余跳力（dp 值）就等于当前的这个较大值减去1
     vector<int> dp(nums.size(), 0);
     for (int i = 1; i < nums.size(); ++i) 
     {
@@ -1894,28 +1891,56 @@ int jump(vector<int>& nums)
 
 ##### [132. Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/)
 
-```
- int minCut(string s) 
+```c++
+// 解法1:
+int minCut(string s)
+{
+    if (s.empty())
+        return 0;
+    int n = s.size();
+    //p[i][j] 表示区间 [i, j] 内的子串是否为回文串，
+    vector<vector<bool>> p(n, vector<bool>(n));
+    // dp[i]表示子串 [0...i] 范围内的最小分割数
+    vector<int> dp(n);
+	// 两个for循环 子串
+    for (int j = 0; j < n; j++)
+    {
+        dp[j] = j;
+        for(int i = 0; i <= j; i++)
+        {
+            p[i][j] = s[i] == s[j] && (j - i < 2 || p[i+1][j-1]);
+
+            if (p[i][j])
+            {
+                dp[j] = (i == 0) ? 0 : min(dp[i-1] + 1, dp[j]);
+            }
+        }
+    }
+    return dp[n-1];
+}
+
+
+// 解法2:
+int minCut_2(string s)
 {
     int n = s.size();
     if (n <= 0)
         return 0;
-    
+
     // dp[i]表示s[i...n-1]的最小分割次数
-    vector<int> dp(n+1, 0);
+    vector<int> dp(n + 1, 0);
     dp[n] = -1;
-    
     vector<vector<bool>> p(n, vector<bool>(n, false));
-    
-    for(int i = n-1; i >= 0; i--)
+
+    for (int i = n - 1; i >= 0; i--)
     {
         dp[i] = INT_MAX;
-        for(int j = i; j < n; j++)
+        for (int j = i; j < n; j++)
         {
-            if (s[i] == s[j] && (j - i < 2 || p[i+1][j-1]) ) // 判断s[i...j]是不是回文子串
+            if (s[i] == s[j] && (j - i < 2 || p[i + 1][j - 1])) // 判断s[i...j]是不是回文子串
             {
                 p[i][j] = true;
-                dp[i] = min(dp[j+1] + 1, dp[i]);
+                dp[i] = min(dp[j + 1] + 1, dp[i]);
             }
         }
     }
@@ -1925,7 +1950,7 @@ int jump(vector<int>& nums)
 
 ##### [139. Word Break](https://leetcode.com/problems/word-break/)
 
-```
+```c++
 bool wordBreak(string s, vector<string> &wordDict)
 {
     if (wordDict.size() == 0)
@@ -1935,6 +1960,8 @@ bool wordBreak(string s, vector<string> &wordDict)
     // bool dp[n+1];
     vector<bool> dp(n + 1, false);
     dp[0] = true;
+    //其中 dp[i] 表示范围 [0, i) 内的子串是否可以拆分，注意这里 dp 数组的长度比s串的长度大1，是因为我们要 handle 空串的情况，我们初始化 dp[0] 为 true，然后开始遍历
+    // 子串
     for (int i = 1; i <= n; i++)
     {
         for (int j = 0; j < i; j++)
@@ -1983,7 +2010,7 @@ int rob(vector<int> &nums)
 
 ##### [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/)
 
-```
+```c++
 int lengthOfLIS(vector<int> &nums)
 {
     if (nums.empty())
@@ -2093,7 +2120,7 @@ bool isMatch(string s, string p)
 }
 ```
 
-##### [72. Edit Distance](https://leetcode.com/problems/edit-distance/)  
+##### [72. Edit Distance](https://leetcode.com/problems/edit-distance/)   #todo 增删改对应的到底是哪个
 
 ```
 int minDistance(string word1, string word2)
@@ -2103,10 +2130,7 @@ int minDistance(string word1, string word2)
     // dp[i][j] 表示word1[0...i-1] 变换到word2[0...j-1]所需要的最小步骤
     vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0)); // 二维dp数组初始化大小为[m+1][n+1] 是为了初始化第0行和第0列
 
-    for (int i = 0; i <= m; i++)
-        dp[i][0] = i;
-    for (int j = 0; j <= n; j++)
-        dp[0][j] = j;
+   
 
     for (int i = 1; i <= m; i++)
     {
@@ -2118,7 +2142,7 @@ int minDistance(string word1, string word2)
             }
             else
             {
-                dp[i][j] = min(dp[i - 1][j] + 1, min(dp[i][j - 1] + 1, dp[i - 1][j - 1] + 1));
+                dp[i][j] = min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1])) + 1; // 分别对应的增加，删除，修改操作
             }
         }
     }
@@ -2128,8 +2152,7 @@ int minDistance(string word1, string word2)
 
 ##### [97. Interleaving String](https://leetcode.com/problems/interleaving-string/)  
 
-```
-//LeetCode 没过很奇怪
+```c++
 bool isInterleave(string s1, string s2, string s3)
 {
     int m = s1.size();
@@ -2139,26 +2162,17 @@ bool isInterleave(string s1, string s2, string s3)
     if (m + n != k)
         return false;
 
-    // dp[i][j] 表示s1[0...i-1] 和s2[0...j-1]能否交替表示成s3[i+j-1]
+    // dp[i][j] 表示s1[0...i-1] 和s2[0...j-1]能否交替表示成s3[0...i+j-1]
     vector<vector<bool>> dp(m + 1, vector<bool>(n + 1, false));
     dp[0][0] = true;
-    for (int i = 0; i <= m; i++)
+    for (int i = 1; i <= m; i++)
     {
-        if (s1[i - 1] != s3[i - 1])
-        {
-            break;
-        }
-        dp[i][0] = true;
+        dp[i][0] = dp[i - 1][0] & (s1[i - 1] == s3[i - 1]);
     }
 
-    for (int j = 0; j <= n; j++)
+    for (int j = 1; j <= n; j++)
     {
-        if (s2[j - 1] != s3[j - 1])
-        {
-            break;
-        }
-            
-        dp[0][j] = true;
+        dp[0][j] = dp[0][j - 1] & (s2[j - 1] == s3[j - 1]);
     }
 
     for (int i = 1; i <= m; i++)
@@ -2176,31 +2190,37 @@ bool isInterleave(string s1, string s2, string s3)
 
 ##### [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/)  
 
-```
-// 这一题的转移方程还没有理解
+```c++
 int numDistinct(string s, string t)
 {
-    int m = t.size();
-    int n = s.size();
-   
+    int m = s.size();
+    int n = t.size();
+
     // dp[i][j]表示S[0...j-1]中的子序列等于T[0..i-1]
-    vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
-    
-    for(int j = 0; j < n; j++)
+    // 1 如果s[i-1]!=t[j-1] 则s[:i-1]中匹配t[:j-1]子序列个数==s[:i-2]中匹配t[:j-1]子序列个数
+    //     dp[i][j] = dp[i-1][j]
+    // 2 if s[i-1]==t[j-1]:
+    //     dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
+    //     2.1 用s[i-1]     dp[i-1][j-1] 则s[:i-1]中匹配t[:j-2]子序列个数 ==s[:i-1]中匹配t[:j-1]子序列个数
+    //     2.2 不用s[i-1]   dp[i-1][j]   则s[:i-2]中匹配t[:j-1]子序列个数  ==s[:i-1]中匹配t[:j]子序列个数
+
+    vector<vector<long long>> dp(m + 1, vector<long long>(n + 1, 0));
+
+    for (int j = 0; j <= m; j++)
     {
-        dp[0][j] = 1;
+        dp[j][0] = 1;
     }
-    
-    for(int i = 1; i <= m; i++)
+
+    for (int i = 1; i <= m; i++)
     {
-        for(int j = 1; j <= n; j++)
+        for (int j = 1; j <= n; j++)
         {
-           if (t[i-1] != s[j-1])
-               dp[i][j] = dp[i][j-1];
-           else
-               dp[i][j] = dp[i-1][j-1] + dp[i][j-1];   
+            if (s[i - 1] != t[j - 1])
+                dp[i][j] = dp[i - 1][j];
+            else
+                dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
         }
-    }  
+    }
     return dp[m][n];
 }
 ```
@@ -2452,7 +2472,7 @@ string longestPalindrome(string s) // todo: 时间上还得优化
 
 ##### [132. Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/)
 
-```
+```c++
 class Solution
 {
 public:
@@ -2463,7 +2483,7 @@ public:
             return 0;
         int n = s.size();
         //p[i][j] 表示区间 [i, j] 内的子串是否为回文串，
-        vector<vector<bool>> p(n, vector<bool>(n));
+        vector<vector<bool>> p(n, vector<bool>(n, false));
         // dp[i]表示子串 [0, i] 范围内的最小分割数
         vector<int> dp(n);
         for (int i = 0; i < n; ++i)
@@ -4208,3 +4228,31 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 ```
 
 ####  [986. Interval List Intersections](https://leetcode.com/problems/interval-list-intersections/)
+
+
+
+### 双堆模式
+
+#### [155. Min Stack](https://leetcode.com/problems/min-stack/)
+
+#### [295 Find-Median-from-Data-Stream](https://leetcode.com/problems/find-median-from-data-stream/)
+
+#### [480. Sliding Window Median](https://leetcode.com/problems/sliding-window-median/)
+
+#### [剑指 Offer 09. 用两个栈实现队列](https://leetcode-cn.com/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/)
+
+
+
+### 前K大的数模式HEAP
+
+采用priority queue 或者 说在python 中的heapq
+求top k 采用最小堆（默认）
+采用最大堆的时候可以采用push 负的value
+
+#### [215. Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/)
+
+#### [347. Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
+
+##### [373. Find K Pairs with Smallest Sums](https://leetcode.com/problems/find-k-pairs-with-smallest-sums/)
+
+# 
