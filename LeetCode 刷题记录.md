@@ -2636,7 +2636,7 @@ public:
 #### [395. Longest Substring with At Least K Repeating Characters](https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/)
 
 
-### 深度优先搜索 (6)
+### 深度优先搜索 (8)
 #### [经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
 ```
 int dirs[8][2] = {1,1,1,0,1,-1,0,1,0,-1,-1,1,-1,0,-1,-1};
@@ -2666,15 +2666,9 @@ class Solution
     bool dfs(vector<vector<char>> &board, string &word, int i, int j, int pos)
     {
         if (i >= board.size() || j >= board[0].size() || i < 0 || j < 0 || pos >= word.size() || word[pos] != board[i][j])
-        {
             return false;
-        }
-
         if (pos == word.size() - 1 && word[pos] == board[i][j])
-        {
             return true;
-        }
-		
 		// 这个地方修改临时值和回溯思想不一样，只是为了不重复访问，需要一个和原数组等大小的 visited 数组，是 bool 型的，用来记录当前位置是否已经被访问过，因为题目要求一个 cell 只能被访问一次
         char temp = board[i][j];
         board[i][j] = '0';
@@ -2696,9 +2690,7 @@ public:
             for (int j = 0; j < board[0].size(); j++)
             {
                 if (dfs(board, word, i, j, 0))
-                {
                     return true;
-                }
             }
         }
         return false;
@@ -2708,8 +2700,10 @@ public:
 
 #### [139. Word Break](https://leetcode.com/problems/word-break/)
 
+<img src="https://pic.leetcode-cn.com/78fd09b2deabeae972809c2795ddb8be96720b8e62377cf01b7f70e7fb3dbf8c-image.png" alt="image.png" style="zoom: 50%;" />
+
 ```c++
- bool wordBreak_1(string s, vector<string> &wordDict)
+ bool wordBreak(string s, vector<string> &wordDict)
 {
     unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
     vector<int> memo(s.size(), -1);
@@ -2733,11 +2727,9 @@ bool dfs(string s, unordered_set<string> &wordSet, int start, vector<int> &memo)
 }
 ```
 
-
-
 #### [200. Number of Islands](https://leetcode.com/submissions/detail/103885458/)  
 
-```
+```c++
 class Solution
 {
     void dfs(vector<vector<char>> &grid, int i, int j, int m, int n)
@@ -2775,7 +2767,7 @@ public:
 };
 ```
 
-[212. Word Search II](https://leetcode.com/problems/word-search-ii/) dfs+字典树
+#### [212. Word Search II](https://leetcode.com/problems/word-search-ii/) dfs+字典树 **#todo** 
 
 ```
 class Solution {
@@ -2954,7 +2946,7 @@ double knightProbability(int N, int K, int r, int c)
 
 #### [827. Making A Large Island](https://leetcode.com/submissions/detail/153847279/) 类似于回溯
 
-```
+```c++
 int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
 int dfs(vector<vector<int>>& grid, vector<vector<bool>>& visited, int i, int j)
 {
