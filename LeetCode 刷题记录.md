@@ -1960,20 +1960,16 @@ bool wordBreak(string s, vector<string> &wordDict)
     // bool dp[n+1];
     vector<bool> dp(n + 1, false);
     dp[0] = true;
-    //其中 dp[i] 表示范围 [0, i) 内的子串是否可以拆分，注意这里 dp 数组的长度比s串的长度大1，是因为我们要 handle 空串的情况，我们初始化 dp[0] 为 true，然后开始遍历
+    //其中 dp[i] 表示子串 s[0...i-1] 内的子串是否可以拆分
     // 子串
     for (int i = 1; i <= n; i++)
     {
         for (int j = 0; j < i; j++)
         {
-            if (dp[j])
+            if (dp[j] && count(wordDict.begin(), wordDict.end(), s.substr(j, i - j)) != 0)
             {
-                string subword = s.substr(j, i - j);
-                if (count(wordDict.begin(), wordDict.end(), subword) != 0)
-                {
-                    dp[i] = true;
-                    break;
-                }
+                dp[i] = true;
+                break;
             }
         }
     }
@@ -2301,13 +2297,13 @@ int longestCommonSubsequence(string word1, string word2)
 ```
 
 
-#### 4.划分型动态规划
+#### 4.划分型动态规划 （1）
 ***状态: f[i]表示前i个元素的最大值; 方程: f[i] = 前i个元素里面选一个区间的最大值; 初始化: f[0]; 答案: f[n - 1]***
 
 ##### [188. Best Time to Buy and Sell Stock IV](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/)
 
 
-#### 5.背包型动态规划
+#### 5.背包型动态规划 （5）
 **特点: 1). 用值作为DP维度, 2). DP过程就是填写矩阵, 3). 可以滚动数组优化 状态: f\[i][S]前i个物品, 取出一些能否组成和为S; 方程: f\[i][S] = f\[i-1][S-a[i]] or f\[i-1][S]; 初始化: f\[i][0]=true; f\[0][1...target]=false; 答案: 检查所有f\[n][j]**
 
 ##### [322. Coin Change](https://leetcode.com/problems/coin-change/description/)
@@ -2433,7 +2429,7 @@ public:
 
 
 
-#### 6.区间型动态规划   关键在于画图 
+#### 6.区间型动态规划  （4）
 
 **特点: 1). 求一段区间的解max/min/count; 2). 转移方程通过区间更新; 3). 从大到小的更新; 这种题目共性就是区间最后求[0, n-1]这样一个区间逆向思维分析, 从大到小就能迎刃而解** 
 
@@ -2591,7 +2587,7 @@ int countSubstrings(string s)
 
 
 
-####  7.博弈型动态规划状态
+####  7.博弈型动态规划状态 （1）
 
 ***定义一个人的状态; 方程: 考虑两个人的状态做状态更新; 初始化: 暂无; 答案: 先思考最小状态, 再思考大的状态 -> 往小的递推, 适合记忆话搜索 动态规划, 循环(从小到大递推), 记忆化搜索(从大到小搜索, 画搜索树); 什么时候 用记忆化搜索: 1). 状态转移特别麻烦, 不是顺序性, 2). 初始化状态不是很容易找到; 题目类型: 1). 博弈类问题, 2). 区间类问题; 适合解决题目: 1). 状态特别复杂, 2). 不好初始化***
 
@@ -2708,6 +2704,33 @@ public:
         return false;
     }
 };
+```
+
+#### [139. Word Break](https://leetcode.com/problems/word-break/)
+
+```c++
+ bool wordBreak_1(string s, vector<string> &wordDict)
+{
+    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+    vector<int> memo(s.size(), -1);
+    return dfs(s, wordSet, 0, memo);
+}
+// dfs 表示字符串s[start,n] 是否可分
+bool dfs(string s, unordered_set<string> &wordSet, int start, vector<int> &memo)
+{
+    if (start >= s.size())
+        return true;
+    if (memo[start] != -1)
+        return memo[start];
+    for (int i = start + 1; i <= s.size(); ++i)
+    {
+        if (wordSet.count(s.substr(start, i - start)) && dfs(s, wordSet, i, memo))
+        {
+            return memo[start] = 1;
+        }
+    }
+    return memo[start] = 0;
+}
 ```
 
 
@@ -3013,8 +3036,6 @@ vector<vector<int>> levelOrder(TreeNode *root)
     return ret;
 }
 ```
-
-
 
 #### [103. Binary Tree Zigzag Level Order Traversal](https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/)
 
