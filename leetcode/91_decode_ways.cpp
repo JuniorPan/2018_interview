@@ -6,11 +6,11 @@
 //  Copyright © 2018年 panqiang. All rights reserved.
 //
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <map>
 #include <algorithm>
+#include <iostream>
+#include <map>
+#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -37,78 +37,74 @@ int numDecodings(string s)
 
     //int dp[n+1] = {0};
 
-    vector<int> dp(n+1);
+    vector<int> dp(n + 1);
 
-    dp[0] = 1;  // 这个地方为什么初始化为1？？？
+    dp[0] = 1; // 这个地方为什么初始化为1？？？
 
     dp[1] = (s[0] == '0') ? 0 : 1;
 
-    for(int i = 2; i <= n; i++)
+    for (int i = 2; i <= n; i++)
     {
         // int one = int(s[i-1]);
         // int two = int(s.substr(i-2, 2));
 
-
-        if (s[i-1] != '0')
+        if (s[i - 1] != '0')
         {
-            dp[i] = dp[i] + dp[i-1];
+            dp[i] = dp[i] + dp[i - 1];
         }
-        if (s[i-2] == '1'|| (s[i-2] == '2' && s[i-1] <='6'))
+        if (s[i - 2] == '1' || (s[i - 2] == '2' && s[i - 1] <= '6'))
         {
-            dp[i] = dp[i] + dp[i-2];
+            dp[i] = dp[i] + dp[i - 2];
         }
-
     }
     return dp[n];
 }
 
-int numDecodings2(string s) {
+int numDecodings2(string s)
+{
 
-        int n = s.length();
+    int n = s.length();
 
-        if (n <= 0)
-            return 0;
+    if (n <= 0)
+        return 0;
 
-        vector<int> dp(n+1);
+    vector<int> dp(n + 1);
 
-        // dp[0] = 1;  // 这个地方为什么初始化为1？？？
+    // dp[0] = 1;  // 这个地方为什么初始化为1？？？
 
-        dp[0] =  1;
-        dp[1]= s[0] != '0' ? 1 : 0;
+    dp[0] = 1;
+    dp[1] = s[0] != '0' ? 1 : 0;
 
-        cout << "dp[0]: " << dp[0] << endl;
-        cout << "dp[1]: " << dp[1] << endl;
+    cout << "dp[0]: " << dp[0] << endl;
+    cout << "dp[1]: " << dp[1] << endl;
 
-        for(int i = 2; i <= n; i++)
+    for (int i = 2; i <= n; i++)
+    {
+        bool one = s[i - 1] != '0';
+        bool two = (s[i - 2] == '1' || (s[i - 2] == '2' && s[i - 1] <= '6'));
+
+        cout << "one: " << s[i - 1] << ": " << one << endl;
+        cout << "two: " << s[i - 2] << s[i - 1] << ": " << two << endl;
+
+        if (!one && two)
         {
-            bool one = s[i-1] != '0';
-            bool two = (s[i-2] == '1'|| (s[i-2] == '2' && s[i-1] <='6'));
-
-            cout << "one: " << s[i-1] << ": " << one << endl;
-            cout << "two: " << s[i-2] << s[i-1] <<  ": "<< two << endl;
-
-            if (!one && two)
-            {
-                dp[i] = dp[i-2];
-                cout << "!one && two" << endl;
-
-            }
-            if (one && !two)
-            {
-                dp[i] = dp[i-1];
-                cout << "one && !two" << endl;
-            }
-
-            if (one && two)
-            {
-                dp[i] = dp[i-1] + dp[i-2];
-                cout << "one && two" << endl;
-            }
-
-
+            dp[i] = dp[i - 2];
+            cout << "!one && two" << endl;
         }
-        return dp[n];
+        if (one && !two)
+        {
+            dp[i] = dp[i - 1];
+            cout << "one && !two" << endl;
+        }
+
+        if (one && two)
+        {
+            dp[i] = dp[i - 1] + dp[i - 2];
+            cout << "one && two" << endl;
+        }
     }
+    return dp[n];
+}
 
 int main()
 {
