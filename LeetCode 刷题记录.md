@@ -1115,7 +1115,7 @@ void wiggleSort(vector<int> &nums)
 }
 ```
 
-### 链表 (14)
+### 链表 (17)
 
 #### K路归并
 
@@ -1535,6 +1535,37 @@ ListNode *sortList(ListNode *head)
 
 #### 原地链表翻转
 
+##### [2. Add Two Numbers](https://leetcode.com/problems/add-two-numbers/submissions/)
+
+```
+ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
+{
+    ListNode *fakeHead = new ListNode(-1), *cur = fakeHead;
+    int carry = 0; // 表示进位
+
+    while (l1 || l2)
+    {
+        int val1 = l1 ? l1->val : 0;
+        int val2 = l2 ? l2->val : 0;
+        int sum = val1 + val2 + carry;
+
+        carry = sum / 10;
+        cur->next = new ListNode(sum % 10);
+        cur = cur->next;
+        if (l1)
+            l1 = l1->next;
+        if (l2)
+            l2 = l2->next;
+    }
+    if (carry)
+        cur->next = new ListNode(1);
+
+    return fakeHead->next;
+}
+```
+
+
+
 ##### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/)
 
 ```c++
@@ -1568,8 +1599,6 @@ ListNode *reverseKGroup(ListNode *head, int k)
 }
 ```
 
-
-
 ##### [92. Reverse Linked List II](https://leetcode.com/problems/reverse-linked-list-ii/)
 
 ```c++
@@ -1596,14 +1625,12 @@ ListNode *reverseBetween(ListNode *head, int m, int n)
 
 ```c++
 // 非递归
-ListNode *reverseList(ListNode *head)
+ListNode *reverseList(ListNode *head)  // 没有额外使用头结点的方式
 {
     if(!head)
         return nullptr;
-
     ListNode *pre = nullptr;
     ListNode *cur = head;
-
     while(cur)
     {
         ListNode *temp = cur->next;
@@ -1624,8 +1651,6 @@ ListNode* reverseList(ListNode* head)
     return newHead;
 }
 ```
-
-
 
 ##### [234. Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list/)
 
@@ -1666,6 +1691,80 @@ ListNode *reverseList(ListNode *head)
     return pre;
 }
 ```
+
+##### [328. Odd Even Linked List](https://leetcode.com/problems/odd-even-linked-list/)
+
+```
+class Solution
+{
+public:
+    /*
+    * 解法一:
+    * 可以使用两个指针来做，pre指向奇节点，cur指向偶节点，然后把偶节点cur后面的那个奇节点提前到pre的后面，然后pre和cur各自前进一步，此时cur又指向偶节点，pre指向当前奇节点的末尾，以此类推直至把所有的偶节点都提前了即可
+    */
+    ListNode *oddEvenList_1(ListNode *head)
+    {
+        if (!head || !head->next)
+            return head;
+        ListNode *pre = head, *cur = head->next;
+        while (cur && cur->next)
+        {
+            ListNode *tmp = pre->next;
+            pre->next = cur->next;
+            cur->next = cur->next->next;
+            pre->next->next = tmp;
+            cur = cur->next;
+            pre = pre->next;
+        }
+        return head;
+    }
+    /*
+    * 解法二:
+    * 用两个奇偶指针分别指向奇偶节点的起始位置，另外需要一个单独的指针even_head来保存偶节点的起点位置，然后把奇节点的指向偶节点的下一个(一定是奇节点)，此奇节点后移一步，再把偶节点指向下一个奇节点的下一个(一定是偶节点)，此偶节点后移一步，以此类推直至末尾，此时把分开的偶节点的链表连在奇节点的链表后即可
+    */
+    ListNode *oddEvenList(ListNode *head)
+    {
+        if (!head || !head->next)
+            return head;
+        ListNode *odd = head, *even = head->next, *even_head = even;
+        while (even && even->next)
+        {
+            odd = odd->next = even->next;
+            even = even->next = odd->next;
+        }
+        odd->next = even_head;
+        return head;
+    }
+};
+```
+
+
+
+
+
+##### [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
+
+```c++
+ListNode *removeNthFromEnd(ListNode *head, int n)
+{
+    if (!head->next)
+        return nullptr;
+    ListNode *pre = head, *cur = head;
+    for (int i = 0; i < n; ++i)  // cur节点先走n步
+        cur = cur->next;
+    if (!cur)
+        return head->next;
+    while (cur->next)
+    {
+        cur = cur->next;
+        pre = pre->next;
+    }
+    pre->next = pre->next->next;
+    return head;
+}
+```
+
+
 
 ### 动态规划  (29)
 
@@ -2463,7 +2562,47 @@ string longestPalindrome(string s) // todo: 时间上还得优化
 }
 ```
 
+##### [131. Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning/)
 
+```
+bool isPalindrome(const string& s, int start, int end) 
+{
+    while(start <= end) {
+        if(s[start++] != s[end--])
+            return false;
+    }
+    return true;
+}
+void dfs(string &s, vector<string> &temp, int start,vector<vector<string>> &res)
+{
+    if(start == s.size())
+    {
+        res.push_back(temp);
+        return;
+    }
+
+    for(int i = start; i < s.size(); i++)
+    {
+        if (isPalindrome(s, start, i))
+        {
+            temp.push_back(s.substr(start, i - start +1)); // index
+            dfs(s, temp, i+1, res);
+            temp.pop_back();
+        }
+    }
+}
+
+vector<vector<string>> partition(string s)
+{
+    vector<vector<string> > res;
+    if(s.empty()) return res;
+
+    vector<string> temp;
+    dfs(s, temp, 0, res);
+
+    return res;
+}
+```
 
 
 ##### [132. Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/)
@@ -2870,9 +3009,9 @@ int longestIncreasingPath(vector<vector<int>>& matrix)
     return longest;    
 }
 ```
-#### [576. Out of Boundary Paths](https://leetcode.com/submissions/detail/154021975/)    记忆化搜索
+#### [576. Out of Boundary Paths](https://leetcode.com/submissions/detail/154021975/)    记忆化搜索 
 
-```
+```c++
 int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
 int dfs(vector<vector<vector<uint>>> &dp, int x, int y, int step,int m, int n)
 {
@@ -3275,10 +3414,11 @@ public:
 };
 ```
 
-
 #### [39. Combination Sum](https://leetcode.com/problems/combination-sum/)
 
-```
+<img src="https://pic.leetcode-cn.com/1598091943-hZjibJ-file_1598091940241" alt="img" style="zoom: 33%;" />
+
+```c++
 class Solution 
 {
 public:   
@@ -3294,6 +3434,8 @@ public:
         
         for(int i = start; i < candidates.size(); i++)
         {
+            if(target - candidates[i] < 0)
+            	break;
             temp.push_back(candidates[i]);
             backtrack(candidates, target - candidates[i], temp, res, i); // i表示每个数字可以用多次
             temp.pop_back();
@@ -3302,7 +3444,7 @@ public:
 public:
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) 
     {       
-        sort(candidates.begin(), candidates.end()); // 为什么要先排序
+        sort(candidates.begin(), candidates.end()); // 减枝
         vector<vector<int>> res;
         vector<int> tmp; // 用来存放每一次满足条件的结果
         backtrack(candidates, target, tmp, res, 0);
@@ -3312,9 +3454,11 @@ public:
 
 ```
 
-#### [40. Combination Sum II](https://leetcode.com/problems/combination-sum-ii/)
+#### [40. Combination Sum II](https://leetcode.com/problems/combination-sum-ii/)  todo 去重策略不是很懂
 
-```
+<img src="https://pic.leetcode-cn.com/1599718525-iXEiiy-image.png" alt="image.png" style="zoom: 50%;" />
+
+```c++
 class Solution 
 {
 public:
@@ -3332,7 +3476,6 @@ public:
         {
             if(candidates[i] > target) return;
             if(i && candidates[i] == candidates[i-1] && i > start) continue; // check duplicate combination
-            
             temp.push_back(candidates[i]);
             backtrack(candidates, target - candidates[i], temp, res, i+1);
             temp.pop_back();
@@ -3350,7 +3493,10 @@ public:
 ```
 
 #### [46. Permutations](https://leetcode.com/problems/permutations/)
-```
+
+![image.png](https://pic.leetcode-cn.com/0bf18f9b86a2542d1f6aa8db6cc45475fce5aa329a07ca02a9357c2ead81eec1-image.png)
+
+```c++
 class Solution
 {
 public:
@@ -3365,7 +3511,6 @@ public:
             res.push_back(temp);
             return;
         }
-
         for (int i = 0; i < nums.size(); i++)
         {
             if (!uesd[i])
@@ -3388,7 +3533,7 @@ public:
 ```
 
 
-#### [47. Permutations II](https://leetcode.com/problems/permutations-ii/)
+#### [47. Permutations II](https://leetcode.com/problems/permutations-ii/)  同40
 
 ```
 class Solution 
@@ -3433,7 +3578,7 @@ public:
 
 #### [77. Combinations](https://leetcode.com/problems/combinations/)
 
-```
+```c++
 class Solution 
 {
 private:    
@@ -3570,9 +3715,9 @@ public:
 
 #### [131. Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning/)
 
-![image.png](/Users/panqiang/Library/Mobile Documents/3L68KQB4HG~com~readdle~CommonDocuments/Documents/面试相关/刷题/298a80282ac3505fec3710abdc1e656c591cf7acaa3ba976151480729244b649-image.png)
+<img src="https://pic.leetcode-cn.com/1604822955-WbvWRE-131.%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2.png" alt="131.分割回文串.png" style="zoom:50%;" />
 
-```
+```c++
 class Solution 
 {
     bool isPalindrome(const string& s, int start, int end) 
@@ -3583,7 +3728,7 @@ class Solution
         }
         return true;
     }
-    // dfs含义是 表示s 从index开始的子串拆成回文的方式
+    // dfs含义是 
     void dfs(string &s, int index, vector<string> &temp, vector<vector<string>> &res)
     {
         if (index == s.size())
@@ -3595,7 +3740,7 @@ class Solution
         {
             if (isPalindrome(s, index, i)) // 这个地方可以用动态规划去优化
             {
-                temp.push_back(s.substr(index, i - index + 1));
+                temp.push_back(s.substr(index, i - index + 1)); // 获取[index,i]在s中的子串
                 dfs(s, i + 1, temp, res);
                 temp.pop_back();
             }

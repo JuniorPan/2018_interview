@@ -53,10 +53,10 @@ public:
         int n = lists.size();
         while (n > 1) // 这个while循环有点巧妙
         {
-            int k = (n + 1) / 2;
+            int k = (n + 1) / 2; //从中间的位置开始合并
             for (int i = 0; i < n / 2; ++i)
             {
-                lists[i] = mergeTwoLists(lists[i], lists[i + k]);
+                lists[i] = mergeTwo  Lists(lists[i], lists[i + k]);
             }
             n = k;
         }

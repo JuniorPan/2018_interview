@@ -66,7 +66,6 @@ public:
     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
         if (l1 == nullptr && l2 == nullptr)
             return nullptr;
-
         ListNode *pHead = new ListNode(-1);
         ListNode *cur = pHead;
 
@@ -87,7 +86,6 @@ public:
         }
         cur->next = p ? p : q;
         return pHead->next;
-
     }
 };
 // @lc code=end
