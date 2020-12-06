@@ -3820,7 +3820,7 @@ public:
 
 
 #### [140. Word Break II](https://leetcode.com/problems/word-break-ii/) 注意和139的区别
-```
+```c++
 class Solution
 {
 public:
@@ -3849,7 +3849,7 @@ public:
         {
             if (s.substr(0, word.size()) != word)
                 continue;
-            vector<string> rem = helper(s.substr(word.size()), wordDict, m);
+            vector<string> rem = dfs(s.substr(word.size()), wordDict, m);
             for (string str : rem)
             {
                 res.push_back(word + (str.empty() ? "" : " ") + str);
