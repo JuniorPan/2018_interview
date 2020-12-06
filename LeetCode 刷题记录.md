@@ -2837,12 +2837,33 @@ public:
 };
 ```
 
-#### [139. Word Break](https://leetcode.com/problems/word-break/)
+#### [139. Word Break](https://leetcode.com/problems/word-break/)  回溯+记忆化搜索
 
 <img src="https://pic.leetcode-cn.com/78fd09b2deabeae972809c2795ddb8be96720b8e62377cf01b7f70e7fb3dbf8c-image.png" alt="image.png" style="zoom: 50%;" />
 
 ```c++
- bool wordBreak(string s, vector<string> &wordDict)
+// 解法一：暴力递归超时了
+bool dfs(string &s, unordered_set<string> &wordSet, int i, vector<int> &memo)
+{
+    if ( i >= s.size())
+        return true;
+    for(int j = i+1; j <= s.size(); j++)
+    {
+        if (wordSet.count(s.substr(i, j - i)) && dfs(s, wordSet, j, memo))
+            return true;
+    }
+    return false;
+}
+
+bool wordBreak(string s, vector<string> &wordDict)
+{
+    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+    vector<int> memo(s.size(), -1);
+    return dfs(s, wordSet, 0, memo);
+}
+
+// 解法一：增加记忆化搜索
+bool wordBreak(string s, vector<string> &wordDict)
 {
     unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
     vector<int> memo(s.size(), -1);
@@ -2863,6 +2884,74 @@ bool dfs(string s, unordered_set<string> &wordSet, int start, vector<int> &memo)
         }
     }
     return memo[start] = 0;
+}
+```
+
+#### [140. Word Break II](https://leetcode.com/problems/word-break-ii/) 注意和139的区别
+
+<img src="https://pic.leetcode-cn.com/1604197605-MUoIgt-image.png" alt="image.png" style="zoom:50%;" />
+
+```c++
+// 解法一 暴力递归超时了  想改成不带返回值得形式
+vector<string> dfs(string s, unordered_set<string> &wordSet, int start)
+{
+    if (start == s.size())
+    {
+        return {""};
+    }
+    vector<string> res;
+    for (int i = start; i < s.size(); ++i)
+    {
+        if (wordSet.count(s.substr(start, i - start+1)) > 0)
+        {
+            vector<string> tmp = dfs(s, wordSet, i+1);
+            for (auto str : tmp)
+            {
+                res.push_back(s.substr(start, i - start + 1) + (str.empty() ? "" : " ") + str);
+            }
+        }
+    }
+    return res;
+}
+
+vector<string> wordBreak(string s, vector<string> &wordDict)
+{
+    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+    return dfs(s, wordSet, 0);
+}
+
+// 解法二: 增加记忆化搜索
+vector<string> dfs(string s, unordered_set<string> &wordSet, int start, unordered_map<int, vector<string>> &memo)
+{
+    if (memo.count(start) > 0)
+    {
+        return memo[start];
+    }
+    if (start == s.size())
+    {
+        return {""};
+    }
+    vector<string> res;
+    for (int i = start; i < s.size(); ++i)
+    {
+        if (wordSet.count(s.substr(start, i - start + 1)) > 0)
+        {
+            vector<string> tmp = dfs(s, wordSet, i+1, memo);
+            for (auto str : tmp)
+            {
+                res.push_back(s.substr(start, i - start + 1) + (str.empty() ? "" : " ") + str);
+            }
+        }
+    }
+    memo[start] = res;
+    return res;
+}
+
+vector<string> wordBreak(string s, vector<string> &wordDict)
+{
+    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+    unordered_map<int, vector<string>> memo;
+    return dfs(s, wordSet, 0, memo);
 }
 ```
 
@@ -3760,7 +3849,7 @@ public:
 };
 ```
 
-#### [139. Word Break](https://leetcode.com/problems/word-break/)  实际上是动态规划
+#### [139. Word Break](https://leetcode.com/problems/word-break/)  
 ```
 class Solution
 {
@@ -3820,44 +3909,71 @@ public:
 
 
 #### [140. Word Break II](https://leetcode.com/problems/word-break-ii/) 注意和139的区别
+
+<img src="https://pic.leetcode-cn.com/1604197605-MUoIgt-image.png" alt="image.png" style="zoom:50%;" />
+
 ```c++
-class Solution
+// 解法一 暴力递归超时了  想改成不带返回值得形式
+vector<string> dfs(string s, unordered_set<string> &wordSet, int start)
 {
-public:
-
-    /**
-     * 解法一:
-     * 先扫一遍wordDict数组，看有没有单词可以当s的开头，那么我们可以发现cat和cats都可以，比如我们先选了cat，那么此时s就变成了 "sanddog" 
-     * 
-     */
-    vector<string> wordBreak(string s, vector<string> &wordDict)
+    if (start == s.size())
     {
-        unordered_map<string, vector<string>> m;
-        return dfs(s, wordDict, m);
+        return {""};
     }
-
-    // dfs表示 s在wordDict中的拆分方式, 遍历wordDict中每一个字符串,是否是s的开头,如果是 
-    // 在s中去掉该字符串,剩下的继续递归
-    vector<string> dfs(string s, vector<string> &wordDict, unordered_map<string, vector<string>> &m)
+    vector<string> res;
+    for (int i = start; i < s.size(); ++i)
     {
-        if (m.count(s))
-            return m[s];
-        if (s.empty())
-            return {""};
-        vector<string> res;
-        for (string word : wordDict)
+        if (wordSet.count(s.substr(start, i - start+1)) > 0)
         {
-            if (s.substr(0, word.size()) != word)
-                continue;
-            vector<string> rem = dfs(s.substr(word.size()), wordDict, m);
-            for (string str : rem)
+            vector<string> tmp = dfs(s, wordSet, i+1);
+            for (auto str : tmp)
             {
-                res.push_back(word + (str.empty() ? "" : " ") + str);
+                res.push_back(s.substr(start, i - start + 1) + (str.empty() ? "" : " ") + str);
             }
         }
-        return m[s] = res;
     }
-};
+    return res;
+}
+
+vector<string> wordBreak(string s, vector<string> &wordDict)
+{
+    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+    return dfs(s, wordSet, 0);
+}
+
+// 解法二: 增加记忆化搜索
+vector<string> dfs(string s, unordered_set<string> &wordSet, int start, unordered_map<int, vector<string>> &memo)
+{
+    if (memo.count(start) > 0)
+    {
+        return memo[start];
+    }
+    if (start == s.size())
+    {
+        return {""};
+    }
+    vector<string> res;
+    for (int i = start; i < s.size(); ++i)
+    {
+        if (wordSet.count(s.substr(start, i - start + 1)) > 0)
+        {
+            vector<string> tmp = dfs(s, wordSet, i+1, memo);
+            for (auto str : tmp)
+            {
+                res.push_back(s.substr(start, i - start + 1) + (str.empty() ? "" : " ") + str);
+            }
+        }
+    }
+    memo[start] = res;
+    return res;
+}
+
+vector<string> wordBreak(string s, vector<string> &wordDict)
+{
+    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+    unordered_map<int, vector<string>> memo;
+    return dfs(s, wordSet, 0, memo);
+}
 ```
 
 ###  二叉树 (3)

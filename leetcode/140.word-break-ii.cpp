@@ -68,38 +68,36 @@
 class Solution
 {
 public:
-
-    /**
-     * 解法一:
-     * 先扫一遍wordDict数组，看有没有单词可以当s的开头，那么我们可以发现cat和cats都可以，比如我们先选了cat，那么此时s就变成了 "sanddog" 
-     * 
-     */
     vector<string> wordBreak(string s, vector<string> &wordDict)
     {
-        unordered_map<string, vector<string>> m;
-        return dfs(s, wordDict, m);
+        unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+        unordered_map<int, vector<string>> memo;
+        return helper(s, wordSet, 0, memo);
     }
-
-    // dfs表示 s在wordDict中的拆分方式, 遍历wordDict中每一个字符串,是否是s的开头,如果是 
-    // 在s中去掉该字符串,剩下的继续递归
-    vector<string> dfs(string s, vector<string> &wordDict, unordered_map<string, vector<string>> &m)
+    vector<string> helper(string s, unordered_set<string> &wordSet, int start, unordered_map<int, vector<string>> &memo)
     {
-        if (m.count(s))
-            return m[s];
-        if (s.empty())
-            return {""};
-        vector<string> res;
-        for (string word : wordDict)
+        if (memo.count(start) > 0)
         {
-            if (s.substr(0, word.size()) != word)
-                continue;
-            vector<string> rem = helper(s.substr(word.size()), wordDict, m);
-            for (string str : rem)
+            return memo[start];
+        }
+        if (start == s.size())
+        {
+            return {""};
+        }
+        vector<string> res;
+        for (int end = start + 1; end <= s.size(); ++end)
+        {
+            if (wordSet.count(s.substr(start, end - start)) > 0)
             {
-                res.push_back(word + (str.empty() ? "" : " ") + str);
+                vector<string> tmp = helper(s, wordSet, end, memo);
+                for (auto str : tmp)
+                {
+                    res.push_back(s.substr(start, end - start) + (str.empty() ? "" : " ") + str);
+                }
             }
         }
-        return m[s] = res;
+        memo[start] = res;
+        return res;
     }
 };
 // @lc code=end
