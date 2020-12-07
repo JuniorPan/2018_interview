@@ -2412,7 +2412,8 @@ int coinChange(vector<int> &coins, int amount)
 {
     // int dp[amount+1] = {amount+1};
     // dp[i] 表示钱数为i时的最小硬币数的找零，注意由于数组是从0开始的，所以要多申请一位，数组大小为 amount+1，这样最终结果就可以保存在 dp[amount] 中了
-    vector<int> dp(amount + 1, amount + 1);
+    //vector<int> dp(amount + 1, amount + 1);
+    vector<int> dp(amount + 1, INT_MAX-1);//用这种初始化的方式要好理解点
     int size = coins.size();
     dp[0] = 0;
     for (int i = 1; i <= amount; i++)
@@ -2421,7 +2422,7 @@ int coinChange(vector<int> &coins, int amount)
         {
             if (coins[j] <= i)
             {
-                dp[i] = min(dp[i], dp[i - coins[j]] + 1);
+                dp[i] = min(dp[i], dp[i - coins[j]] + 1); //这里有两种选择，第j个硬币要不要
             }
         }
     }
@@ -2429,7 +2430,7 @@ int coinChange(vector<int> &coins, int amount)
 }
 ```
 
-##### [518. Coin Change 2](https://leetcode.com/problems/coin-change)  注意和322的区别
+##### [518. Coin Change 2](https://leetcode.com/problems/coin-change)  #todo 空间优化
 
 todo: **还不懂后面的这个去掉当前硬币的这种情况 **   还有空间优化需要看   
 
@@ -2442,7 +2443,7 @@ int change(int amount, vector<int> &coins)
     // 采用的方法是一个硬币一个硬币的增加，每增加一个硬币，都从1遍历到 amount，对于遍历到的当前钱数j，组成方法就是不加上当前硬币的拼法 dp[i-1][j]，还要加上去掉当前硬币值的钱数的组成方法 
     for (int i = 1; i <= coins.size(); ++i)
     {
-        dp[i][0] = 1;
+        dp[i][0] = 1; // 这个初值是为什么？？？
         for (int j = 1; j <= amount; ++j)
         {
             if(j >= coins[i - 1])
