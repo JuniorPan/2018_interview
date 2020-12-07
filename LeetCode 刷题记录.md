@@ -2457,7 +2457,7 @@ int change(int amount, vector<int> &coins)
 ##### [416. Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/) # todo 空间优化
 
 ```c++
-// 解法一:
+// 解法一: 需要空间优化
 bool canPartition(vector<int>& nums) 
 {
     int sum = 0;
@@ -2472,26 +2472,24 @@ bool canPartition(vector<int>& nums)
     // 状态转移方程：很多时候，状态转移方程思考的角度是「分类讨论」，对于「0-1 背包问题」而言就是「当前考虑到的数字选与不选」。
     // 		不选择 nums[i]，如果在 [0, i - 1] 这个子区间内已经有一部分元素，使得它们的和为 j ，那么 dp[i][j] = true；
     // 		选择 nums[i]，如果在 [0, i - 1] 这个子区间内就得找到一部分元素，使得它们的和为 j - nums[i]。
-    vector<vector<bool>> dp(nums.size(), vector<bool>(target+1));
-    dp[0][0]=true;
-    if (nums[0] <= target)  // 第一行
-    {
-        dp[0][nums[0]] = true;
-    }
-    for (int i = 1; i < nums.size(); i++) 
-    {
-        for (int j = 0; j <= target; j++) 
-        {
-            dp[0]
-            if (nums[i] < j)
-                dp[i][j] = dp[i - 1][j] || dp[i - 1][j - nums[i]];
-            else
-                dp[i][j] = dp[i - 1][j];
+    int n = nums.size();
+    vector<vector<bool>>  dp(n + 1, vector<bool>(target + 1, false));
+    // base case
+    for (int i = 0; i <= n; i++)
+        dp[i][0] = true;
 
-
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= target; j++) {
+            if (j - nums[i - 1] < 0) {
+               // 背包容量不足，不能装入第 i 个物品
+                dp[i][j] = dp[i - 1][j]; 
+            } else {
+                // 装入或不装入背包
+                dp[i][j] = dp[i - 1][j] || dp[i - 1][j-nums[i-1]];
+            }
         }
     }
-    return dp[nums.size() - 1][target];
+    return dp[n][target];
 }
 
 bool canPartition(vector<int> &nums)
@@ -2519,6 +2517,30 @@ bool canPartition(vector<int> &nums)
     }
     return dp[targetSum];
 }
+
+/* 计算 nums 中有几个子集的和为 sum */
+int subsets(int[] nums, int sum) {
+    int n = nums.length;
+    int[][] dp = new int[n + 1][sum + 1];
+    // base case
+    for (int i = 0; i <= n; i++) {
+        dp[i][0] = 1;
+    }
+    
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j <= sum; j++) {
+            if (j >= nums[i-1]) {
+                // 两种选择的结果之和
+                dp[i][j] = dp[i-1][j] + dp[i-1][j-nums[i-1]];
+            } else {
+                // 背包的空间不足，只能选择不装物品 i
+                dp[i][j] = dp[i-1][j];
+            }
+        }
+    }
+    return dp[n][sum];
+}
+
 ```
 
 ##### [474. Ones and Zeroes](https://leetcode.com/problems/ones-and-zeroes/)
@@ -2552,10 +2574,59 @@ int findMaxForm(vector<string> &strs, int m, int n)
 ```c++
 class Solution {
 public:
+    /*
+    sum(A) - sum(B) = target
+    sum(A) = target + sum(B)
+    sum(A) + sum(A) = target + sum(B) + sum(A)
+    2 * sum(A) = target + sum(nums)
+    
+    int subsets(int[] nums, int sum) {
+    int n = nums.length;
+    int[][] dp = new int[n + 1][sum + 1];
+    // base case
+    for (int i = 0; i <= n; i++) {
+        dp[i][0] = 1;
+    }
+    
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j <= sum; j++) {
+            if (j >= nums[i-1]) {
+                // 两种选择的结果之和
+                dp[i][j] = dp[i-1][j] + dp[i-1][j-nums[i-1]];
+            } else {
+                // 背包的空间不足，只能选择不装物品 i
+                dp[i][j] = dp[i-1][j];
+            }
+        }
+    }
+    return dp[n][sum];
+}
+
+
+    
+    
+    */
     int findTargetSumWays(vector<int>& nums, int S) {
         
-        // dp[i][j] 选前i个数 组成和为j的方法 思路有了 实际代码写不出来
-        // dp[i][j] = dp[i-1][j-num[i]] + dp[ i - 1 ][ j + nums[ i ] ]
+    // dp[i][j] 选前i个数 组成和为j的方法 思路有了 实际代码写不出来
+    // dp[i][j] = dp[i-1][j-num[i]] + dp[ i - 1 ][ j + nums[ i ] ]
+    vector<vector<bool>> dp(nums.size(), vector<bool>(S+1));
+    dp[0][0]=true;
+    if (nums[0] <= S)  // 第一行
+    {
+        dp[0][nums[0]] = 1;
+    }
+    for (int i = 1; i < nums.size(); i++) 
+    {
+        for (int j = 0; j <= S; j++) 
+        {
+            if (j-num[i] > 0 &&  j + nums[i] < S  )
+                dp[i][j] =dp[i-1][j-num[i]] + dp[ i - 1 ][ j + nums[ i ] ]
+            else
+                dp[i][j] = dp[i - 1][j];
+        }
+    }
+    return dp[nums.size() - 1][target];
         
         
     }
