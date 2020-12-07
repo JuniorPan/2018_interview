@@ -2430,9 +2430,7 @@ int coinChange(vector<int> &coins, int amount)
 }
 ```
 
-##### [518. Coin Change 2](https://leetcode.com/problems/coin-change)  #todo 空间优化
-
-todo: **还不懂后面的这个去掉当前硬币的这种情况 **   还有空间优化需要看   
+##### [518. Coin Change 2](https://leetcode.com/problems/coin-change)  #todo 空间优化  377
 
 ```c++
 int change(int amount, vector<int> &coins)
@@ -2456,9 +2454,46 @@ int change(int amount, vector<int> &coins)
 }
 ```
 
-##### [416. Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/)
+##### [416. Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/) # todo 空间优化
 
 ```c++
+// 解法一:
+bool canPartition(vector<int>& nums) 
+{
+    int sum = 0;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        sum += nums[i];
+    }
+    int target  = sum / 2;
+    if (sum % 2 == 1)
+        return false;
+    // 状态定义：dp[i][j]表示从数组的 [0, i] 这个子区间内挑选一些正整数，每个数只能用一次，使得这些数的和恰好等于 j。
+    // 状态转移方程：很多时候，状态转移方程思考的角度是「分类讨论」，对于「0-1 背包问题」而言就是「当前考虑到的数字选与不选」。
+    // 		不选择 nums[i]，如果在 [0, i - 1] 这个子区间内已经有一部分元素，使得它们的和为 j ，那么 dp[i][j] = true；
+    // 		选择 nums[i]，如果在 [0, i - 1] 这个子区间内就得找到一部分元素，使得它们的和为 j - nums[i]。
+    vector<vector<bool>> dp(nums.size(), vector<bool>(target+1));
+    dp[0][0]=true;
+    if (nums[0] <= target)  // 第一行
+    {
+        dp[0][nums[0]] = true;
+    }
+    for (int i = 1; i < nums.size(); i++) 
+    {
+        for (int j = 0; j <= target; j++) 
+        {
+            dp[0]
+            if (nums[i] < j)
+                dp[i][j] = dp[i - 1][j] || dp[i - 1][j - nums[i]];
+            else
+                dp[i][j] = dp[i - 1][j];
+
+
+        }
+    }
+    return dp[nums.size() - 1][target];
+}
+
 bool canPartition(vector<int> &nums)
 {
     int sum = 0;
@@ -2488,7 +2523,7 @@ bool canPartition(vector<int> &nums)
 
 ##### [474. Ones and Zeroes](https://leetcode.com/problems/ones-and-zeroes/)
 
-```
+```c++
 int findMaxForm(vector<string> &strs, int m, int n)
 {
     //dp[i][j]表示有i个0和j个1时能组成的最多字符串的个数
@@ -3099,6 +3134,48 @@ int longestIncreasingPath(vector<vector<int>>& matrix)
     return longest;    
 }
 ```
+#### [377. Combination Sum IV](https://leetcode.com/problems/combination-sum-iv/submissions/)  #todo 优化成动态规划
+
+<img src="https://pic.leetcode-cn.com/fa278029267fedeb06686b784bd322f16b2abf6b61987dc3b5257630570cd38f-377-1.png" alt="377-1.png" style="zoom: 50%;" />
+
+```c++
+// 记忆化搜索
+int dfs(vector<int> &nums, int target, unordered_map<int, int> &memo)
+{
+    if(memo.count(target)) return memo[target];
+    if (target < 0) return 0;
+    if (target == 0) return 1;
+
+    int res = 0;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        res += dfs(nums, target - nums[i], memo);
+    }
+    memo[target] = res;
+    return res;
+}
+int combinationSum4(vector<int>& nums, int target)
+{
+    unordered_map<int, int> memo;
+    return dfs(nums, target, memo);
+}
+
+// 优化成动态规划
+int combinationSum4(vector<int>& nums, int target)
+{
+    vector<int> dp(target + 1);
+    dp[0] = 1;
+    for (int i = 1; i <= target; ++i) {
+        for (auto a : nums) {
+            if (i >= a) dp[i] += dp[i - a];
+        }
+    }
+    return dp.back();
+}
+```
+
+
+
 #### [576. Out of Boundary Paths](https://leetcode.com/submissions/detail/154021975/)    记忆化搜索 
 
 ```c++
