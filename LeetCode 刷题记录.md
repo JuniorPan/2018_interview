@@ -2430,7 +2430,7 @@ int coinChange(vector<int> &coins, int amount)
 }
 ```
 
-##### [518. Coin Change 2](https://leetcode.com/problems/coin-change)  #todo 空间优化  377
+##### [518. Coin Change 2](https://leetcode.com/problems/coin-change-2/)  #todo 空间优化  377
 
 ```c++
 int change(int amount, vector<int> &coins)
@@ -2441,8 +2441,7 @@ int change(int amount, vector<int> &coins)
     // 采用的方法是一个硬币一个硬币的增加，每增加一个硬币，都从1遍历到 amount，对于遍历到的当前钱数j，组成方法就是不加上当前硬币的拼法 dp[i-1][j]，还要加上去掉当前硬币值的钱数的组成方法 
     for (int i = 1; i <= coins.size(); ++i)
     {
-        dp[i][0] = 1; // 这个初值是为什么？？？
-        for (int j = 1; j <= amount; ++j)
+        for (int j = 0; j <= amount; ++j)
         {
             if(j >= coins[i - 1])
                 dp[i][j] = dp[i - 1][j] +  dp[i][j - coins[i - 1]]; // 第i个硬币有 使用和不使用两种情况
