@@ -2478,7 +2478,7 @@ bool canPartition(vector<int>& nums)
         dp[i][0] = true;
 
     for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= target; j++) {
+        for (int j = 0; j <= target; j++) {
             if (j - nums[i - 1] < 0) {
                // 背包容量不足，不能装入第 i 个物品
                 dp[i][j] = dp[i - 1][j]; 
