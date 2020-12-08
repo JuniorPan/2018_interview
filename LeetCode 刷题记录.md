@@ -4697,17 +4697,12 @@ class Solution
         int temp = 0;
         for(int i = 0; i < times; i++)
         {
-            temp = matrix[left_x][left_y + i];
-            
-            matrix[left_x][left_y + i] = matrix[right_x-i][left_y];
-            
-            matrix[right_x-i][left_y] = matrix[right_x][right_y-i];
-            
+            temp = matrix[left_x][left_y + i];      
+            matrix[left_x][left_y + i] = matrix[right_x-i][left_y]; 
+            matrix[right_x-i][left_y] = matrix[right_x][right_y-i];  
             matrix[right_x][right_y-i] = matrix[left_x+i][right_y];
-            
             matrix[left_x+i][right_y] = temp;
-        }
-        
+        }  
     }
     
 public:
@@ -4723,5 +4718,38 @@ public:
         }
     }
 };
+```
+
+
+
+### 字符串
+
+#### [49. Group Anagrams](https://leetcode.com/problems/group-anagrams/)
+
+```
+// 有点巧妙
+vector<vector<string>> groupAnagrams(vector<string>& strs) 
+{
+    unordered_map<string, vector<string>> mp; // 字典 排序
+    // for (string s : strs)
+    // {
+    //     string t = s;
+    //     sort(t.begin(), t.end());
+    //     mp[t].push_back(s);
+    // }
+
+    for(int i = 0; i < strs.size(); i ++)
+    {
+        string t = strs[i];
+        sort(t.begin(), t.end());
+        mp[t].push_back(strs[i]);
+    }
+    vector<vector<string>> res;
+    for (auto p : mp)
+    {
+        res.push_back(p.second);
+    }
+    return res;
+}
 ```
 
