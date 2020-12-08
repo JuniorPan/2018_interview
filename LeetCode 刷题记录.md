@@ -2197,7 +2197,9 @@ bool isMatch(string s, string p)
             dp[0][j] = dp[0][j - 1];
     }
     // * 可以匹配空串和任意字符串
-    // dp[i-1][j] 表示 s[0...i-2] 和p[0...j-1]匹配成功， 因为星号可以匹配任意字符串，再多加一个任意字符也没问题
+    // 如果我们不使用这个星号，那么就会从 dp[i][j-1] 转移而来；如果我们使用这个星号，那么就会从 dp[i-1][j]dp[i−1][j] 转移而来。
+
+    // dp[i-1][j] 表示 s[0...i-2] 和p[0...j-1]匹配成功， 因为星号可以匹配任意字符串，再多加一个任意字符也没问题 
     // dp[i][j-1] 表示 s[0...i-1] 和p[0...j-2]匹配成功，星号可以匹配空串
     for (int i = 1; i <= m; i++)
     {
@@ -4653,6 +4655,73 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 
 #### [347. Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
 
-##### [373. Find K Pairs with Smallest Sums](https://leetcode.com/problems/find-k-pairs-with-smallest-sums/)
+#### [373. Find K Pairs with Smallest Sums](https://leetcode.com/problems/find-k-pairs-with-smallest-sums/)
 
-# 
+
+
+### 数组
+
+#### [41. First Missing Positive](https://leetcode.com/problems/first-missing-positive/)
+
+```c++
+int firstMissingPositive(vector<int> &nums)
+{
+    //思路是把1放在数组第一个位置 nums[0]，2放在第二个位置 nums[1]，即需要把 nums[i] 放在 nums[nums[i] - 1]上，\
+    // 遍历整个数组，如果 nums[i] != i + 1, 而 nums[i] 为整数且不大于n，另外 nums[i] 不等于 nums[nums[i] - 1] 的话，
+    // 将两者位置调换，如果不满足上述条件直接跳过，最后再遍历一遍数组，如果对应位置上的数不正确则返回正确的数
+    int n = nums.size();
+    for (int i = 0; i < n; ++i)
+    {
+        while (nums[i] > 0 && nums[i] <= n && nums[nums[i] - 1] != nums[i])
+        {
+            swap(nums[i], nums[nums[i] - 1]);
+        }
+    }
+    for (int i = 0; i < n; ++i)
+    {
+        if (nums[i] != i + 1)
+            return i + 1;
+    }
+    return n + 1;
+}
+```
+
+#### [48. Rotate Image](https://leetcode.com/problems/rotate-image/)  #todo 需要扣一下边界
+
+```c++
+class Solution 
+{ 
+    void rotateEdge(vector<vector<int>>& matrix, int left_x, int left_y, int right_x, int right_y)
+    {
+        int times = right_x - left_x;
+        int temp = 0;
+        for(int i = 0; i < times; i++)
+        {
+            temp = matrix[left_x][left_y + i];
+            
+            matrix[left_x][left_y + i] = matrix[right_x-i][left_y];
+            
+            matrix[right_x-i][left_y] = matrix[right_x][right_y-i];
+            
+            matrix[right_x][right_y-i] = matrix[left_x+i][right_y];
+            
+            matrix[left_x+i][right_y] = temp;
+        }
+        
+    }
+    
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        
+        int left_x = 0;
+        int left_y = 0;
+        int right_x = matrix.size()-1;
+        int right_y = matrix[0].size()- 1;
+        while(left_x < right_x)
+        {
+            rotateEdge(matrix, left_x++, left_y++, right_x--, right_y--);
+        }
+    }
+};
+```
+
