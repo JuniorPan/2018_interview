@@ -2877,7 +2877,7 @@ public:
 #### [395. Longest Substring with At Least K Repeating Characters](https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/)
 
 
-### 深度优先搜索 (8)
+### DFS (8)
 #### [经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
 ```
 int dirs[8][2] = {1,1,1,0,1,-1,0,1,0,-1,-1,1,-1,0,-1,-1};
@@ -3841,10 +3841,14 @@ public:
 
 #### [78. Subsets](https://leetcode.com/problems/subsets/)
 
+<img src="https://pic.leetcode-cn.com/1600557223-hvNyjD-image.png" alt="image.png" style="zoom:67%;" />
 
-```
+![image.png](https://pic.leetcode-cn.com/1600565878-FTjJsK-image.png)
+
+
+```c++
 class Solution 
-{  
+{   // 解法一： 每个元素，都有两种选择：选入子集，或不选入子集。
     void dfs(vector<int>& nums, int i, vector<int> &temp, vector<vector<int>> &res )
     {    
         if (i == nums.size())
@@ -3852,10 +3856,10 @@ class Solution
             res.push_back(temp);
             return;
         }     
-        temp.push_back(nums[i]);
-        dfs(nums, i+1, temp, res);
-        temp.pop_back();
-        dfs(nums, i+1, temp, res);   
+        temp.push_back(nums[i]); 	// 选择这个数
+        dfs(nums, i+1, temp, res);  // 基于该选择，继续往下递归
+        temp.pop_back();   			// 上面的递归结束，撤销该选择
+        dfs(nums, i+1, temp, res);  // 不选这个数，继续往下递归
     }    
 public:
     vector<vector<int>> subsets(vector<int>& nums)
@@ -3866,6 +3870,33 @@ public:
         
         vector<int> temp;
         dfs(nums,0, temp, res);
+        return res;
+    }
+};
+
+// 解法二：
+//每次看看有几个数能选，然后选一个
+//用 for 枚举出当前可选的数，比如选第一个数：有 1、2、3 可选。
+//选了 1，选第二个数，有 2、3 可选；如果选 2，选第二个数，只有 3 可选，如下图
+class Solution 
+{
+public:
+    void dfs(vector<vector<int>> &res, vector<int> &temp, vector<int> &nums, int index)
+    {
+        res.push_back(temp);
+        for(int i = index; i < nums.size(); i++)
+        {
+            temp.push_back(nums[i]);
+            dfs(res, temp, nums, i+1);
+            temp.pop_back();
+        }
+    }
+    vector<vector<int>> subsets(vector<int>& nums)
+    {
+        vector<vector<int>> res;
+        vector<int> temp;
+        dfs(res, temp, nums, 0);
+        // res.push_back({});
         return res;
     }
 };
