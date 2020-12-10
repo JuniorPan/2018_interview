@@ -783,6 +783,22 @@ public:
 };
 ```
 
+#### [69. Sqrt(x)](https://leetcode.com/problems/sqrtx/)  #todo 
+
+```c++
+int mySqrt(int x) 
+{
+    if (x <= 1) return x;
+    int left = 0, right = x;
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (x / mid >= mid) left = mid + 1;
+        else right = mid;
+    }
+    return right - 1;
+}
+```
+
 
 
 #### [81. Search in Rotated Sorted Array II](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)  #todo
@@ -4718,6 +4734,80 @@ public:
         }
     }
 };
+```
+
+#### [53. Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
+
+```c++
+int maxSubArray(vector<int>& nums) 
+{
+    int res = INT_MIN;
+    int cur_sum = 0;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        cur_sum += nums[i];
+        res = max(res, cur_sum);
+        cur_sum = cur_sum > 0 ? cur_sum:0;
+    }
+    return res;
+}
+```
+
+#### [54. Spiral Matrix](https://leetcode.com/problems/spiral-matrix/) #todo 同48 注意边界
+
+```
+vector<int> spiralOrder(vector<vector<int>>& matrix)
+{
+    if (matrix.empty() || matrix[0].empty()) 
+        return {};
+    int m = matrix.size(), n = matrix[0].size();
+    vector<int> res;
+    int up = 0, down = m - 1, left = 0, right = n - 1;
+    while (true) 
+    {
+        for (int j = left; j <= right; ++j) 
+            res.push_back(matrix[up][j]);
+        if (++up > down) 
+            break;
+        for (int i = up; i <= down; ++i) 
+            res.push_back(matrix[i][right]);
+        if (--right < left)
+            break;
+        for (int j = right; j >= left; --j) 
+            res.push_back(matrix[down][j]);
+        if (--down < up)
+            break;
+        for (int i = down; i >= up; --i) 
+            res.push_back(matrix[i][left]);
+        if (++left > right)
+            break;
+    }
+    return res;
+}
+```
+
+#### [66. Plus One](https://leetcode.com/problems/plus-one/)
+
+```c++
+vector<int> plusOne(vector<int> &digits)
+{
+    int n = digits.size();
+    for (int i = n - 1; i >= 0; --i)
+    {
+        if (digits[i] == 9) // 针对 多个9的情况
+        {
+            digits[i] = 0;
+        }
+        else
+        {
+            digits[i]++;
+            return digits;
+        }
+    }
+    digits[0] = 1;
+    digits.push_back(0);
+    return digits;
+}
 ```
 
 
