@@ -2863,7 +2863,6 @@ int countSubstrings(string s)
 ```
 
 
-
 ####  7.博弈型动态规划状态 （1）
 
 ***定义一个人的状态; 方程: 考虑两个人的状态做状态更新; 初始化: 暂无; 答案: 先思考最小状态, 再思考大的状态 -> 往小的递推, 适合记忆话搜索 动态规划, 循环(从小到大递推), 记忆化搜索(从大到小搜索, 画搜索树); 什么时候 用记忆化搜索: 1). 状态转移特别麻烦, 不是顺序性, 2). 初始化状态不是很容易找到; 题目类型: 1). 博弈类问题, 2). 区间类问题; 适合解决题目: 1). 状态特别复杂, 2). 不好初始化***
@@ -4305,6 +4304,37 @@ void flatten(TreeNode* root)
 }
 ```
 
+[230. Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/)
+
+```c++
+int kthSmallest(TreeNode* root, int k)
+{
+    if (!root || k < 0)
+        return 0;
+
+    stack<TreeNode *> s;
+    TreeNode *cur = root;
+    while(!s.empty() || cur)
+    {
+        if (cur)
+        {
+            s.push(cur);
+            cur = cur->left;
+        }
+        else
+        {
+            TreeNode *temp = s.top();
+            s.pop();
+            k--;
+            if (k == 0)
+                return temp->val;
+            cur = temp->right;
+        }
+    }
+    return 0;
+}
+```
+
 
 
 #### [235. Lowest Common Ancestor of a Binary Search Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
@@ -4512,7 +4542,6 @@ public:
     int maxPathSum(TreeNode *root)
     {
         int res = INT_MIN;
-
         dfs(root, res);
         return res;
     }
