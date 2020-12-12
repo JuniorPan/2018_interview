@@ -3503,6 +3503,35 @@ int minDepth(TreeNode *root)
 }
 ```
 
+[\116. Populating Next Right Pointers in Each Node](https://leetcode.com/problems/populating-next-right-pointers-in-each-node/)
+
+```c++
+Node *connect(Node *root)
+{
+    if (!root) return NULL;
+    queue<Node *> q;
+    q.push(root);
+    while (!q.empty())
+    {
+        int size = q.size();
+        for (int i = 0; i < size; ++i)
+        {
+            Node *t = q.front();
+            q.pop();
+            if (i < size - 1)
+                t->next = q.front();
+            if (t->left) q.push(t->left);
+            if (t->right) q.push(t->right);
+        }
+    }
+    return root;
+}
+```
+
+
+
+
+
 
 
 #### [127. Word Ladder I ](https://leetcode.com/problems/word-ladder/)   todo: 还有种解法不是很懂
@@ -4189,6 +4218,65 @@ vector<string> wordBreak(string s, vector<string> &wordDict)
 
 ###  二叉树 (3)
 
+#### [94. Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal/)
+
+```c++
+// 二叉树中序非递归遍历
+vector<int> inorderTraversal(TreeNode* root)
+{
+    vector<int> res;
+    if (root == nullptr)
+    {
+        return {};
+    }
+    stack<TreeNode *> s;
+    while(!s.empty() || root)
+    {
+        while (root != nullptr)
+        {
+            s.push(root);
+            root = root->left;
+        }
+        root = s.top();
+        res.push_back(root->val);
+        s.pop();
+        root = root->right;
+
+    }
+    return res;
+}
+```
+
+#### [98. Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/)
+
+```c++
+bool isValidBST(TreeNode* root) 
+{
+    if (root == nullptr)
+        return true;
+    stack<TreeNode *> s;
+    TreeNode *cur = root;
+    TreeNode *pre = nullptr;
+    while(!s.empty() || cur)
+    {
+        while(cur)
+        {
+            s.push(cur);
+            cur =cur->left;
+        }
+        cur = s.top();
+        s.pop();
+        if (pre != nullptr && pre->val >= cur->val)
+            return false;
+        pre = cur;
+        cur = cur->right;
+    }
+    return true;
+}
+```
+
+
+
 ####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)  todo: 没看懂
 
 ```
@@ -4302,18 +4390,12 @@ class Solution
     {
         if (!root1 && !root2)
             return true;
-
         if (!root1 || !root2)
             return false;
-
         if (root1 && root2)
-        {
             return root1->val == root2->val && isSymmetricTree(root1->left, root2->right) && isSymmetricTree(root1->right, root2->left);
-        }
         else
-        {
             return false;
-        }
     }
 
 public:
@@ -4321,7 +4403,6 @@ public:
     {
         if (!root)
             return true;
-
         return isSymmetricTree(root->left, root->right);
     }
 };
