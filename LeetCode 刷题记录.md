@@ -2004,6 +2004,42 @@ bool canJump(vector<int>& nums)
 }
 ```
 
+[91. Decode Ways](https://leetcode.com/problems/decode-ways/)
+
+```c++
+int numDecodings(string s) 
+{
+    int n = s.size();
+    if (n <= 0  || s[0] == '0')
+        return 0;
+    // dp[i] 表示前i个数字的组合数目
+    int dp[n+1] = {0};
+    dp[0] = 1;
+    dp[1] = s[0] != '0' ? 1 : 0;
+    for(int i = 2; i <= n; i++)
+    {
+        int d1 = s[i-1] - '0';
+        int d2 = s[i-2] - '0';
+        int num = d2*10 + d1;
+        if(!(d1 >= 1 && d1 <= 9) && (num >= 10 && num <= 26))
+        {
+           dp[i] = dp[i-2];  
+        }      
+        if (!(num >= 10 && num <= 26) && (d1 >= 1 && d1 <= 9))
+        {
+            dp[i] = dp[i-1];
+        }
+        if((d1 >= 1 && d1 <= 9) && (num >= 10 && num <= 26)) 
+        {
+            dp[i] = dp[i-1] + dp[i-2];
+        }
+    }
+    return dp[n];
+}
+```
+
+
+
 ##### [132. Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/)
 
 ```c++
