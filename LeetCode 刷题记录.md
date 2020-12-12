@@ -4750,6 +4750,43 @@ TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder)
 }
 ```
 
+#### [297. Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)
+
+```
+class Codec {
+    TreeNode* de(istringstream& iss)
+    {
+        TreeNode* root = NULL;
+        string word;
+        if (iss >> word && word != "null") {
+            root = new TreeNode(stoi(word));
+            root->left = de(iss);
+            root->right = de(iss);
+        }
+        return root;
+    }
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        if (root == NULL)
+        {
+            return "null";
+        }
+        else
+            return to_string(root->val) + " " + serialize(root->left) + " " + serialize(root->right);
+        
+        
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        istringstream iss(data);
+        return de(iss);
+    }
+};
+```
+
 
 
 [606. Construct String from Binary Tree](https://leetcode.com/problems/construct-string-from-binary-tree/)
