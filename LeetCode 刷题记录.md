@@ -3535,7 +3535,7 @@ Node *connect(Node *root)
 
 #### [127. Word Ladder I ](https://leetcode.com/problems/word-ladder/)   todo: 还有种解法不是很懂
 
-```
+```c++
 //用BFS来求最短路径的长度
 int ladderLength(string beginWord, string endWord, vector<string> &wordList)
 {
@@ -5046,7 +5046,7 @@ void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
 }
 ```
 
-
+#### [128. Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence)  不会   298 收费题 树上面的
 
 ### 字符串
 
@@ -5079,7 +5079,7 @@ vector<vector<string>> groupAnagrams(vector<string>& strs)
 }
 ```
 
-##### [125. Valid Palindrome](https://leetcode.com/problems/valid-palindrome/)
+#### [125. Valid Palindrome](https://leetcode.com/problems/valid-palindrome/)
 
 ```
 bool isPalindrome(string s) 
@@ -5104,3 +5104,4 @@ bool isPalindrome(string s)
 }
 ```
 
+#### 
