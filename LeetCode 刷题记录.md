@@ -671,7 +671,41 @@ public:
     }
 };
 ```
+#### [162. Find Peak Element](https://leetcode.com/problems/find-peak-element)
+
+```
+int findPeakElement(vector<int>& nums) 
+{
+    if (nums.empty())
+        return 0;
+
+    stack<int> monoStack;
+    for (int i = 0; i < nums.size(); i++)
+    {
+        if (!monoStack.empty() && nums[i] < nums[monoStack.top()])
+        {
+           int temp = monoStack.top();
+           monoStack.pop();
+           return temp;
+        }
+        else
+        {
+            monoStack.push(i);
+        }
+
+    }
+
+    if (monoStack.size() == nums.size())
+        return monoStack.top();
+
+    return 0;
+}
+```
+
+
+
 #### [402. Remove K Digits](https://leetcode.com/problems/remove-k-digits/) 
+
 https://www.cnblogs.com/grandyang/p/5883736.html
 
 #### [768. Max Chunks To Make Sorted II](https://leetcode.com/problems/max-chunks-to-make-sorted-ii/)
@@ -1783,6 +1817,8 @@ ListNode *removeNthFromEnd(ListNode *head, int n)
 
 
 ### 动态规划  (29)
+
+[Leetcode 题解 - 动态规划](https://github.com/CyC2018/CS-Notes/blob/master/notes/Leetcode%20%E9%A2%98%E8%A7%A3%20-%20%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92.md#0-1-%E8%83%8C%E5%8C%85)
 
 #### 1.坐标型动态规划  (5)
 
@@ -4089,6 +4125,13 @@ public:
 ```
 
 #### [139. Word Break](https://leetcode.com/problems/word-break/)  
+
+<img src="https://pic.leetcode-cn.com/78fd09b2deabeae972809c2795ddb8be96720b8e62377cf01b7f70e7fb3dbf8c-image.png" alt="image.png" style="zoom: 50%;" />
+
+<img src="https://pic.leetcode-cn.com/5cba31457da78b75f3d593ef6f3c64c34e80db00c5e619f7e03affb1d6b829f0-image.png" alt="image.png" style="zoom: 33%;" />
+
+<img src="https://pic.leetcode-cn.com/2f0982c37f7681f16fe290f89df77660597b828a4038689b563f40eaa4958fa8-image.png" alt="image.png" style="zoom: 50%;" />
+
 ```
 class Solution
 {
@@ -4097,27 +4140,32 @@ public:
      * 解法一: 
      * memo[i] 定义为范围为 [i, n] 的子字符串是否可以拆分，初始化为 -1，表示没有计算过，如果可以拆分，则赋值为1，反之为0
      */
-    bool wordBreak_1(string s, vector<string> &wordDict)
+    bool dfs(string &s, vector<string>& wordDict, int index,  vector<int> &memo)
     {
-        unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
-        vector<int> memo(s.size(), -1);
-        return dfs(s, wordSet, 0, memo);
-    }
-    // dfs 表示字符串s[start,n] 是否可分
-    bool dfs(string s, unordered_set<string> &wordSet, int start, vector<int> &memo)
-    {
-        if (start >= s.size())
+        if (index == s.size())  // 指针越界，s都划分成单词了才走到这步的，没有剩余子串了，返回真，结束递归
             return true;
-        if (memo[start] != -1)
-            return memo[start];
-        for (int i = start + 1; i <= s.size(); ++i)
-        {
-            if (wordSet.count(s.substr(start, i - start)) && dfs(s, wordSet, i, memo))
+        if (memo[index] != -1)
+            return memo[index];
+
+        for(int i = index; i < s.size(); i++)
+        {   
+            // 先判断字典中是否能找到子串 [index...i] 然后递归调用[i+1...s.size()]
+            if (find(wordDict.begin(),wordDict.end(), s.substr(index, i - index + 1)) != wordDict.end() && dfs(s, wordDict, i +1, memo))
             {
-                return memo[start] = 1;
+                memo[index] = true;
+                return true;
             }
-        }
-        return memo[start] = 0;
+        } 
+        memo[index]=false;
+        return false;
+    }
+
+
+
+    bool wordBreak(string s, vector<string>& wordDict)
+    {
+        vector<int> memo(s.size(), -1);
+        return dfs(s, wordDict, 0, memo);
     }
 
     /**
@@ -4181,37 +4229,35 @@ vector<string> wordBreak(string s, vector<string> &wordDict)
 }
 
 // 解法二: 增加记忆化搜索
-vector<string> dfs(string s, unordered_set<string> &wordSet, int start, unordered_map<int, vector<string>> &memo)
+vector<string> dfs(string &s, vector<string> &wordDict, unordered_map<int, vector<string>> &memo, int index)
 {
-    if (memo.count(start) > 0)
-    {
-        return memo[start];
-    }
-    if (start == s.size())
-    {
+    if (index == s.size())
         return {""};
-    }
+
+    if (memo.count(index) > 0)
+        return memo[index];
+
     vector<string> res;
-    for (int i = start; i < s.size(); ++i)
+    for (int i = index; i < s.size();i++)  // 横向切割字符串 [index...i] 和[i+1...s.size()]
     {
-        if (wordSet.count(s.substr(start, i - start + 1)) > 0)
+        // 先判断字典中是否能找到子串 [index...i] 然后递归调用[i+1...s.size()]
+        if (find(wordDict.begin(),wordDict.end(), s.substr(index, i - index + 1)) != wordDict.end())
         {
-            vector<string> tmp = dfs(s, wordSet, i+1, memo);
-            for (auto str : tmp)
+            vector<string> temp = dfs(s, wordDict, memo, i+1);
+            for(auto str : temp)
             {
-                res.push_back(s.substr(start, i - start + 1) + (str.empty() ? "" : " ") + str);
+                res.push_back(s.substr(index, i - index + 1) +  (str.empty() ? "" : " ") + str);
             }
         }
     }
-    memo[start] = res;
+    memo[index] = res;
     return res;
 }
 
-vector<string> wordBreak(string s, vector<string> &wordDict)
+vector<string> wordBreak(string s, vector<string>& wordDict) 
 {
-    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
     unordered_map<int, vector<string>> memo;
-    return dfs(s, wordSet, 0, memo);
+    return dfs(s, wordDict,  memo, 0);
 }
 ```
 
@@ -5047,6 +5093,86 @@ void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
 ```
 
 #### [128. Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence)  不会   298 收费题 树上面的
+
+
+
+#### [136. Single Number](https://leetcode.com/problems/single-number/)  #todo 位运算 还不会
+
+```
+int singleNumber(vector<int> &nums)
+{
+    if (nums.empty())
+        return 0;
+    int first = nums[0];
+    for (int i = 1; i < nums.size(); i++)
+    {
+        first = first ^ nums[i];
+    }
+    return first;
+}
+```
+
+
+
+#### [150. Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation/)
+
+```
+// 逆波兰表达式
+int evalRPN(vector<string> &tokens)
+{
+    if (tokens.size() == 1)
+        return stoi(tokens[0]);
+    stack<int> st;
+    for (int i = 0; i < tokens.size(); ++i)
+    {
+        if (tokens[i] != "+" && tokens[i] != "-" && tokens[i] != "*" && tokens[i] != "/")
+        {
+            st.push(stoi(tokens[i]));
+        }
+        else
+        {
+            int num1 = st.top();
+            st.pop();
+            int num2 = st.top();
+            st.pop();
+            if (tokens[i] == "+")
+                st.push(num2 + num1);
+            if (tokens[i] == "-")
+                st.push(num2 - num1);
+            if (tokens[i] == "*")
+                st.push(num2 * num1);
+            if (tokens[i] == "/")
+                st.push(num2 / num1);
+        }
+    }
+    return st.top();
+}
+```
+
+#### [152. Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/)
+
+```c++
+int maxProduct(vector<int>& nums) 
+{ 
+    // 最大值 可能来自三种可能，
+    // 分别记录当前的最大值和最小值
+    int curMin, curMax;
+    int preMax = nums[0], preMin = nums[0];
+    int res = nums[0];
+
+    for(int i = 1; i < nums.size(); i++)
+    {
+        curMin = min(min(preMax * nums[i], preMin * nums[i]) , nums[i]);
+        curMax = max(max(preMax * nums[i], preMin * nums[i]) , nums[i]);
+        preMin = curMin;
+        preMax = curMax;
+        res = max(res, curMax);
+    }
+    return res;
+}
+```
+
+
 
 ### 字符串
 
