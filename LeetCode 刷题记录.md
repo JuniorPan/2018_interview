@@ -552,14 +552,14 @@ int trap(vector<int> &height)
             monoStack.push(i++);
         }
         else // 如果不满足入栈条件,则弹出栈顶元素,这个时候可以结算当前元素,栈顶元素的下一个元素则为左边界，当前遍历到的height[i] 则为右边界
-            {
-                int tmp = monoStack.top();
-                monoStack.pop();
-                if (monoStack.empty())
-                    continue;
-                int h = min(height[i], height[monoStack.top()]);
-                res = res + (h - height[tmp]) * (i - monoStack.top() - 1);
-            }
+        {
+            int tmp = monoStack.top();
+            monoStack.pop();
+            if (monoStack.empty())
+                continue;
+            int h = min(height[i], height[monoStack.top()]);
+            res = res + (h - height[tmp]) * (i - monoStack.top() - 1);
+        }
     }
     return res;
 }
@@ -598,7 +598,7 @@ int trap(vector<int>& height)
 ```
 ####  [84. Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/) 
 
-```
+```c++
 int largestRectangleArea(vector<int> &heights)
 {
     int res = 0;
@@ -5170,6 +5170,77 @@ int maxProduct(vector<int>& nums)
     }
     return res;
 }
+```
+
+#### [215. Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/) #todo 堆排序还不会  还可以通过快排partition 搞定
+
+```
+class Solution 
+{
+private:
+    void heapInsert(vector<int> &arr, int index, int value)
+    {
+        arr[index] = value;
+        while(index != 0)
+        {
+            int parent = (index-1) / 2; // 获取父节点
+
+            if(arr[parent] > arr[index])
+            {
+                int temp = arr[parent];
+                arr[parent] = arr[index];
+                arr[index] = temp;
+            
+                index = parent;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+void heapify(vector<int> &arr, int index, int size)
+{
+    int left = 2 * index + 1;
+    while(left < size)
+    {
+        int smallest = left + 1 < size && arr[left+1] < arr[left] ? left +1: left ; // smallest记录左右子树中较小的那个
+        if (arr[smallest] > arr[index])
+            break;
+        
+        int temp = arr[smallest];
+        arr[smallest] = arr[index];
+        arr[index] = temp;
+
+        index = smallest;
+        left = 2 * index + 1;
+    }
+}
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        if (nums.empty() || nums.size() < k)
+            return 0;
+        
+        // int *heap = (int *)malloc(sizeof(int) * k);
+        vector<int> heap(k , 0);
+        
+        for(int i = 0; i < k; i++)
+        {
+            heapInsert(heap, i, nums[i]);
+        }
+        
+        for(int j = k; j < nums.size(); j++)
+        {
+            if (nums[j] > heap[0])
+            {
+                heap[0] = nums[j];
+                heapify(heap, 0, k);
+            }
+        }
+        return heap[0];
+    }
+};
 ```
 
 
