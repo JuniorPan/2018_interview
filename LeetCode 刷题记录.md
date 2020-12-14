@@ -4064,7 +4064,7 @@ class Solution
             res.push_back(temp);
             return;
         }
-        for(int i = index; i < s.size(); i++)
+        for(int i = index; i < s.size(); i++)  // a, aa, aab for循环横向遍历
         {
             if (isPalindrome(s, index, i)) // 这个地方可以用动态规划去优化
             {
