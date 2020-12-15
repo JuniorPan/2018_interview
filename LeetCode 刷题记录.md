@@ -2191,6 +2191,31 @@ int rob(vector<int> &nums)
 }
 ```
 
+#### [279. 完全平方数](https://leetcode-cn.com/problems/perfect-squares/)
+
+```c++
+int numSquares(int n)
+{
+    if (n <= 0)
+        return 0;
+    // dp[i] 表示数字i最少有几个平方数的和
+    vector<int> dp(n + 1, INT_MAX);
+    dp[0] = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j * j <= i; j++)
+        {
+            dp[i] = min(dp[i], dp[i - j * j] + 1);
+        }
+    }
+    return dp[n];
+}
+```
+
+
+
+
+
 ##### [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/)
 
 ```c++
@@ -4905,8 +4930,6 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 
 ####  [986. Interval List Intersections](https://leetcode.com/problems/interval-list-intersections/)
 
-
-
 ### 双堆模式
 
 #### [155. Min Stack](https://leetcode.com/problems/min-stack/)
@@ -4916,8 +4939,6 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 #### [480. Sliding Window Median](https://leetcode.com/problems/sliding-window-median/)
 
 #### [剑指 Offer 09. 用两个栈实现队列](https://leetcode-cn.com/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/)
-
-
 
 ### 前K大的数模式HEAP
 
@@ -5094,8 +5115,6 @@ void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
 
 #### [128. Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence)  不会   298 收费题 树上面的
 
-
-
 #### [136. Single Number](https://leetcode.com/problems/single-number/)  #todo 位运算 还不会
 
 ```
@@ -5241,6 +5260,28 @@ public:
         return heap[0];
     }
 };
+```
+
+#### [238. 除自身以外数组的乘积](https://leetcode-cn.com/problems/product-of-array-except-self/)
+
+```c++
+//由于最终的结果都是要乘到结果 res 中，所以可以不用单独的数组来保存乘积，而是直接累积到结果 res 中，
+//我们先从前面遍历一遍，将乘积的累积存入结果 res 中，然后从后面开始遍历，用到一个临时变量 right，初始化为1，然后每次不断累积，最终得到正确结果，
+vector<int> productExceptSelf(vector<int>& nums) 
+{
+    vector<int> res(nums.size(), 1);
+    for (int i = 1; i < nums.size(); ++i) 
+    {
+        res[i] = res[i - 1] * nums[i - 1];
+    }
+    int right = 1;
+    for (int i = nums.size() - 1; i >= 0; --i) 
+    {
+        res[i] *= right;
+        right *= nums[i];
+    }
+    return res;
+}
 ```
 
 
