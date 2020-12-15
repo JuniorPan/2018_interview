@@ -906,6 +906,55 @@ int findMin(vector<int> &nums)
 }
 ```
 
+#### [378. 有序矩阵中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-sorted-matrix/)
+
+```
+class Solution
+{
+public:
+    bool check(vector<vector<int>> &matrix, int mid, int k, int n)
+    {
+        int i = n - 1;
+        int j = 0;
+        int num = 0;
+        while (i >= 0 && j < n)
+        {
+            if (matrix[i][j] <= mid)
+            {
+                num += i + 1;
+                j++;
+            }
+            else
+            {
+                i--;
+            }
+        }
+        return num >= k;
+    }
+    int kthSmallest(vector<vector<int>> &matrix, int k)
+    {
+        int n = matrix.size();
+        int left = matrix[0][0];
+        int right = matrix[n-1][n-1];
+        while (left < right)
+        {
+            int mid = left + (right - left) / 2;
+            if (check(matrix, mid, k, n))
+            {
+                right = mid;
+            }
+            else
+            {
+                left = mid+1;
+            }
+        }
+        return left;
+    }
+};
+```
+
+
+
 #### [704. Binary Search ](https://leetcode.com/problems/binary-search/)
 
 ```
@@ -1124,11 +1173,14 @@ public:
 // 利用快速排序原理
 void wiggleSort(vector<int> &nums)
 {
+    // 先找到中位数,
     auto midptr = nums.begin() + nums.size() / 2;
     nth_element(nums.begin(), midptr, nums.end());
     int mid = *midptr;
 
     int i = 0, j = 0, k = nums.size() - 1;
+    // 3-way-partition
+    // 然后根据中位数将原数组被分为3个部分，左侧为小于中位数的数，中间为中位数，右侧为大于中位数的数
     while (j < k)
     {
         if (nums[j] > mid)
@@ -1744,7 +1796,7 @@ ListNode *reverseList(ListNode *head)
 
 ##### [328. Odd Even Linked List](https://leetcode.com/problems/odd-even-linked-list/)
 
-```
+```c++
 class Solution
 {
 public:
@@ -1787,10 +1839,6 @@ public:
     }
 };
 ```
-
-
-
-
 
 ##### [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
 
