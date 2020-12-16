@@ -908,10 +908,15 @@ int findMin(vector<int> &nums)
 
 #### [378. 有序矩阵中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-sorted-matrix/)
 
+
+
+<img src="https://assets.leetcode-cn.com/solution-static/378/378_fig3.png" alt="fig3" style="zoom:48%;" />
+
 ```
 class Solution
 {
 public:
+	// 计算矩阵中有多少数不大于 mid 计算的是左上角
     bool check(vector<vector<int>> &matrix, int mid, int k, int n)
     {
         int i = n - 1;
@@ -931,6 +936,8 @@ public:
         }
         return num >= k;
     }
+    // 如果数量不少于 k，那么说明最终答案 x 不大于 mid；
+	// 如果数量少于 kk，那么说明最终答案 x 大于 mid。	
     int kthSmallest(vector<vector<int>> &matrix, int k)
     {
         int n = matrix.size();
@@ -1831,8 +1838,12 @@ public:
         ListNode *odd = head, *even = head->next, *even_head = even;
         while (even && even->next)
         {
-            odd = odd->next = even->next;
-            even = even->next = odd->next;
+            // odd = odd->next = even->next;
+            // even = even->next = odd->next;
+            odd->next = even->next;
+            odd = odd->next;
+            even->next = odd->next;
+            even = even->next;
         }
         odd->next = even_head;
         return head;
@@ -2260,10 +2271,6 @@ int numSquares(int n)
 }
 ```
 
-
-
-
-
 ##### [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/)
 
 ```c++
@@ -2567,6 +2574,31 @@ int longestCommonSubsequence(string word1, string word2)
 
 #### 5.背包型动态规划 （5）
 **特点: 1). 用值作为DP维度, 2). DP过程就是填写矩阵, 3). 可以滚动数组优化 状态: f\[i][S]前i个物品, 取出一些能否组成和为S; 方程: f\[i][S] = f\[i-1][S-a[i]] or f\[i-1][S]; 初始化: f\[i][0]=true; f\[0][1...target]=false; 答案: 检查所有f\[n][j]**
+
+[279. Perfect Squares](https://leetcode.com/problems/perfect-squares/)
+
+```c++
+int numSquares(int n) 
+{
+    if (n <= 0)
+        return 0;
+
+    // dp[i] 表示数字i最少有几个平方数的和
+    vector<int> dp(n+1, INT_MAX);
+    dp[0] = 0;
+    for(int i = 1; i <= n; i++)
+    {
+        for(int j = 1; j * j <= i; j++)
+        {
+            dp[i] = min(dp[i], dp[i-j*j]+1); //这里有两种选择，第j个要不要
+        }
+    }
+
+    return dp[n];
+}
+```
+
+
 
 ##### [322. Coin Change](https://leetcode.com/problems/coin-change/description/)
 
@@ -4996,7 +5028,139 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 
 #### [215. Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/)
 
+```c++
+class Solution {
+private:
+    void heapInsert(vector<int> &arr, int index, int value)
+    {
+        arr[index] = value;
+        while(index != 0)
+        {
+            int parent = (index-1) / 2; // 获取父节点
+
+            if(arr[parent] > arr[index])
+            {
+                int temp = arr[parent];
+                arr[parent] = arr[index];
+                arr[index] = temp;
+            
+                index = parent;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+void heapify(vector<int> &arr, int index, int size)
+{
+    int left = 2 * index + 1;
+    while(left < size)
+    {
+        int smallest = left + 1 < size && arr[left+1] < arr[left] ? left +1: left ; // smallest记录左右子树中较小的那个
+        if (arr[smallest] > arr[index])
+            break;
+        
+        int temp = arr[smallest];
+        arr[smallest] = arr[index];
+        arr[index] = temp;
+
+        index = smallest;
+        left = 2 * index + 1;
+    }
+}
+    
+int partition(vector<int>& nums, int left, int right) 
+{
+    auto pivot = nums[left];
+    int i = left;
+    int j = right;
+    while (i < j) {
+        while (j > i && nums[j] >= pivot) {
+            j--; // find first smaller than pivot from right
+        } 
+        nums[i] = nums[j];
+        while (i < j && nums[i] <= pivot) {
+            i++; // find first larger than pivot from left 
+        }
+        nums[j] = nums[i];
+    }
+    nums[i] = pivot;
+
+    return i;
+}
+
+
+public:
+	// 解法一: 利用堆排序
+    int findKthLargest(vector<int>& nums, int k) {
+        if (nums.empty() || nums.size() < k)
+            return 0;
+        
+        // int *heap = (int *)malloc(sizeof(int) * k);
+        vector<int> heap(k , 0);
+        
+        for(int i = 0; i < k; i++)
+        {
+            heapInsert(heap, i, nums[i]);
+        }
+        
+        for(int j = k; j < nums.size(); j++)
+        {
+            if (nums[j] > heap[0])
+            {
+                heap[0] = nums[j];
+                heapify(heap, 0, k);
+            }
+        }
+        return heap[0];
+    }
+    // 解法二: 利用快速排序来做
+    int findKthLargest(vector<int>& nums, int k) {
+        int left = 0;
+        int right = nums.size() - 1;
+        while (left <= right) {
+            int mid = partition(nums, left, right);
+            int target = (nums.size() - k);
+            if (mid == target) {
+                return nums[mid];
+            } else if (mid < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return -1;
+    }
+};
+```
+
+
+
 #### [347. Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
+
+```c++
+vector<int> topKFrequent(vector<int>& nums, int k) 
+{
+    unordered_map<int, int> m;
+    priority_queue<pair<int, int>> q;
+    vector<int> res;
+    // 先统计每个数字出现的次数
+    for (auto a : nums)
+         ++m[a];
+    // 然后将次数 和数字 放到大根堆里面去, 然后从大根堆里面一次弹出k个数字
+    for (auto it : m) q.push({it.second, it.first});
+    for (int i = 0; i < k; ++i) 
+    {
+        res.push_back(q.top().second);
+        q.pop();
+    }
+    return res;
+}
+```
+
+
 
 #### [373. Find K Pairs with Smallest Sums](https://leetcode.com/problems/find-k-pairs-with-smallest-sums/)
 
@@ -5179,8 +5343,6 @@ int singleNumber(vector<int> &nums)
 }
 ```
 
-
-
 #### [150. Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation/)
 
 ```
@@ -5327,6 +5489,85 @@ vector<int> productExceptSelf(vector<int>& nums)
     {
         res[i] *= right;
         right *= nums[i];
+    }
+    return res;
+}
+```
+
+[334. Increasing Triplet Subsequence](https://leetcode.com/problems/increasing-triplet-subsequence/)
+
+```c++
+// you are fucking genius
+bool increasingTriplet(vector<int> &nums)
+{
+    int c1 = INT_MAX, c2 = INT_MAX;
+    for (int x : nums)
+    {
+        if (x <= c1)
+        {
+            c1 = x; // c1 is min seen so far (it's a candidate for 1st element)
+        }
+        else if (x <= c2)  //  c1 < x <= c2
+        {           // here when x > c1, i.e. x might be either c2 or c3
+            c2 = x; // x is better than the current c2, store it
+        }  
+        else  // x > c2
+        {                // here when we have/had c1 < c2 already and x > c2
+            return true; // the increasing subsequence of 3 elements exists
+        }
+    }
+    return false;
+}
+```
+
+
+
+#### [454. 四数相加 II](https://leetcode-cn.com/problems/4sum-ii/)
+
+```
+int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D)
+{
+    // 把A和B的两两之和都求出来，在 HashMap 中建立两数之和跟其出现次数之间的映射
+    // 再遍历C和D中任意两个数之和，只要看哈希表存不存在这两数之和的相反数就行了
+    int res = 0;
+    unordered_map<int, int> hasTwoSum;
+    for (int i = 0; i < A.size(); ++i) 
+    {
+        for (int j = 0; j < B.size(); ++j)
+            hasTwoSum[A[i] + B[j]] ++;
+    }
+    for (int i = 0; i < C.size(); ++i) 
+    {
+        for (int j = 0; j < D.size(); ++j) 
+        {
+            int target = -1 * (C[i] + D[j]);
+            if (hasTwoSum.find(target) != hasTwoSum.end())
+                res += hasTwoSum[target];
+        }
+    }
+    return res;
+}
+```
+
+
+
+#### [560. Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/)
+
+```c++
+int subarraySum(vector<int>& nums, int k) 
+{
+    unordered_map<int, int> hasSum;
+    int sum = 0;
+    hasSum[0]=1;
+    int res = 0;
+    // 如果能在hasSum中能找到 说明在i 位置至少存在一个位置j 使得[0...j]的累加和为sum-k, 那么从[j+1...i]的累加和就是k了.
+    // 所以有可能不只一个j满足条件,用hasSum记录在i位置之前出现多少j满足条件
+    for(int i = 0; i < nums.size(); i++)
+    {
+        sum += nums[i];
+        if (hasSum.find(sum-k) != hasSum.end())
+            res += hasSum[sum-k];
+        hasSum[sum] += 1;
     }
     return res;
 }
