@@ -4268,11 +4268,9 @@ public:
     vector<vector<string>> partition(string s)
     {
         vector<vector<string> > res;
-        if(s.empty()) return res;
-        
+        if(s.empty()) return res;  
         vector<string> temp;
-        dfs(s, 0, temp, res);
-        
+        dfs(s, 0, temp, res);  
         return res;
     }
 };
