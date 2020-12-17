@@ -37,7 +37,7 @@ public:
     {
         
         vector<int> visted(cols*rows, 0);
-        return dfs(rows, cols, 0,0,threshold,  visted);
+        return dfs(rows, cols, 0, 0, threshold, visted);
         
     }
 };

@@ -1422,7 +1422,7 @@ bool hasCycle(ListNode *head)
 
 ##### [142. Linked List Cycle II](https://leetcode.com/problems/linked-list-cycle-ii/)
 
-```
+```c++
  ListNode *detectCycle(ListNode *head) 
 {
     if (head == nullptr || head->next == nullptr || head->next->next == nullptr)
@@ -1984,7 +1984,7 @@ int minPathSum(vector<vector<int>> &grid)
 
 ##### [70. Climbing Stairs](https://leetcode.com/problems/climbing-stairs/)
 
-```
+```c++
 int climbStairs(int n)
 {
     if (n <= 1)
@@ -2297,10 +2297,35 @@ int lengthOfLIS(vector<int> &nums)
     }
     return max2;
 }
+
+```
+
+[343. Integer Break](https://leetcode.com/problems/integer-break/)
+
+```
+int cuttingRope(int n)
+{
+    if (n <= 2)
+        return 1;
+
+    // dp[i] 表示分拆数字i能得到的最大乘积
+    vector<int> dp(n+1, 0);
+
+    for(int i = 3; i <= n; i++)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            dp[i] = max(max(dp[i], j*dp[i-j]), j*(i-j)); //dp[i] = max(dp[i], j*dp[i-j],j*(i-j) )
+        }
+    }
+    return dp[n];
+}
 ```
 
 
+
 #### 3.双序列动态规划  (7)
+
 **状态: f\[i][j]表示第一个sequence的前i个数字/字符, 配上第二个sequence的前j个; **
 
 **方程: f\[i][j] = 研究第i个和第j个的匹配关系; **
@@ -3077,7 +3102,7 @@ void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, 
 ```
 #### [79. Word Search](https://leetcode.com/problems/word-search/) 
 
-```
+```c++
 class Solution
 {
     bool dfs(vector<vector<char>> &board, string &word, int i, int j, int pos)
@@ -4474,35 +4499,67 @@ bool isValidBST(TreeNode* root)
 
 
 
-####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)  todo: 没看懂
+####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)  todo: 还有更优解
 
-```
-void flatten(TreeNode* root)
+```c++
+void flatten(TreeNode* root) 
 {
-	while(root)
-	{
-	    if (root->left && root->right)
-	    {
-	        TreeNode *t = root->left;
-	        while(t->right)
-	        {
-	            t = t->right;
-	        }
-	        t->right = root->right;
-	    }
-	    
-	    if (root->left)
-	    {
-	        root->right = root->left;
-	
-	    }
-	    root->left = nullptr;
-	    root = root->right;
-	}
+    if(root == nullptr)
+        return;
+    stack<TreeNode *> s;
+    vector<TreeNode *> node_list;
+    s.push(root);
+    while(!s.empty())
+    {
+        root = s.top();
+        s.pop();
+        node_list.push_back(root);
+        // 因为需要先访问左子树，所以左子树后压栈
+        if (root->right)
+            s.push(root->right);
+        if (root->left)
+            s.push(root->left);
+    }
+    for(int i = 1; i < node_list.size(); i++)
+    {
+        auto prev = node_list[i - 1], curr = node_list[i];
+        prev->left = nullptr;
+        prev->right = curr;
+    } 
 }
 ```
 
-[230. Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/)
+#### [144. Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-preorder-traversal/)
+
+```
+// 二叉树谦虚遍历非递归
+vector<int> preorderTraversal(TreeNode* root) 
+{
+    vector<int> res;
+    if (root == nullptr)
+        return res;
+
+    stack<TreeNode *> s;
+    s.push(root);
+
+    while(!s.empty())
+    {
+        root = s.top();
+        s.pop();
+        res.push_back(root->val);
+
+        if (root->right)
+            s.push(root->right);
+        if (root->left)
+            s.push(root->left);  
+    }
+    return res;
+}
+```
+
+
+
+#### [230. Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/)
 
 ```c++
 int kthSmallest(TreeNode* root, int k)
