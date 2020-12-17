@@ -3115,6 +3115,54 @@ public:
 };
 ```
 
+[130. Surrounded Regions](https://leetcode.com/problems/surrounded-regions/)
+
+```c++
+class Solution {
+public:
+   void solve(vector<vector<char> >& board) 
+   {
+        
+       if (board.empty() || board[0].empty())
+           return;
+       
+       int m = board.size();
+       int n = board[0].size();
+       for (int i = 0; i < m;  ++i) 
+        {
+            for (int j = 0; j < n; ++j) 
+            {
+                // 从出边界出发，将边界上为O的并且连在一起的都变成$
+                if ((i == 0 || i == m - 1 || j == 0 || j == n - 1) && board[i][j] == 'O')
+                    solveDFS(board, i, j, m, n);
+            }
+        }
+       // 先将没有变成$也就是不和边界上的O连在一起的改为X，
+        for (int i = 0; i < board.size(); ++i) {
+            for (int j = 0; j < board[i].size(); ++j) {
+                if (board[i][j] == 'O') board[i][j] = 'X';
+                if (board[i][j] == '$') board[i][j] = 'O';
+            }
+        }
+    }
+    void solveDFS(vector<vector<char> > &board, int i, int j, int m, int n) {
+        
+        if (i >= m || i < 0 || j >= n || j < 0 || board[i][j] != 'O') return;
+        
+        board[i][j] = '$';
+        solveDFS(board, i - 1, j, m, n);
+        solveDFS(board, i, j + 1, m, n);
+        solveDFS(board, i + 1, j, m, n);
+        solveDFS(board, i, j - 1, m, n);
+
+    }
+};
+```
+
+
+
+
+
 #### [139. Word Break](https://leetcode.com/problems/word-break/)  回溯+记忆化搜索
 
 <img src="https://pic.leetcode-cn.com/78fd09b2deabeae972809c2795ddb8be96720b8e62377cf01b7f70e7fb3dbf8c-image.png" alt="image.png" style="zoom: 50%;" />
@@ -3680,6 +3728,7 @@ Node *connect(Node *root)
 //用BFS来求最短路径的长度
 int ladderLength(string beginWord, string endWord, vector<string> &wordList)
 {
+    // todo: 直接使用vector 会超时,主要是因为有大量删除操作
     unordered_set<string> wordSet(wordList.begin(), wordList.end());
     if (!wordSet.count(endWord))
         return 0;
