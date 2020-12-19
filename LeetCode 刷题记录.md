@@ -1176,52 +1176,119 @@ public:
 核心思想， 如果当前数小于num,当前数和小于区域的下一个数交换, 如果当前数大于num,当前数和大于区域的前一
 个数交换
 
-```
-// 利用快速排序原理
-void wiggleSort(vector<int> &nums)
-{
-    // 先找到中位数,
-    auto midptr = nums.begin() + nums.size() / 2;
-    nth_element(nums.begin(), midptr, nums.end());
-    int mid = *midptr;
+```c++
+class Solution {
+public:
 
-    int i = 0, j = 0, k = nums.size() - 1;
-    // 3-way-partition
-    // 然后根据中位数将原数组被分为3个部分，左侧为小于中位数的数，中间为中位数，右侧为大于中位数的数
-    while (j < k)
+    int partrition(vector<int>& nums,int left,int right)
     {
-        if (nums[j] > mid)
-        {
-            swap(nums[j], nums[k]);
-            k--;
+        int i=left,j=right;
+        int pivot=nums[i];//基准值
+        while(i<j){
+            //当尾部元素大于等于基准值时向前移动后面的指针
+            while(i<j&&nums[j]>=pivot)
+                j--;
+            if(i<j){
+                nums[i]=nums[j];
+                i++;
+            }
+            //当前面的元素小于基准值时向后移动前面的指针
+            while(i<j&&nums[i]<pivot)
+                i++;
+            if(i<j){
+                nums[j]=nums[i];
+                j--;
+            }
         }
-        else if (nums[j] < mid)
+        nums[i]=pivot;
+        return i;
+    }
+    
+    int partrition_2(vector<int>& input, int start, int end)
+    {
+
+        int small = start - 1;
+
+        for(int i = start;i < end; i++)
         {
-            swap(nums[j], nums[i]);
-            i++;
-            j++;
+            if(input[i] < input[end])
+            {
+                small++;
+                if (i != small)
+                    swap(input[small], input[i]);
+            }
         }
-        else
-        {
-            j++;
-        }
+        small++;
+        swap(input[small],input[end]);
+        return small;
     }
 
-    if (nums.size() % 2)
-        ++midptr;
 
-    vector<int> tmp1(nums.begin(), midptr);
-    vector<int> tmp2(midptr, nums.end());
+    int quickSelect(vector<int> &nums, int begin, int end, int k)
+    {
+        int index = partrition_2(nums, begin, end);
+        
+        while(index != k)
+        {
+            if (index > k)
+            {
+                end = index -1;
+                index = partrition_2(nums, begin, end);
+            }
+            else
+            {
+                begin = index + 1;
+                index = partrition_2(nums, begin, end);
+            }   
+        }
+        return index;
+    }
 
-    for (int i = 0; i < tmp1.size(); i++)
+    void wiggleSort(vector<int>& nums) 
     {
-        nums[2 * i] = tmp1[tmp1.size() - 1 - i];
+        // 先找到中位数,
+
+        
+        int mid = nums[quickSelect(nums, 0, nums.size()-1, nums.size()/2)];
+        auto midptr = nums.begin() + nums.size() / 2;
+        int i = 0, j = 0, k = nums.size() - 1;
+        // 3-way-partition
+        // 然后根据中位数将原数组被分为3个部分，左侧为小于中位数的数，中间为中位数，右侧为大于中位数的数
+        while (j < k)
+        {
+            if (nums[j] > mid)
+            {
+                swap(nums[j], nums[k]);
+                k--;
+            }
+            else if (nums[j] < mid)
+            {
+                swap(nums[j], nums[i]);
+                i++;
+                j++;
+            }
+            else
+            {
+                j++;
+            }
+        }
+
+        if (nums.size() % 2)
+            ++midptr;
+
+        vector<int> tmp1(nums.begin(), midptr);
+        vector<int> tmp2(midptr, nums.end());
+
+        for (int i = 0; i < tmp1.size(); i++)
+        {
+            nums[2 * i] = tmp1[tmp1.size() - 1 - i];
+        }
+        for (int i = 0; i < tmp2.size(); i++)
+        {
+            nums[2 * i + 1] = tmp2[tmp2.size() - 1 - i];
+        }
     }
-    for (int i = 0; i < tmp2.size(); i++)
-    {
-        nums[2 * i + 1] = tmp2[tmp2.size() - 1 - i];
-    }
-}
+};
 ```
 
 ### 链表 (17)
