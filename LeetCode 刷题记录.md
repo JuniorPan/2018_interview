@@ -870,7 +870,7 @@ bool search(vector<int> &nums, int target)
 
 #### [153. Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)   while条件 懵逼了
 
-```
+```c++
 int findMin(vector<int> &nums)
 {
     int left = 0, right = (int)nums.size() - 1;
@@ -888,7 +888,7 @@ int findMin(vector<int> &nums)
 
 #### [154. Find Minimum in Rotated Sorted Array II](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)  while条件 懵逼了
 
-```
+```c++
 int findMin(vector<int> &nums)
 {
     int left = 0, right = (int)nums.size() - 1;

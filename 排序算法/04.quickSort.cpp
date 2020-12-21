@@ -1,6 +1,5 @@
 #include "../generateRandomArray.h"
 
-
 // void swap(vector<int> &arr, int i, int j)
 //  {
 //     int tmp = arr[i];
@@ -8,11 +7,11 @@
 //     arr[j] = tmp;
 // }
 
-vector<int>  partition(vector<int> arr, int l, int r)
+vector<int> partition(vector<int> arr, int l, int r)
 {
     int less = l - 1;
     int more = r;
-    while(l < more)
+    while (l < more)
     {
         if (arr[l] < arr[r])
         {
@@ -29,13 +28,13 @@ vector<int>  partition(vector<int> arr, int l, int r)
     }
     swap(arr, more, r);
     vector<int> res;
-    res.push_back(less+1);
+    res.push_back(less + 1);
     res.push_back(more);
     return res;
 }
 
-void quickSort(vector<int>  arr, int l, int r)
- {
+void quickSort(vector<int> arr, int l, int r)
+{
     if (l < r)
     {
         srand((unsigned)time(NULL));
@@ -49,15 +48,40 @@ void quickSort(vector<int>  arr, int l, int r)
     }
 }
 
+int partition(vector<int> &arr, int startIndex, int endIndex)
+{
+    int pivot = arr[startIndex];
+    int left = startIndex;
+    int right = endIndex;
+    while (left != right)
+    {
+        while (left < right && arr[right] > pivot)
+        {
+            right--;
+        }
+        while (left < right && arr[left] <= pivot)
+        {
+            left++;
+        }
+        //找到left比基准大，right比基准小，进行交换
+        if (left < right)
+        {
+            swap(arr, left, right);
+        }
+    }
+    //第一轮完成，让left和right重合的位置和基准交换，返回基准的位置
+    swap(arr, startIndex, left);
+    return left;
+}
 
-int partrition(vector<int>& input, int start, int end)
+int partrition(vector<int> &input, int start, int end)
 {
 
     int small = start - 1;
-    
-    for(int i = start;i < end; i++)
+
+    for (int i = start; i < end; i++)
     {
-        if(input[i] < input[end])
+        if (input[i] < input[end])
         {
             small++;
             if (i != small)
@@ -65,26 +89,25 @@ int partrition(vector<int>& input, int start, int end)
         }
     }
     small++;
-    swap(input[small],input[end]);
+    swap(input[small], input[end]);
     return small;
 }
 
 void quicksort2(vector<int> &nums, int start, int end)
-{   
+{
     if (start == end)
         return;
     int index = partrition(nums, start, end);
     if (index > start)
         quicksort2(nums, start, index - 1);
     if (index < end)
-        quicksort2(nums, index+1, end);
-
+        quicksort2(nums, index + 1, end);
 }
 
 int main()
 {
     int count = 0;
-    while(true)
+    while (true)
     {
         srand((unsigned)time(NULL));
         int maxSize = rand() % 20 + 1;
@@ -94,25 +117,23 @@ int main()
         vector<int> nums2(nums);
         // copyArray(nums, nums2);
 
-        quicksort2(nums, 0, nums.size()-1);
+        quicksort2(nums, 0, nums.size() - 1);
         sort(nums2.begin(), nums2.end());
 
         for (int i = 0; i < nums2.size(); i++)
         {
             if (nums2[i] != nums[i])
             {
-                cout << "false" << " ";
+                cout << "false"
+                     << " ";
                 break;
             }
         }
 
-
-        count ++;
+        count++;
         if (count > 100)
             break;
     }
-    
-
 
     return 0;
 }
