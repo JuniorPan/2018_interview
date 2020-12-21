@@ -1434,6 +1434,35 @@ public:
 
 #### 快慢指针
 
+#### [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/submissions/) todo
+
+```c++
+ListNode* removeNthFromEnd(ListNode* head, int n) 
+{
+    if (head == nullptr)
+        return head;
+
+    ListNode *fast = head;
+    ListNode *slow = head;
+    for(int i = 0; i < n; i++)
+    {
+        fast = fast->next;
+    }
+    // todo: 好像还有点不明白
+    if (fast == nullptr)
+        return head->next;
+    while(fast->next)
+    {
+        fast = fast->next;
+        slow = slow->next;
+    }
+    slow->next= slow->next->next;
+    return head;
+}
+```
+
+
+
 ##### [61. Rotate List](https://leetcode.com/problems/rotate-list/)
 
 ```c++
@@ -4514,7 +4543,7 @@ vector<string> wordBreak(string s, vector<string>& wordDict)
 
 ###  二叉树 (3)
 
-#### [94. Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal/)
+#### [94. Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal/) 二叉树中序遍历非递归
 
 ```c++
 // 二叉树中序非递归遍历
@@ -4543,7 +4572,7 @@ vector<int> inorderTraversal(TreeNode* root)
 }
 ```
 
-#### [98. Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/) 二叉树中序序遍历非递归
+#### [98. Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/) 二叉树中序遍历非递归
 
 ```c++
 bool isValidBST(TreeNode* root) 
