@@ -52,62 +52,40 @@ public:
     2. 将第二个链翻转。
     3. 将第二个链表的元素间隔地插入第一个链表中。
     */
-    void reorderList_1(ListNode *head)
+    void reorderList(ListNode *head)
     {
-        if (!head || !head->next || !head->next->next)
+        if (head == nullptr || head->next == nullptr || head->next->next == nullptr )
             return;
-        ListNode *fast = head, *slow = head;
-        while (fast->next && fast->next->next)
+        
+        ListNode *slow = head;
+        ListNode *fast = head;
+        while(fast->next && fast->next->next)
         {
             slow = slow->next;
             fast = fast->next->next;
         }
         ListNode *mid = slow->next;
-        slow->next = NULL;
-        ListNode *last = mid, *pre = NULL;
-        while (last)
+        slow->next = nullptr; // 端口链表
+        ListNode *cur = mid;
+        ListNode *pre = nullptr;
+        // 逆序后半段链表
+        while(cur)
         {
-            ListNode *next = last->next;
-            last->next = pre;
-            pre = last;
-            last = next;
+            ListNode *temp = cur->next;
+            cur->next = pre;
+            pre = cur;
+            cur = temp;
         }
-        while (head && pre)
+        // 将逆序的后半段插入到前半段中
+        while(head && pre)
         {
-            ListNode *next = head->next;
+            ListNode *temp = head->next;
             head->next = pre;
             pre = pre->next;
-            head->next->next = next;
-            head = next;
+            head->next->next = temp;
+            head = temp;
         }
     }
-    /**
-     * 解法二:
-     * 其实可以借助栈的后进先出的特性来做，如果我们按顺序将所有的结点压入栈，那么出栈的时候就可以倒序了，实际上就相当于翻转了链表。由于只需将后半段链表翻转，那么我们就要控制出栈结点的个数，还好栈可以直接得到结点的个数，我们减1除以2，就是要出栈结点的个数了。
-     */
-    void reorderList(ListNode *head)
-    {
-        if (!head || !head->next || !head->next->next)
-            return;
-        stack<ListNode *> st;
-        ListNode *cur = head;
-        while (cur)
-        {
-            st.push(cur);
-            cur = cur->next;
-        }
-        int cnt = ((int)st.size() - 1) / 2;
-        cur = head;
-        while (cnt-- > 0)
-        {
-            auto t = st.top();
-            st.pop();
-            ListNode *next = cur->next;
-            cur->next = t;
-            t->next = next;
-            cur = next;
-        }
-        st.top()->next = NULL;
-    }
+
 };
 // @lc code=end

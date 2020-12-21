@@ -1521,9 +1521,13 @@ bool hasCycle(ListNode *head)
 ##### [143. Reorder List](https://leetcode.com/problems/reorder-list/)
 
 ```
-
-// 解法一  （https://github.com/grandyang/leetcode/issues/143）
-void reorderList(ListNode *head)
+/* 
+解法一: 
+1. 使用快慢指针来找到链表的中点，并将链表从中点处断开，形成两个独立的链表。
+2. 将第二个链翻转。
+3. 将第二个链表的元素间隔地插入第一个链表中。
+*/
+void reorderList_1(ListNode *head)
 {
     if (!head || !head->next || !head->next->next)
         return;
@@ -1552,8 +1556,10 @@ void reorderList(ListNode *head)
         head = next;
     }
 }
-
-// 解法二 
+/**
+ * 解法二:
+ * 其实可以借助栈的后进先出的特性来做，如果我们按顺序将所有的结点压入栈，那么出栈的时候就可以倒序了，实际上就相当于翻转了链表。由于只需将后半段链表翻转，那么我们就要控制出栈结点的个数，还好栈可以直接得到结点的个数，我们减1除以2，就是要出栈结点的个数了。
+ */
 void reorderList(ListNode *head)
 {
     if (!head || !head->next || !head->next->next)
@@ -1567,7 +1573,7 @@ void reorderList(ListNode *head)
     }
     int cnt = ((int)st.size() - 1) / 2;
     cur = head;
-    while (cnt-- > 0)
+    while (cnt > 0)
     {
         auto t = st.top();
         st.pop();
@@ -1575,6 +1581,7 @@ void reorderList(ListNode *head)
         cur->next = t;
         t->next = next;
         cur = next;
+        cnt--;
     }
     st.top()->next = NULL;
 }
@@ -4536,7 +4543,7 @@ vector<int> inorderTraversal(TreeNode* root)
 }
 ```
 
-#### [98. Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/)
+#### [98. Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/) 二叉树中序序遍历非递归
 
 ```c++
 bool isValidBST(TreeNode* root) 
@@ -4564,9 +4571,7 @@ bool isValidBST(TreeNode* root)
 }
 ```
 
-
-
-####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)  todo: 还有更优解
+####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)  二叉树前序遍历非递归
 
 ```c++
 void flatten(TreeNode* root) 
@@ -4596,10 +4601,10 @@ void flatten(TreeNode* root)
 }
 ```
 
-#### [144. Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-preorder-traversal/)
+#### [144. Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-preorder-traversal/) 二叉树前序遍历非递归
 
 ```
-// 二叉树谦虚遍历非递归
+// 二叉树前序遍历非递归
 vector<int> preorderTraversal(TreeNode* root) 
 {
     vector<int> res;
@@ -4624,7 +4629,37 @@ vector<int> preorderTraversal(TreeNode* root)
 }
 ```
 
+#### [145. Binary Tree Postorder Traversal](https://leetcode.com/problems/binary-tree-postorder-traversal/) 二叉树后续非递归遍历
 
+```
+vector<int> postorderTraversal(TreeNode* root) 
+{
+    vector<int> res;
+    if (root == nullptr)
+        return res;
+
+    stack<TreeNode *> s1;
+    stack<TreeNode *> s2;
+    s1.push(root);
+    while(!s1.empty())
+    {
+        root = s1.top();
+        s1.pop();
+        s2.push(root);
+
+        if (root->left)
+            s1.push(root->left);
+        if (root->right)
+            s1.push(root->right);
+    }
+    while(!s2.empty())
+    {
+        res.push_back(s2.top()->val);
+        s2.pop();
+    }
+    return res;
+}
+```
 
 #### [230. Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/)
 
