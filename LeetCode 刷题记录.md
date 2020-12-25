@@ -3992,38 +3992,36 @@ public:
 
 #### [22. Generate Parentheses](https://leetcode.com/problems/generate-parentheses/)
 
-```
-class Solution
+```c++
+class Solution 
 {
-public:
-    void backtrack(vector<string> &res, string &cur, int open, int close, int n)
+    void dfs(vector<string> & res, string &temp, int left, int right, int n)
     {
-        if (cur.size() == 2 * n)
+        if (temp.size() == 2 *n)
         {
-            res.push_back(cur);
+            res.push_back(temp);
             return;
         }
-        if (open < n)
-        {
-            cur.push_back('(');
-            backtrack(res, cur, open + 1, close, n);
-            cur.pop_back();
-        }
 
-        if (close < open)
+        if (left < n)
         {
-            cur.push_back(')');
-            backtrack(res, cur, open, close + 1, n);
-            cur.pop_back();
+            temp.push_back('(');
+            dfs(res, temp, left + 1, right, n);
+            temp.pop_back();
         }
-    }
+        if (right < left)
+        {
+            temp.push_back(')');
+            dfs(res, temp, left, right + 1, n);
+            temp.pop_back();
+        }
+    } 
 
 public:
-    vector<string> generateParenthesis(int n)
-    {
+    vector<string> generateParenthesis(int n) {
         vector<string> res;
-        string current;
-        backtrack(res, current, 0, 0, n);
+        string temp;
+        dfs(res, temp, 0, 0, n);
         return res;
     }
 };
