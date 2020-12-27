@@ -1206,9 +1206,7 @@ public:
     
     int partrition_2(vector<int>& input, int start, int end)
     {
-
-        int small = start - 1;
-
+        int small = start - 1; // small 指向小于区域的最后一个元素
         for(int i = start;i < end; i++)
         {
             if(input[i] < input[end])
@@ -2439,7 +2437,7 @@ int cuttingRope(int n)
 
 ##### [10. Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching/)
 
-```
+```c++
 bool isMatch(string s, string p) 
 {
     int m = s.length();
@@ -2463,7 +2461,7 @@ bool isMatch(string s, string p)
         {
             if (p[j-1] != '*') // 如果p[j-1]的位置不是*的情况下， 如果s[i-1] == p[j-1] || p[j-1] == '.'， 则dp[i][j] 匹配
                 dp[i][j] = dp[i-1][j-1] && (s[i-1] == p[j-1] || p[j-1] == '.');
-            else
+            else  // // (s[i-1] == p[j-2] || '.' == p[j-2]) && dp[i-1][j]; 可以认为p[j-1]直接丢掉
             {
                 dp[i][j] = dp[i][j-2] || (s[i-1] == p[j-2] || '.' == p[j-2]) && dp[i-1][j];
             }            
