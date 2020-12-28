@@ -712,46 +712,6 @@ https://www.cnblogs.com/grandyang/p/5883736.html
 https://www.cnblogs.com/grandyang/p/8850299.html
 ### 二分查找  (6)
 
-#### [33. Search in Rotated Sorted Array ](https://leetcode.com/problems/search-in-rotated-sorted-array/) #todo
-
-```
-int search(vector<int>& nums, int target) 
-{
-    //可以得出出规律，如果中间的数小于最右边的数，则右半段是有序的，若中间数大于最右边数，则左半段是有序的，我们只要在有序的半段里用首尾两个数组来判断目标值是否在这一区域内，这样就可以确定保留哪半边了
-    int l = 0, r = nums.size()-1;
-    while (l <= r) {
-        int mid = (l+r) / 2;
-        if (target == nums[mid])
-            return mid;
-        // there exists rotation; the middle element is in the left part of the array
-        if (nums[mid] > nums[r])
-        {
-            if (target < nums[mid] && target >= nums[l])
-                r = mid - 1;
-            else
-                l = mid + 1;
-        }
-        // there exists rotation; the middle element is in the right part of the array
-        else if (nums[mid] < nums[l])
-        {
-            if (target > nums[mid] && target <= nums[r])
-                l = mid + 1;
-            else
-                r = mid - 1;
-        }
-        // there is no rotation; just like normal binary search
-        else
-        {
-            if (target < nums[mid])
-                r = mid - 1;
-            else
-                l = mid + 1;
-        }
-    }
-    return -1;
-}
-```
-
 #### [34. Find First and Last Position of Element in Sorted Array](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
 ```
@@ -833,56 +793,108 @@ int mySqrt(int x)
 }
 ```
 
+#### [33. Search in Rotated Sorted Array ](https://leetcode.com/problems/search-in-rotated-sorted-array/) #todo
 
+```c++
+int search(vector<int>& nums, int target) 
+{
+    int search(vector<int>& nums, int target) 
+    {
+        int left = 0, right = nums.size() -1;
+        while(left <= right)
+        {
+            int mid = left + (right - left);
+            if (nums[mid] == target)
+                return mid;
+            if (nums[left] <= nums[mid])  // [left, mid] 递增序列
+            {
+                if (nums[left] <= target && target < nums[mid])  // 加等号，因为 left 可能是 target
+                    right = mid - 1; // 在左侧 [left,mid) 查找  因为到了这个地方 num[mid] 已经不可能等于target了
+                else
+                    left = mid + 1;
+            }
+            else // [mid,right] 连续递增
+            {
+                if (nums[mid] < target && target <= nums[right]) // 加等号，因为 right 可能是 target
+                    left = mid + 1; // 在右侧 (mid,right] 查找  因为到了这个地方 num[mid] 已经不可能等于target了
+                else  
+                    right =  mid -1;
+            }
+        }
+        return -1;
+    }
+}
+```
 
 #### [81. Search in Rotated Sorted Array II](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)  #todo
 
-```
+```c++
 bool search(vector<int> &nums, int target)
 {
-    // 如果中间的数小于最右边的数，则右半段是有序的，若中间数大于最右边数，则左半段是有序的。
-    int n = nums.size(), left = 0, right = n - 1;
-    while (left <= right)
+    if (nums.empty())
+        return false;
+
+    int left = 0;
+    int right = nums.size()-1;
+
+    while(left <= right)
     {
-        int mid = (left + right) / 2;
+        int mid = left + (right - left) / 2;
         if (nums[mid] == target)
             return true;
-        if (nums[mid] < nums[right])
+
+        if (nums[mid] < nums[right]) // 说明 [mid...right]是有序的
         {
-            if (nums[mid] < target && nums[right] >= target)
+            if (nums[mid] < target && target <= nums[right])
                 left = mid + 1;
             else
                 right = mid - 1;
         }
-        else if (nums[mid] > nums[right])
+        else if (nums[mid] > nums[right]) // 说明[left...mid]是有序的
         {
-            if (nums[left] <= target && nums[mid] > target)
-                right = mid - 1;
+            if(nums[left] <= target && target < nums[mid])
+                right = mid-1;
             else
                 left = mid + 1;
         }
-        else
-            --right;
-    }
+        else if (nums[mid] == nums[right])
+        {
+            --right;                
+        }
+    }    
     return false;
 }
 ```
 
-#### [153. Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)   while条件 懵逼了
+#### [153. Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)  
+
+![image.png](https://pic.leetcode-cn.com/f4e1d8b0ec3cd903037611666236efb9fd311e3022d12fb7071a995259e564d9-image.png)![image.png](https://pic.leetcode-cn.com/f7a76bf084aa4e3296eacedd0f3845d5a68ee7064a42f2a0affe62054cca1882-image.png)
 
 ```c++
+// 如果数组没有翻转，即 nums[left] <= nums[right]，则 nums[left] 就是最小值，直接返回
+// 若 nums[left] <= nums[mid]，说明区间 [left,mid] 连续递增，则最小元素一定不在这个区间里，可以直接排除。因此，令 left = mid+1，在 [mid+1,right] 继续查找
+//否则，说明区间 [left,mid] 不连续，则最小元素一定在这个区间里。因此，令 right = mid，在 [left,mid] 继续查找
+//[left,right] 表示当前搜索的区间。注意 right 更新时会被设为 mid 而不是 mid-1，因为 mid 无法被排除。这一点和「33 题 查找特定元素」是不同的
+
 int findMin(vector<int> &nums)
 {
-    int left = 0, right = (int)nums.size() - 1;
-    while (left < right)
+    int left = 0;
+    int right = nums.size()  -1;
+    while(left <= right)
     {
-        int mid = left + (right - left) / 2;
-        if (nums[mid] > nums[right])
-            left = mid + 1;
-        else
-            right = mid;
+        if (nums[left] <= nums[right])
+            return nums[left];
+        int mid = left + (right - left ) / 2;
+        if (nums[left] <= nums[mid]) //  [left,mid] 连续递增，则在 [mid+1,right] 查找
+        {
+            left = mid + 1
+        }
+        else // [left,mid] 不连续，在 [left,mid] 查找
+        {
+            right = mid
+        }
     }
-    return nums[right];
+    return -1;
 }
 ```
 
@@ -891,18 +903,27 @@ int findMin(vector<int> &nums)
 ```c++
 int findMin(vector<int> &nums)
 {
-    int left = 0, right = (int)nums.size() - 1;
-    while (left < right)
+    int left = 0;
+    int right = nums.size()  -1;
+    while(left <= right)
     {
-        int mid = left + (right - left) / 2;
-        if (nums[mid] > nums[right])
+        if (nums[left] < nums[right] || left == right)
+            return nums[left];
+        int mid = left + (right - left ) / 2;
+        if (nums[left] < nums[mid]) //  [left,mid] 连续递增，则在 [mid+1,right] 查找
+        {
             left = mid + 1;
-        else if (nums[mid] < nums[right])
+        }
+        else if (nums[left] == nums[mid])
+        {
+            left++;
+        }
+        else // [left,mid] 不连续，在 [left,mid] 查找
+        {
             right = mid;
-        else
-            --right;
+        }
     }
-    return nums[right];
+    return -1;
 }
 ```
 
@@ -1432,7 +1453,7 @@ public:
 
 #### 快慢指针
 
-#### [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/submissions/) todo
+##### [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/submissions/) todo
 
 ```c++
 ListNode* removeNthFromEnd(ListNode* head, int n) 
@@ -5632,6 +5653,10 @@ int maxProduct(vector<int>& nums)
 }
 ```
 
+#### [189. 旋转数组](https://leetcode-cn.com/problems/rotate-array/) #todo
+
+
+
 #### [215. Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/) #todo 堆排序还不会  还可以通过快排partition 搞定
 
 ```
@@ -5703,23 +5728,26 @@ public:
 };
 ```
 
-#### [238. 除自身以外数组的乘积](https://leetcode-cn.com/problems/product-of-array-except-self/)
+#### [238. 除自身以外数组的乘积](https://leetcode-cn.com/problems/product-of-array-except-self/) #todo
 
 ```c++
 //由于最终的结果都是要乘到结果 res 中，所以可以不用单独的数组来保存乘积，而是直接累积到结果 res 中，
 //我们先从前面遍历一遍，将乘积的累积存入结果 res 中，然后从后面开始遍历，用到一个临时变量 right，初始化为1，然后每次不断累积，最终得到正确结果，
-vector<int> productExceptSelf(vector<int>& nums) 
+vector<int> productExceptSelf(vector<int>& nums)
 {
-    vector<int> res(nums.size(), 1);
-    for (int i = 1; i < nums.size(); ++i) 
+    vector<int> res(nums.size());
+    int k = 1;
+    for(int i = 0; i < nums.size(); i++)
     {
-        res[i] = res[i - 1] * nums[i - 1];
+        res[i] = k;
+        k = k * nums[i]; // 此时数组存储的是除去当前元素左边的元素乘积
     }
-    int right = 1;
-    for (int i = nums.size() - 1; i >= 0; --i) 
+
+    k = 1;
+    for(int i = res.size() - 1; i >= 0; i--)
     {
-        res[i] *= right;
-        right *= nums[i];
+        res[i] *= k;// k为该数右边的乘积。
+        k = k * nums[i]; // 此时数组等于左边的 * 该数右边的。
     }
     return res;
 }
