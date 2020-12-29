@@ -1349,7 +1349,7 @@ public:
 };
 ```
 
-#####  [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
+#####  [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/) #Todo 合并的细节
 
 ```c++
 // 解法一
@@ -1423,7 +1423,7 @@ public:
 
 ##### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) (hard 这题还不会)  #todo
 
-```
+```c++
 class Solution {
 public:
      ListNode *reverseKGroup(ListNode *head, int k)
@@ -5595,7 +5595,7 @@ int singleNumber(vector<int> &nums)
 }
 ```
 
-#### [150. Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation/)
+#### [150. Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation/) #Todo 需要敲一遍
 
 ```
 // 逆波兰表达式
@@ -5654,6 +5654,24 @@ int maxProduct(vector<int>& nums)
 ```
 
 #### [189. 旋转数组](https://leetcode-cn.com/problems/rotate-array/) #todo
+
+#### [179. 最大数](https://leetcode-cn.com/problems/largest-number/)
+
+```c++
+string largestNumber(vector<int>& nums) 
+{
+    //对于两个数字a和b来说，如果将其都转为字符串，如果 ab > ba，则a排在前面，比如9和34，由于 934>349，所以9排在前面，
+    // 再比如说 30 和3，由于 303<330，所以3排在 30 的前面。按照这种规则对原数组进行排序后，将每个数字转化为字符串再连接起来就是最终结果
+    string res;
+    sort(nums.begin(), nums.end(), [](int a, int b) {
+       return to_string(a) + to_string(b) > to_string(b) + to_string(a); 
+    });
+    for (int i = 0; i < nums.size(); ++i) {
+        res += to_string(nums[i]);
+    }
+    return res[0] == '0' ? "0" : res;
+}
+```
 
 
 
@@ -5753,7 +5771,7 @@ vector<int> productExceptSelf(vector<int>& nums)
 }
 ```
 
-[334. Increasing Triplet Subsequence](https://leetcode.com/problems/increasing-triplet-subsequence/)
+#### [334. Increasing Triplet Subsequence](https://leetcode.com/problems/increasing-triplet-subsequence/)
 
 ```c++
 // you are fucking genius
@@ -5779,7 +5797,34 @@ bool increasingTriplet(vector<int> &nums)
 }
 ```
 
+#### [384. 打乱数组](https://leetcode-cn.com/problems/shuffle-an-array/)  #Todo: 洗牌算法
 
+```c++
+class Solution {
+public:
+    Solution(vector<int> nums): v(nums) {}
+    
+    /** Resets the array to its original configuration and return it. */
+    vector<int> reset() {
+        return v;
+    }
+    
+    /** Returns a random shuffling of the array. */
+    vector<int> shuffle() 
+    {
+        vector<int> res = v;
+        for (int i = 0; i < res.size(); ++i) 
+        {
+            int t = i + rand() % (res.size() - i);
+            swap(res[i], res[t]);
+        }
+        return res;
+    }
+    
+private:
+    vector<int> v;
+};
+```
 
 #### [454. 四数相加 II](https://leetcode-cn.com/problems/4sum-ii/)
 
