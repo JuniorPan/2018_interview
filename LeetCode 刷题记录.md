@@ -2745,8 +2745,6 @@ int numSquares(int n)
 }
 ```
 
-
-
 ##### [322. Coin Change](https://leetcode.com/problems/coin-change/description/)
 
 ```c++
@@ -5653,8 +5651,6 @@ int maxProduct(vector<int>& nums)
 }
 ```
 
-#### [189. 旋转数组](https://leetcode-cn.com/problems/rotate-array/) #todo
-
 #### [179. 最大数](https://leetcode-cn.com/problems/largest-number/)
 
 ```c++
@@ -5671,6 +5667,24 @@ string largestNumber(vector<int>& nums)
     }
     return res[0] == '0' ? "0" : res;
 }
+```
+
+#### [189. 旋转数组](https://leetcode-cn.com/problems/rotate-array/) #todo
+
+```
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) 
+    {
+        if (nums.empty() || (k %= nums.size()) == 0) 
+            return;
+        int n = nums.size();
+        // todo: 记住reverse是左闭右开的
+        reverse(nums.begin(), nums.begin() + n - k);
+        reverse(nums.begin() + n - k, nums.end());
+        reverse(nums.begin(), nums.end());
+    }
+};
 ```
 
 
