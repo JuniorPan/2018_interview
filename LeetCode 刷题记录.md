@@ -754,8 +754,8 @@ vector<int> dailyTemperatures(vector<int>& T)
     {
         while (!s.empty() && T[i] > T[s.top()]) 
         {
-            int previousIndex = s.top();
-            res[previousIndex] = i - previousIndex;
+            int pre_index = s.top();
+            res[pre_index] = i - pre_index; // 弹出谁就结算谁
             s.pop();
         }
         s.push(i);
