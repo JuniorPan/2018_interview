@@ -5648,6 +5648,30 @@ void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
 
 #### [128. Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence)  不会   298 收费题 树上面的
 
+
+
+#### [128. 最长连续序列](https://leetcode-cn.com/problems/longest-consecutive-sequence/)
+
+```c++
+//使用一个集合HashSet存入所有的数字，然后遍历数组中的每个数字，如果其在集合中存在，那么将其移除，然后分别用两个变量pre和next算出其前一个数跟后一个数，然后在集合中循环查找，如果pre在集合中，那么将pre移除集合，然后pre再自减1，直至pre不在集合之中，对next采用同样的方法，那么next-pre-1就是当前数字的最长连续序列，更新res即
+int longestConsecutive(vector<int>& nums) 
+{
+    int res = 0;
+    unordered_set<int> s(nums.begin(), nums.end());
+    for (int val : nums) {
+        if (!s.count(val)) continue;
+        s.erase(val);
+        int pre = val - 1, next = val + 1;
+        while (s.count(pre)) s.erase(pre--);
+        while (s.count(next)) s.erase(next++);
+        res = max(res, next - pre - 1);
+    }
+    return res;
+}
+```
+
+
+
 #### [136. Single Number](https://leetcode.com/problems/single-number/)  #todo 位运算 还不会
 
 ```
