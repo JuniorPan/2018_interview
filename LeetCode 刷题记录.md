@@ -1,4 +1,5 @@
 # LeetCode 刷题记录
+
 ### 滑动窗口问题 (7)
 核心思想: 我们可以用滑动窗口的思想解决这个问题，在滑动窗口类型的问题中都会有两个指针。一个用于「延伸」现有窗口的 r 指针，和一个用于「收缩」窗口的 l 指针。在任意时刻，只有一个指针运动，而另一个保持静止。我们在 ss上滑动窗口，通过移动 r 指针不断扩张窗口。当窗口包含 t 全部所需的字符后，如果能收缩，我们就收缩窗口直到得到最小窗口。
 <img src="https://assets.leetcode-cn.com/solution-static/76/76_fig1.gif" alt="滑动窗口示意"  />
@@ -702,6 +703,45 @@ int findPeakElement(vector<int>& nums)
 }
 ```
 
+#### [581. 最短无序连续子数组](https://leetcode-cn.com/problems/shortest-unsorted-continuous-subarray/)
+
+```c++
+class Solution {
+public:
+    int findUnsortedSubarray(vector<int>& nums) 
+    {
+        stack<int> stack;
+        int left = nums.size()-1;
+        int right = 0;
+        for(int i = 0; i < nums.size(); i++)
+        {
+            while(!stack.empty() && nums[i] < nums[stack.top()])
+            {
+                int temp = stack.top();
+                stack.pop();
+                left = min(left, temp);
+            }
+            stack.push(i);
+        }
+
+        while(!stack.empty())
+            stack.pop();
+
+        for(int i = nums.size() - 1; i >= 0; i--)
+        {
+            while(!stack.empty() && nums[i] > nums[stack.top()])
+            {
+                int temp = stack.top();
+                stack.pop();
+                right = max(right, temp);
+            }
+            stack.push(i);
+        }
+        return right - left > 0 ? right - left + 1 : 0;
+    }
+};
+```
+
 
 
 #### [402. Remove K Digits](https://leetcode.com/problems/remove-k-digits/) 
@@ -927,54 +967,63 @@ int findMin(vector<int> &nums)
 }
 ```
 
+#### [287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/)
+
+```
+// 解法一: 二分查找
+int findDuplicate(vector<int>& nums) 
+{
+
+    int left = 1, right = nums.size();
+    while (left < right){
+        int mid = left + (right - left) / 2, cnt = 0;
+        for (int num : nums) {
+            if (num <= mid) ++cnt;
+        }
+        if (cnt <= mid) left = mid + 1;
+        else right = mid;
+    }    
+    return right;
+}
+```
+
+
+
 #### [378. 有序矩阵中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-sorted-matrix/)
 
 
 
 <img src="https://assets.leetcode-cn.com/solution-static/378/378_fig3.png" alt="fig3" style="zoom:48%;" />
 
-```
-class Solution
-{
+```c++
+class Solution {
 public:
-	// 计算矩阵中有多少数不大于 mid 计算的是左上角
-    bool check(vector<vector<int>> &matrix, int mid, int k, int n)
-    {
-        int i = n - 1;
-        int j = 0;
-        int num = 0;
-        while (i >= 0 && j < n)
-        {
-            if (matrix[i][j] <= mid)
-            {
-                num += i + 1;
-                j++;
-            }
-            else
-            {
-                i--;
+    // 计算矩阵中有多少个数字小于target
+    int search_less_equal(vector<vector<int>>& matrix, int target) {
+        int n = matrix.size(), i = n - 1, j = 0, res = 0;
+        while (i >= 0 && j < n) {
+            if (matrix[i][j] <= target) {
+                res += i + 1;
+                ++j;
+            } else {
+                --i;
             }
         }
-        return num >= k;
+        return res;
     }
-    // 如果数量不少于 k，那么说明最终答案 x 不大于 mid；
-	// 如果数量少于 kk，那么说明最终答案 x 大于 mid。	
-    int kthSmallest(vector<vector<int>> &matrix, int k)
+
+    int kthSmallest(vector<vector<int>>& matrix, int k) 
     {
-        int n = matrix.size();
-        int left = matrix[0][0];
-        int right = matrix[n-1][n-1];
-        while (left < right)
+        int left = matrix[0][0], 
+        right = matrix.back().back();
+        while (left < right) 
         {
             int mid = left + (right - left) / 2;
-            if (check(matrix, mid, k, n))
-            {
+            int cnt = search_less_equal(matrix, mid);
+            if (cnt < k) 
+                left = mid + 1;
+            else 
                 right = mid;
-            }
-            else
-            {
-                left = mid+1;
-            }
         }
         return left;
     }
@@ -5895,6 +5944,42 @@ int subarraySum(vector<int>& nums, int k)
 
 ### 字符串
 
+
+
+#### [43. 字符串相乘](https://leetcode-cn.com/problems/multiply-strings/) #todo
+
+```
+string multiply(string num1, string num2) 
+{
+    vector<int> res(num1.size()+num2.size(), 0);
+    string      ans;
+
+    for (int i = num1.size()-1; i >= 0; --i) 
+    {
+        for (int j = num2.size()-1; j >= 0; --j)
+        {
+            res[i+j+1] += ((num1[i] - '0') * (num2[j] - '0'));
+            res[i+j] += res[i+j+1]/10;
+            res[i+j+1] %= 10;
+        }
+    }
+
+    bool zero = false;
+    for (auto n : res)
+    {
+        if (n || zero) 
+        {
+            zero = true;
+            ans += to_string(n);
+        }
+    }
+    ans = (ans == "") ? "0" : ans;
+    return ans;
+}
+```
+
+#### [415. 字符串相加](https://leetcode-cn.com/problems/add-strings/) #Todo
+
 #### [49. Group Anagrams](https://leetcode.com/problems/group-anagrams/)
 
 ```
@@ -5948,5 +6033,9 @@ bool isPalindrome(string s)
     return true;
 }
 ```
+
+
+
+
 
 #### 
