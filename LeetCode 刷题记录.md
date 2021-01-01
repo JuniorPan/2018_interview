@@ -742,6 +742,28 @@ public:
 };
 ```
 
+#### [739. 每日温度](https://leetcode-cn.com/problems/daily-temperatures/)
+
+```c++
+vector<int> dailyTemperatures(vector<int>& T) 
+{
+    int n = T.size();
+    vector<int> res(n);
+    stack<int> s;
+    for (int i = 0; i < n; ++i)
+    {
+        while (!s.empty() && T[i] > T[s.top()]) 
+        {
+            int previousIndex = s.top();
+            res[previousIndex] = i - previousIndex;
+            s.pop();
+        }
+        s.push(i);
+    }
+    return res;
+}
+```
+
 
 
 #### [402. Remove K Digits](https://leetcode.com/problems/remove-k-digits/) 
