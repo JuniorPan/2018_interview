@@ -5489,6 +5489,10 @@ vector<int> topKFrequent(vector<int>& nums, int k)
 
 ### 数组
 
+#### [15. 三数之和](https://leetcode-cn.com/problems/3sum/) #Todo
+
+
+
 #### [41. First Missing Positive](https://leetcode.com/problems/first-missing-positive/)
 
 ```c++
@@ -5650,7 +5654,7 @@ void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
 
 
 
-#### [128. 最长连续序列](https://leetcode-cn.com/problems/longest-consecutive-sequence/)
+#### [128. 最长连续序列](https://leetcode-cn.com/problems/longest-consecutive-sequence/) #TODO
 
 ```c++
 //使用一个集合HashSet存入所有的数字，然后遍历数组中的每个数字，如果其在集合中存在，那么将其移除，然后分别用两个变量pre和next算出其前一个数跟后一个数，然后在集合中循环查找，如果pre在集合中，那么将pre移除集合，然后pre再自减1，直至pre不在集合之中，对next采用同样的方法，那么next-pre-1就是当前数字的最长连续序列，更新res即
