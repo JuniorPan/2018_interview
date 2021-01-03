@@ -35,11 +35,9 @@ sort(nums.begin(), nums.end(), [](int a, int b) {
 
 
 
-
-
 #### [380. 常数时间插入、删除和获取随机元素](https://leetcode-cn.com/problems/insert-delete-getrandom-o1/)
 
-#### [114. 二叉树展开为链表](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)
+#### ~~[114. 二叉树展开为链表](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)~~
 
 
 
