@@ -87,3 +87,20 @@ https://www.cnblogs.com/grandyang/p/5849037.html
 #### [406. 根据身高重建队列](https://leetcode-cn.com/problems/queue-reconstruction-by-height/)
 
 #### [437. 路径总和 III](https://leetcode-cn.com/problems/path-sum-iii/)
+
+
+
+#### [8. 字符串转换整数 (atoi)](https://leetcode-cn.com/problems/string-to-integer-atoi/)
+
+#### [124. 二叉树中的最大路径和](https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/)
+
+#### [4. 寻找两个正序数组的中位数](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)
+
+#### [297. 二叉树的序列化与反序列化](https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/)
+
+#### [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)
+
+#### [301. 删除无效的括号](https://leetcode-cn.com/problems/remove-invalid-parentheses/)
+
+#### [312. 戳气球](https://leetcode-cn.com/problems/burst-balloons/)
+

@@ -1,4 +1,4 @@
-# LeetCode 刷题记录
+# sLeetCode 刷题记录
 
 ### 滑动窗口问题 (7)
 核心思想: 我们可以用滑动窗口的思想解决这个问题，在滑动窗口类型的问题中都会有两个指针。一个用于「延伸」现有窗口的 r 指针，和一个用于「收缩」窗口的 l 指针。在任意时刻，只有一个指针运动，而另一个保持静止。我们在 ss上滑动窗口，通过移动 r 指针不断扩张窗口。当窗口包含 t 全部所需的字符后，如果能收缩，我们就收缩窗口直到得到最小窗口。
@@ -619,7 +619,8 @@ int largestRectangleArea(vector<int> &heights)
 }
 ```
 
-#### [85. Maximal Rectangle](https://leetcode.com/problems/maximal-rectangle/)
+#### [85. 最大矩形](https://leetcode-cn.com/problems/maximal-rectangle/)
+
 ```c++
 class Solution {
     
@@ -1718,10 +1719,10 @@ public:
     ListNode *partition(ListNode *head, int x) 
     {
         if (!head) return head;
-        ListNode *dummy = new ListNode(-1);
-        ListNode *newDummy = new ListNode(-1);
-        dummy->next = head;
-        ListNode *cur = dummy, *p = newDummy;
+        ListNode *large_head = new ListNode(-1);
+        ListNode *small_head = new ListNode(-1);
+        large_head->next = head;
+        ListNode *cur = large_head, *p = small_head;
         while (cur->next)
         {
             if (cur->next->val < x)
@@ -1729,15 +1730,14 @@ public:
                 p->next = cur->next;
                 p = p->next;
                 cur->next = cur->next->next;
-                p->next = NULL;
             } 
             else
             {
                 cur = cur->next;
             }
         }
-        p->next = dummy->next;
-        return newDummy->next;
+        p->next = large_head->next;
+        return small_head->next;
     }
 };
 ```
@@ -2613,7 +2613,10 @@ int minDistance(string word1, string word2)
     // dp[i][j] 表示word1[0...i-1] 变换到word2[0...j-1]所需要的最小步骤
     vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0)); // 二维dp数组初始化大小为[m+1][n+1] 是为了初始化第0行和第0列
 
-   
+   for(int i = 0; i <= m; i++)
+        dp[i][0] = i;
+   for(int j = 0; j <=n; j++)
+   		dp[0][j] = j;
 
     for (int i = 1; i <= m; i++)
     {
