@@ -5340,9 +5340,79 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 
 ### 双堆模式
 
-#### [155. Min Stack](https://leetcode.com/problems/min-stack/)
+#### [155. 最小栈](https://leetcode-cn.com/problems/min-stack/)
 
-#### [295 Find-Median-from-Data-Stream](https://leetcode.com/problems/find-median-from-data-stream/)
+```c++
+class MinStack {
+public:
+    stack<int> s1, s2; // s2 辅助栈 用来保存最小元素
+    /** initialize your data structure here. */
+    MinStack() {
+        
+    }
+    
+    void push(int x) 
+    {
+        s1.push(x);
+        if (s2.empty() || x <= s2.top()) s2.push(x);
+    }
+    
+    void pop() {
+        if (s1.top() == s2.top()) s2.pop();
+        s1.pop();
+    }
+    
+    int top() 
+    {
+        return s1.top();
+    }
+    
+    int getMin() 
+    {
+         return s2.top();
+    }
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(x);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
+```
+
+
+
+#### [[295. 数据流的中位数](https://leetcode-cn.com/problems/find-median-from-data-stream/)](https://leetcode.com/problems/find-median-from-data-stream/)
+
+```c++
+class MedianFinder {
+public:
+    priority_queue<long> small, large;
+    /** initialize your data structure here. */
+    MedianFinder() {
+
+    }
+    
+    void addNum(int num) {
+        small.push(num);
+        large.push(-small.top());
+        small.pop();
+        if (small.size() < large.size()) {
+            small.push(-large.top());
+            large.pop();
+        }
+    }
+    
+    double findMedian() {
+        return small.size() > large.size() ? small.top() : 0.5 *(small.top() - large.top());
+    }
+};
+```
+
+
 
 #### [480. Sliding Window Median](https://leetcode.com/problems/sliding-window-median/)
 
