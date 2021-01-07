@@ -1426,7 +1426,7 @@ public:
 };
 ```
 
-#####  [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/) #Todo 合并的细节
+#####  [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/) #Todo 最小堆的做法 需要熟悉STL
 
 ```c++
 // 解法一
@@ -1530,7 +1530,7 @@ public:
 
 #### 快慢指针
 
-##### [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/submissions/) todo
+##### [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/submissions/)  # todo 注意细节
 
 ```c++
 ListNode* removeNthFromEnd(ListNode* head, int n) 
@@ -1544,8 +1544,8 @@ ListNode* removeNthFromEnd(ListNode* head, int n)
     {
         fast = fast->next;
     }
-    // todo: 好像还有点不明白
-    if (fast == nullptr)
+    // todo: 注意细节
+    if (fast == nullptr) // 防止n等链表长度 正好删除第一个节点 
         return head->next;
     while(fast->next)
     {
