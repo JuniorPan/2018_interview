@@ -130,4 +130,150 @@ https://www.nowcoder.com/practice/185a87cd29eb42049132aed873273e83?tpId=191&&tqI
 
 
 
-[88. Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array/)
+#### [88. Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array/)
+
+
+
+
+
+#### [41. First Missing Positive ](https://leetcode.com/problems/first-missing-positive/) #todo
+
+
+
+#### [128. 最长连续序列](https://leetcode-cn.com/problems/longest-consecutive-sequence/)
+
+
+
+```
+    
+ 	int partition(vector<int> &nums, int left, int right)
+    {
+        int small = left -1;
+        for(int i = left; i < right; i++)
+        {
+            if (nums[i] < nums[right])
+                swap(nums[i], nums[++small]);
+        }
+        swap(nums[++small], nums[right]);
+        return small;
+    }
+    // 快排差点忘了。。。
+    void quickSort(vector<int> &nums, int left, int right)
+    {
+        if (left < right)
+        {
+            int index = partition(nums, left, right);
+            quickSort(nums, left, index - 1);
+            quickSort(nums, index + 1, right);
+        }
+    }
+```
+
+https://www.nowcoder.com/practice/f31fc6d3caf24e7f8b4deb5cd9b5fa97?tpId=191&&tqId=35928&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking
+
+```
+bool judgeTotal(TreeNode *root)
+{
+    if(root==nullptr)
+        return false;
+    TreeNode *p = root;
+    queue<TreeNode*> q;
+    q.push(root);
+    while(!q.empty())
+    {
+        p = q.front();
+        q.pop();
+        if(p->left && p->right){
+            q.push(p->left);
+            q.push(p->right);
+        }
+        else if(p->left==nullptr && p->right)
+            return false;
+        else{
+            if(p->left && p->right==nullptr)
+                while(!q.empty()){
+                    p = q.front();
+                    q.pop();
+                    if(p->left || p->right)
+                        return false;
+                }                
+        }
+    }
+    return true;
+}
+```
+
+
+
+
+
+https://www.nowcoder.com/practice/6fbe70f3a51d44fa9395cfc49694404f?tpId=191&&tqId=36127&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking
+
+```
+class Solution {
+public:
+    /**
+     * find median in two sorted array
+     * @param arr1 int整型vector the array1
+     * @param arr2 int整型vector the array2
+     * @return int整型
+     */
+    int findMedianinTwoSortedAray(vector<int>& arr1, vector<int>& arr2) {
+        // write code here
+        
+        int start_1 = 0;
+        int end_1 = arr1.size() -1;
+        
+        int start_2 = 0;
+        int end_2 = arr2.size() -1;
+        
+        int mid_1 = 0;
+        int mid_2 = 0;
+        int offset = 0;
+        
+        while(start_1 < end_1)
+        {
+            mid_1 = start_1 + (end_1 - start_1) / 2;
+            mid_2 = start_2 + (end_2 - start_2) / 2;
+            offset = ((end_1 - start_1+1) & 1 ) ^1;
+            if (arr1[mid_1] == arr2[mid_2])
+            {
+                return arr1[mid_1];
+            }
+            else if (arr1[mid_1] > arr2[mid_2])
+            {
+                start_2 = mid_2 + offset;
+                end_1 = mid_1;
+                
+            }
+            else{
+                start_1 = mid_1 + offset;
+                end_2 = mid_2;
+            }
+        }
+        return min(arr1[start_1], arr2[start_2]);
+    }
+};
+```
+
+
+
+https://www.nowcoder.com/practice/e8a1b01a2df14cb2b228b30ee6a92163?tpId=191&&tqId=36300&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking
+
+
+
+#### [169. 多数元素](https://leetcode-cn.com/problems/majority-element/)
+
+投票法先将第一个数字假设为过半数，然后把计数器设为1，比较下一个数和此数是否相等，若相等则计数器加一，反之减一。然后看此时计数器的值，若为零，则将下一个值设为候选过半数。
+
+
+
+
+
+#### [20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/)
+
+
+
+#### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
+
+难度困难835

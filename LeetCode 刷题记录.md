@@ -1503,16 +1503,21 @@ public:
 ```c++
 class Solution {
 public:
-     ListNode *reverseKGroup(ListNode *head, int k)
+       ListNode *reverseKGroup(ListNode *head, int k)
     {
         ListNode *dummy = new ListNode(-1), *pre = dummy, *cur = pre;
         dummy->next = head;
         int num = 0;
-        while (cur = cur->next)
+        while (cur)
+        {
             ++num;
-        while (num >= k)
+            cur = cur->next;
+        }
+            
+        while (num > k)
         {
             cur = pre->next;
+            //  // 一次摘下节点然后 使用头插法
             for (int i = 1; i < k; ++i)
             {
                 ListNode *t = cur->next;
@@ -1559,7 +1564,7 @@ ListNode* removeNthFromEnd(ListNode* head, int n)
 
 
 
-##### [61. Rotate List](https://leetcode.com/problems/rotate-list/)
+##### [61. Rotate List](https://leetcode.com/problems/rotate-list/)  #todo
 
 ```c++
 ListNode *rotateRight(ListNode *head, int k)
@@ -1711,6 +1716,67 @@ void reorderList(ListNode *head)
     st.top()->next = NULL;
 }
 ```
+
+#### [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
+
+```
+/**
+ * struct ListNode {
+ *	int val;
+ *	struct ListNode *next;
+ * };
+ */
+
+class Solution {
+public:
+    /**
+     * 
+     * @param head ListNode类 the head
+     * @return bool布尔型
+     */
+    ListNode * reverse(ListNode *head)
+    {
+        ListNode *pre = nullptr;
+        ListNode *cur = head;
+        while(cur)
+        {
+            ListNode *temp = cur->next;
+            cur->next = pre;
+            pre = cur;
+            cur = temp;
+        }
+        return pre;
+    }
+    bool isPail(ListNode* head) {
+        // write code here
+        
+        if (head->next == nullptr || head->next->next == nullptr)
+            return head;
+        ListNode *fast = head;
+        ListNode *slow = head;
+        // 找到中间结点的前一个
+        while(fast->next && fast->next->next)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        
+        slow->next = reverse(slow->next);
+        
+        slow = slow->next;
+        while (slow != NULL)
+        {
+            if (head->val != slow->val)
+                return false;
+            head = head->next;
+            slow = slow->next;
+        }
+        return true;
+    }
+};
+```
+
+
 
 #### 链表排序  
 
@@ -2633,7 +2699,7 @@ int minDistance(string word1, string word2)
             }
             else
             {
-                dp[i][j] = min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1])) + 1; // 分别对应的增加，删除，修改操作
+                dp[i][j] = min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1])) + 1; //dp[i-1][j-1] 表示替换操作，dp[i-1][j] 表示删除操作，dp[i][j-1] 表示插入操作。
             }
         }
     }
@@ -5571,7 +5637,7 @@ vector<int> topKFrequent(vector<int>& nums, int k)
 
 
 
-#### [41. First Missing Positive](https://leetcode.com/problems/first-missing-positive/)
+#### [41. First Missing Positive ](https://leetcode.com/problems/first-missing-positive/) #todo
 
 ```c++
 int firstMissingPositive(vector<int> &nums)
