@@ -266,6 +266,36 @@ https://www.nowcoder.com/practice/e8a1b01a2df14cb2b228b30ee6a92163?tpId=191&&tqI
 
 投票法先将第一个数字假设为过半数，然后把计数器设为1，比较下一个数和此数是否相等，若相等则计数器加一，反之减一。然后看此时计数器的值，若为零，则将下一个值设为候选过半数。
 
+```c++
+int majorityElement(vector<int>& nums) 
+{
+    // 投票法先将第一个数字假设为过半数，然后把计数器设为1，比较下一个数和此数是否相等，若相等则计数器加一，反之减一。然后看此时计数器的值，若为零，则将下一个值设为候选过半数。
+    int n = nums.size();
+    if (n <= 0)
+        return 0;
+    int count = 0;
+    int res;
+
+    for(int i = 0; i < nums.size(); i++)
+    {
+        if (count == 0)
+        {
+            res = nums[i];
+            count ++;
+        }
+        else if (nums[i] == res)
+        {
+            count ++;
+        }
+        else
+        {
+            count--;
+        }
+    }
+    return res;
+}
+```
+
 
 
 
