@@ -276,4 +276,124 @@ https://www.nowcoder.com/practice/e8a1b01a2df14cb2b228b30ee6a92163?tpId=191&&tqI
 
 #### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
 
+```c++
+ListNode* reverseKGroup(ListNode* head, int k) 
+{
+    ListNode *fakeHead = new ListNode(-1);
+    fakeHead->next = head;
+
+    ListNode *pre = fakeHead;
+    ListNode *cur = fakeHead;
+
+    int num = 0;
+    while(cur->next)
+    {
+        ++num;
+        cur = cur->next;
+    }   
+    while(num >= k)
+    {
+        cur = pre->next;
+
+        for(int i = 1; i < k; i++)
+        {
+            // 把cur后面的一个节点temp摘下来，然后用头插法插入到pre后面
+            ListNode *temp = cur->next;
+            cur->next = temp->next;
+            temp->next = pre->next;
+            pre->next = temp;
+        }
+        pre = cur;
+        num -= k;
+    }
+    return fakeHead->next;
+}
+```
+
 难度困难835
+
+
+
+#### 中间结点的前一个
+
+```c++
+ListNode *fast = head;
+ListNode *slow = head;
+// 如果链表个数为奇数，那么直接找到了中间结点，如果是偶数则是中间结点的前一个
+while(fast->next && fast->next->next)
+{
+    slow = slow->next;
+    fast = fast->next->next;
+}
+```
+
+https://www.nowcoder.com/practice/c215ba61c8b1443b996351df929dc4d4?tpId=191&&tqId=36121&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking
+
+
+
+#### [剑指 Offer 49. 丑数](https://leetcode-cn.com/problems/chou-shu-lcof/)
+
+```c++
+int nthUglyNumber(int index) 
+{
+    if(index == 0)
+        return 0;
+    vector<int> res(1, 1);
+    int i2 = 0, i3 = 0, i5 = 0;
+    // (1) 1x2,  2x2, 2x2, 3x2, 3x2, 4x2, 5x2...
+    // (2) 1x3,  1x3, 2x3, 2x3, 2x3, 3x3, 3x3...
+    // (3) 1x5,  1x5, 1x5, 1x5, 2x5, 2x5, 2x5...
+    while (res.size() < index) 
+    {
+        int m2 = res[i2] * 2, m3 = res[i3] * 3, m5 = res[i5] * 5;
+        int mn = min(m2, min(m3, m5)); // 用来记录是哪个数产生的下个丑数
+        if (mn == m2) ++i2;
+        if (mn == m3) ++i3;
+        if (mn == m5) ++i5;
+        res.push_back(mn);
+    }
+    return res.back();
+}
+```
+
+
+
+KMP next数组
+
+
+
+[43. 字符串相乘](https://leetcode-cn.com/problems/multiply-strings/) #todo
+
+```
+class Solution {
+public:
+    string multiply(string num1, string num2) 
+    {
+
+        if (num1 == "0" || num2 == "0")
+            return "0";
+
+        vector<int> temp(num1.size() + num2.size());
+        string res;
+        for(int i = num1.size()-1; i >= 0; i--)
+        {
+            for(int j = num2.size()-1; j >= 0; j--)
+            {
+                temp[i+j+1] += ((num1[i] - '0') * (num2[j] - '0'));
+                temp[i+j] += temp[i+j+1]/10;
+                temp[i+j+1] %= 10;
+            }
+        }
+        for(int i = 0; i < temp.size(); i++)
+        {
+            if (i == 0 && temp[0] == 0)
+                continue;
+            else
+                res += to_string(temp[i]);
+        }
+
+        return res == "" ? "0" :res;
+    }
+};
+```
+
