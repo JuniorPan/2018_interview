@@ -565,3 +565,44 @@ public:
 };
 ```
 
+
+
+
+
+#### [最长公共子串](https://www.nowcoder.com/practice/f33f5adc55f444baa0e0ca87ad8a6aac?tpId=188&&tqId=37034&rp=1&ru=/activity/oj&qru=/ta/job-code-high-week/question-ranking)
+
+```
+
+string LCS(string str1, string str2) 
+{
+    // write code here
+    if (str1.empty() || str2.empty())
+        return "-1";
+    int m = str1.size();
+    int n = str2.size();
+    vector<vector<int>> dp(m+1, vector<int>(n+1,0));
+    int max_len = INT_MIN;
+    int max_right = 0;
+    for(int i = 1; i <= m; i++)
+    {
+        for(int j = 1; j <= n; j++)
+        {
+            if (str1[i-1] == str2[j-1])
+                dp[i][j] = dp[i-1][j-1] + 1;
+
+            if(dp[i][j] > max_len)
+            {
+                max_len = dp[i][j];
+                max_right = i;
+            }
+        }
+    }
+
+   if(max_len==0)return "-1";
+   return str1.substr(max_right-max_len,max_len);
+}
+
+
+```
+
+#### [14. 最长公共前缀](https://leetcode-cn.com/problems/longest-common-prefix/)
