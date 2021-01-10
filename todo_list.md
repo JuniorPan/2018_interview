@@ -33,6 +33,19 @@ sort(nums.begin(), nums.end(), [](int a, int b) {
 
 #### [384. 打乱数组](https://leetcode-cn.com/problems/shuffle-an-array/)  #Todo: 洗牌算法
 
+```
+vector<int> shuffle() 
+{
+    vector<int> res = v;
+    for (int i = 0; i < res.size(); ++i) 
+    {
+        int t = i + rand() % (res.size() - i);
+        swap(res[i], res[t]);
+    }
+    return res;
+}
+```
+
 
 
 #### [380. 常数时间插入、删除和获取随机元素](https://leetcode-cn.com/problems/insert-delete-getrandom-o1/)
@@ -47,9 +60,9 @@ sort(nums.begin(), nums.end(), [](int a, int b) {
 
 #### [96. 不同的二叉搜索树](https://leetcode-cn.com/problems/unique-binary-search-trees/)
 
-#### [221. 最大正方形](https://leetcode-cn.com/problems/maximal-square/)
+#### [221. 最大正方形](https://leetcode-cn.com/problems/maximal-square/) #TODO
 
-#### [1277. 统计全为 1 的正方形子矩阵](https://leetcode-cn.com/problems/count-square-submatrices-with-all-ones/)
+#### [1277. 统计全为 1 的正方形子矩阵](https://leetcode-cn.com/problems/count-square-submatrices-with-all-ones/) #TODO
 
 https://leetcode-cn.com/problems/count-square-submatrices-with-all-ones/solution/tong-ji-quan-wei-1-de-zheng-fang-xing-zi-ju-zhen-2/
 
@@ -57,9 +70,36 @@ https://leetcode-cn.com/problems/count-square-submatrices-with-all-ones/solution
 
 #### [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)
 
+#### [213. 打家劫舍 II](https://leetcode-cn.com/problems/house-robber-ii/)
+
 #### [337. 打家劫舍 III](https://leetcode-cn.com/problems/house-robber-iii/)
 
-#### [213. 打家劫舍 II](https://leetcode-cn.com/problems/house-robber-ii/)
+```c++
+// 那么对于某一个节点，如果其左子节点存在，通过递归调用函数，算出不包含左子节点返回的值，
+// 同理，如果右子节点存在，算出不包含右子节点返回的值，那么此节点的最大值可能有两种情况，一种是该节点值加上不包含左子节点和右子节点的返回值之和，
+// 另一种是左右子节点返回值之和不包含当期节点值，取两者的较大值返回即可
+int dfs(TreeNode *root, unordered_map<TreeNode*, int> &m) 
+{
+    if (!root) return 0;
+    if (m.count(root)) return m[root];
+    int val = 0;
+    if (root->left) {
+        val += dfs(root->left->left, m) + dfs(root->left->right, m);
+    }
+    if (root->right) {
+        val += dfs(root->right->left, m) + dfs(root->right->right, m);
+    }
+    val = max(val + root->val, dfs(root->left, m) + dfs(root->right, m));
+    m[root] = val;
+    return val;
+}
+
+int rob(TreeNode* root) 
+{
+    unordered_map<TreeNode*, int> m;
+    return dfs(root, m);
+}
+```
 
 
 
