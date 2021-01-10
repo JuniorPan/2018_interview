@@ -1717,7 +1717,7 @@ void reorderList(ListNode *head)
 }
 ```
 
-#### [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
+##### [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
 
 ```
 /**
@@ -5023,9 +5023,7 @@ bool hasPathSum(TreeNode *root, int sum)
 }
 ```
 
-
-
-#### [113. Path Sum II](https://leetcode.com/problems/path-sum-ii/)（和[剑指 Offer 34. 二叉树中和为某一值的路径](https://leetcode-cn.com/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/)一样）
+#### [113. 路径总和 II](https://leetcode-cn.com/problems/path-sum-ii/)（和[剑指 Offer 34. 二叉树中和为某一值的路径](https://leetcode-cn.com/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/)一样）
 
 ```c++
 // **本质上还是回溯**
@@ -5042,7 +5040,6 @@ public:
         {
             res.push_back(temp);
         }
-
         dfs(node->left, sum - node->val, temp, res);
         dfs(node->right, sum - node->val, temp, res);
         temp.pop_back();
@@ -5056,6 +5053,38 @@ public:
     }
 };
 ```
+
+#### [437. 路径总和 III](https://leetcode-cn.com/problems/path-sum-iii/)
+
+```c++
+// 本质上还是回溯
+// 每一个节点都有记录了一条从根节点到当前节点到路径 path
+// 用一个变量 curSum 记录路径节点总和，然后看 curSum 和 sum 是否相等，相等的话结果 res 加1，
+// 不等的话继续查看子路径和有没有满足题意的，做法就是每次去掉一个节点，看路径和是否等于给定值
+int pathSum(TreeNode* root, int sum) 
+{
+    int res = 0;
+    vector<TreeNode*> temp;
+    dfs(root, sum, 0, temp, res);
+    return res;
+}
+void dfs(TreeNode* node, int sum, int curSum, vector<TreeNode*>& temp, int& res) {
+    if (!node) return;
+    curSum += node->val;
+    temp.push_back(node);
+    if (curSum == sum) ++res;
+    int t = curSum;
+    for (int i = 0; i < temp.size() - 1; ++i) {
+        t -= temp[i]->val;
+        if (t == sum) ++res;
+    }
+    dfs(node->left, sum, curSum, temp, res);
+    dfs(node->right, sum, curSum, temp, res);
+    temp.pop_back();
+}
+```
+
+
 
 #### [124. Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/) todo: 还不是很懂
 

@@ -105,6 +105,41 @@ https://www.cnblogs.com/grandyang/p/5849037.html
 
 #### [297. 二叉树的序列化与反序列化](https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/)
 
+```c++
+class Codec {
+    TreeNode* de(istringstream& iss)
+    {
+        TreeNode* root = NULL;
+        string word;
+        if (iss >> word && word != "null") {
+            root = new TreeNode(stoi(word));
+            root->left = de(iss);
+            root->right = de(iss);
+        }
+        return root;
+    }
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        if (root == NULL)
+        {
+            return "null";
+        }
+        else
+            return to_string(root->val) + " " + serialize(root->left) + " " + serialize(root->right);
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        istringstream iss(data);
+        return de(iss);
+    }
+};
+```
+
+
+
 #### [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)
 
 #### [301. 删除无效的括号](https://leetcode-cn.com/problems/remove-invalid-parentheses/)
@@ -115,7 +150,7 @@ https://www.cnblogs.com/grandyang/p/5849037.html
 
 
 
-#### **[295. 数据流的中位数](https://leetcode-cn.com/problems/find-median-from-data-stream/)**
+#### **[295. 数据流的中位数](https://leetcode-cn.com/problems/find-median-from-data-stream/)** # TODO
 
 ```c++
 关于addNum 逻辑还不是很懂
@@ -186,8 +221,9 @@ int firstMissingPositive(vector<int> &nums)
 
 #### [128. 最长连续序列](https://leetcode-cn.com/problems/longest-consecutive-sequence/)
 
-```
-int longestConsecutive(vector<int>& nums) {
+```c++
+int longestConsecutive(vector<int>& nums) 
+{
     int res = 0;
     unordered_set<int> s(nums.begin(), nums.end());
     for(int i = 0; i < nums.size(); i++)
@@ -226,7 +262,7 @@ int partition(vector<int> &nums, int left, int right)
 void quickSort(vector<int> &nums, int left, int right)
 {
     if (left < right)
-    {z
+    {
         int index = partition(nums, left, right);
         quickSort(nums, left, index - 1);
         quickSort(nums, index + 1, right);
