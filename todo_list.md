@@ -115,7 +115,7 @@ https://www.cnblogs.com/grandyang/p/5849037.html
 
 
 
-#### [295. 数据流的中位数](https://leetcode-cn.com/problems/find-median-from-data-stream/)
+#### **[295. 数据流的中位数](https://leetcode-cn.com/problems/find-median-from-data-stream/)**
 
 ```c++
 关于addNum 逻辑还不是很懂
@@ -125,6 +125,25 @@ priority_queue
 
 
 https://www.nowcoder.com/practice/185a87cd29eb42049132aed873273e83?tpId=191&&tqId=36660&rp=1&ru=/ta/job-code-high-algorithm&qru=/ta/job-code-high-algorithm/question-ranking
+
+```
+ int dfs(TreeNode * root, int sum)
+{
+    if (root == nullptr)
+        return 0;
+    sum = 10 * sum + root->val;
+    if (root->left == nullptr && root->right == nullptr)
+        return sum;
+    return dfs(root->left, sum) + dfs(root->right, sum);
+}
+
+int sumNumbers(TreeNode* root) {
+    // write code here
+    if(!root) return 0;
+    int sum = 0;
+    return dfs(root, sum);
+}
+```
 
 
 
@@ -138,38 +157,84 @@ https://www.nowcoder.com/practice/185a87cd29eb42049132aed873273e83?tpId=191&&tqI
 
 #### [41. First Missing Positive ](https://leetcode.com/problems/first-missing-positive/) #todo
 
+```
+int firstMissingPositive(vector<int> &nums)
+{
+    //思路是把1放在数组第一个位置 nums[0]，2放在第二个位置 nums[1]，即需要把 nums[i] 放在 nums[nums[i] - 1]上，\
+    // 遍历整个数组，如果 nums[i] != i + 1, 而 nums[i] 为整数且不大于n，另外 nums[i] 不等于 nums[nums[i] - 1] 的话，
+    // 将两者位置调换，如果不满足上述条件直接跳过，最后再遍历一遍数组，如果对应位置上的数不正确则返回正确的数
+    int n = nums.size();
+    for (int i = 0; i < n; ++i)
+    {
+        while (nums[i] > 0 && nums[i] <= n && nums[nums[i] - 1] != nums[i])
+        {
+            swap(nums[i], nums[nums[i] - 1]);
+        }
+    }
+    for (int i = 0; i < n; ++i)
+    {
+        if (nums[i] != i + 1)
+            return i + 1;
+    }
+    return n + 1;
+}
+```
+
+
+
 
 
 #### [128. 最长连续序列](https://leetcode-cn.com/problems/longest-consecutive-sequence/)
 
-
-
 ```
-    
- 	int partition(vector<int> &nums, int left, int right)
+int longestConsecutive(vector<int>& nums) {
+    int res = 0;
+    unordered_set<int> s(nums.begin(), nums.end());
+    for(int i = 0; i < nums.size(); i++)
     {
-        int small = left -1;
-        for(int i = left; i < right; i++)
-        {
-            if (nums[i] < nums[right])
-                swap(nums[i], nums[++small]);
-        }
-        swap(nums[++small], nums[right]);
-        return small;
+        // if (!s.count(val)) continue;
+        if(s.find(nums[i]) != s.end())
+            s.erase(nums[i]);
+        int pre = nums[i] - 1, next = nums[i] + 1;
+        while (s.count(pre)) s.erase(pre--);
+        while (s.count(next)) s.erase(next++);
+        res = max(res, next - pre - 1);
     }
-    // 快排差点忘了。。。
-    void quickSort(vector<int> &nums, int left, int right)
-    {
-        if (left < right)
-        {
-            int index = partition(nums, left, right);
-            quickSort(nums, left, index - 1);
-            quickSort(nums, index + 1, right);
-        }
-    }
+    return res;
+}
 ```
 
-https://www.nowcoder.com/practice/f31fc6d3caf24e7f8b4deb5cd9b5fa97?tpId=191&&tqId=35928&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking
+
+
+
+
+#### 快速排序
+
+```c++
+int partition(vector<int> &nums, int left, int right)
+{
+    int small = left -1;
+    for(int i = left; i < right; i++)
+    {
+        if (nums[i] < nums[right])
+            swap(nums[i], nums[++small]);
+    }
+    swap(nums[++small], nums[right]);
+    return small;
+}
+// 快排差点忘了。。。
+void quickSort(vector<int> &nums, int left, int right)
+{
+    if (left < right)
+    {z
+        int index = partition(nums, left, right);
+        quickSort(nums, left, index - 1);
+        quickSort(nums, index + 1, right);
+    }
+}
+```
+
+#### [判断一棵二叉树是否完全二叉树](https://www.nowcoder.com/practice/f31fc6d3caf24e7f8b4deb5cd9b5fa97?tpId=191&&tqId=35928&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking)
 
 ```
 bool judgeTotal(TreeNode *root)
@@ -205,11 +270,9 @@ bool judgeTotal(TreeNode *root)
 
 
 
+#### [ 在两个长度相等的排序数组中找到上中位数](https://www.nowcoder.com/practice/6fbe70f3a51d44fa9395cfc49694404f?tpId=191&&tqId=36127&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking) # Todo
 
-
-https://www.nowcoder.com/practice/6fbe70f3a51d44fa9395cfc49694404f?tpId=191&&tqId=36127&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking
-
-```
+```c++
 class Solution {
 public:
     /**
@@ -246,7 +309,8 @@ public:
                 end_1 = mid_1;
                 
             }
-            else{
+            else
+            {
                 start_1 = mid_1 + offset;
                 end_2 = mid_2;
             }
@@ -258,9 +322,7 @@ public:
 
 
 
-https://www.nowcoder.com/practice/e8a1b01a2df14cb2b228b30ee6a92163?tpId=191&&tqId=36300&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking
-
-
+[数组中出现次数超过一半的数字](https://www.nowcoder.com/practice/e8a1b01a2df14cb2b228b30ee6a92163?tpId=191&&tqId=36300&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking)
 
 #### [169. 多数元素](https://leetcode-cn.com/problems/majority-element/)
 
