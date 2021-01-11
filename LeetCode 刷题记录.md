@@ -861,7 +861,7 @@ int mySqrt(int x)
 }
 ```
 
-#### [33. Search in Rotated Sorted Array ](https://leetcode.com/problems/search-in-rotated-sorted-array/) #todo
+#### [33. 搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/) #todo
 
 ```c++
 int search(vector<int>& nums, int target) 
@@ -995,23 +995,26 @@ int findMin(vector<int> &nums)
 }
 ```
 
-#### [287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/)
+#### [287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/) #TODOz
 
-```
+```c++
 // 解法一: 二分查找
 int findDuplicate(vector<int>& nums) 
 {
-
+    // 把1~n的数的数字从中间的数字mid分为两部分, 1~mid, mid+1~n;
+    // 如果1~mid中的数据数目超过mid,那么1~mid中间肯定存在重复数字，否则mid+1~n肯定存在重复数字
     int left = 1, right = nums.size();
     while (left < right){
         int mid = left + (right - left) / 2, cnt = 0;
         for (int num : nums) {
             if (num <= mid) ++cnt;
         }
+        // 根据抽屉原理，小于等于 4 的个数如果严格大于 4 个
+        // 此时重复元素一定出现在 [1, 4] 区间里
         if (cnt <= mid) left = mid + 1;
-        else right = mid;
+        else right = mid;   // 重复元素位于区间 [left, mid]
     }    
-    return right;
+    return left;
 }
 ```
 
@@ -1648,7 +1651,7 @@ bool hasCycle(ListNode *head)
 ```
 
 
-##### [143. Reorder List](https://leetcode.com/problems/reorder-list/)
+##### [143. Reorder List](https://leetcode.com/problems/reorder-list/) #TODO
 
 ```
 /* 
