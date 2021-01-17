@@ -4384,7 +4384,9 @@ public:
 };
 ```
 
-#### [78. Subsets](https://leetcode.com/problems/subsets/)
+#### [78. 子集](https://leetcode-cn.com/problems/subsets/)
+
+
 
 <img src="https://pic.leetcode-cn.com/1600557223-hvNyjD-image.png" alt="image.png" style="zoom:67%;" />
 
@@ -4481,7 +4483,7 @@ public:
 
 
 
-#### [93. Restore IP Addresses](https://leetcode.com/problems/restore-ip-addresses/)
+#### [[93. 复原IP地址](https://leetcode-cn.com/problems/restore-ip-addresses/)](https://leetcode.com/problems/restore-ip-addresses/)
 
 ```
 class Solution

@@ -620,3 +620,9 @@ https://www.nowcoder.com/practice/c56f6c70fb3f4849bc56e33ff2a50b6b?tpId=117&&tqI
 #### [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
 
 https://www.nowcoder.com/practice/046a55e6cd274cffb88fc32dba695668?tpId=117&&tqId=35041&&companyId=665&rp=1&ru=/company/home/code/665&qru=/ta/job-code-high/question-ranking
+
+
+
+#### [78. 子集](https://leetcode-cn.com/problems/subsets/)
+
+#### [93. 复原IP地址](https://leetcode-cn.com/problems/restore-ip-addresses/)
