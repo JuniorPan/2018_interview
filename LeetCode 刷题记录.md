@@ -20,7 +20,7 @@ while (right < s.size()) {
 }
 ```
 
-#### [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
+#### [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/) #todo
 
 ```c++
  // 维护了一个滑动窗口，窗口内的都是没有重复的字符，需要尽可能的扩大窗口的大小。由于窗口在不停向右滑动，所以只关心每个字符最后出现的位置，并建立映射。窗口的右边界就是当前遍历到的字符的位置，为了求出窗口的大小，需要一个变量 left 来指向滑动窗口的左边界，这样，如果当前遍历到的字符从未出现过，那么直接扩大右边界，如果之前出现过，那么就分两种情况，在或不在滑动窗口内，如果不在滑动窗口内，那么就没事，当前字符可以加进来，如果在的话，就需要先在滑动窗口内去掉这个已经出现过的字符了，去掉的方法并不需要将左边界 left 一位一位向右遍历查找，由于 HashMap 已经保存了该重复字符最后出现的位置，所以直接移动 left 指针就可以了。维护一个结果 res，每次用出现过的窗口大小来更新结果 res，就可以得到最终结果
@@ -70,7 +70,7 @@ public:
 };
 ```
 
-####  [76. Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/)
+#### [76. 最小覆盖子串](https://leetcode-cn.com/problems/minimum-window-substring/)
 
 ```
 string minWindow(string s, string t) 
@@ -107,7 +107,7 @@ string minWindow(string s, string t)
 }
 ```
 
-#### [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/)  
+#### [239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)
 
 ```c++
 vector<int> maxSlidingWindow(vector<int> &nums, int k)
@@ -126,7 +126,7 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
             q.pop_back();
         q.push_back(i);  // 入队列相当于窗口多了一个数
 
-        if (q.front() == i - k) // 检查队首元素是否过期，如果过期则弹出
+        if (q.front() <= i - k) // 检查队首元素是否过期，如果过期则弹出
             q.pop_front();
 
         if (i >= k - 1)  // 开始形成窗口
