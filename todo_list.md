@@ -510,6 +510,20 @@ while(fast->next && fast->next->next)
 }
 ```
 
+#### 找到第n个节点 从0开始 如果n=3 那么会走到第4个节点上
+
+```
+   找到第n个节点 从0开始 如果n=3 那么会走到第4个节点上
+   for(int i = 0; i < n; i++)
+    {
+        fast = fast->next;
+    }
+```
+
+
+
+
+
 https://www.nowcoder.com/practice/c215ba61c8b1443b996351df929dc4d4?tpId=191&&tqId=36121&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking
 
 

@@ -1448,7 +1448,9 @@ public:
 };
 ```
 
-##### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/) (hard 这题还不会)  #todo
+##### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
+
+难度困难856(hard 这题还不会)  #todo
 
 ```c++
 class Solution {
@@ -1514,7 +1516,7 @@ ListNode* removeNthFromEnd(ListNode* head, int n)
 
 
 
-##### [61. Rotate List](https://leetcode.com/problems/rotate-list/)  #todo
+#### [61. 旋转链表](https://leetcode-cn.com/problems/rotate-list/)  #todo
 
 ```c++
 ListNode *rotateRight(ListNode *head, int k)
@@ -1704,7 +1706,7 @@ public:
             return head;
         ListNode *fast = head;
         ListNode *slow = head;
-        // 找到中间结点的前一个
+        // 找到中间结点 slow 中间结点或者是中间结点的前一个
         while(fast->next && fast->next->next)
         {
             slow = slow->next;
@@ -1730,7 +1732,7 @@ public:
 
 #### 链表排序  
 
-##### [86. Partition List](https://leetcode.com/problems/partition-list/)  # todo?
+##### [[86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)](https://leetcode.com/problems/partition-list/)  # todo?
 
 ```c++
  // 将所有小于给定值的节点取出组成一个新的链表，此时原链表中剩余的节点的值都大于或等于给定值，只要将原链表直接接在新链表后
@@ -1856,9 +1858,9 @@ ListNode *sortList(ListNode *head)
 }
 ```
 
-#### 原地链表翻转
+#### 原地链表翻转 #todo  看到这里了
 
-##### [2. Add Two Numbers](https://leetcode.com/problems/add-two-numbers/submissions/)
+##### [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
 
 ```
 ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
@@ -1889,40 +1891,46 @@ ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
 
 
 
-##### [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/)
+##### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
+
+难度困难856
 
 ```c++
 // 每k组翻转
-ListNode *reverseKGroup(ListNode *head, int k)
+ListNode* reverseKGroup(ListNode* head, int k) 
 {
-    ListNode *dummy = new ListNode(-1), *pre = dummy, *cur = pre;
-    dummy->next = head;
-    int num = -1;
-    // 统计链表长度,因为是从假的头结点开始所以num从-1开始
-    while (cur)
+    ListNode *fakeHead = new ListNode(-1);
+    fakeHead->next = head;
+
+    ListNode *pre = fakeHead;
+    ListNode *cur = fakeHead;
+
+    int num = 0;
+    while(cur->next)
     {
         ++num;
         cur = cur->next;
-    }
-    while (num >= k)
+    }   
+    while(num >= k)
     {
         cur = pre->next;
-        for (int i = 1; i < k; ++i)
+
+        for(int i = 1; i < k; i++)
         {
-            // 这个地方相当于头插法
-            ListNode *t = cur->next;
-            cur->next = t->next;
-            t->next = pre->next;
-            pre->next = t;
+            // 把cur后面的一个节点temp摘下来，然后用头插法插入到pre后面
+            ListNode *temp = cur->next;
+            cur->next = temp->next;
+            temp->next = pre->next;
+            pre->next = temp;
         }
         pre = cur;
         num -= k;
     }
-    return dummy->next;
+    return fakeHead->next;
 }
 ```
 
-##### [92. Reverse Linked List II](https://leetcode.com/problems/reverse-linked-list-ii/)
+##### [92. 反转链表 II](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
 
 ```c++
 ListNode *reverseBetween(ListNode *head, int m, int n)
@@ -2073,7 +2081,7 @@ ListNode *removeNthFromEnd(ListNode *head, int n)
     if (!head->next)
         return nullptr;
     ListNode *pre = head, *cur = head;
-    for (int i = 0; i < n; ++i)  // cur节点先走n步
+    for (int i = 0; i < n; ++i)  // cur节点先走n+1步
         cur = cur->next;
     if (!cur)
         return head->next;
