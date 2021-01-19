@@ -3210,7 +3210,7 @@ int longestPalindromeSubseq(string s)
 
 ##### [647. Palindromic Substrings](https://leetcode.com/problems/palindromic-substrings/)
 
-```
+```c++
 int countSubstrings(string s)
 {
     int n = s.size();
@@ -3390,10 +3390,6 @@ public:
     }
 };
 ```
-
-
-
-
 
 #### [139. Word Break](https://leetcode.com/problems/word-break/)  回溯+记忆化搜索
 
@@ -3656,6 +3652,7 @@ int longestIncreasingPath(vector<vector<int>>& matrix)
     return longest;    
 }
 ```
+
 #### [377. Combination Sum IV](https://leetcode.com/problems/combination-sum-iv/submissions/)  #todo 优化成动态规划
 
 <img src="https://pic.leetcode-cn.com/fa278029267fedeb06686b784bd322f16b2abf6b61987dc3b5257630570cd38f-377-1.png" alt="377-1.png" style="zoom: 50%;" />
@@ -3948,13 +3945,7 @@ Node *connect(Node *root)
 }
 ```
 
-
-
-
-
-
-
-#### [127. Word Ladder I ](https://leetcode.com/problems/word-ladder/)   todo: 还有种解法不是很懂
+#### [127. Word Ladder I](https://leetcode.com/problems/word-ladder/)   todo: 还有种解法不是很懂
 
 ```c++
 //用BFS来求最短路径的长度
