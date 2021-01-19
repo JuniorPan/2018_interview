@@ -779,7 +779,7 @@ https://www.cnblogs.com/grandyang/p/5883736.html
 https://www.cnblogs.com/grandyang/p/8850299.html
 ### 二分查找  (6)
 
-#### [34. Find First and Last Position of Element in Sorted Array](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+#### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
 ```
 class Solution
@@ -965,7 +965,7 @@ int findMin(vector<int> &nums)
 }
 ```
 
-#### [154. Find Minimum in Rotated Sorted Array II](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)  while条件 懵逼了
+#### [154. Find Minimum in Rotated Sorted Array II](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)  
 
 ```c++
 int findMin(vector<int> &nums)

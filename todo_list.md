@@ -651,3 +651,7 @@ https://www.nowcoder.com/practice/046a55e6cd274cffb88fc32dba695668?tpId=117&&tqI
 
 
 #### [581. 最短无序连续子数组](https://leetcode-cn.com/problems/shortest-unsorted-continuous-subarray/)
+
+
+
+#### [287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/)
