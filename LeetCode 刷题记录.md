@@ -25,21 +25,26 @@ while (right < s.size()) {
 }
 ```
 
-#### [3. Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/description/) 不会
+#### [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
 
-```
+```c++
  // 维护了一个滑动窗口，窗口内的都是没有重复的字符，需要尽可能的扩大窗口的大小。由于窗口在不停向右滑动，所以只关心每个字符最后出现的位置，并建立映射。窗口的右边界就是当前遍历到的字符的位置，为了求出窗口的大小，需要一个变量 left 来指向滑动窗口的左边界，这样，如果当前遍历到的字符从未出现过，那么直接扩大右边界，如果之前出现过，那么就分两种情况，在或不在滑动窗口内，如果不在滑动窗口内，那么就没事，当前字符可以加进来，如果在的话，就需要先在滑动窗口内去掉这个已经出现过的字符了，去掉的方法并不需要将左边界 left 一位一位向右遍历查找，由于 HashMap 已经保存了该重复字符最后出现的位置，所以直接移动 left 指针就可以了。维护一个结果 res，每次用出现过的窗口大小来更新结果 res，就可以得到最终结果
-int lengthOfLongestSubstring(string s)
+int lengthOfLongestSubstring(string s) 
 {
-    vector<int> m(128, -1);
-    //  res 用来记录最长无重复子串的长度，left 指向该无重复子串左边的起始位置的前一个
-    int res = 0, left = -1;
-    // [left...i] 维护了一个窗口
-    for (int i = 0; i < s.size(); ++i)
+    int res = 0, n = s.size();
+    //窗口的右边界就是当前遍历到的字符的位置，为了求出窗口的大小，需要一个变量 left 来指向滑动窗口的左边界
+    int left = -1; // left 指向该无重复子串左边的起始位置的前一个
+    //如果当前遍历到的字符从未出现过，那么直接扩大右边界，如果之前出现过，那么就分两种情况，在或不在滑动窗口内，如果不在滑动窗口内，那么就没事，当前字符可以加进来，如果在的话，就需要先在滑动窗口内去掉这个已经出现过的字符了，去掉的方法并不需要将左边界 left 一位一位向右遍历查找，由于 HashMap 已经保存了该重复字符最后出现的位置，所以直接移动 left 指针就可以了
+    unordered_map<int, int> m;
+    for (int i = 0; i < n; ++i) 
     {
-        left = max(left, m[s[i]]);
+        //两个条件 m.count(s[i]) && m[s[i]] > left，因为一旦当前字符 s[i] 在 HashMap 已经存在映射，说明当前的字符已经出现过了，而若 m[s[i]] > left 成立，说明之前出现过的字符在窗口内，那么如果要加上当前这个重复的字符，就要移除之前的那个，所以让 left 赋值为 m[s[i]]，由于 left 是窗口左边界的前一个位置
+        if (m.count(s[i]) && m[s[i]] > left) 
+        {
+            left = m[s[i]];  
+        }
         m[s[i]] = i;
-        res = max(res, i - left);
+        res = max(res, i - left);            
     }
     return res;
 }
@@ -861,7 +866,7 @@ int mySqrt(int x)
 }
 ```
 
-#### [33. Search in Rotated Sorted Array ](https://leetcode.com/problems/search-in-rotated-sorted-array/) #todo
+#### [33. 搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/) #todo
 
 ```c++
 int search(vector<int>& nums, int target) 
@@ -995,23 +1000,26 @@ int findMin(vector<int> &nums)
 }
 ```
 
-#### [287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/)
+#### [287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/) #TODOz
 
-```
+```c++
 // 解法一: 二分查找
 int findDuplicate(vector<int>& nums) 
 {
-
+    // 把1~n的数的数字从中间的数字mid分为两部分, 1~mid, mid+1~n;
+    // 如果1~mid中的数据数目超过mid,那么1~mid中间肯定存在重复数字，否则mid+1~n肯定存在重复数字
     int left = 1, right = nums.size();
     while (left < right){
         int mid = left + (right - left) / 2, cnt = 0;
         for (int num : nums) {
             if (num <= mid) ++cnt;
         }
+        // 根据抽屉原理，小于等于 4 的个数如果严格大于 4 个
+        // 此时重复元素一定出现在 [1, 4] 区间里
         if (cnt <= mid) left = mid + 1;
-        else right = mid;
+        else right = mid;   // 重复元素位于区间 [left, mid]
     }    
-    return right;
+    return left;
 }
 ```
 
@@ -1426,7 +1434,7 @@ public:
 };
 ```
 
-#####  [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/) #Todo 合并的细节
+#####  [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/) #Todo 最小堆的做法 需要熟悉STL
 
 ```c++
 // 解法一
@@ -1503,16 +1511,21 @@ public:
 ```c++
 class Solution {
 public:
-     ListNode *reverseKGroup(ListNode *head, int k)
+       ListNode *reverseKGroup(ListNode *head, int k)
     {
         ListNode *dummy = new ListNode(-1), *pre = dummy, *cur = pre;
         dummy->next = head;
         int num = 0;
-        while (cur = cur->next)
+        while (cur)
+        {
             ++num;
-        while (num >= k)
+            cur = cur->next;
+        }
+            
+        while (num > k)
         {
             cur = pre->next;
+            //  // 一次摘下节点然后 使用头插法
             for (int i = 1; i < k; ++i)
             {
                 ListNode *t = cur->next;
@@ -1530,7 +1543,7 @@ public:
 
 #### 快慢指针
 
-##### [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/submissions/) todo
+##### [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/submissions/)  # todo 注意细节
 
 ```c++
 ListNode* removeNthFromEnd(ListNode* head, int n) 
@@ -1544,8 +1557,8 @@ ListNode* removeNthFromEnd(ListNode* head, int n)
     {
         fast = fast->next;
     }
-    // todo: 好像还有点不明白
-    if (fast == nullptr)
+    // todo: 注意细节
+    if (fast == nullptr) // 防止n等链表长度 正好删除第一个节点 
         return head->next;
     while(fast->next)
     {
@@ -1559,7 +1572,7 @@ ListNode* removeNthFromEnd(ListNode* head, int n)
 
 
 
-##### [61. Rotate List](https://leetcode.com/problems/rotate-list/)
+##### [61. Rotate List](https://leetcode.com/problems/rotate-list/)  #todo
 
 ```c++
 ListNode *rotateRight(ListNode *head, int k)
@@ -1642,7 +1655,12 @@ bool hasCycle(ListNode *head)
 }
 ```
 
+<<<<<<< HEAD
 ##### [143. Reorder List](https://leetcode.com/problems/reorder-list/)
+=======
+
+##### [143. Reorder List](https://leetcode.com/problems/reorder-list/) #TODO
+>>>>>>> 9cf3040b944c5883cc7d64e928f5f28d689220d4
 
 ```
 /* 
@@ -1710,6 +1728,67 @@ void reorderList(ListNode *head)
     st.top()->next = NULL;
 }
 ```
+
+##### [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
+
+```
+/**
+ * struct ListNode {
+ *	int val;
+ *	struct ListNode *next;
+ * };
+ */
+
+class Solution {
+public:
+    /**
+     * 
+     * @param head ListNode类 the head
+     * @return bool布尔型
+     */
+    ListNode * reverse(ListNode *head)
+    {
+        ListNode *pre = nullptr;
+        ListNode *cur = head;
+        while(cur)
+        {
+            ListNode *temp = cur->next;
+            cur->next = pre;
+            pre = cur;
+            cur = temp;
+        }
+        return pre;
+    }
+    bool isPail(ListNode* head) {
+        // write code here
+        
+        if (head->next == nullptr || head->next->next == nullptr)
+            return head;
+        ListNode *fast = head;
+        ListNode *slow = head;
+        // 找到中间结点的前一个
+        while(fast->next && fast->next->next)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        
+        slow->next = reverse(slow->next);
+        
+        slow = slow->next;
+        while (slow != NULL)
+        {
+            if (head->val != slow->val)
+                return false;
+            head = head->next;
+            slow = slow->next;
+        }
+        return true;
+    }
+};
+```
+
+
 
 #### 链表排序  
 
@@ -2632,7 +2711,7 @@ int minDistance(string word1, string word2)
             }
             else
             {
-                dp[i][j] = min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1])) + 1; // 分别对应的增加，删除，修改操作
+                dp[i][j] = min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1])) + 1; //dp[i-1][j-1] 表示替换操作，dp[i-1][j] 表示删除操作，dp[i][j-1] 表示插入操作。
             }
         }
     }
@@ -4314,7 +4393,9 @@ public:
 };
 ```
 
-#### [78. Subsets](https://leetcode.com/problems/subsets/)
+#### [78. 子集](https://leetcode-cn.com/problems/subsets/)
+
+
 
 <img src="https://pic.leetcode-cn.com/1600557223-hvNyjD-image.png" alt="image.png" style="zoom:67%;" />
 
@@ -4411,7 +4492,7 @@ public:
 
 
 
-#### [93. Restore IP Addresses](https://leetcode.com/problems/restore-ip-addresses/)
+#### [[93. 复原IP地址](https://leetcode-cn.com/problems/restore-ip-addresses/)](https://leetcode.com/problems/restore-ip-addresses/)
 
 ```
 class Solution
@@ -4956,9 +5037,7 @@ bool hasPathSum(TreeNode *root, int sum)
 }
 ```
 
-
-
-#### [113. Path Sum II](https://leetcode.com/problems/path-sum-ii/)（和[剑指 Offer 34. 二叉树中和为某一值的路径](https://leetcode-cn.com/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/)一样）
+#### [113. 路径总和 II](https://leetcode-cn.com/problems/path-sum-ii/)（和[剑指 Offer 34. 二叉树中和为某一值的路径](https://leetcode-cn.com/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/)一样）
 
 ```c++
 // **本质上还是回溯**
@@ -4975,7 +5054,6 @@ public:
         {
             res.push_back(temp);
         }
-
         dfs(node->left, sum - node->val, temp, res);
         dfs(node->right, sum - node->val, temp, res);
         temp.pop_back();
@@ -4989,6 +5067,38 @@ public:
     }
 };
 ```
+
+#### [437. 路径总和 III](https://leetcode-cn.com/problems/path-sum-iii/)
+
+```c++
+// 本质上还是回溯
+// 每一个节点都有记录了一条从根节点到当前节点到路径 path
+// 用一个变量 curSum 记录路径节点总和，然后看 curSum 和 sum 是否相等，相等的话结果 res 加1，
+// 不等的话继续查看子路径和有没有满足题意的，做法就是每次去掉一个节点，看路径和是否等于给定值
+int pathSum(TreeNode* root, int sum) 
+{
+    int res = 0;
+    vector<TreeNode*> temp;
+    dfs(root, sum, 0, temp, res);
+    return res;
+}
+void dfs(TreeNode* node, int sum, int curSum, vector<TreeNode*>& temp, int& res) {
+    if (!node) return;
+    curSum += node->val;
+    temp.push_back(node);
+    if (curSum == sum) ++res;
+    int t = curSum;
+    for (int i = 0; i < temp.size() - 1; ++i) {
+        t -= temp[i]->val;
+        if (t == sum) ++res;
+    }
+    dfs(node->left, sum, curSum, temp, res);
+    dfs(node->right, sum, curSum, temp, res);
+    temp.pop_back();
+}
+```
+
+
 
 #### [124. Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/) todo: 还不是很懂
 
@@ -5570,7 +5680,7 @@ vector<int> topKFrequent(vector<int>& nums, int k)
 
 
 
-#### [41. First Missing Positive](https://leetcode.com/problems/first-missing-positive/)
+#### [41. First Missing Positive ](https://leetcode.com/problems/first-missing-positive/) #todo
 
 ```c++
 int firstMissingPositive(vector<int> &nums)
