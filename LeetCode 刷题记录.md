@@ -2529,15 +2529,13 @@ int cuttingRope(int n)
 }
 ```
 
-
-
 #### 3.双序列动态规划  (7)
 
-**状态: f\[i][j]表示第一个sequence的前i个数字/字符, 配上第二个sequence的前j个; **
+**状态: f\[i][j]表示第一个sequence的前i个数字/字符, 配上第二个sequence的前j个;**
 
-**方程: f\[i][j] = 研究第i个和第j个的匹配关系; **
+**方程: f\[i][j] = 研究第i个和第j个的匹配关系;**
 
-**初始化: f\[i][0]和f\[0][i]; **
+**初始化: f\[i][0]和f\[0][i];**
 
 **答案: f\[n][m], 其中n = s1.length(); m = s2.length();**
 
@@ -2799,17 +2797,17 @@ int longestCommonSubsequence(string word1, string word2)
 }
 ```
 
-
 #### 4.划分型动态规划 （1）
+
 ***状态: f[i]表示前i个元素的最大值; 方程: f[i] = 前i个元素里面选一个区间的最大值; 初始化: f[0]; 答案: f[n - 1]***
 
 ##### [188. Best Time to Buy and Sell Stock IV](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/)
 
-
 #### 5.背包型动态规划 （5）
+
 **特点: 1). 用值作为DP维度, 2). DP过程就是填写矩阵, 3). 可以滚动数组优化 状态: f\[i][S]前i个物品, 取出一些能否组成和为S; 方程: f\[i][S] = f\[i-1][S-a[i]] or f\[i-1][S]; 初始化: f\[i][0]=true; f\[0][1...target]=false; 答案: 检查所有f\[n][j]**
 
-[279. Perfect Squares](https://leetcode.com/problems/perfect-squares/)
+##### [279. Perfect Squares](https://leetcode.com/problems/perfect-squares/)
 
 ```c++
 int numSquares(int n) 
