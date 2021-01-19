@@ -252,7 +252,7 @@ bool checkInclusion(string s1, string s2)
 
 todo: 11和42的区别
 
-#### [11. Container With Most Water](https://leetcode.com/problems/container-with-most-water/)
+#### [11. 盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/)
 
 ```c++
 int maxArea(vector<int>& height)
@@ -275,8 +275,7 @@ int maxArea(vector<int>& height)
 }
 ```
 
-
-#### [42. Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/)
+#### [42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/) #todo
 
 ```
 // 解法二：还不太懂

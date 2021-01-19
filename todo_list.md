@@ -645,3 +645,9 @@ https://www.nowcoder.com/practice/046a55e6cd274cffb88fc32dba695668?tpId=117&&tqI
 
 
 #### [剑指 Offer 53 - II. 0～n-1中缺失的数字](https://leetcode-cn.com/problems/que-shi-de-shu-zi-lcof/)
+
+
+
+
+
+#### [581. 最短无序连续子数组](https://leetcode-cn.com/problems/shortest-unsorted-continuous-subarray/)
