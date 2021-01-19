@@ -463,7 +463,7 @@ int trap(vector<int>& height)
     if (height.empty())
         return 0;
     
-    int res = 0;
+    * int res = 0;
     int i = 0;
     stack<int> monoStack;
     while( i < height.size())
@@ -5031,7 +5031,6 @@ public:
 ```
 
 #### [437. Path Sum III](https://leetcode.com/problems/path-sum-iii/submissions/)
-
 ```c++
 class Solution
 {
@@ -5071,9 +5070,7 @@ public:
 ```
 
 [剑指 Offer 26. 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
-
 [剑指 Offer 33. 二叉搜索树的后序遍历序列](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/)
-
 [剑指 Offer 54. 二叉搜索树的第k大节点](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/)(inorder)
 
 ### 树和链表结合 (3)
@@ -5154,13 +5151,11 @@ class Solution
         }
         ListNode *mid = head;
         ListNode *fast = head;
-
         // 寻找中间结点
         while(fast->next != tail && fast->next->next != tail )
         {
             mid = mid->next;
             fast = fast->next->next;
-            
         }
         TreeNode *root = new TreeNode(mid->val);
         root->left = sortedListToBST(head, mid);
@@ -5171,7 +5166,7 @@ class Solution
 public:
     TreeNode *sortedListToBST(ListNode *head)
     {
-        return sortedListToBST(head, NULL);
+        return sortedListToBST(head, nullptr);
     }
 };
 ```
