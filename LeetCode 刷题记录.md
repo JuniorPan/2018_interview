@@ -1,10 +1,11 @@
-# sLeetCode 刷题记录
+# LeetCode 刷题记录
 
 ### 滑动窗口问题 (7)
+
 核心思想: 我们可以用滑动窗口的思想解决这个问题，在滑动窗口类型的问题中都会有两个指针。一个用于「延伸」现有窗口的 r 指针，和一个用于「收缩」窗口的 l 指针。在任意时刻，只有一个指针运动，而另一个保持静止。我们在 ss上滑动窗口，通过移动 r 指针不断扩张窗口。当窗口包含 t 全部所需的字符后，如果能收缩，我们就收缩窗口直到得到最小窗口。
 <img src="https://assets.leetcode-cn.com/solution-static/76/76_fig1.gif" alt="滑动窗口示意"  />
 
-```
+```c++
 // 基本框架
 int left = 0, right = 0;
 while (right < s.size()) {
@@ -49,7 +50,7 @@ int lengthOfLongestSubstring(string s)
 
 #### [53. Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
 
-```
+```c++
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) 
@@ -72,7 +73,7 @@ public:
 
 #### [76. 最小覆盖子串](https://leetcode-cn.com/problems/minimum-window-substring/)
 
-```
+```c++
 string minWindow(string s, string t) 
 {
     vector<int> m(128,0);  // m 可以理解 需要多少个 如m[a] = -1,说明多了一个a, m[a] = 0,正好， m[a]=1说明缺一个a
@@ -136,9 +137,9 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
 }
 ```
 
-#### [424. Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/)   
+#### [424. Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/)
 
-见https://www.cnblogs.com/grandyang/p/5999050.html 
+见https://www.cnblogs.com/grandyang/p/5999050.html
 
 ```c++
 /*
@@ -184,9 +185,8 @@ int characterReplacement(string s, int k)
     }
     return res;
 }
-
-
 ```
+
 #### [438. Find All Anagrams in a String](https://leetcode.com/problems/find-all-anagrams-in-a-string/)
 
 ```c++
@@ -277,7 +277,7 @@ int maxArea(vector<int>& height)
 
 #### [42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/) #todo
 
-```
+```c++
 // 解法二：还不太懂
 int trap(vector<int>& height) 
  {
@@ -367,11 +367,9 @@ public:
 };
 ```
 
+#### [167. Two Sum II - Input array is sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/submissions/)
 
-
-####  [167. Two Sum II - Input array is sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/submissions/)
-
-```
+```c++
 vector<int> twoSum(vector<int>& numbers, int target)
 {
     //使用双指针，一个指针指向值较小的元素，一个指针指向值较大的元素。指向较小元素的指针从头向尾遍历，指向较大元素的指针从尾向头遍历。
@@ -430,7 +428,7 @@ bool searchMatrix(vector<vector<int>> &matrix, int target)
 
 #### [524. Longest Word in Dictionary through Deleting](https://leetcode.com/problems/longest-word-in-dictionary-through-deleting/)  #todo
 
-```
+```c++
 string findLongestWord(string s, vector<string> &d)
 {
     string res = "";
@@ -458,7 +456,7 @@ string findLongestWord(string s, vector<string> &d)
 
 **单调栈的两种写法**   [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
 
-```
+```c++
 // 写法一
 int trap(vector<int>& height) 
 {
@@ -510,7 +508,6 @@ int largestRectangleArea(vector<int> height)
     return res;
 }
 ```
-
 
 #### [42. Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/)
 
@@ -599,9 +596,9 @@ int trap(vector<int>& height)
     }
    return res;
 }
-
 ```
-####  [84. Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/) 
+
+#### [84. Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/)
 
 ```c++
 int largestRectangleArea(vector<int> &heights)
@@ -677,9 +674,10 @@ public:
     }
 };
 ```
+
 #### [162. Find Peak Element](https://leetcode.com/problems/find-peak-element)
 
-```
+```c++
 int findPeakElement(vector<int>& nums) 
 {
     if (nums.empty())
@@ -769,19 +767,19 @@ vector<int> dailyTemperatures(vector<int>& T)
 }
 ```
 
-
-
-#### [402. Remove K Digits](https://leetcode.com/problems/remove-k-digits/) 
+#### [402. Remove K Digits](https://leetcode.com/problems/remove-k-digits/)
 
 https://www.cnblogs.com/grandyang/p/5883736.html
 
 #### [768. Max Chunks To Make Sorted II](https://leetcode.com/problems/max-chunks-to-make-sorted-ii/)
-https://www.cnblogs.com/grandyang/p/8850299.html
+
+<https://www.cnblogs.com/grandyang/p/8850299.html>
+
 ### 二分查找  (6)
 
 #### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
-```
+```c++
 class Solution
 {   
     // 找第一个大于等于target的值得位置
@@ -1017,11 +1015,7 @@ int findDuplicate(vector<int>& nums)
 }
 ```
 
-
-
 #### [378. 有序矩阵中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-sorted-matrix/)
-
-
 
 <img src="https://assets.leetcode-cn.com/solution-static/378/378_fig3.png" alt="fig3" style="zoom:48%;" />
 
@@ -1060,11 +1054,9 @@ public:
 };
 ```
 
+#### [704. Binary Search](https://leetcode.com/problems/binary-search/)
 
-
-#### [704. Binary Search ](https://leetcode.com/problems/binary-search/)
-
-```
+```c++
 int search(vector<int> &nums, int target)
 {
     int left = 0, right = nums.size();
@@ -1081,9 +1073,6 @@ int search(vector<int> &nums, int target)
     return -1;
 }
 ```
-
-
-
 
 ```c++
 
@@ -1113,9 +1102,10 @@ int find(vector<int>& nums, int target) {
 ### 排序 (3)
 
 #### 归并排序
+
 ##### [493. Reverse Pairs](https://leetcode.com/problems/reverse-pairs/)
 
-```
+```c++
 class Solution
 {
     int merge(vector<int> &arr, int left, int mid, int right)
@@ -1191,9 +1181,9 @@ public:
 
 #### 快速排序
 
-##### [75. Sort Colors](https://leetcode.com/problems/sort-colors/) 快排partion 
+##### [75. Sort Colors](https://leetcode.com/problems/sort-colors/) 快排partion
 
-```
+```c++
 class Solution
 {
 public:
@@ -1376,7 +1366,7 @@ public:
 };
 ```
 
-#####  [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/) #Todo 最小堆的做法 需要熟悉STL
+##### [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/) #Todo 最小堆的做法 需要熟悉STL
 
 ```c++
 // 解法一
@@ -1514,8 +1504,6 @@ ListNode* removeNthFromEnd(ListNode* head, int n)
 }
 ```
 
-
-
 ##### [61. 旋转链表](https://leetcode-cn.com/problems/rotate-list/)  #todo
 
 ```c++
@@ -1549,7 +1537,8 @@ ListNode *rotateRight(ListNode *head, int k)
 ```
 
 ##### [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
-```
+
+```c++
 bool hasCycle(ListNode *head) 
 {
     if (head == nullptr || head->next == nullptr || head->next->next == nullptr)
@@ -1599,10 +1588,9 @@ bool hasCycle(ListNode *head)
 }
 ```
 
-
 ##### [143. Reorder List](https://leetcode.com/problems/reorder-list/) #TODO
 
-```
+```c++
 /* 
 解法一: 
 1. 使用快慢指针来找到链表的中点，并将链表从中点处断开，形成两个独立的链表。
@@ -1671,7 +1659,7 @@ void reorderList(ListNode *head)
 
 ##### [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
 
-```
+```c++
 /**
  * struct ListNode {
  *	int val;
@@ -1728,8 +1716,6 @@ public:
 };
 ```
 
-
-
 #### 链表排序  
 
 ##### [86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)](https://leetcode.com/problems/partition-list/)  # todo?
@@ -1767,7 +1753,7 @@ public:
 
 ##### [147. Insertion Sort List](https://leetcode.com/problems/insertion-sort-list/)  对链表使用插入排序
 
-```
+```c++
 ListNode *insertionSortList(ListNode *head)
 {
     if (head == nullptr)
@@ -1862,7 +1848,7 @@ ListNode *sortList(ListNode *head)
 
 ##### [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
 
-```
+```c++
 ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
 {
     ListNode *fakeHead = new ListNode(-1), *cur = fakeHead;
@@ -2175,7 +2161,7 @@ int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
 
 ##### [64. Minimum Path Sum](https://leetcode.com/problems/minimum-path-sum/)
 
-```
+```c++
 int minPathSum(vector<vector<int>> &grid)
 {
     int m = grid.size();
@@ -2222,10 +2208,9 @@ int climbStairs(int n)
 }
 ```
 
-
 ##### [120. Triangle](https://leetcode.com/problems/triangle/) #todo
 
-```
+```c++
 
 int minimumTotal(vector<vector<int>>& triangle) 
 {
@@ -2634,7 +2619,7 @@ bool isMatch(string s, string p)
 
 ##### [72. Edit Distance](https://leetcode.com/problems/edit-distance/)   #todo 增删改对应的到底是哪个
 
-```
+```c++
 int minDistance(string word1, string word2)
 {
     int m = word1.size();
@@ -2701,7 +2686,6 @@ bool isInterleave(string s1, string s2, string s3)
     return dp[m][n];
 }
 ```
-
 
 ##### [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/)  
 
@@ -4011,11 +3995,9 @@ int ladderLength(string beginWord, string endWord, vector<string> &wordList)
 }
 ```
 
-
-
 #### [207. Course Schedule](https://leetcode.com/problems/course-schedule/)【拓扑排序】
 
-```
+```c++
  bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) 
 {
     vector<vector<int>> graph(numCourses); // 构建图 领接表的形式
@@ -4053,25 +4035,15 @@ int ladderLength(string beginWord, string endWord, vector<string> &wordList)
 }
 ```
 
-
-
 #### [297. Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)
-
-
-
-
-
-
 
 ### 回溯  (13)
 
 #### [17. Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/)
 
-
-
 ![1573829897(1).jpg](https://pic.leetcode-cn.com/02b0ec926e3da5f12a0a118293b8ac10dc236741ccb04414ded44a30f7fc70af-1573829897(1).jpg)
 
-```
+```c++
 //Input: digits = "23"
 //Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
 class Solution 
@@ -4108,7 +4080,6 @@ public:
     }
 };
 ```
-
 
 #### [22. Generate Parentheses](https://leetcode.com/problems/generate-parentheses/)
 
@@ -4168,7 +4139,7 @@ public:
         for(int i = start; i < candidates.size(); i++)
         {
             if(target - candidates[i] < 0)
-            	break;
+                break;
             temp.push_back(candidates[i]);
             backtrack(candidates, target - candidates[i], temp, res, i); // i表示每个数字可以用多次
             temp.pop_back();
@@ -4265,14 +4236,13 @@ public:
 };
 ```
 
-
 #### [47. Permutations II](https://leetcode.com/problems/permutations-ii/)  同40
 
-```
+```c++
 class Solution 
 {  
 public: 
-	void dfs(vector<vector<int>> &res, vector<int> &temp, vector<int> &nums, vector<bool> &uesd, int start)
+    void dfs(vector<vector<int>> &res, vector<int> &temp, vector<int> &nums, vector<bool> &uesd, int start)
     {
 
         if (temp.size() == nums.size())
@@ -4341,12 +4311,9 @@ public:
 
 #### [78. 子集](https://leetcode-cn.com/problems/subsets/)
 
-
-
 <img src="https://pic.leetcode-cn.com/1600557223-hvNyjD-image.png" alt="image.png" style="zoom:67%;" />
 
 ![image.png](https://pic.leetcode-cn.com/1600565878-FTjJsK-image.png)
-
 
 ```c++
 class Solution 
@@ -4406,7 +4373,7 @@ public:
 
 #### [90. Subsets II](https://leetcode.com/problems/subsets-ii/)
 
-```
+```c++
 class Solution 
 {
     void dfs(vector<int>& nums, int start, vector<int>& temp, vector<vector<int>>& res)
@@ -4435,12 +4402,9 @@ public:
 };
 ```
 
+#### [93. 复原IP地址](https://leetcode-cn.com/problems/restore-ip-addresses/)
 
-
-
-#### [[93. 复原IP地址](https://leetcode-cn.com/problems/restore-ip-addresses/)](https://leetcode.com/problems/restore-ip-addresses/)
-
-```
+```c++
 class Solution
 {
 public:
@@ -4532,7 +4496,7 @@ public:
 
 <img src="https://pic.leetcode-cn.com/2f0982c37f7681f16fe290f89df77660597b828a4038689b563f40eaa4958fa8-image.png" alt="image.png" style="zoom: 50%;" />
 
-```
+```c++
 class Solution
 {
 public:
@@ -4592,8 +4556,6 @@ public:
     }
 };
 ```
-
-
 
 #### [140. Word Break II](https://leetcode.com/problems/word-break-ii/) 注意和139的区别
 
@@ -4661,7 +4623,7 @@ vector<string> wordBreak(string s, vector<string>& wordDict)
 }
 ```
 
-###  二叉树 (3)
+### 二叉树 (3)
 
 #### [94. Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal/) 二叉树中序遍历非递归
 
@@ -4720,7 +4682,7 @@ bool isValidBST(TreeNode* root)
 }
 ```
 
-####  [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)  二叉树前序遍历非递归
+#### [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)  二叉树前序遍历非递归
 
 ```c++
 void flatten(TreeNode* root) 
@@ -4752,7 +4714,7 @@ void flatten(TreeNode* root)
 
 #### [144. Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-preorder-traversal/) 二叉树前序遍历非递归
 
-```
+```c++
 // 二叉树前序遍历非递归
 vector<int> preorderTraversal(TreeNode* root) 
 {
@@ -4780,7 +4742,7 @@ vector<int> preorderTraversal(TreeNode* root)
 
 #### [145. Binary Tree Postorder Traversal](https://leetcode.com/problems/binary-tree-postorder-traversal/) 二叉树后续非递归遍历
 
-```
+```c++
 vector<int> postorderTraversal(TreeNode* root) 
 {
     vector<int> res;
@@ -4843,7 +4805,7 @@ int kthSmallest(TreeNode* root, int k)
 
 #### [235. Lowest Common Ancestor of a Binary Search Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
 
-```
+```c++
 TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 {
     //如果跟节点的值 比pq都大,那么最近公共祖先只能在左子树上，否则在右子树上，只有当root->val 在pq之间的话，root才是最近公共祖先
@@ -4875,10 +4837,10 @@ TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 
 #### [236. Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/)
 
-```
+```c++
 TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 {
-	// 看当前结点是否为空，若为空则直接返回空，若为p或q中的任意一个，也直接返回当前结点。否则的话就对其左右子结点分别调用递归函数，由于这道题限制了p和q一定都在二叉树中存在，那么如果当前结点不等于p或q，p和q要么分别位于左右子树中，要么同时位于左子树，或者同时位于右子树
+    // 看当前结点是否为空，若为空则直接返回空，若为p或q中的任意一个，也直接返回当前结点。否则的话就对其左右子结点分别调用递归函数，由于这道题限制了p和q一定都在二叉树中存在，那么如果当前结点不等于p或q，p和q要么分别位于左右子树中，要么同时位于左子树，或者同时位于右子树
     if (root == nullptr || root == p || root == q)
         return root;
     TreeNode *left = lowestCommonAncestor(root->left, p, q);
@@ -4897,7 +4859,7 @@ TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 
 #### [100. Same Tree](https://leetcode.com/problems/same-tree/)
 
-```
+```c++
 bool isSameTree(TreeNode *p, TreeNode *q)
 {
     if (p == nullptr && q == nullptr)
@@ -4917,7 +4879,7 @@ bool isSameTree(TreeNode *p, TreeNode *q)
 
 #### [101. Symmetric Tree](https://leetcode.com/problems/symmetric-tree/)
 
-```
+```c++
 class Solution
 {
     bool isSymmetricTree(TreeNode *root1, TreeNode *root2)
@@ -4944,7 +4906,7 @@ public:
 
 #### [104. Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
 
-```
+```c++
 int maxDepth(TreeNode* root)
 {
     if (root == NULL)
@@ -5044,8 +5006,6 @@ void dfs(TreeNode* node, int sum, int curSum, vector<TreeNode*>& temp, int& res)
 }
 ```
 
-
-
 #### [124. Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/) todo: 还不是很懂
 
 ```c++
@@ -5080,8 +5040,6 @@ public:
     }
 };
 ```
-
-
 
 #### [437. Path Sum III](https://leetcode.com/problems/path-sum-iii/submissions/)
 
@@ -5122,8 +5080,6 @@ public:
     }
 };
 ```
-
-
 
 [剑指 Offer 26. 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
 
@@ -5196,17 +5152,17 @@ Node* treeToDoublyList(Node* root)
 
 ##### [109. Convert Sorted List to Binary Search Tree](https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/)
 
-```
+```c++
 class Solution
 {
     TreeNode *sortedListToBST(ListNode *head, ListNode *tail)
     {
        if (head == tail) return nullptr;
        if( head->next == tail )
-    	{	
-    		TreeNode *root = new TreeNode( head->val );
-    		return root;
-    	}
+        { 
+            TreeNode *root = new TreeNode( head->val );
+            return root;
+        }
         ListNode *mid = head;
         ListNode *fast = head;
 
@@ -5231,15 +5187,11 @@ public:
 };
 ```
 
-
-
-
-
 ### 树的重新构建
 
 #### [105. Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal)
 
-```
+```c++
 TreeNode *buildTree(vector<int> &preorder, int preStart, int preEnd, vector<int> &inorder, int inStart, int inEnd)
 {
     if (preStart > preEnd ||inStart > inEnd )
@@ -5263,7 +5215,7 @@ TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder)
 
 #### [106. Construct Binary Tree from Inorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
 
-```
+```c++
 TreeNode *buildTree(vector<int> &inorder, int inStart, int inEnd, vector<int> &postorder, int postStart, int postEnd)
 {
     if (postStart > postEnd || inStart > inEnd)
@@ -5285,9 +5237,9 @@ TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder)
 }
 ```
 
-#### [297. Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)
+#### [297.Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)
 
-```
+```c++
 class Codec {
     TreeNode* de(istringstream& iss)
     {
@@ -5322,19 +5274,17 @@ public:
 };
 ```
 
-
-
 [606. Construct String from Binary Tree](https://leetcode.com/problems/construct-string-from-binary-tree/)
 
 [1008. Construct Binary Search Tree from Preorder Traversal](https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/)
 
-[889.	Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal)
+[889.Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal)
 
 ### 区间合并 (3)
 
-####  [56. Merge Intervals](https://leetcode.com/problems/merge-intervals/)
+#### [56. Merge Intervals](https://leetcode.com/problems/merge-intervals/)
 
-```
+```c++
 vector<vector<int>> merge(vector<vector<int>>& intervals) {
     if (intervals.size() == 0)
     {
@@ -5360,10 +5310,9 @@ vector<vector<int>> merge(vector<vector<int>>& intervals) {
 }
 ```
 
-
 #### [57. Insert Interval](https://leetcode.com/problems/insert-interval/)
 
-```
+```c++
 //用一个变量 cur 来遍历区间，如果当前 cur 区间的结束位置小于要插入的区间的起始位置的话，说明没有重叠，则将 cur 区间加入结果 res 中，然后 cur 自增1。
 // 每次用取两个区间起始位置的较小值，和结束位置的较大值来更新要插入的区间，然后 cur 自增1。直到 cur 越界或者没有重叠时 while 循环退出。之后将更新好的新区间加入结果 res，然后将 cur 之后的区间再加入结果 res 中即可
 vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInterval)
@@ -5392,7 +5341,7 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 }
 ```
 
-####  [986. Interval List Intersections](https://leetcode.com/problems/interval-list-intersections/)
+#### [986. Interval List Intersections](https://leetcode.com/problems/interval-list-intersections/)
 
 ### 双堆模式
 
@@ -5439,9 +5388,7 @@ public:
  */
 ```
 
-
-
-#### [[295. 数据流的中位数](https://leetcode-cn.com/problems/find-median-from-data-stream/)](https://leetcode.com/problems/find-median-from-data-stream/)
+#### [295. 数据流的中位数](https://leetcode-cn.com/problems/find-median-from-data-stream/)
 
 ```c++
 class MedianFinder {
@@ -5467,8 +5414,6 @@ public:
     }
 };
 ```
-
-
 
 #### [480. Sliding Window Median](https://leetcode.com/problems/sliding-window-median/)
 
@@ -5547,7 +5492,7 @@ int partition(vector<int>& nums, int left, int right)
 
 
 public:
-	// 解法一: 利用堆排序
+ // 解法一: 利用堆排序
     int findKthLargest(vector<int>& nums, int k) {
         if (nums.empty() || nums.size() < k)
             return 0;
@@ -5590,8 +5535,6 @@ public:
 };
 ```
 
-
-
 #### [347. Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
 
 ```c++
@@ -5614,19 +5557,13 @@ vector<int> topKFrequent(vector<int>& nums, int k)
 }
 ```
 
-
-
 #### [373. Find K Pairs with Smallest Sums](https://leetcode.com/problems/find-k-pairs-with-smallest-sums/)
-
-
 
 ### 数组
 
 #### [15. 三数之和](https://leetcode-cn.com/problems/3sum/) #Todo
 
-
-
-#### [41. First Missing Positive ](https://leetcode.com/problems/first-missing-positive/) #todo
+#### [41. First Missing Positive](https://leetcode.com/problems/first-missing-positive/) #todo
 
 ```c++
 int firstMissingPositive(vector<int> &nums)
@@ -5685,7 +5622,7 @@ public:
 };
 ```
 
-#### [53. Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
+#### [53.Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
 
 ```c++
 int maxSubArray(vector<int>& nums) 
@@ -5704,7 +5641,7 @@ int maxSubArray(vector<int>& nums)
 
 #### [54. Spiral Matrix](https://leetcode.com/problems/spiral-matrix/) #todo 同48 注意边界
 
-```
+```c++
 vector<int> spiralOrder(vector<vector<int>>& matrix)
 {
     if (matrix.empty() || matrix[0].empty()) 
@@ -5761,7 +5698,7 @@ vector<int> plusOne(vector<int> &digits)
 
 #### [88. Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array/)
 
-```
+```c++
 void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
 {
     int a = m - 1;
@@ -5785,8 +5722,6 @@ void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
 
 #### [128. Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence)  不会   298 收费题 树上面的
 
-
-
 #### [128. 最长连续序列](https://leetcode-cn.com/problems/longest-consecutive-sequence/) #TODO
 
 ```c++
@@ -5807,11 +5742,9 @@ int longestConsecutive(vector<int>& nums)
 }
 ```
 
-
-
 #### [136. Single Number](https://leetcode.com/problems/single-number/)  #todo 位运算 还不会
 
-```
+```c++
 int singleNumber(vector<int> &nums)
 {
     if (nums.empty())
@@ -5827,7 +5760,7 @@ int singleNumber(vector<int> &nums)
 
 #### [150. Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation/) #Todo 需要敲一遍
 
-```
+```c++
 // 逆波兰表达式
 int evalRPN(vector<string> &tokens)
 {
@@ -5903,7 +5836,7 @@ string largestNumber(vector<int>& nums)
 
 #### [189. 旋转数组](https://leetcode-cn.com/problems/rotate-array/) #todo
 
-```
+```c++
 class Solution {
 public:
     void rotate(vector<int>& nums, int k) 
@@ -5919,11 +5852,9 @@ public:
 };
 ```
 
-
-
 #### [215. Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/) #todo 堆排序还不会  还可以通过快排partition 搞定
 
-```
+```c++
 class Solution 
 {
 private:
@@ -6074,7 +6005,7 @@ private:
 
 #### [454. 四数相加 II](https://leetcode-cn.com/problems/4sum-ii/)
 
-```
+```c++
 int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D)
 {
     // 把A和B的两两之和都求出来，在 HashMap 中建立两数之和跟其出现次数之间的映射
@@ -6099,8 +6030,6 @@ int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D)
 }
 ```
 
-
-
 #### [560. Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/)
 
 ```c++
@@ -6123,15 +6052,11 @@ int subarraySum(vector<int>& nums, int k)
 }
 ```
 
-
-
 ### 字符串
-
-
 
 #### [43. 字符串相乘](https://leetcode-cn.com/problems/multiply-strings/) #todo
 
-```
+```c++
 string multiply(string num1, string num2) 
 {
     vector<int> res(num1.size()+num2.size(), 0);
@@ -6165,7 +6090,7 @@ string multiply(string num1, string num2)
 
 #### [49. Group Anagrams](https://leetcode.com/problems/group-anagrams/)
 
-```
+```c++
 // 有点巧妙
 vector<vector<string>> groupAnagrams(vector<string>& strs) 
 {
@@ -6194,7 +6119,7 @@ vector<vector<string>> groupAnagrams(vector<string>& strs)
 
 #### [125. Valid Palindrome](https://leetcode.com/problems/valid-palindrome/)
 
-```
+```c++
 bool isPalindrome(string s) 
 {
     int n = s.size();
@@ -6216,9 +6141,3 @@ bool isPalindrome(string s)
     return true;
 }
 ```
-
-
-
-
-
-#### 
