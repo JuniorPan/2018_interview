@@ -669,3 +669,8 @@ https://www.nowcoder.com/practice/046a55e6cd274cffb88fc32dba695668?tpId=117&&tqI
 
 
 #### [287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/)
+
+
+
+[86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)](https://leetcode.com/problems/partition-list/) 
+

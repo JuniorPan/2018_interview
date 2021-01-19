@@ -1516,7 +1516,7 @@ ListNode* removeNthFromEnd(ListNode* head, int n)
 
 
 
-#### [61. 旋转链表](https://leetcode-cn.com/problems/rotate-list/)  #todo
+##### [61. 旋转链表](https://leetcode-cn.com/problems/rotate-list/)  #todo
 
 ```c++
 ListNode *rotateRight(ListNode *head, int k)
@@ -1732,7 +1732,7 @@ public:
 
 #### 链表排序  
 
-##### [[86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)](https://leetcode.com/problems/partition-list/)  # todo?
+##### [86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)](https://leetcode.com/problems/partition-list/)  # todo?
 
 ```c++
  // 将所有小于给定值的节点取出组成一个新的链表，此时原链表中剩余的节点的值都大于或等于给定值，只要将原链表直接接在新链表后
