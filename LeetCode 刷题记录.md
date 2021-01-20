@@ -1331,7 +1331,7 @@ public:
 };
 ```
 
-### 链表 (17)
+### 链表 (20)
 
 #### K路归并
 
@@ -1426,6 +1426,7 @@ public:
         auto cmp = [](ListNode*& a, ListNode*& b) {
             return a->val > b->val;
         };
+        
         priority_queue<ListNode*, vector<ListNode*>, decltype(cmp) > q(cmp);
         for (auto node : lists) {
             if (node) q.push(node);
@@ -1763,7 +1764,7 @@ public:
 };
 ```
 
-##### [147. Insertion Sort List](https://leetcode.com/problems/insertion-sort-list/)  对链表使用插入排序
+##### [147. Insertion Sort List](https://leetcode.com/problems/insertion-sort-list/)  #todo 对链表使用插入排序
 
 ```c++
 ListNode *insertionSortList(ListNode *head)
@@ -1858,7 +1859,7 @@ ListNode *sortList(ListNode *head)
 
 #### 原地链表翻转 #todo  看到这里了
 
-##### [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
+##### [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)  #todo
 
 ```c++
 ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
@@ -1887,11 +1888,7 @@ ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
 }
 ```
 
-
-
-##### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
-
-难度困难856
+##### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)  #todo
 
 ```c++
 // 每k组翻转
@@ -1912,7 +1909,6 @@ ListNode* reverseKGroup(ListNode* head, int k)
     while(num >= k)
     {
         cur = pre->next;
-
         for(int i = 1; i < k; i++)
         {
             // 把cur后面的一个节点temp摘下来，然后用头插法插入到pre后面
@@ -1928,7 +1924,7 @@ ListNode* reverseKGroup(ListNode* head, int k)
 }
 ```
 
-##### [92. 反转链表 II](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
+##### [92. 反转链表 II](https://leetcode-cn.com/problems/reverse-linked-list-ii/) # todo
 
 ```c++
 ListNode *reverseBetween(ListNode *head, int m, int n)
@@ -1950,7 +1946,7 @@ ListNode *reverseBetween(ListNode *head, int m, int n)
 }
 ```
 
-##### [206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/)
+##### [206. 反转链表](https://leetcode-cn.com/problems/reverse-linked-list/)
 
 ```c++
 // 非递归
@@ -1981,7 +1977,7 @@ ListNode* reverseList(ListNode* head)
 }
 ```
 
-##### [234. Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list/)
+##### [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
 
 ```c++
 bool isPalindrome(ListNode *head)
@@ -2021,7 +2017,7 @@ ListNode *reverseList(ListNode *head)
 }
 ```
 
-##### [328. Odd Even Linked List](https://leetcode.com/problems/odd-even-linked-list/)
+##### [328. 奇偶链表](https://leetcode-cn.com/problems/odd-even-linked-list/)
 
 ```c++
 class Solution
