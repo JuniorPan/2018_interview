@@ -1888,6 +1888,28 @@ ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
 }
 ```
 
+##### [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
+
+```c++
+ListNode *removeNthFromEnd(ListNode *head, int n)
+{
+    if (!head->next)
+        return nullptr;
+    ListNode *pre = head, *cur = head;
+    for (int i = 0; i < n; ++i)  // cur节点先走n+1步
+        cur = cur->next;
+    if (!cur)
+        return head->next;
+    while (cur->next)
+    {
+        cur = cur->next;
+        pre = pre->next;
+    }
+    pre->next = pre->next->next;
+    return head;
+}
+```
+
 ##### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)  #todo
 
 ```c++
@@ -2065,28 +2087,6 @@ public:
         return head;
     }
 };
-```
-
-##### [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
-
-```c++
-ListNode *removeNthFromEnd(ListNode *head, int n)
-{
-    if (!head->next)
-        return nullptr;
-    ListNode *pre = head, *cur = head;
-    for (int i = 0; i < n; ++i)  // cur节点先走n+1步
-        cur = cur->next;
-    if (!cur)
-        return head->next;
-    while (cur->next)
-    {
-        cur = cur->next;
-        pre = pre->next;
-    }
-    pre->next = pre->next->next;
-    return head;
-}
 ```
 
 
