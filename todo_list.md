@@ -510,6 +510,20 @@ while(fast->next && fast->next->next)
 }
 ```
 
+#### 找到第n个节点 从0开始 如果n=3 那么会走到第4个节点上
+
+```
+   找到第n个节点 从0开始 如果n=3 那么会走到第4个节点上
+   for(int i = 0; i < n; i++)
+    {
+        fast = fast->next;
+    }
+```
+
+
+
+
+
 https://www.nowcoder.com/practice/c215ba61c8b1443b996351df929dc4d4?tpId=191&&tqId=36121&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking
 
 
@@ -645,3 +659,18 @@ https://www.nowcoder.com/practice/046a55e6cd274cffb88fc32dba695668?tpId=117&&tqI
 
 
 #### [剑指 Offer 53 - II. 0～n-1中缺失的数字](https://leetcode-cn.com/problems/que-shi-de-shu-zi-lcof/)
+
+
+
+
+
+#### [581. 最短无序连续子数组](https://leetcode-cn.com/problems/shortest-unsorted-continuous-subarray/)
+
+
+
+#### [287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/)
+
+
+
+[86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)](https://leetcode.com/problems/partition-list/) 
+
