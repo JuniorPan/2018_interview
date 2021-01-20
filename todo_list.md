@@ -15,6 +15,20 @@ l.splice(l.begin(), l, m[key]); // 这个函数的意思
 sort(nums.begin(), nums.end(), [](int a, int b) {
            return to_string(a) + to_string(b) > to_string(b) + to_string(a); 
         });
+
+string largestNumber(vector<int>& nums) 
+{
+    //对于两个数字a和b来说，如果将其都转为字符串，如果 ab > ba，则a排在前面，比如9和34，由于 934>349，所以9排在前面，
+    // 再比如说 30 和3，由于 303<330，所以3排在 30 的前面。按照这种规则对原数组进行排序后，将每个数字转化为字符串再连接起来就是最终结果
+    string res;
+    sort(nums.begin(), nums.end(), [](int a, int b) {
+       return to_string(a) + to_string(b) > to_string(b) + to_string(a); 
+    });
+    for (int i = 0; i < nums.size(); ++i) {
+        res += to_string(nums[i]);
+    }
+    return res[0] == '0' ? "0" : res;
+}
 ```
 
 #### ~~[189. 旋转数组](https://leetcode-cn.com/problems/rotate-array/)~~
@@ -36,6 +50,7 @@ sort(nums.begin(), nums.end(), [](int a, int b) {
 ```
 vector<int> shuffle() 
 {
+	// 遍历数组每个位置，每次都随机生成一个坐标位置，然后交换当前遍历位置和随机生成的坐标位置的数字
     vector<int> res = v;
     for (int i = 0; i < res.size(); ++i) 
     {
