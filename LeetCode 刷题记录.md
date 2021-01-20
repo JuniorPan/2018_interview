@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-# sLeetCode 刷题记录
-=======
 # LeetCode 刷题记录
->>>>>>> Stashed changes
-=======
-# LeetCode 刷题记录
->>>>>>> 6cc10a05f7d16de2b217a32ff30176dbc5c7fcac
 
 ### 滑动窗口问题 (7)
 
