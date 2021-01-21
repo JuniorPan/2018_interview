@@ -3848,9 +3848,7 @@ bool judgeTotal(TreeNode *root)
             q.push(root->right);
         }
         else if (root->left == nullptr && root->right)
-        {
             return false;
-        }
         else
         {
             while(!q.empty())

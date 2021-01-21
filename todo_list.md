@@ -245,7 +245,7 @@ int sumNumbers(TreeNode* root) {
 
 
 
-#### [41. First Missing Positive ](https://leetcode.com/problems/first-missing-positive/) #todo
+#### [41. First Missing Positive](https://leetcode.com/problems/first-missing-positive/) #todo
 
 ```
 int firstMissingPositive(vector<int> &nums)
