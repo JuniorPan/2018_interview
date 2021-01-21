@@ -3849,7 +3849,7 @@ bool judgeTotal(TreeNode *root)
         }
         else if (root->left == nullptr && root->right)
             return false;
-        else
+        else if (root->left && root->right == nullptr)
         {
             while(!q.empty())
             {
