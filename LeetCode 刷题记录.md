@@ -3828,6 +3828,45 @@ int largestIsland(vector<vector<int>>& grid)
 
 ### BFS (6)
 
+#### [判断一棵二叉树是否完全二叉树](https://www.nowcoder.com/practice/f31fc6d3caf24e7f8b4deb5cd9b5fa97?tpId=191&&tqId=35928&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking) #TODO
+
+```c++
+bool judgeTotal(TreeNode *root)
+{
+    if (root == nullptr)
+        return true;
+
+    queue<TreeNode *> q;
+    q.push(root);
+    while(!q.empty())
+    {
+        root = q.front();
+        q.pop();
+        if (root->left && root->right)
+        {
+            q.push(root->left);
+            q.push(root->right);
+        }
+        else if (root->left == nullptr && root->right)
+        {
+            return false;
+        }
+        else
+        {
+            while(!q.empty())
+            {
+                root = q.front();
+                q.pop();
+                if (root->left || root->right)
+                    return false;
+            }            
+        }
+    }
+    return true;
+}
+
+```
+
 #### [102. Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/)
 
 ```
