@@ -3291,7 +3291,7 @@ public:
 #### [395. Longest Substring with At Least K Repeating Characters](https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/)
 
 
-### DFS (8)
+### DFS (11)
 #### [经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
 ```
 int dirs[8][2] = {1,1,1,0,1,-1,0,1,0,-1,-1,1,-1,0,-1,-1};
@@ -3313,7 +3313,7 @@ void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, 
 }
 
 ```
-#### [79. Word Search](https://leetcode.com/problems/word-search/) 
+#### [79. 单词搜索](https://leetcode-cn.com/problems/word-search/)
 
 ```c++
 class Solution
@@ -3353,7 +3353,7 @@ public:
 };
 ```
 
-[130. Surrounded Regions](https://leetcode.com/problems/surrounded-regions/)
+#### [130. 被围绕的区域](https://leetcode-cn.com/problems/surrounded-regions/)
 
 ```c++
 class Solution {
@@ -3397,7 +3397,7 @@ public:
 };
 ```
 
-#### [139. Word Break](https://leetcode.com/problems/word-break/)  回溯+记忆化搜索
+#### [139. 单词拆分](https://leetcode-cn.com/problems/word-break/) 回溯+记忆化搜索
 
 <img src="https://pic.leetcode-cn.com/78fd09b2deabeae972809c2795ddb8be96720b8e62377cf01b7f70e7fb3dbf8c-image.png" alt="image.png" style="zoom: 50%;" />
 
@@ -3885,7 +3885,6 @@ vector<vector<int>> levelOrder(TreeNode *root)
             TreeNode *node = q.front();
             level.push_back(node->val);
             q.pop();
-
             if (node->left)
                 q.push(node->left);
             if (node->right)
@@ -3931,7 +3930,7 @@ vector<vector<int>> zigzagLevelOrder(TreeNode *root)
 }
 ```
 
-#### [111. Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree/)
+#### [111. 二叉树的最小深度](https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/)
 
 ```
 int minDepth(TreeNode *root)
@@ -3963,7 +3962,7 @@ int minDepth(TreeNode *root)
 }
 ```
 
-[\116. Populating Next Right Pointers in Each Node](https://leetcode.com/problems/populating-next-right-pointers-in-each-node/)
+#### [116. 填充每个节点的下一个右侧节点指针](https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node/)
 
 ```c++
 Node *connect(Node *root)
@@ -3988,7 +3987,7 @@ Node *connect(Node *root)
 }
 ```
 
-#### [127. Word Ladder I](https://leetcode.com/problems/word-ladder/)   todo: 还有种解法不是很懂
+#### [127. 单词接龙](https://leetcode-cn.com/problems/word-ladder/)  todo: 还有种解法不是很懂
 
 ```c++
 //用BFS来求最短路径的长度
