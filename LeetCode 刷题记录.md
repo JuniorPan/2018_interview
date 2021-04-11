@@ -6144,7 +6144,7 @@ vector<vector<string>> groupAnagrams(vector<string>& strs)
 
 #### [125. Valid Palindrome](https://leetcode.com/problems/valid-palindrome/)
 
-```c++
+``` c++
 bool isPalindrome(string s) 
 {
     int n = s.size();
