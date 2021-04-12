@@ -1332,7 +1332,7 @@ public:
 
 #### K路归并
 
-##### [21. Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/)
+#### [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
 
 ```C++
 class Solution {
@@ -1346,7 +1346,7 @@ public:
         
         ListNode *p = l1;
         ListNode *q = l2;
-        
+        // 一次摘下一个节点相当于尾插法
         while (p && q)
         {
             if (p->val < q->val)
