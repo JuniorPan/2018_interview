@@ -1328,11 +1328,11 @@ public:
 };
 ```
 
-### 链表 (20)
+### 链表 (18)
 
 #### K路归并
 
-#### [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
+##### [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
 
 ```C++
 class Solution {
@@ -1367,7 +1367,7 @@ public:
 };
 ```
 
-#### [23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/) #Todo 最小堆的做法 需要熟悉STL
+##### [23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/) #Todo 最小堆的做法 需要熟悉STL
 
 ```c++
 // 解法一
@@ -1440,46 +1440,9 @@ public:
 };
 ```
 
-##### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/) #todo
-
-难度困难856(hard 这题还不会)  #todo
-
-```c++
-class Solution {
-public:
-       ListNode *reverseKGroup(ListNode *head, int k)
-    {
-        ListNode *dummy = new ListNode(-1), *pre = dummy, *cur = pre;
-        dummy->next = head;
-        int num = 0;
-        while (cur)
-        {
-            ++num;
-            cur = cur->next;
-        }
-            
-        while (num > k)
-        {
-            cur = pre->next;
-            //  // 一次摘下节点然后 使用头插法
-            for (int i = 1; i < k; ++i)
-            {
-                ListNode *t = cur->next;
-                cur->next = t->next;
-                t->next = pre->next;
-                pre->next = t;
-            }
-            pre = cur;
-            num -= k;
-        }
-        return dummy->next;
-    }
-};
-```
-
 #### 快慢指针
 
-#### [19. 删除链表的倒数第 N 个结点](https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/) # todo 注意细节
+##### [19. 删除链表的倒数第 N 个结点](https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/) # todo 注意细节
 
 ```c++
 ListNode* removeNthFromEnd(ListNode* head, int n) 
@@ -1721,7 +1684,7 @@ public:
 
 #### 链表排序  
 
-##### [86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)](https://leetcode.com/problems/partition-list/)  # todo?
+##### [86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)  # todo?
 
 ```c++
  // 将所有小于给定值的节点取出组成一个新的链表，此时原链表中剩余的节点的值都大于或等于给定值，只要将原链表直接接在新链表后
@@ -1879,28 +1842,6 @@ ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
 }
 ```
 
-##### [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
-
-```c++
-ListNode *removeNthFromEnd(ListNode *head, int n)
-{
-    if (!head->next)
-        return nullptr;
-    ListNode *pre = head, *cur = head;
-    for (int i = 0; i < n; ++i)  // cur节点先走n+1步
-        cur = cur->next;
-    if (!cur)
-        return head->next;
-    while (cur->next)
-    {
-        cur = cur->next;
-        pre = pre->next;
-    }
-    pre->next = pre->next->next;
-    return head;
-}
-```
-
 ##### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)  #todo
 
 ```c++
@@ -1987,46 +1928,6 @@ ListNode* reverseList(ListNode* head)
     head->next->next = head;
     head->next = NULL;
     return newHead;
-}
-```
-
-##### [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
-
-```c++
-bool isPalindrome(ListNode *head)
-{
-    if (head == nullptr || head->next == nullptr)
-        return true;
-    ListNode *slow = head;
-    ListNode *fast = head;
-    while (fast->next != nullptr && fast->next->next != nullptr)
-    {
-        slow = slow->next;
-        fast = fast->next->next;
-    }
-    slow->next = reverseList(slow->next);
-    slow = slow->next;
-    fast = head;
-    while (slow)
-    {
-        if (fast->val != slow->val)
-            return false;
-        fast = fast->next;
-        slow = slow->next;
-    }
-    return true;
-}
-ListNode *reverseList(ListNode *head)
-{
-    ListNode *pre = nullptr, *cur=head;
-    while (cur)
-    {
-        ListNode *temp = cur->next;
-        cur->next = pre;
-        pre = cur;
-        cur = temp;
-    }
-    return pre;
 }
 ```
 
