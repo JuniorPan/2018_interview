@@ -1622,11 +1622,11 @@ void reorderList_1(ListNode *head)
     }
     while (head && pre)
     {
-        ListNode *next = head->next;
+        ListNode *temp = head->next;
         head->next = pre;
         pre = pre->next;
-        head->next->next = next;
-        head = next;
+        head->next->next = temp;
+        head = temp;
     }
 }
 /**
