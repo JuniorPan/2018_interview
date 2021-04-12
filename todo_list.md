@@ -674,3 +674,19 @@ https://www.nowcoder.com/practice/046a55e6cd274cffb88fc32dba695668?tpId=117&&tqI
 
 [86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)](https://leetcode.com/problems/partition-list/) 
 
+
+
+
+
+# 链表总结
+
+### 1） i 从零开始 最终fast会停在第n个节点上，n从零开始
+
+```
+ListNode *fast = head;
+for(int i = 0; i < n; i++)
+{
+    fast = fast->next;
+}
+```
+

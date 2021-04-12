@@ -1346,7 +1346,7 @@ public:
         
         ListNode *p = l1;
         ListNode *q = l2;
-        // 一次摘下一个节点相当于尾插法
+        // 依次摘下一个节点相当于尾插法
         while (p && q)
         {
             if (p->val < q->val)
@@ -1367,7 +1367,7 @@ public:
 };
 ```
 
-##### [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/) #Todo 最小堆的做法 需要熟悉STL
+#### [23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/) #Todo 最小堆的做法 需要熟悉STL
 
 ```c++
 // 解法一
@@ -1440,7 +1440,7 @@ public:
 };
 ```
 
-##### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
+##### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/) #todo
 
 难度困难856(hard 这题还不会)  #todo
 
@@ -1479,7 +1479,7 @@ public:
 
 #### 快慢指针
 
-##### [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/submissions/)  # todo 注意细节
+#### [19. 删除链表的倒数第 N 个结点](https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/) # todo 注意细节
 
 ```c++
 ListNode* removeNthFromEnd(ListNode* head, int n) 
