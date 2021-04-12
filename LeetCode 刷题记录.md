@@ -1590,15 +1590,7 @@ bool hasCycle(ListNode *head)
 }
 ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-##### [143. Reorder List](https://leetcode.com/problems/reorder-list/)
-=======
-
-=======
->>>>>>> 6cc10a05f7d16de2b217a32ff30176dbc5c7fcac
 ##### [143. Reorder List](https://leetcode.com/problems/reorder-list/) #TODO
->>>>>>> 9cf3040b944c5883cc7d64e928f5f28d689220d4
 
 ```c++
 /* 
@@ -1619,13 +1611,14 @@ void reorderList_1(ListNode *head)
     }
     ListNode *mid = slow->next;
     slow->next = NULL;
+    // 反转链表
     ListNode *last = mid, *pre = NULL;
     while (last)
     {
-        ListNode *next = last->next;
+        ListNode *temp = last->next;
         last->next = pre;
         pre = last;
-        last = next;
+        last = temp;
     }
     while (head && pre)
     {

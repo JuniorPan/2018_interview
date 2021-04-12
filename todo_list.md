@@ -690,3 +690,16 @@ for(int i = 0; i < n; i++)
 }
 ```
 
+2） 找链表的中间节点
+
+```
+ListNode *fast = head;
+ListNode *slow = head;
+// 如果链表个数为奇数，那么直接找到了中间结点，如果是偶数则是中间结点的前一个
+while(fast->next && fast->next->next)
+{
+    slow = slow->next;
+    fast = fast->next->next;
+}
+```
+
