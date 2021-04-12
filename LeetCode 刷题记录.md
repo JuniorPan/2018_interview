@@ -1831,11 +1831,11 @@ ListNode *merge(ListNode *l1, ListNode *l2)
 ListNode *sortList(ListNode *head)
 {
     if (head == nullptr || head->next == nullptr)
-        return head;
-
-    ListNode *fast = head->next, *slow = head;
-    // 找到中间结点
-    while (fast && fast->next)
+            return head;
+	
+    // 统一用这种方式寻找中间节点
+    ListNode *fast = head, *slow = head;
+    while(fast->next && fast->next->next)
     {
         slow = slow->next;
         fast = fast->next->next;
@@ -1843,6 +1843,7 @@ ListNode *sortList(ListNode *head)
 
     fast = slow->next;
     slow->next = nullptr;
+
     return merge(sortList(head), sortList(fast));
 }
 ```
