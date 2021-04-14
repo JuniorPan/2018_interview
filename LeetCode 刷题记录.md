@@ -892,7 +892,7 @@ int search(vector<int>& nums, int target)
 }
 ```
 
-#### [81. Search in Rotated Sorted Array II](https://leetcode.com/problems/search-in-rotated-sorted-array-ii/)  #todo
+#### [81. 搜索旋转排序数组 II](https://leetcode-cn.com/problems/search-in-rotated-sorted-array-ii/)  #todo
 
 ```c++
 bool search(vector<int> &nums, int target)
@@ -932,7 +932,7 @@ bool search(vector<int> &nums, int target)
 }
 ```
 
-#### [153. Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)  
+#### [153. 寻找旋转排序数组中的最小值](https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array/)
 
 ![image.png](https://pic.leetcode-cn.com/f4e1d8b0ec3cd903037611666236efb9fd311e3022d12fb7071a995259e564d9-image.png)![image.png](https://pic.leetcode-cn.com/f7a76bf084aa4e3296eacedd0f3845d5a68ee7064a42f2a0affe62054cca1882-image.png)
 
