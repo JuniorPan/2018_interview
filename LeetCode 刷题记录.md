@@ -3964,7 +3964,7 @@ int ladderLength(string beginWord, string endWord, vector<string> &wordList)
 
 ### 回溯  (13)
 
-#### [17. Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/)
+#### [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
 
 ![1573829897(1).jpg](https://pic.leetcode-cn.com/02b0ec926e3da5f12a0a118293b8ac10dc236741ccb04414ded44a30f7fc70af-1573829897(1).jpg)
 
@@ -4043,7 +4043,7 @@ public:
 };
 ```
 
-#### [39. Combination Sum](https://leetcode.com/problems/combination-sum/)
+#### [39. 组合总和](https://leetcode-cn.com/problems/combination-sum/)
 
 <img src="https://pic.leetcode-cn.com/1598091943-hZjibJ-file_1598091940241" alt="img" style="zoom: 33%;" />
 
@@ -4121,7 +4121,9 @@ public:
 };
 ```
 
-#### [46. Permutations](https://leetcode.com/problems/permutations/)
+#### [46. 全排列](https://leetcode-cn.com/problems/permutations/)
+
+难度中等1294
 
 ![image.png](https://pic.leetcode-cn.com/0bf18f9b86a2542d1f6aa8db6cc45475fce5aa329a07ca02a9357c2ead81eec1-image.png)
 
@@ -4161,7 +4163,7 @@ public:
 };
 ```
 
-#### [47. Permutations II](https://leetcode.com/problems/permutations-ii/)  同40
+#### [47. 全排列 II](https://leetcode-cn.com/problems/permutations-ii/) 同40
 
 ```c++
 class Solution 
@@ -4296,7 +4298,7 @@ public:
 };
 ```
 
-#### [90. Subsets II](https://leetcode.com/problems/subsets-ii/)
+#### [90. 子集 II](https://leetcode-cn.com/problems/subsets-ii/)
 
 ```c++
 class Solution 
@@ -4413,7 +4415,7 @@ public:
 };
 ```
 
-#### [139. Word Break](https://leetcode.com/problems/word-break/)  
+#### [139. 单词拆分](https://leetcode-cn.com/problems/word-break/)
 
 <img src="https://pic.leetcode-cn.com/78fd09b2deabeae972809c2795ddb8be96720b8e62377cf01b7f70e7fb3dbf8c-image.png" alt="image.png" style="zoom: 50%;" />
 
