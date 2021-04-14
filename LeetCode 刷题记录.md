@@ -4728,7 +4728,7 @@ int kthSmallest(TreeNode* root, int k)
 }
 ```
 
-#### [[235. 二叉搜索树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
+#### [235. 二叉搜索树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
 
 ```c++
 TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
@@ -4760,7 +4760,7 @@ TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
     }
 ```
 
-#### [236. Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/)
+#### [236. 二叉树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)
 
 ```c++
 TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
@@ -4782,7 +4782,7 @@ TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 
 通常采用递归
 
-#### [100. Same Tree](https://leetcode.com/problems/same-tree/)
+#### [100. 相同的树](https://leetcode-cn.com/problems/same-tree/)
 
 ```c++
 bool isSameTree(TreeNode *p, TreeNode *q)
@@ -4966,49 +4966,9 @@ public:
 };
 ```
 
-#### [437. Path Sum III](https://leetcode.com/problems/path-sum-iii/submissions/)
-```c++
-class Solution
-{
-public:
-    // 本质上还是回溯
-    // 每一个节点都有记录了一条从根节点到当前节点到路径 path
-    // 用一个变量 curSum 记录路径节点总和，然后看 curSum 和 sum 是否相等，相等的话结果 res 加1，
-    // 不等的话继续查看子路径和有没有满足题意的，做法就是每次去掉一个节点，看路径和是否等于给定值
-    void dfs(TreeNode *node, int sum, int curSum, vector<TreeNode *>& path, int &res)
-    {
-        if (node == nullptr)
-            return;
-
-        curSum += node->val;
-        path.push_back(node);
-        if (curSum == sum)
-            res++;
-        int t = curSum;
-        for (int i = 0; i < path.size() - 1; ++i) {
-            t -= path[i]->val;
-            if (t == sum) ++res;
-        }
-        dfs(node->left, sum, curSum, path, res);
-        dfs(node->right, sum, curSum, path, res);
-        path.pop_back();
-        
-    }
-
-    int pathSum(TreeNode *root, int sum)
-    {
-        int res = 0;
-        vector<TreeNode*> path;
-        dfs(root, sum, 0, path, res);
-        return res;
-    }
-};
-```
-
-[剑指 Offer 26. 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
+#### [剑指 Offer 26. 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
 [剑指 Offer 33. 二叉搜索树的后序遍历序列](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/)
 [剑指 Offer 54. 二叉搜索树的第k大节点](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/)(inorder)
-
 ### 树和链表结合 (3)
 
 ##### [剑指 Offer 36. 二叉搜索树与双向链表](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/)  没看懂 感觉非递归方式可能好理解点 424 收费题
@@ -5046,7 +5006,7 @@ private:
     }
 };
 
-// 二叉树中序遍历非递归还不是很熟悉
+// 
 Node* treeToDoublyList(Node* root) 
 {
     if (!root) return NULL;
