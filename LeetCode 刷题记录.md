@@ -776,7 +776,7 @@ https://www.cnblogs.com/grandyang/p/5883736.html
 
 <https://www.cnblogs.com/grandyang/p/8850299.html>
 
-### 二分查找  (6)
+### 二分查找  (9)
 
 #### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -4607,7 +4607,7 @@ bool isValidBST(TreeNode* root)
 }
 ```
 
-#### [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)  二叉树前序遍历非递归
+#### [114. 二叉树展开为链表](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)  二叉树前序遍历非递归
 
 ```c++
 void flatten(TreeNode* root) 
@@ -4637,7 +4637,7 @@ void flatten(TreeNode* root)
 }
 ```
 
-#### [144. Binary Tree Preorder Traversal](https://leetcode.com/problems/binary-tree-preorder-traversal/) 二叉树前序遍历非递归
+#### [144. 二叉树的前序遍历](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/) 二叉树前序遍历非递归
 
 ```c++
 // 二叉树前序遍历非递归
@@ -4697,7 +4697,7 @@ vector<int> postorderTraversal(TreeNode* root)
 }
 ```
 
-#### [230. Kth Smallest Element in a BST](https://leetcode.com/problems/kth-smallest-element-in-a-bst/)
+#### [230. 二叉搜索树中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/)
 
 ```c++
 int kthSmallest(TreeNode* root, int k)
@@ -4728,7 +4728,7 @@ int kthSmallest(TreeNode* root, int k)
 }
 ```
 
-#### [235. Lowest Common Ancestor of a Binary Search Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
+#### [[235. 二叉搜索树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
 
 ```c++
 TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
