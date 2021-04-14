@@ -1983,7 +1983,7 @@ public:
 
 
 
-### 动态规划  (29)
+### 动态规划  (30)
 
 [Leetcode 题解 - 动态规划](https://github.com/CyC2018/CS-Notes/blob/master/notes/Leetcode%20%E9%A2%98%E8%A7%A3%20-%20%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92.md#0-1-%E8%83%8C%E5%8C%85)
 
@@ -2937,13 +2937,13 @@ public:
 
 
 
-#### 6.区间型动态规划  （4）
+#### 6.区间型动态规划  （5）
 
 **特点: 1). 求一段区间的解max/min/count; 2). 转移方程通过区间更新; 3). 从大到小的更新; 这种题目共性就是区间最后求[0, n-1]这样一个区间逆向思维分析, 从大到小就能迎刃而解** 
 
 区间 DP 是在一个区间上进行的一系列的动态规划，在一个线性的数据上对区间进行状态转移，dp\[i][j]表示i到j的区间。dp\[i][j]可以由子区间的状态转移而来，关键是 dp\[i][j]表示什么，然后找 dp\[i][j]和子区间的关系
 
-##### [5. Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)
+##### [5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
 
 ```
 string longestPalindrome(string s) // todo: 时间上还得优化
@@ -2971,7 +2971,7 @@ string longestPalindrome(string s) // todo: 时间上还得优化
 }
 ```
 
-##### [131. Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning/)
+##### [131. 分割回文串](https://leetcode-cn.com/problems/palindrome-partitioning/)
 
 ```
 bool isPalindrome(const string& s, int start, int end) 
@@ -3013,8 +3013,7 @@ vector<vector<string>> partition(string s)
 }
 ```
 
-
-##### [132. Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/)
+##### [132. 分割回文串 II](https://leetcode-cn.com/problems/palindrome-partitioning-ii/)
 
 ```c++
 class Solution
@@ -3074,7 +3073,7 @@ public:
 };
 ```
 
-##### [516. Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence/)   后面两题 逆向遍历 为什么？？？ 重点是画图
+##### [516. 最长回文子序列](https://leetcode-cn.com/problems/longest-palindromic-subsequence/)  后面两题 逆向遍历 为什么？？？ 重点是画图
 
 <img src="https://pic.leetcode-cn.com/1600677121-aGPcPu-file_1600677121456" alt="img" style="zoom:50%;" />
 
@@ -3106,7 +3105,7 @@ int longestPalindromeSubseq(string s)
 }
 ```
 
-##### [647. Palindromic Substrings](https://leetcode.com/problems/palindromic-substrings/)
+##### [647. 回文子串](https://leetcode-cn.com/problems/palindromic-substrings/)
 
 ```c++
 int countSubstrings(string s)
