@@ -2439,7 +2439,7 @@ int cuttingRope(int n)
 
 **答案: f\[n][m], 其中n = s1.length(); m = s2.length();**
 
-##### [10. Regular Expression Matching](https://leetcode.com/problems/regular-expression-matching/)
+##### [10. 正则表达式匹配](https://leetcode-cn.com/problems/regular-expression-matching/)
 
 ```c++
 bool isMatch(string s, string p) 
@@ -2475,8 +2475,9 @@ bool isMatch(string s, string p)
 }
 ```
 
+##### [44. 通配符匹配](https://leetcode-cn.com/problems/wildcard-matching/)
 
-##### [44. Wildcard Matching](https://leetcode.com/problems/wildcard-matching/)
+难度困难662
 
 ```c++
 bool isMatch(string s, string p)
@@ -2515,7 +2516,7 @@ bool isMatch(string s, string p)
 }
 ```
 
-##### [72. Edit Distance](https://leetcode.com/problems/edit-distance/)   #todo 增删改对应的到底是哪个
+##### [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)  #todo 增删改对应的到底是哪个
 
 ```c++
 int minDistance(string word1, string word2)
@@ -2548,7 +2549,7 @@ int minDistance(string word1, string word2)
 }
 ```
 
-##### [97. Interleaving String](https://leetcode.com/problems/interleaving-string/)  
+##### [97. 交错字符串](https://leetcode-cn.com/problems/interleaving-string/)
 
 ```c++
 bool isInterleave(string s1, string s2, string s3)
@@ -2585,7 +2586,7 @@ bool isInterleave(string s1, string s2, string s3)
 }
 ```
 
-##### [115. Distinct Subsequences](https://leetcode.com/problems/distinct-subsequences/)  
+##### [115. 不同的子序列](https://leetcode-cn.com/problems/distinct-subsequences/)
 
 ```c++
 int numDistinct(string s, string t)
@@ -2622,7 +2623,7 @@ int numDistinct(string s, string t)
 }
 ```
 
-##### [712. Minimum ASCII Delete Sum for Two Strings](https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/)
+##### [712. 两个字符串的最小ASCII删除和](https://leetcode-cn.com/problems/minimum-ascii-delete-sum-for-two-strings/)
 
 ```c++
 int minimumDeleteSum(string s1, string s2) 
@@ -2659,8 +2660,7 @@ int minimumDeleteSum(string s1, string s2)
 }
 ```
 
-
-##### [1143. Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/)
+##### [1143. 最长公共子序列](https://leetcode-cn.com/problems/longest-common-subsequence/)
 
 ```
 int longestCommonSubsequence(string word1, string word2)
