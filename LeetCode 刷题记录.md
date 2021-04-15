@@ -1983,7 +1983,7 @@ public:
 
 
 
-### 动态规划  (32)
+### 动态规划  (33)
 
 [Leetcode 题解 - 动态规划](https://github.com/CyC2018/CS-Notes/blob/master/notes/Leetcode%20%E9%A2%98%E8%A7%A3%20-%20%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92.md#0-1-%E8%83%8C%E5%8C%85)
 
@@ -2131,7 +2131,7 @@ int minimumTotal(vector<vector<int>>& triangle)
 ```
 
 
-#### 2.单序列动态规划 (9)
+#### 2.单序列动态规划 (10)
 
 ***状态: f[i]表示前i个位置/数字/字符, 第i个; 方程: f[i] = f(f[j]), j是i之前的一个位置; 初始化: f[0]; 答案: f[n-1]; 小技巧: 一般有N个数字/字符, 就开N+1个位置的数组, 第0个位置单独留出来作初始化.(跟坐标相关的动态规划除外)***
 
@@ -2303,7 +2303,7 @@ int minCut_2(string s)
 }
 ```
 
-##### [139. Word Break](https://leetcode.com/problems/word-break/)
+##### [139. 单词拆分](https://leetcode-cn.com/problems/word-break/) #TODO 20210415
 
 ```c++
 bool wordBreak(string s, vector<string> &wordDict)
@@ -2332,7 +2332,9 @@ bool wordBreak(string s, vector<string> &wordDict)
 }
 ```
 
-##### [198. House Robber](https://leetcode.com/problems/house-robber/)
+##### [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)
+
+难度中等1395
 
 ```
 int rob(vector<int> &nums)
@@ -2380,7 +2382,9 @@ int numSquares(int n)
 }
 ```
 
-##### [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/)
+##### [300. 最长递增子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/) #todo 20210415
+
+难度中等1533
 
 ```c++
 int lengthOfLIS(vector<int> &nums)
@@ -2409,7 +2413,7 @@ int lengthOfLIS(vector<int> &nums)
 
 ```
 
-[343. Integer Break](https://leetcode.com/problems/integer-break/)
+##### [343. 整数拆分](https://leetcode-cn.com/problems/integer-break/)
 
 ```
 int cuttingRope(int n)
