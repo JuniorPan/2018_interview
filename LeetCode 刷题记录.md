@@ -1983,7 +1983,7 @@ public:
 
 
 
-### 动态规划  (30)
+### 动态规划  (32)
 
 [Leetcode 题解 - 动态规划](https://github.com/CyC2018/CS-Notes/blob/master/notes/Leetcode%20%E9%A2%98%E8%A7%A3%20-%20%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92.md#0-1-%E8%83%8C%E5%8C%85)
 
@@ -1991,7 +1991,8 @@ public:
 
 **状态: f(x)表示从起点走到坐标x, f\[x][y]表示我从起点走到坐标x,y; 方程: 研究走到x, y这个点之前的一步; 初始化: 起点; 答案: 终点**
 
-##### [62. Unique Paths](https://leetcode.com/problems/unique-paths/)
+##### [62. 不同路径](https://leetcode-cn.com/problems/unique-paths/)
+
 ```c++
 int uniquePaths(int m, int n) 
 {
@@ -2016,7 +2017,9 @@ int uniquePaths(int m, int n)
 }
 ```
 
-##### [63. Unique Paths II](https://leetcode.com/problems/unique-paths-ii/)
+##### [63. 不同路径 II](https://leetcode-cn.com/problems/unique-paths-ii/)
+
+难度中等531
 
 ```c++
 int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
@@ -2059,7 +2062,7 @@ int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
 }
 ```
 
-##### [64. Minimum Path Sum](https://leetcode.com/problems/minimum-path-sum/)
+##### [64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
 
 ```c++
 int minPathSum(vector<vector<int>> &grid)
@@ -2128,11 +2131,11 @@ int minimumTotal(vector<vector<int>>& triangle)
 ```
 
 
-#### 2.单序列动态规划 (7)
+#### 2.单序列动态规划 (9)
 
 ***状态: f[i]表示前i个位置/数字/字符, 第i个; 方程: f[i] = f(f[j]), j是i之前的一个位置; 初始化: f[0]; 答案: f[n-1]; 小技巧: 一般有N个数字/字符, 就开N+1个位置的数组, 第0个位置单独留出来作初始化.(跟坐标相关的动态规划除外)***
 
-##### [32. Longest Valid Parentheses](https://leetcode.com/problems/longest-valid-parentheses/)
+##### [32. 最长有效括号](https://leetcode-cn.com/problems/longest-valid-parentheses/)
 
 ```c++
 int longestValidParentheses(string s)
@@ -2161,7 +2164,7 @@ int longestValidParentheses(string s)
 ```
 
 
-##### [45. Jump Game II](https://leetcode.com/problems/jump-game-ii/)  好像不是dp
+##### [45. Jump Game II](https://leetcode.com/problems/jump-game-ii/)  好像不是dp #todo 20210415
 
 ```
 int jump(vector<int>& nums) 
@@ -2187,8 +2190,7 @@ int jump(vector<int>& nums)
 }
 ```
 
-
-##### [55. Jump Game](https://leetcode.com/problems/jump-game/)
+##### [55. 跳跃游戏](https://leetcode-cn.com/problems/jump-game/)
 
 ```c++
 bool canJump(vector<int>& nums) 
@@ -2206,7 +2208,7 @@ bool canJump(vector<int>& nums)
 }
 ```
 
-[91. Decode Ways](https://leetcode.com/problems/decode-ways/)
+##### [91. 解码方法](https://leetcode-cn.com/problems/decode-ways/) #todo 20210415 
 
 ```c++
 int numDecodings(string s) 
@@ -2242,7 +2244,7 @@ int numDecodings(string s)
 
 
 
-##### [132. Palindrome Partitioning II](https://leetcode.com/problems/palindrome-partitioning-ii/)
+##### [132. 分割回文串 II](https://leetcode-cn.com/problems/palindrome-partitioning-ii/)
 
 ```c++
 // 解法1:
