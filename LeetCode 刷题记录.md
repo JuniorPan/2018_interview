@@ -71,9 +71,7 @@ public:
 };
 ```
 
-#### [76. 最小覆盖子串](https://leetcode-cn.com/problems/minimum-window-substring/)
->>>>>>> 263583b67f3a4d4b7750d3b5bed2c9671511d90d
-
+#### [76. 最小覆盖子串](https://leetcode-cn.com/problems/minimum-window-substring/)  # todo 20210419
 ```c++
 string minWindow(string s, string t) 
 {
