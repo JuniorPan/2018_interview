@@ -136,7 +136,7 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
 }
 ```
 
-#### [424. Longest Repeating Character Replacement](https://leetcode.com/problems/longest-repeating-character-replacement/)
+#### [424. 替换后的最长重复字符](https://leetcode-cn.com/problems/longest-repeating-character-replacement/) #todo 20210419
 
 见https://www.cnblogs.com/grandyang/p/5999050.html
 
@@ -186,7 +186,7 @@ int characterReplacement(string s, int k)
 }
 ```
 
-#### [438. Find All Anagrams in a String](https://leetcode.com/problems/find-all-anagrams-in-a-string/)
+#### [438. 找到字符串中所有字母异位词](https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/)
 
 ```c++
 vector<int> findAnagrams(string s, string p)
@@ -213,7 +213,7 @@ vector<int> findAnagrams(string s, string p)
 }
 ```
 
-#### [567. Permutation in String](https://leetcode.com/problems/permutation-in-string/)  (和438 差不多)
+#### [567. 字符串的排列](https://leetcode-cn.com/problems/permutation-in-string/) (和438 差不多)
 
  解法一 其他解法见 [[LeetCode] Permutation in String 字符串中的全排列](https://www.cnblogs.com/grandyang/p/6815227.html)
 
