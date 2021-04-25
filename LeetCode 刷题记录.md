@@ -1440,6 +1440,32 @@ public:
 
 #### 快慢指针
 
+##### [剑指 Offer 22. 链表中倒数第k个节点](https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/)
+
+```c++
+ListNode* getKthFromEnd(ListNode* head, int k) 
+{
+    if (head == nullptr || k < 0)
+        return head;
+
+    ListNode *fast = head;
+    ListNode *slow = head;
+
+    for(int i = 0; i < k; i++)
+    {
+        fast = fast->next;
+    }
+    while (fast)
+    {
+        fast = fast->next;
+        slow = slow->next;
+    }
+    return slow;
+}
+```
+
+
+
 ##### [19. 删除链表的倒数第 N 个结点](https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/) # todo 注意细节
 
 ```c++
@@ -1620,6 +1646,64 @@ void reorderList(ListNode *head)
     st.top()->next = NULL;
 }
 ```
+
+##### [160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/)
+
+```
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+    int getLen(ListNode *head)
+    {
+        int len = 0;
+        while(head)
+        {
+            len++;
+            head = head->next;
+            
+        }
+        return len;
+    }
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB)
+    {
+        if (headA == nullptr || headB == nullptr)
+            return nullptr;
+        
+        int len1 = getLen(headA);
+        int len2 = getLen(headB);
+        
+        ListNode *lon = headA;
+        ListNode *small = headB;
+        
+        if (len1 < len2)
+        {
+            lon = headB;
+            small = headA;
+        }
+        
+        for(int i = 0; i < abs(len1 - len2); i++)
+        {
+            lon = lon->next;
+        }
+        
+        while(lon && small && lon->val != small->val)
+        {
+            lon = lon->next;
+            small = small->next;
+        }
+        return lon;
+    }
+};
+```
+
+
 
 ##### [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
 
@@ -4553,7 +4637,7 @@ vector<string> wordBreak(string s, vector<string>& wordDict)
 }
 ```
 
-### 二叉树 (3)
+### 二叉树 (8)
 
 #### [94. Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal/) 二叉树中序遍历非递归
 
@@ -5939,7 +6023,40 @@ int subarraySum(vector<int>& nums, int k)
 
 ### 字符串
 
-#### [43. 字符串相乘](https://leetcode-cn.com/problems/multiply-strings/) #todo
+#### [14. 最长公共前缀](https://leetcode-cn.com/problems/longest-common-prefix/)
+
+```c++
+string longestCommonPrefix(vector<string>& strs) 
+{
+    // write code here
+    int n = strs.size();
+    if (n == 0)
+    {
+        return "";
+    }
+    string res = "";
+    sort(strs.begin(), strs.end()); // sort the array
+    string first = strs[0];         // first word
+    string last = strs[n - 1];      // last word
+    int limit = min(first.length(), last.length());
+    for (int i = 0; i < limit; i++)
+    {   // find out the longest common prefix between first and last word
+        if (first[i] == last[i])
+        {
+            res += first[i];
+        }
+        else
+        {
+            break;
+        }
+    }
+    return res;
+}
+```
+
+
+
+#### [43. 字符串相乘](https://leetcode-cn.com/problems/multiply-strings/) #todo 20210419
 
 ```c++
 string multiply(string num1, string num2) 
@@ -5971,7 +6088,31 @@ string multiply(string num1, string num2)
 }
 ```
 
-#### [415. 字符串相加](https://leetcode-cn.com/problems/add-strings/) #Todo
+#### [415. 字符串相加](https://leetcode-cn.com/problems/add-strings/) #Todo 20210419
+
+```c++
+string addStrings(string num1, string num2) 
+{
+    string res = "";
+    int add=0,i=num1.size()-1,j=num2.size()-1;
+    while(i>=0 || j>=0 || add>0)
+    {
+        int cur=add;
+        cur += (i >= 0 ? num1[i--] - '0' : 0);
+        cur += (j >= 0 ? num2[j--] - '0' : 0);
+
+        add = cur / 10;//用来判断是否有进位
+
+        cur %= 10;
+
+        res += ('0'+cur);
+    }
+    reverse(res.begin(), res.end());//翻转字符串
+    return res;
+}
+```
+
+
 
 #### [49. Group Anagrams](https://leetcode.com/problems/group-anagrams/)
 
