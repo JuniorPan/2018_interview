@@ -6021,7 +6021,7 @@ int subarraySum(vector<int>& nums, int k)
 }
 ```
 
-### 字符串
+### 字符串(6)
 
 #### [14. 最长公共前缀](https://leetcode-cn.com/problems/longest-common-prefix/)
 
@@ -6034,6 +6034,7 @@ string longestCommonPrefix(vector<string>& strs)
     {
         return "";
     }
+    // 如果有共同前缀的话，一定会出现在首尾两端的字符串中，所以只需要找首尾字母串的共同前缀即可
     string res = "";
     sort(strs.begin(), strs.end()); // sort the array
     string first = strs[0];         // first word
