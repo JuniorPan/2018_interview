@@ -1328,6 +1328,31 @@ public:
 
 ### 链表 (18)
 
+#### [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
+
+```c++
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
+{
+    ListNode *fakeHead = new ListNode(-1), *cur = fakeHead;
+    int carry = 0;
+    while (l1 || l2) 
+    {
+        int val1 = l1 ? l1->val : 0;
+        int val2 = l2 ? l2->val : 0;
+        int sum = val1 + val2 + carry;
+        carry = sum / 10;
+        cur->next = new ListNode(sum % 10);
+        cur = cur->next;
+        if (l1) l1 = l1->next;
+        if (l2) l2 = l2->next;
+    }
+    if (carry) cur->next = new ListNode(1);
+    return fakeHead->next;
+}
+```
+
+
+
 #### K路归并
 
 ##### [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
@@ -6144,7 +6169,7 @@ vector<vector<string>> groupAnagrams(vector<string>& strs)
 }
 ```
 
-#### [125. Valid Palindrome](https://leetcode.com/problems/valid-palindrome/)
+#### [125. 验证回文串](https://leetcode-cn.com/problems/valid-palindrome/)
 
 ``` c++
 bool isPalindrome(string s) 
