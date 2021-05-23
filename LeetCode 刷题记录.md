@@ -4922,6 +4922,40 @@ TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 }
 ```
 
+#### [538. 把二叉搜索树转换为累加树](https://leetcode-cn.com/problems/convert-bst-to-greater-tree/)
+
+```c++
+int sum = 0;
+TreeNode* convertBST_1(TreeNode* root) {
+    if (!root) return NULL;
+    convertBST(root->right);
+    root->val += sum;
+    sum = root->val;
+    convertBST(root->left);
+    return root;
+}
+
+TreeNode* convertBST(TreeNode* root) {
+    if (!root) return NULL;
+    int sum = 0;
+    stack<TreeNode*> st;
+    TreeNode *p = root;
+    while (p || !st.empty()) {
+        while (p) {
+            st.push(p);
+            p = p->right;
+        }
+        p = st.top(); st.pop();
+        p->val += sum;
+        sum = p->val;
+        p = p->left;
+    }
+    return root;
+}
+```
+
+
+
 ### 树的DFS (8)
 
 通常采用递归
@@ -5110,7 +5144,23 @@ public:
 };
 ```
 
+#### [617. 合并二叉树](https://leetcode-cn.com/problems/merge-two-binary-trees/)
+
+```c++
+TreeNode* mergeTrees(TreeNode* t1, TreeNode* t2) {
+    if (!t1) return t2;
+    if (!t2) return t1;
+    TreeNode *t = new TreeNode(t1->val + t2->val);
+    t->left = mergeTrees(t1->left, t2->left);
+    t->right = mergeTrees(t1->right, t2->right);
+    return t;
+}
+```
+
+
+
 #### [剑指 Offer 26. 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
+
 [剑指 Offer 33. 二叉搜索树的后序遍历序列](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/)
 [剑指 Offer 54. 二叉搜索树的第k大节点](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/)(inorder)
 ### 树和链表结合 (3)
@@ -5584,6 +5634,52 @@ vector<int> topKFrequent(vector<int>& nums, int k)
 #### [373. Find K Pairs with Smallest Sums](https://leetcode.com/problems/find-k-pairs-with-smallest-sums/)
 
 ### 数组
+
+#### [53. 最大子序和](https://leetcode-cn.com/problems/maximum-subarray/)
+
+```c++
+int maxSubArray(vector<int>& nums) 
+{
+    int res = INT_MIN;
+    int cur_sum = 0;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        cur_sum += nums[i];
+        res = max(res, cur_sum);
+        cur_sum = cur_sum > 0 ? cur_sum:0;
+    }
+
+    return res;
+}
+```
+
+
+
+#### [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
+
+```c++
+void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
+{
+    int a = m - 1;
+    int b = n - 1;
+    int i = m + n - 1; // calculate the index of the last element of the merged array
+
+    // go from the back by A and B and compare and put to the A element which is larger
+    while (a >= 0 && b >= 0)
+    {
+        if (nums1[a] > nums2[b])
+            nums1[i--] = nums1[a--];
+        else
+            nums1[i--] = nums2[b--];
+    }
+
+    // if B is longer than A just copy the rest of B to A location, otherwise no need to do anything
+    while (b >= 0)
+        nums1[i--] = nums2[b--];
+}
+```
+
+
 
 #### [15. 三数之和](https://leetcode-cn.com/problems/3sum/) #Todo
 
