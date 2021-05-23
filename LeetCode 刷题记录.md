@@ -3046,6 +3046,36 @@ public:
         
     }
 };
+
+class Solution {
+private:
+    int targetSum(vector<int> & nums, int sum)
+    {
+        // int dp[sum+1] = {0};
+        vector<int> dp(sum+1, 0);
+        dp[0] = 1;
+        for(int i = 0; i < nums.size(); i++)
+        {
+            for(int j = sum; j >= nums[i]; j--)
+            {
+                dp[j] += dp[j-nums[i]];
+            }
+        }
+        return dp[sum];
+        
+
+    }
+public:
+    int findTargetSumWays(vector<int>& nums, int target)
+    {
+        // sum(A) - sum(B) = target
+        // sum(A) = target + sum(B)
+        // sum(A) + sum(A) = target + sum(B) + sum(A)
+        // 2 * sum(A) = target + sum(nums)
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        return sum < target || (target + sum) % 2 == 1 ? 0 : targetSum(nums, (target + sum) / 2); 
+    }
+};
 ```
 
 
@@ -5997,6 +6027,29 @@ private:
 };
 ```
 
+#### [448. 找到所有数组中消失的数字](https://leetcode-cn.com/problems/find-all-numbers-disappeared-in-an-array/)
+
+```c++
+//第二种方法是将nums[i]置换到其对应的位置nums[nums[i]-1]上去，比如对于没有缺失项的正确的顺序应该是[1, 2, 3, 4, 5, 6, 7, 8]，而我们现在却是[4,3,2,7,8,2,3,1]，我们需要把数字移动到正确的位置上去，比如第一个4就应该和7先交换个位置，以此类推，最后得到的顺序应该是[1, 2, 3, 4, 3, 2, 7, 8]，我们最后在对应位置检验，如果nums[i]和i+1不等，那么我们将i+1存入结果res中即可，
+vector<int> findDisappearedNumbers(vector<int>& nums) {
+    vector<int> res;
+    for (int i = 0; i < nums.size(); ++i) {
+        if (nums[i] != nums[nums[i] - 1]) {
+            swap(nums[i], nums[nums[i] - 1]);
+            --i;
+        }
+    }
+    for (int i = 0; i < nums.size(); ++i) {
+        if (nums[i] != i + 1) {
+            res.push_back(i + 1);
+        }
+    }
+    return res;
+}   
+```
+
+
+
 #### [454. 四数相加 II](https://leetcode-cn.com/problems/4sum-ii/)
 
 ```c++
@@ -6113,6 +6166,37 @@ string multiply(string num1, string num2)
     return ans;
 }
 ```
+
+#### [394. 字符串解码](https://leetcode-cn.com/problems/decode-string/)
+
+```c++
+string decodeString(string s) 
+{
+    //我们也可以用迭代的方法写出来，当然需要用 stack 来辅助运算，我们用两个 stack，一个用来保存个数，一个用来保存字符串，我们遍历输入字符串，如果遇到数字，我们更新计数变量 cnt；如果遇到左括号，我们把当前 cnt 压入数字栈中，把当前t压入字符串栈中；如果遇到右括号时，我们取出数字栈中顶元素，存入变量k，然后给字符串栈的顶元素循环加上k个t字符串，然后取出顶元素存入字符串t中；如果遇到字母，我们直接加入字符串t中即可，参见代码如下：
+    string t = "";
+    stack<int> s_num;
+    stack<string> s_str;
+    int cnt = 0;
+    for (int i = 0; i < s.size(); ++i) {
+        if (s[i] >= '0' && s[i] <= '9') {
+            cnt = 10 * cnt + s[i] - '0';
+        } else if (s[i] == '[') {
+            s_num.push(cnt);
+            s_str.push(t);
+            cnt = 0; t.clear();
+        } else if (s[i] == ']') {
+            int k = s_num.top(); s_num.pop();
+            for (int j = 0; j < k; ++j) s_str.top() += t;
+            t = s_str.top(); s_str.pop();
+        } else {
+            t += s[i];
+        }
+    }
+    return s_str.empty() ? t : s_str.top();
+}
+```
+
+
 
 #### [415. 字符串相加](https://leetcode-cn.com/problems/add-strings/) #Todo 20210419
 
