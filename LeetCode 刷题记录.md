@@ -1351,6 +1351,83 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
 }
 ```
 
+#### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)
+
+```c++
+ListNode *swapPairs(ListNode *head)
+{
+    ListNode *dummy = new ListNode(-1), *pre = dummy;
+    dummy->next = head;
+    while (pre->next && pre->next->next)
+    {
+        ListNode *t = pre->next->next;
+        pre->next->next = t->next;
+        t->next = pre->next;
+        pre->next = t;
+        pre = t->next;
+    }
+    return dummy->next;
+}
+```
+
+#### [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
+
+```
+ListNode* deleteDuplicates(ListNode* head) {
+    if (head == NULL || head->next == NULL)
+        return head;
+
+    ListNode *p = head;
+    while(p && p->next)
+    {
+        if (p->val == p->next->val)
+        {
+            p->next = p->next->next; 
+        }
+        else
+        {
+            p = p->next;
+        }
+
+    }
+    return head; 
+}
+```
+
+#### [138. 复制带随机指针的链表](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)
+
+```c++
+Node* copyRandomList(Node* head) 
+{
+    if (head == nullptr)
+        return head;
+
+    Node *res = new Node(head->val, nullptr, nullptr); 
+    Node *node = res;
+    Node *cur = head->next;
+    unordered_map<Node *, Node *> m;
+    m[head] = node;
+    // 第一遍遍历生成所有新节点时同时建立一个原节点和新节点的 HashMap
+    while(cur)
+    {
+        Node *temp = new Node(cur->val, nullptr, nullptr);
+        node->next = temp;
+        m[cur] = temp;
+        node = node->next;
+        cur = cur->next;
+    }
+    // 第二遍给随机指针赋值时
+    node = res; cur = head;
+    while(cur)
+    {
+        node->random = m[cur->random];
+        cur = cur->next;
+        node = node->next;
+    }
+    return res;
+}
+```
+
 
 
 #### K路归并
@@ -4021,6 +4098,48 @@ Node *connect(Node *root)
 }
 ```
 
+#### [199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
+
+```c++
+vector<int> rightSideView(TreeNode* root)
+{
+    vector<int> res;
+    if (!root)
+        return res;
+
+    queue<TreeNode *> q;
+    TreeNode *last = root;
+    TreeNode *nlast = nullptr;
+    q.push(root);
+    while(!q.empty())
+    {
+        root = q.front();
+        q.pop();
+
+        if (root->left)
+        {
+            q.push(root->left);
+            nlast = root->left;
+        }
+        if (root->right)
+        {
+            q.push(root->right);
+            nlast = root->right;
+        }
+
+        if (root == last)
+        {
+            res.push_back(root->val);
+            last = nlast;
+        }
+
+    }
+    return res;
+}
+```
+
+
+
 #### [127. 单词接龙](https://leetcode-cn.com/problems/word-ladder/)  todo: 还有种解法不是很懂
 
 ```c++
@@ -4148,7 +4267,7 @@ public:
 };
 ```
 
-#### [22. Generate Parentheses](https://leetcode.com/problems/generate-parentheses/)
+#### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/)
 
 ```c++
 class Solution 
@@ -4694,7 +4813,7 @@ vector<string> wordBreak(string s, vector<string>& wordDict)
 
 ### 二叉树 (8)
 
-#### [94. Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal/) 二叉树中序遍历非递归
+#### [98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/) 二叉树中序遍历非递归
 
 ```c++
 // 二叉树中序非递归遍历
@@ -4954,6 +5073,23 @@ TreeNode* convertBST(TreeNode* root) {
 }
 ```
 
+#### [543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/)
+
+```
+int diameterOfBinaryTree(TreeNode* root) {
+    int res = 0;
+    maxDepth(root, res);
+    return res;
+}
+int maxDepth(TreeNode* node, int& res) {
+    if (!node) return 0;
+    int left = maxDepth(node->left, res);
+    int right = maxDepth(node->right, res);
+    res = max(res, left + right);
+    return max(left, right) + 1;
+}
+```
+
 
 
 ### 树的DFS (8)
@@ -5033,6 +5169,41 @@ bool isBalanced(TreeNode* root)
     else return isBalanced(root->right) && isBalanced(root->left) && abs(height(root->left) - height(root->right)) <= 1;
 }
 ```
+
+#### [572. 另一个树的子树](https://leetcode-cn.com/problems/subtree-of-another-tree/)
+
+```c++
+class Solution {
+    bool isSame(TreeNode* s, TreeNode* t)
+    {
+        if (s == nullptr && t == nullptr)
+            return true;
+        if (s == nullptr || t == nullptr)
+            return false;
+        
+        if (s->val != t->val) 
+            return false;
+        else
+            return isSame(s->left, t->left) && isSame(s->right, t->right);
+        
+    }
+    
+     
+public:
+    bool isSubtree(TreeNode* s, TreeNode* t)
+    {
+        if (s == nullptr && t == nullptr)
+            return true;
+        if (s == nullptr || t == nullptr)
+            return false;
+        if (isSame(s, t)) 
+            return true;
+        return isSubtree(s->left, t) || isSubtree(s->right, t);
+    }
+};
+```
+
+
 
 #### [112. Path Sum](https://leetcode.com/problems/path-sum/)
 
@@ -5143,6 +5314,38 @@ public:
     }
 };
 ```
+
+#### [129. 求根节点到叶节点数字之和](https://leetcode-cn.com/problems/sum-root-to-leaf-numbers/)
+
+```c++
+class Solution
+{
+public:
+    int sumNumbers(TreeNode *root)
+    {
+        if(!root)
+            return 0;
+        int res = 0;
+        dfs(root, res, 0);
+        return res;
+    }
+
+    void dfs(TreeNode *root, int &sum, int cur_sum)
+    {
+        cur_sum = cur_sum * 10 + root->val;
+        if (!root->left && !root->right)
+        {
+            sum += cur_sum;
+        }
+        if (root->left)
+            dfs(root->left, sum, cur_sum);
+        if (root->right)
+            dfs(root->right, sum, cur_sum);
+    }
+};
+```
+
+
 
 #### [617. 合并二叉树](https://leetcode-cn.com/problems/merge-two-binary-trees/)
 
@@ -5499,7 +5702,9 @@ public:
 求top k 采用最小堆（默认）
 采用最大堆的时候可以采用push 负的value
 
-#### [215. Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/)
+#### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
+
+难度中等1093
 
 ```c++
 class Solution {
@@ -5607,6 +5812,31 @@ public:
         return -1;
     }
 };
+
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        int left = 0, right = nums.size() - 1;
+        while (true) {
+            int pos = partition(nums, left, right);
+            if (pos == k - 1) return nums[pos];
+            if (pos > k - 1) right = pos - 1;
+            else left = pos + 1;
+        }
+    }
+    int partition(vector<int>& nums, int left, int right) {
+        int pivot = nums[left], l = left + 1, r = right;
+        while (l <= r) {
+            if (nums[l] < pivot && nums[r] > pivot) {
+                swap(nums[l++], nums[r--]);
+            }
+            if (nums[l] >= pivot) ++l;
+            if (nums[r] <= pivot) --r;
+        }
+        swap(nums[left], nums[r]);
+        return r;
+    }
+};
 ```
 
 #### [347. Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
@@ -5682,6 +5912,76 @@ void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
 
 
 #### [15. 三数之和](https://leetcode-cn.com/problems/3sum/) #Todo
+
+```c++
+vector<vector<int>> threeSum(vector<int>& nums) 
+{
+    vector<vector<int>> res;
+    sort(nums.begin(), nums.end());
+
+    if (nums.empty() || nums.size() < 3)
+        return res;
+
+    for(int i = 0; i < nums.size()-2; i++)
+    {
+        if (i == 0 || nums[i] != nums[i-1])
+        {
+            //twoSum(nums, i, i+1, nums.size()-1, 0 - nums[i], res);
+            int left = i + 1;
+            int right = nums.size() -1;
+            int target = 0 - nums[i];
+            while(left < right)
+            {
+                if (nums[left] + nums[right] < target)
+                {
+                    left++;
+                }
+                else if (nums[left] + nums[right] > target)
+                {
+                    right--; 
+                }
+                else
+                {
+                    if (left == i+1 || nums[left] != nums[left-1])
+                    {
+                        res.push_back({nums[i], nums[left], nums[right]});
+                    }
+                    left++;
+                    right--;
+                }
+            }
+
+        }
+    }
+    return res;
+}
+```
+
+#### [26. 删除有序数组中的重复项](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
+
+```
+int removeDuplicates(vector<int>& nums) 
+{
+    if (nums.empty())
+        return 0;
+    int k = 1;
+    for (int i = 1; i < nums.size(); i++)
+    {
+        if (nums[i] == nums[i-1])
+        {
+            continue;
+        }
+        else
+        {
+            nums[k] = nums[i];
+            k++;
+        }
+    }
+    return k;
+}
+```
+
+
 
 #### [41. First Missing Positive](https://leetcode.com/problems/first-missing-positive/) #todo
 
@@ -5972,7 +6272,7 @@ public:
 };
 ```
 
-#### [215. Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/) #todo 堆排序还不会  还可以通过快排partition 搞定
+#### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/) #todo 堆排序还不会  还可以通过快排partition 搞定
 
 ```c++
 class Solution 
@@ -6041,6 +6341,31 @@ public:
         return heap[0];
     }
 };
+
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        int left = 0, right = nums.size() - 1;
+        while (true) {
+            int pos = partition(nums, left, right);
+            if (pos == k - 1) return nums[pos];
+            if (pos > k - 1) right = pos - 1;
+            else left = pos + 1;
+        }
+    }
+    int partition(vector<int>& nums, int left, int right) {
+        int pivot = nums[left], l = left + 1, r = right;
+        while (l <= r) {
+            if (nums[l] < pivot && nums[r] > pivot) {
+                swap(nums[l++], nums[r--]);
+            }
+            if (nums[l] >= pivot) ++l;
+            if (nums[r] <= pivot) --r;
+        }
+        swap(nums[left], nums[r]);
+        return r;
+    }
+};
 ```
 
 #### [238. 除自身以外数组的乘积](https://leetcode-cn.com/problems/product-of-array-except-self/) #todo
@@ -6093,6 +6418,31 @@ bool increasingTriplet(vector<int> &nums)
     return false;
 }
 ```
+
+#### [349. 两个数组的交集](https://leetcode-cn.com/problems/intersection-of-two-arrays/)
+
+```c++
+vector<int> intersection(vector<int>& nums1, vector<int>& nums2) 
+{ 
+       vector<int> res;
+        int i = 0, j = 0;
+        sort(nums1.begin(), nums1.end());
+        sort(nums2.begin(), nums2.end());
+        while (i < nums1.size() && j < nums2.size()) {
+            if (nums1[i] < nums2[j]) ++i;
+            else if (nums1[i] > nums2[j]) ++j;
+            else {
+                if (res.empty() || res.back() != nums1[i]) {
+                    res.push_back(nums1[i]);
+                }
+                ++i; ++j;
+            }
+        }
+        return res;
+    }
+```
+
+
 
 #### [384. 打乱数组](https://leetcode-cn.com/problems/shuffle-an-array/)  #Todo: 洗牌算法
 
@@ -6195,7 +6545,52 @@ int subarraySum(vector<int>& nums, int k)
 }
 ```
 
+#### [845. 数组中的最长山脉](https://leetcode-cn.com/problems/longest-mountain-in-array/)
+
+难度中等190
+
+```c++
+int longestMountain(vector<int>& A) {
+    //首先来找山峰，peak 的范围是 [1, n-1]，因为首尾两个数字都不能做山峰，能做山峰的位置上的数必须大于其左右两边的数字，然后分别向左右两个方向遍历，这样就可以找到完整的山，用 right-left+1 来更新结果 res
+    int res = 0, n = A.size();
+    for (int i = 1; i < n - 1; ++i) {
+        if (A[i - 1] < A[i] && A[i + 1] < A[i]) {
+            int left = i - 1, right = i + 1;
+            while (left > 0 && A[left - 1] < A[left]) --left;
+            while (right < n - 1 && A[right] > A[right + 1]) ++right;
+            res = max(res, right - left + 1);
+        }
+    }
+    return res;
+}
+```
+
+
+
 ### 字符串(6)
+
+#### [8. 字符串转换整数 (atoi)](https://leetcode-cn.com/problems/string-to-integer-atoi/)
+
+```c++
+int myAtoi(string str) 
+{
+    if (str.empty()) return 0;
+    int sign = 1, base = 0, i = 0, n = str.size();
+    while (i < n && str[i] == ' ') ++i;
+    if (i < n && (str[i] == '+' || str[i] == '-')) {
+        sign = (str[i++] == '+') ? 1 : -1;
+    }
+    while (i < n && str[i] >= '0' && str[i] <= '9') {
+        if (base > INT_MAX / 10 || (base == INT_MAX / 10 && str[i] - '0' > 7)) {
+            return (sign == 1) ? INT_MAX : INT_MIN;
+        }
+        base = 10 * base + (str[i++] - '0');
+    }
+    return base * sign;
+}
+```
+
+
 
 #### [14. 最长公共前缀](https://leetcode-cn.com/problems/longest-common-prefix/)
 
@@ -6227,6 +6622,73 @@ string longestCommonPrefix(vector<string>& strs)
     }
     return res;
 }
+```
+
+#### [28. 实现 strStr()](https://leetcode-cn.com/problems/implement-strstr/)  KMP
+
+```
+class Solution {
+    vector<int> getNext(string s)
+    {
+        int m = s.length();
+        
+        vector<int> next(m);
+        next[0] = -1;
+        if (m == 1)
+            return next;
+        
+        next[1] = 0;
+        int pos = 2;
+        int cn = 0;
+        
+        while(pos < m)
+        {
+            if (s[pos-1] == s[cn])
+            {
+                next[pos++] = ++cn;
+            }
+            else if (cn > 0)
+            {
+                cn = next[cn];
+            }
+            else
+            {
+                next[pos++] =  0;
+            }
+        }
+       return next;
+    }
+public:
+    int strStr(string s, string m)
+    {
+        if (m.length() == 0)
+            return 0;
+        if (m.length() < 1 || s.length() < m.length())
+            return -1;
+
+        int i = 0;
+        int j = 0;
+        vector<int> next = getNext(m);
+
+        while(i < s.length() && j < m.length())
+        {
+            if(s[i] == m[j])  // 如果当前字符相等,说明匹配上了,那么两个指针都向右走
+            {
+                i++;
+                j++;
+            } // 下面两种情况是 当前字符不相等 该如何匹配
+            else if (next[j] == -1)
+            {
+                i++;
+            }  
+            else
+            {
+                j = next[j];
+            }
+        }
+        return j == m.length() ? i - j : -1;
+    }
+};
 ```
 
 
@@ -6262,6 +6724,58 @@ string multiply(string num1, string num2)
     return ans;
 }
 ```
+
+#### [151. 翻转字符串里的单词](https://leetcode-cn.com/problems/reverse-words-in-a-string/)
+
+难度中等323
+
+```
+string reverseWords(string s) 
+{
+    // storeIndex表示当前存储到的位置
+    int storeIndex = 0, n = s.size();
+    reverse(s.begin(), s.end());
+    for (int i = 0; i < n; ++i) {
+        if (s[i] != ' ') 
+        {
+            if (storeIndex != 0) 
+                s[storeIndex++] = ' ';
+            int j = i;
+            while (j < n && s[j] != ' ') 
+                s[storeIndex++] = s[j++];
+            reverse(s.begin() + storeIndex - (j - i), s.begin() + storeIndex);
+            i = j;
+        }
+    }
+    s.resize(storeIndex);
+    return s;
+}
+```
+
+#### [168. Excel表列名称](https://leetcode-cn.com/problems/excel-sheet-column-title/)
+
+```c++
+class Solution {
+public:
+    string convertToTitle(int n) {
+        string res = "";
+        while (n) {
+            if (n % 26 == 0) {
+                res += 'Z';
+                n -= 26;
+            } else {
+                res += n % 26 - 1 + 'A';
+                n -= n % 26;
+            }
+            n /= 26;
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
+```
+
+
 
 #### [394. 字符串解码](https://leetcode-cn.com/problems/decode-string/)
 
@@ -6320,7 +6834,7 @@ string addStrings(string num1, string num2)
 
 
 
-#### [49. Group Anagrams](https://leetcode.com/problems/group-anagrams/)
+#### [49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/)
 
 ```c++
 // 有点巧妙
@@ -6373,3 +6887,70 @@ bool isPalindrome(string s)
     return true;
 }
 ```
+
+
+
+
+
+### 其他
+
+#### [208. 实现 Trie (前缀树)](https://leetcode-cn.com/problems/implement-trie-prefix-tree/)
+
+```c++
+class Trie {
+public:
+    
+    struct TrieNode {
+        unordered_map<char, TrieNode*> map;
+        bool endOfWord = false;
+    };
+    
+    TrieNode *root;
+    /** Initialize your data structure here. */
+    Trie() {
+        root = new TrieNode();
+    }
+    
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        TrieNode *curr = root;
+        for (int i=0; i<word.size(); i++) {
+            if (curr->map.find(word[i]) == curr->map.end()) {
+                TrieNode *newNode = new TrieNode();
+                curr->map[word[i]] = newNode;
+                curr = newNode;
+            } else {
+                curr = curr->map[word[i]];
+            }
+        }
+        curr->endOfWord = true;;
+    }
+    
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        TrieNode *curr = root;
+        for (int i=0; i<word.size(); i++) {
+            if (curr->map.find(word[i]) == curr->map.end()) {
+                return false;
+            } else {
+                curr = curr->map[word[i]];
+            }
+        }
+        return curr->endOfWord;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        TrieNode *curr = root;
+        for (int i=0; i<prefix.size(); i++) {
+            if (curr->map.find(prefix[i]) == curr->map.end()) {
+                return false;
+            } else {
+                curr = curr->map[prefix[i]];
+            }
+        }
+        return true;
+    }
+};
+```
+
