@@ -1180,6 +1180,41 @@ public:
 
 #### 快速排序
 
+```
+ int partition(vector<int> &nums, int left, int right)
+{
+    int small = left -1;
+    for(int i = left; i < right; i++)
+    {
+        if (nums[i] < nums[right])
+            swap(nums[i], nums[++small]);
+    }
+    swap(nums[++small], nums[right]);
+    return small;
+}
+
+void quickSort(vector<int> &nums, int left, int right)
+{
+    if (left < right)
+    {
+        int index = partition(nums, left, right);
+        quickSort(nums, left, index - 1);
+        quickSort(nums, index + 1, right);
+    }
+
+
+
+}
+
+vector<int> MySort(vector<int>& arr) {
+    // write code here
+    quickSort(arr, 0, arr.size()-1);
+    return arr;
+}
+```
+
+
+
 ##### [75. Sort Colors](https://leetcode.com/problems/sort-colors/) 快排partion
 
 ```c++
@@ -5824,17 +5859,16 @@ public:
             else left = pos + 1;
         }
     }
-    int partition(vector<int>& nums, int left, int right) {
-        int pivot = nums[left], l = left + 1, r = right;
-        while (l <= r) {
-            if (nums[l] < pivot && nums[r] > pivot) {
-                swap(nums[l++], nums[r--]);
-            }
-            if (nums[l] >= pivot) ++l;
-            if (nums[r] <= pivot) --r;
+    int partition(vector<int> &nums, int left, int right)
+    {
+        int small = left -1;
+        for(int i = left; i < right; i++)
+        {
+            if (nums[i] > nums[right]) // 从大到小
+                swap(nums[i], nums[++small]);
         }
-        swap(nums[left], nums[r]);
-        return r;
+        swap(nums[++small], nums[right]);
+        return small;
     }
 };
 ```
