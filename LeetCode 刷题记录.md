@@ -5125,6 +5125,62 @@ int maxDepth(TreeNode* node, int& res) {
 }
 ```
 
+#### [找到搜索二叉树中两个错误的节点](javascript:void(0);)
+
+```c++
+class Solution {
+public:
+    /**
+     * 
+     * @param root TreeNode类 the root
+     * @return int整型vector
+     */
+    void inOrderTraverse(TreeNode* &root, TreeNode* &pre, TreeNode* &first,TreeNode* &second)
+    {
+        if (root == nullptr)
+            return;
+
+        stack<TreeNode*> s;
+
+        while(!s.empty() || root)
+        {
+            if(root)
+            {
+                s.push(root);
+                root = root->left;
+            }
+            else
+            {
+                root = s.top();
+                s.pop();
+
+                if (pre != nullptr && pre->val > root->val)
+                {
+                    first = first == nullptr ? pre : first;
+                    second = root;
+                }
+                pre = root;
+                root = root->right;
+            }
+        }
+    }
+    
+    
+    vector<int> findError(TreeNode* root) {
+        // write code here
+        TreeNode* first=nullptr;
+        TreeNode* second=nullptr;
+        TreeNode* pre= nullptr;
+        vector<int> res;
+        inOrderTraverse(root, pre, first, second);
+        res.push_back(first->val);
+        res.push_back(second->val);
+        sort(res.begin(), res.end());
+        return res;
+        
+    }
+```
+
 
 
 ### 树的DFS (8)
@@ -5898,6 +5954,45 @@ vector<int> topKFrequent(vector<int>& nums, int k)
 #### [373. Find K Pairs with Smallest Sums](https://leetcode.com/problems/find-k-pairs-with-smallest-sums/)
 
 ### 数组
+
+
+
+#### [未排序数组中累加和为给定值的最长子数组长度](javascript:void(0);)
+
+```c++
+int maxlenEqualK(vector<int>& arr, int k) {
+    // write code here
+    if(arr.size()==0)
+        return 0;
+    vector<int> sum(arr.size(),0);//累积数组
+    sum[0]=arr[0];//初始化第一个
+    unordered_map<int,int> mp;//存放前累积和 对应的下标
+    mp[sum[0]]=0;
+    for(int i=1;i<arr.size();i++)
+    {
+
+        sum[i]=sum[i-1]+arr[i];  //累积和
+        mp[sum[i]]=i;//该累积和的下标（由于i迭代增加 所以i存放的是最大的i）
+
+    }
+    int ans=0;
+    for(int i=0;i<arr.size()-1;i++)
+    {
+        if(mp.find(sum[i]+k)!=mp.end())  //查找当前累积和相差k的值是否存在
+        {
+            ans=max(ans,mp[sum[i]+k]-i);
+
+        }
+
+    }
+    //存在直接从0项开始累积和为k的
+    if(mp.find(k)!=mp.end())
+        ans=max(ans,mp[k]+1);
+    return ans;
+}
+```
+
+
 
 #### [53. 最大子序和](https://leetcode-cn.com/problems/maximum-subarray/)
 
@@ -6986,5 +7081,97 @@ public:
         return true;
     }
 };
+```
+
+
+
+
+
+# 剑指offer 刷题记录
+
+#### [剑指 Offer 15. 二进制中1的个数](https://leetcode-cn.com/problems/er-jin-zhi-zhong-1de-ge-shu-lcof/)
+
+```c++
+class Solution {
+public:
+   // 若 n \& 1 = 0n&1=0 ，则 nn 二进制 最右一位 为 00 ；
+   // 若 n \& 1 = 1n&1=1 ，则 nn 二进制 最右一位 为 11 。
+    //判断 nn 最右一位是否为 11 ，根据结果计数。
+	// 将 nn 右移一位（本题要求把数字 nn 看作无符号数，因此使用 无符号右移 操作）。
+    int hammingWeight(uint32_t n) {
+        int count = 0;
+        while (n) {
+            n &= (n - 1);
+            count++;
+        }
+        return count;
+    }
+};
+```
+
+#### [剑指 Offer 51. 数组中的逆序对](https://leetcode-cn.com/problems/shu-zu-zhong-de-ni-xu-dui-lcof/)
+
+```c++
+// 对数组 nums[left...mid]  [mid+1...right]进行合并
+int merge(vector<int> &nums, int left, int mid, int right)
+{
+    vector<int> help;
+    int index = 0;
+    int i = left;
+    int j = mid + 1;
+    int count = 0;
+
+    while(i <= mid && j <= right)
+    {
+        if (nums[i] > nums[j])
+        {
+            count += mid -i +1;
+            help.push_back(nums[j]);
+            j++;
+        }
+        else
+        {
+            help.push_back(nums[i]);
+            i++;
+        }
+    }
+
+    while (i <= mid)
+    {
+        help.push_back(nums[i++]);
+    }
+    while (j <= right)
+    {
+        help.push_back(nums[j++]);
+    }
+    for (int index = 0; index < help.size(); index++)
+    {
+        nums[left + index] = help[index];
+    }
+
+    return count;
+}
+
+int mergeSort(vector<int> &nums, int left, int right)
+{
+    if (left == right)
+    {
+        return 0;
+    }
+    int mid = left + (right - left) /2 ;
+    int leftCount = mergeSort(nums, left, mid);
+    int rightCount = mergeSort(nums, mid + 1, right);
+    int count = merge(nums, left, mid, right);
+    return leftCount + rightCount + count;
+}
+
+
+int reversePairs(vector<int>& nums) 
+{
+    if (nums.empty())
+        return 0;
+
+    return mergeSort(nums, 0, nums.size() - 1);
+}
 ```
 
