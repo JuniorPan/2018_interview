@@ -841,6 +841,23 @@ public:
 };
 ```
 
+#### [50. Pow(x, n)](https://leetcode-cn.com/problems/powx-n/)
+
+```c++
+double myPow(double x, int n) {
+    //迭代的解法，让i初始化为n，然后看i是否是2的倍数，不是的话就让 res 乘以x。然后x乘以自己，i每次循环缩小一半，直到为0停止循环。最后看n的正负，如果为负，返回其倒数，
+    double res = 1.0;
+    for (int i = n; i != 0; i /= 2) 
+    {
+        if (i % 2 != 0) res *= x;
+        x *= x;
+    }
+    return n < 0 ? 1 / res : res;
+}
+```
+
+
+
 #### [69. Sqrt(x)](https://leetcode.com/problems/sqrtx/)  #todo 
 
 ```c++
@@ -4475,6 +4492,38 @@ public:
 };
 ```
 
+#### [31. 下一个排列](https://leetcode-cn.com/problems/next-permutation/)
+
+```c++
+那么是如何得到的呢，我们通过观察原数组可以发现，如果从末尾往前看，数字逐渐变大，到了2时才减小的，然后再从后往前找第一个比2大的数字，是3，那么我们交换2和3，再把此时3后面的所有数字转置一下即可，步骤如下：
+
+1　　2　　7　　4　　3　　1
+
+1　　2　　7　　4　　3　　1
+
+1　　3　　7　　4　　2　　1
+
+1　　3　　1　　2　　4　　7
+void nextPermutation(vector<int>& num) 
+{
+    int i, j, n = num.size();
+    for (i = n - 2; i >= 0; --i) {
+        if (num[i + 1] > num[i]) {
+            for (j = n - 1; j > i; --j) {
+                if (num[j] > num[i]) break;
+            }
+            swap(num[i], num[j]);
+            reverse(num.begin() + i + 1, num.end());
+            return;
+        }
+        
+    }
+    reverse(num.begin(), num.end());
+}   
+```
+
+
+
 #### [46. 全排列](https://leetcode-cn.com/problems/permutations/)
 
 难度中等1294
@@ -6804,6 +6853,29 @@ int longestMountain(vector<int>& A) {
 
 
 ### 字符串(6)
+
+#### [7. 整数反转](https://leetcode-cn.com/problems/reverse-integer/)
+
+```c++
+int reverse(int x) 
+{
+    int y = 0;
+    int n;
+    while (x != 0)
+    {
+        n = x % 10;
+        if (y > INT_MAX / 10 || y < INT_MIN / 10)
+        {
+            return 0;
+        }
+        y = y * 10 + n;
+        x = x / 10;
+    }
+    return y;
+}
+```
+
+
 
 #### [8. 字符串转换整数 (atoi)](https://leetcode-cn.com/problems/string-to-integer-atoi/)
 
