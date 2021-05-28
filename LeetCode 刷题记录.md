@@ -7319,6 +7319,319 @@ int rand10()
 
 # 剑指offer 刷题记录
 
+#### [剑指 Offer 03. 数组中重复的数字](https://leetcode-cn.com/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/)
+
+```c++
+int findRepeatNumber(vector<int>& nums)
+{
+    for(int i = 0; i < nums.size(); ++i)
+    {
+        while(nums[i] != i)     //当前元素不等于下标
+        {
+            if(nums[i] == nums[nums[i]])    
+                return nums[i];
+            swap(nums[i],nums[nums[i]]);            
+        }
+    }   
+    return -1;
+}
+```
+
+
+
+#### [剑指 Offer 04. 二维数组中的查找](https://leetcode-cn.com/problems/er-wei-shu-zu-zhong-de-cha-zhao-lcof/)
+
+```
+bool findNumberIn2DArray(vector<vector<int>>& matrix, int target) 
+{
+    if (matrix.empty())
+        return false;
+
+    int row = matrix.size() - 1;
+    int col = 0;
+
+    while (row >= 0 && col < matrix[0].size())
+    {
+        if (matrix[row][col] == target)
+            return true;
+        else if (matrix[row][col] < target)
+            col++;
+        else
+            row--;
+    }
+    return false;
+}
+```
+
+#### [剑指 Offer 05. 替换空格](https://leetcode-cn.com/problems/ti-huan-kong-ge-lcof/)
+
+```c++
+string replaceSpace(string s) {
+    string res;   //存储结果
+
+    for(auto &c : s){   //遍历原字符串
+        if(c == ' '){
+            res.push_back('%');
+            res.push_back('2');
+            res.push_back('0');
+        }
+        else{
+            res.push_back(c);
+        }
+    }
+    return res;
+}
+```
+
+
+
+#### [剑指 Offer 06. 从尾到头打印链表](https://leetcode-cn.com/problems/cong-wei-dao-tou-da-yin-lian-biao-lcof/)
+
+```c++
+vector<int> reversePrint(ListNode* head) 
+{        
+    vector<int> res;
+    stack<int> s;
+    //入栈
+    while(head)
+    {
+        s.push(head->val);
+        head = head->next;
+    }
+    //出栈
+    while(!s.empty())
+    {
+        res.push_back(s.top());
+        s.pop();
+    }
+    return res;
+
+}
+```
+
+
+
+#### [剑指 Offer 07. 重建二叉树](https://leetcode-cn.com/problems/zhong-jian-er-cha-shu-lcof/)
+
+```c++
+TreeNode *buildTree(vector<int> &preorder, int preStart, int preEnd, vector<int> &inorder, int inStart, int inEnd)
+{
+    if (preStart > preEnd ||inStart > inEnd )
+        return nullptr;
+
+    // 先建立根节点
+    TreeNode *root = new TreeNode(preorder[preStart]);
+    // 在中序遍历中找到根节点所在位置，然后就可以确定左右子树的节点数目
+    int i = find(inorder.begin(), inorder.end(), preorder[preStart]) - inorder.begin();
+    root->left = buildTree(preorder, preStart + 1, preStart + i - inStart, inorder, inStart, i - 1);
+    root->right = buildTree(preorder, preStart + i - inStart + 1, preEnd, inorder, i + 1, inEnd);
+
+    return root;
+}
+
+TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder)
+{
+    return buildTree(preorder, 0, preorder.size() - 1, inorder, 0, inorder.size() - 1);
+}
+```
+
+
+
+#### [剑指 Offer 09. 用两个栈实现队列](https://leetcode-cn.com/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/)
+
+```c++
+
+class CQueue {
+public:
+    stack<int> stack1,stack2;
+    CQueue() {
+        
+        while (!stack1.empty()) {
+            stack1.pop();
+        }
+        while (!stack2.empty()) {
+            stack2.pop();
+        }
+
+
+    }
+    
+    void appendTail(int value) {
+        stack1.push(value);
+    }
+    
+    int deleteHead() 
+    {
+        // 如果第二个栈为空
+        if (stack2.empty()) 
+        {
+            while (!stack1.empty())
+            {
+                stack2.push(stack1.top());
+                stack1.pop();
+            }
+        } 
+        if (stack2.empty())
+        {
+            return -1;
+        } 
+        else 
+        {
+            int deleteItem = stack2.top();
+            stack2.pop();
+            return deleteItem;
+        }
+
+    }
+};
+
+/**
+ * Your CQueue object will be instantiated and called as such:
+ * CQueue* obj = new CQueue();
+ * obj->appendTail(value);
+ * int param_2 = obj->deleteHead();
+ */
+
+```
+
+
+
+#### [剑指 Offer 10- I. 斐波那契数列](https://leetcode-cn.com/problems/fei-bo-na-qi-shu-lie-lcof/)
+
+```c++
+int fib(int n) {
+    if(n <= 1)  return n;
+    int a = 0, b = 1, c = 0;
+    for(int i = 2; i <= n; ++i)     //从f(2)开始计算到f(n)
+    {
+        c = (a + b) % 1000000007;
+        a = b;
+        b = c;
+    }
+    return c;
+}
+```
+
+#### [剑指 Offer 10- II. 青蛙跳台阶问题](https://leetcode-cn.com/problems/qing-wa-tiao-tai-jie-wen-ti-lcof/)
+
+```c++
+int numWays(int n) 
+{
+    if (n <= 1)
+        return 1;
+    vector<int> dp(n, 0);
+    dp[0] = 1;
+    dp[1] = 2;
+    for (int i = 2; i < n; i++)
+    {
+        dp[i] = (dp[i - 1] + dp[i - 2]) % 1000000007;
+    }
+    return dp[n - 1];
+}
+```
+
+
+
+#### [剑指 Offer 11. 旋转数组的最小数字](https://leetcode-cn.com/problems/xuan-zhuan-shu-zu-de-zui-xiao-shu-zi-lcof/)
+
+```c++
+int minArray(vector<int>& nums) 
+{
+    //，若数组没有旋转或者旋转点在左半段的时候，中间值是一定小于右边界值的，所以要去左半边继续搜索
+    int left = 0, right = nums.size() - 1;
+    while (left < right)
+    {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] > nums[right])  // 如果中间值比右边的大, 则在右半边寻找最小值
+            left = mid + 1;
+        else if (nums[mid] < nums[right])// 如果中间值比右边的小, 则在左半边寻找最小值，注意这里mid可能就是最小值，所right =mid;
+            right = mid;
+        else
+            --right;
+    }
+    return nums[right];
+}
+```
+
+#### [剑指 Offer 12. 矩阵中的路径](https://leetcode-cn.com/problems/ju-zhen-zhong-de-lu-jing-lcof/)
+
+```c++
+bool dfs(vector<vector<char>>& board, string &word, int i, int j, int step)
+{
+    if (i < 0 || i >= board.size() || j < 0 || j >= board[0].size() || word[step] != board[i][j] || step >= word.size())
+        return false;
+
+    if (step == word.size()-1 && word[step] == board[i][j])
+        return true;
+
+    char temp = board[i][j];
+    board[i][j] = '1';
+    bool res =  dfs(board, word, i + 1, j, step+1) || 
+                dfs(board, word, i - 1, j, step+1) || 
+                dfs(board, word, i, j + 1, step+1) || 
+                dfs(board, word, i, j - 1, step+1);
+    board[i][j] = temp;
+    return res;
+}
+
+bool exist(vector<vector<char>>& board, string word)
+{
+    if (board.empty())
+        return false;
+
+    // return dfs(board, word, 0, 0, 0);
+
+    for(int i = 0; i < board.size(); i++)
+    {
+        for(int j = 0; j < board[0].size(); j++)
+        {
+            if (dfs(board, word, i, j, 0))
+                return true;
+        }
+    }
+    return false;
+
+}
+```
+
+
+
+#### [剑指 Offer 13. 机器人的运动范围](https://leetcode-cn.com/problems/ji-qi-ren-de-yun-dong-fan-wei-lcof/)
+
+```
+int getsum(int num)
+{
+    int sum = 0;
+    while(num)
+    {
+        sum += num % 10;
+        num /= 10;
+
+    }
+    return sum;
+}
+int dfs(int m, int n, int k, int i, int j, vector<int> &visted)
+{
+    if (i < 0 || i >= m || j < 0 || j >= n || visted[i * n +j] == 1 || getsum(i) + getsum(j) > k)
+        return 0;
+    visted[i * n +j] = 1;
+    int res = 1+ dfs(m, n, k, i + 1, j, visted) +
+              dfs(m, n, k, i - 1, j, visted) +
+              dfs(m, n, k, i, j + 1, visted) +
+              dfs(m, n, k, i, j - 1, visted); 
+    return res;
+}
+
+
+int movingCount(int m, int n, int k) 
+{
+    vector<int> visted(m * n, 0);
+    return dfs(m, n, k, 0, 0, visted);
+}
+```
+
+
+
 #### [剑指 Offer 15. 二进制中1的个数](https://leetcode-cn.com/problems/er-jin-zhi-zhong-1de-ge-shu-lcof/)
 
 ```c++
@@ -7338,6 +7651,40 @@ public:
     }
 };
 ```
+
+#### [剑指 Offer 30. 包含min函数的栈](https://leetcode-cn.com/problems/bao-han-minhan-shu-de-zhan-lcof/)
+
+```c++
+class MinStack {
+public:
+    stack<int> s1;
+    stack<int> s2;
+    /** initialize your data structure here. */
+    MinStack() {
+        
+    }
+    
+    void push(int x) {
+        s1.push(x);
+	    if (s2.empty() || x <= min())  s2.push(x);	
+    }
+    
+    void pop() {
+        if (s1.top() == min())  s2.pop();
+	    s1.pop();
+    }
+    
+    int top() {
+         return s1.top();
+    }
+    
+    int min() {
+        return s2.top();
+    }
+};
+```
+
+
 
 #### [剑指 Offer 51. 数组中的逆序对](https://leetcode-cn.com/problems/shu-zu-zhong-de-ni-xu-dui-lcof/)
 
