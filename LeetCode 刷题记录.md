@@ -4258,6 +4258,64 @@ int ladderLength(string beginWord, string endWord, vector<string> &wordList)
 
 #### [297. Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)
 
+
+
+#### [542. 01 矩阵](https://leetcode-cn.com/problems/01-matrix/)
+
+```
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+        
+        if(matrix.empty() || matrix[0].empty())
+            return matrix;
+        queue<pair<int,int>> q;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        
+        for(int i = 0; i < m; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                if (matrix[i][j] == 0)
+                {
+                    q.push({i,j});
+                }
+                else
+                {
+                    matrix[i][j] = INT_MAX;
+                }
+            }
+        }
+    
+        int dirs[4][2]= {-1, 0, 1, 0, 0, -1, 0, 1};
+        
+        while(!q.empty())   // 广度优先遍历
+        {
+
+            int x = q.front().first, y = q.front().second;
+            q.pop();
+            for(int i = 0; i < 4; i++)  // 遍历4个方向
+            {
+                int nx = x + dirs[i][0];
+                int ny = y + dirs[i][1];
+                if(nx >= 0 && ny >= 0 && nx < m &&  ny < n && matrix[nx][ny] > matrix[x][y])
+                {
+                    matrix[nx][ny] = matrix[x][y] + 1;
+                    q.push({nx,ny});
+                }
+                
+            }
+        }
+ 
+        return matrix;
+        
+    }
+};
+```
+
+
+
 ### 回溯  (13)
 
 #### [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
@@ -6245,6 +6303,55 @@ vector<int> plusOne(vector<int> &digits)
 }
 ```
 
+#### [73. 矩阵置零](https://leetcode-cn.com/problems/set-matrix-zeroes/)
+
+```c++
+class Solution {
+public
+    // 用一个长度为m的一维数组记录各行中是否有0，用一个长度为n的一维数组记录各列中是否有0，最后直接更新matrix数组即可。这道题的要求是用O(1)的空间，那么我们就不能新建数组，我们考虑就用原数组的第一行第一列来记录各行各列是否有0.
+
+//- 先扫描第一行第一列，如果有0，则将各自的flag设置为true
+//- 然后扫描除去第一行第一列的整个数组，如果有0，则将对应的第一行和第一列的数字赋0
+//- 再次遍历除去第一行第一列的整个数组，如果对应的第一行和第一列的数字有一个为0，则将当前值赋0
+//- 最后根据第一行第一列的flag来更新第一行第一列
+    void setZeroes(vector<vector<int> > &matrix) {
+        if (matrix.empty() || matrix[0].empty()) return;
+        int m = matrix.size(), n = matrix[0].size();
+        bool rowZero = false, colZero = false;
+        for (int i = 0; i < m; ++i) {
+            if (matrix[i][0] == 0) colZero = true;
+        }
+        for (int i = 0; i < n; ++i) {
+            if (matrix[0][i] == 0) rowZero = true;
+        } 
+        for (int i = 1; i < m; ++i) {
+            for (int j = 1; j < n; ++j) {
+                if (matrix[i][j] == 0) {
+                    matrix[0][j] = 0;
+                    matrix[i][0] = 0;
+                }
+            }
+        }
+        for (int i = 1; i < m; ++i) {
+            for (int j = 1; j < n; ++j) {
+                if (matrix[0][j] == 0 || matrix[i][0] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        if (rowZero) {
+            for (int i = 0; i < n; ++i) matrix[0][i] = 0;
+        }
+        if (colZero) {
+            for (int i = 0; i < m; ++i) matrix[i][0] = 0;
+        }
+    }
+
+};
+```
+
+
+
 #### [88. Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array/)
 
 ```c++
@@ -7081,6 +7188,57 @@ public:
         return true;
     }
 };
+```
+
+#### [146. LRU 缓存机制](https://leetcode-cn.com/problems/lru-cache/)
+
+```c++
+class LRUCache{
+private:
+    int cap;
+    list<pair<int, int>> l;
+    unordered_map<int, list<pair<int, int>>::iterator> m;
+public:
+    LRUCache(int capacity) {
+        cap = capacity;
+    }
+    
+    // get 相对简单些，我们在 HashMap 中查找给定的 key，若不存在直接返回 -1。如果存在则将此项移到顶部，这里我们使用 C++ STL 中的函数 splice，专门移动链表中的一个或若干个结点到某个特定的位置，这里我们就只移动 key 对应的迭代器到列表的开头，然后返回 value
+    int get(int key) {
+        auto it = m.find(key);
+        if (it == m.end()) return -1;
+        l.splice(l.begin(), l, it->second);
+        return it->second->second;
+    }
+    // 我们也是现在 HashMap 中查找给定的 key，如果存在就删掉原有项，并在顶部插入新来项，然后判断是否溢出，若溢出则删掉底部项(最不常用项)
+    void put(int key, int value) {
+        auto it = m.find(key);
+        if (it != m.end()) l.erase(it->second);
+        l.push_front(make_pair(key, value));
+        m[key] = l.begin();
+        if (m.size() > cap) {
+            int k = l.rbegin()->first;
+            l.pop_back();
+            m.erase(k);
+        }
+    }
+};
+```
+
+
+
+
+
+#### [470. 用 Rand7() 实现 Rand10()](https://leetcode-cn.com/problems/implement-rand10-using-rand7/)
+
+```
+int rand10() 
+{
+    while (true) {
+        int num = (rand7() - 1) * 7 + rand7();
+        if (num <= 40) return num % 10 + 1;
+    }
+}
 ```
 
 
