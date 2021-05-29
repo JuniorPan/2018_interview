@@ -1422,6 +1422,33 @@ ListNode *swapPairs(ListNode *head)
 }
 ```
 
+#### [82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
+
+```c++
+ListNode *deleteDuplicates(ListNode *head)
+{
+    if (!head || !head->next)
+        return head;
+    ListNode *dummy = new ListNode(-1), *pre = dummy;
+    dummy->next = head;
+    while (pre->next)
+    {
+        ListNode *cur = pre->next;
+        while (cur->next && cur->next->val == cur->val)
+        {
+            cur = cur->next;
+        }
+        if (cur != pre->next)
+            pre->next = cur->next;
+        else
+            pre = pre->next;
+    }
+    return dummy->next;
+}
+```
+
+
+
 #### [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
 
 ```
@@ -3217,7 +3244,7 @@ public:
 
 ##### [5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
 
-```
+```c++
 string longestPalindrome(string s) // todo: 时间上还得优化
 {
     if (s.empty())
@@ -3240,6 +3267,35 @@ string longestPalindrome(string s) // todo: 时间上还得优化
         }
     }
     return s.substr(left,right - left + 1);
+}
+
+int getLongestPalindrome(string str, int n) {
+    // write code here
+    if (str.empty() || n <= 0)
+        return 0;
+
+
+    // dp[i][j]表示区间[i...j]上是否是回文子串
+    vector<vector<bool>> dp(str.size(), vector<bool>(str.size(), false));
+    int max_len = 0;
+    int max_left = 0;
+    int max_right = 0;
+
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j <= i; j++)
+        {
+            dp[j][i] = str[i] == str[j] && ( i - j < 2 || dp[j+1][i-1]);
+            if (dp[j][i] && i-j+1 > max_len)
+            {
+                max_len = i - j +1;
+            }
+
+        }
+    }
+
+    return max_len;
+
 }
 ```
 
@@ -7031,6 +7087,33 @@ string multiply(string num1, string num2)
     ans = (ans == "") ? "0" : ans;
     return ans;
 }
+
+string solve(string num1, string num2) {
+    // write code here
+    if (num1 == "0" || num2 == "0")
+                return "0";
+
+    vector<int> temp(num1.size() + num2.size());
+    string res;
+    for(int i = num1.size()-1; i >= 0; i--)
+    {
+        for(int j = num2.size()-1; j >= 0; j--)
+        {
+            temp[i+j+1] += ((num1[i] - '0') * (num2[j] - '0'));
+            temp[i+j] += temp[i+j+1]/10;
+            temp[i+j+1] %= 10;
+        }
+    }
+    for(int i = 0; i < temp.size(); i++)
+    {
+        if (i == 0 && temp[0] == 0)
+            continue;
+        else
+            res += to_string(temp[i]);
+    }
+
+    return res == "" ? "0" :res;
+}
 ```
 
 #### [151. 翻转字符串里的单词](https://leetcode-cn.com/problems/reverse-words-in-a-string/)
@@ -7137,6 +7220,19 @@ string addStrings(string num1, string num2)
     }
     reverse(res.begin(), res.end());//翻转字符串
     return res;
+}
+
+string addStrings(string num1, string num2) {
+    string res = "";
+    int m = num1.size(), n = num2.size(), i = m - 1, j = n - 1, carry = 0;
+    while (i >= 0 || j >= 0) {
+        int a = i >= 0 ? num1[i--] - '0' : 0;
+        int b = j >= 0 ? num2[j--] - '0' : 0;
+        int sum = a + b + carry;
+        res.insert(res.begin(), sum % 10 + '0');
+        carry = sum / 10;
+    }
+    return carry ? "1" + res : res;
 }
 ```
 
@@ -7295,6 +7391,72 @@ public:
         }
     }
 };
+class Solution {
+public:
+    /**
+     * lru design
+     * @param operators int整型vector<vector<>> the ops
+     * @param k int整型 the k
+     * @return int整型vector
+     */
+    vector<int>keys;
+    vector<int>values;
+    vector<int>res;
+    void set(int key,int value,int k)
+    {
+        if(keys.size()<k)
+        {
+            keys.push_back(key);
+            values.push_back(value);
+        }
+        else
+        {
+            keys.erase(keys.begin());
+            values.erase(values.begin());
+            keys.push_back(key);
+            values.push_back(value);
+        }
+    }
+    void get(int key)
+    {
+        int i;
+        for(i=0;i<keys.size();i++)
+        {
+            if(keys[i]==key)
+            {
+                break;
+            }
+        }
+        if(i==keys.size())
+        {
+            res.push_back(-1);
+            return ;
+        }
+        int value=values[i];
+        keys.erase(keys.begin()+i);
+        values.erase(values.begin()+i);
+        keys.push_back(key);
+        values.push_back(value);
+        res.push_back(value);
+    }
+    vector<int> LRU(vector<vector<int> >& operators, int k) {
+        // write code here
+        for(int i=0;i<operators.size();i++)
+        {
+            if(operators[i][0]==1)
+            {
+                int key=operators[i][1];
+                int v=operators[i][2];
+                set(key,v,k);
+            }
+            else
+            {
+                get(operators[i][1]);
+            }
+        }
+        return res;
+    }
+};
 ```
 
 
@@ -7314,6 +7476,77 @@ int rand10()
 ```
 
 
+
+#### 丢旗子
+
+```c++
+//核心思路：每次扔的位置都是最佳的，i个棋子扔time次，第1次时，如果碎了，向下可以探测“i-1个棋子扔time-1次”层；如果没碎，向上可以探测“i个棋子扔time-1次”层。上下层数加当前1层即为i个棋子扔time次能探测的最大层数
+class Solution {
+public:
+    int solve(int n, int k) {
+        if(n <= 1 || k == 1) return n; //层数小于等于1和棋子数等于1的情况
+        int best = log2(n) + 1; //棋子足够条件下扔的最小次数
+        if(k >= best) return best; //如果棋子数足够则返回最小次数
+        int dp[k + 1]; //用来记录扔1~k个棋子能探测的最大层数
+        for(int &i: dp) i = 1; //无论有几个棋子扔1次都只能探测一层
+        for(int time = 2;;time++) { //从扔第2次开始（前面初始化dp数组时扔了第1次）
+            for(int i = k; i >= 2; i--) { //从k个棋子开始刷新dp数组（倒过来刷新省去记录临时值的步骤）
+                dp[i] = dp[i] + dp[i-1] + 1; //关键一步
+                if(dp[i] >= n) return time; //如果探测层数大于n，则返回扔的次数
+            }
+            dp[1] = time; //1个棋子扔time次最多探测time层
+        }
+    }
+};
+
+```
+
+
+
+#### 进制转换
+
+```
+string solve(int M, int N) {
+    // write code here
+    if(M == 0) return "0";//如果M=0就直接返回
+    bool flag = false;//记录是不是负数
+    if(M < 0){
+        //如果是负数flag=true，M 取相反数
+        flag = true;
+        M = -M;
+    }
+    string res = "";//返回最终的结果
+    string jz = "0123456789ABCDEF";//对应进制的某一位
+    while(M != 0){//就对应转换为N进制的逆序样子
+        res += jz[M % N];
+        M /= N;
+    }
+    reverse(res.begin(),res.end());//逆序一下才是对应的N进制
+    if(flag) res.insert(0,"-");//如果是负数就在头位置插入一个-号
+    return res;
+}
+```
+
+#### **括号序列**
+
+```
+bool isValid(string s) {
+        // write code here
+        stack<char> parentheses;
+        for (int i = 0; i < s.size(); ++i) {
+            if (s[i] == '(' || s[i] == '[' || s[i] == '{') parentheses.push(s[i]);
+            else {
+                if (parentheses.empty()) return false;
+                if (s[i] == ')' && parentheses.top() != '(') return false;
+                if (s[i] == ']' && parentheses.top() != '[') return false;
+                if (s[i] == '}' && parentheses.top() != '{') return false;
+                parentheses.pop();
+            }
+        }
+        return parentheses.empty();
+    }
+
+```
 
 
 
