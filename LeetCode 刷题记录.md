@@ -3505,8 +3505,38 @@ public:
 };
 ```
 
+#### 其他
+
+#### [221. 最大正方形](https://leetcode-cn.com/problems/maximal-square/)
+
+```c++
+int maximalSquare(vector<vector<char>>& matrix) 
+{
+    if (matrix.empty() || matrix[0].empty()) 
+    	return 0;
+    int m = matrix.size(), n = matrix[0].size(), res = 0;
+    // dp[i][j] 表示到达 (i, j) 位置所能组成的最大正方形的边长
+    // p[i][j]，由于该点是正方形的右下角，所以该点的右边，下边，右下边都不用考虑，关心的就是左边，上边，和左上边。这三个位置的dp值 suppose 都应该算好的，还有就是要知道一点，只有当前 (i, j) 位置为1，dp[i][j] 才有可能大于0，否则 dp[i][j] 一定为0。当 (i, j) 位置为1，此时要看 dp[i-1][j-1], dp[i][j-1]，和 dp[i-1][j] 这三个位置，我们找其中最小的值，并加上1，就是 dp[i][j] 的当前值了
+    vector<vector<int>> dp(m, vector<int>(n, 0));
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (i == 0 || j == 0) dp[i][j] = matrix[i][j] - '0';
+            else if (matrix[i][j] == '1') {
+                dp[i][j] = min(dp[i - 1][j - 1], min(dp[i][j - 1], dp[i - 1][j])) + 1;
+            }
+            res = max(res, dp[i][j]);
+        }
+    }
+    return res * res;
+}
+```
+
+
+
+
 
 ###  分治 
+
 #### [395. Longest Substring with At Least K Repeating Characters](https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/)
 
 
@@ -5010,6 +5040,46 @@ vector<string> wordBreak(string s, vector<string>& wordDict)
 ```
 
 ### 二叉树 (8)
+
+#### 完全二叉树
+
+```c++
+
+
+bool judgeTotal(TreeNode *root)
+    {
+        if (root == nullptr)
+            return true;    
+queue<TreeNode *> q;
+    q.push(root);
+    while(!q.empty())
+    {
+        root = q.front();
+        q.pop();
+        if (root->left && root->right)
+        {
+            q.push(root->left);
+            q.push(root->right);
+        }
+
+        else if (root->left == nullptr && root->right)
+        {
+            return false;
+        }
+        else
+        {
+            while(!q.empty())
+            {
+                root = q.front();
+                q.pop();
+                if (root->left || root->right)
+                    return false;
+            }            
+        }
+    }
+    return true;
+}
+```
 
 #### [98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/) 二叉树中序遍历非递归
 
@@ -7055,9 +7125,89 @@ public:
 };
 ```
 
+#### [415. 字符串相加 大数加法](https://leetcode-cn.com/problems/add-strings/) 
+
+```c++
+string addStrings(string num1, string num2) 
+{
+    string res = "";
+    int add=0,i=num1.size()-1,j=num2.size()-1;
+    while(i>=0 || j>=0 || add>0)
+    {
+        int cur=add;
+        cur += (i >= 0 ? num1[i--] - '0' : 0);
+        cur += (j >= 0 ? num2[j--] - '0' : 0);
+
+        add = cur / 10;//用来判断是否有进位
+
+        cur %= 10;
+
+        res += ('0'+cur);
+    }
+    reverse(res.begin(), res.end());//翻转字符串
+    return res;
+}
+
+string addStrings(string num1, string num2) {
+    string res = "";
+    int m = num1.size(), n = num2.size(), i = m - 1, j = n - 1, carry = 0;
+    while (i >= 0 || j >= 0) {
+        int a = i >= 0 ? num1[i--] - '0' : 0;
+        int b = j >= 0 ? num2[j--] - '0' : 0;
+        int sum = a + b + carry;
+        res.insert(res.begin(), sum % 10 + '0');
+        carry = sum / 10;
+    }
+    return carry ? "1" + res : res;
+}
+```
+
+#### 415_2 大数减法
+
+```c++
+string sub(string s1, string s2) {
+    int i = s1.length()-1;
+    int j = s2.length()-1;
+    int flag = 0;
+    string ans = "";
+    while (i>=0&&j >=0) {
+        s1[i] = s1[i] - flag;
+        if (s1[i] >= s2[j]) {
+            flag = 0;
+            int temp = s1[i] - s2[j];
+            ans = ans + to_string(temp);
+        }
+        else {
+            int temp = s1[i] - s2[j] + 10;
+            ans = ans + to_string(temp);
+            flag = 1;
+        }
+        i--, j--;
+    }
+    while (i>=0) {//处理剩余部分
+        if (flag == 0)
+            ans = ans + s1[i];
+        else {
+            int temp = s1[i] - '1';
+            ans = ans + to_string(temp);
+        }
+        i--;
+    }
+    //翻转并去除前导0
+    int len = ans.length();
+    string ss = "";
+    for (int i = len-1; i>=0; i--) {
+        if (ans[i] == '0')
+            continue;
+        ss = ss + ans[i];
+    }
+    return ss;
+}
+```
 
 
-#### [43. 字符串相乘](https://leetcode-cn.com/problems/multiply-strings/) #todo 20210419
+
+#### [43. 字符串相乘 大数相乘](https://leetcode-cn.com/problems/multiply-strings/) 
 
 ```c++
 string multiply(string num1, string num2) 
@@ -7199,42 +7349,7 @@ string decodeString(string s)
 
 
 
-#### [415. 字符串相加](https://leetcode-cn.com/problems/add-strings/) #Todo 20210419
 
-```c++
-string addStrings(string num1, string num2) 
-{
-    string res = "";
-    int add=0,i=num1.size()-1,j=num2.size()-1;
-    while(i>=0 || j>=0 || add>0)
-    {
-        int cur=add;
-        cur += (i >= 0 ? num1[i--] - '0' : 0);
-        cur += (j >= 0 ? num2[j--] - '0' : 0);
-
-        add = cur / 10;//用来判断是否有进位
-
-        cur %= 10;
-
-        res += ('0'+cur);
-    }
-    reverse(res.begin(), res.end());//翻转字符串
-    return res;
-}
-
-string addStrings(string num1, string num2) {
-    string res = "";
-    int m = num1.size(), n = num2.size(), i = m - 1, j = n - 1, carry = 0;
-    while (i >= 0 || j >= 0) {
-        int a = i >= 0 ? num1[i--] - '0' : 0;
-        int b = j >= 0 ? num2[j--] - '0' : 0;
-        int sum = a + b + carry;
-        res.insert(res.begin(), sum % 10 + '0');
-        carry = sum / 10;
-    }
-    return carry ? "1" + res : res;
-}
-```
 
 
 
@@ -7885,6 +8000,113 @@ public:
 };
 ```
 
+#### [剑指 Offer 26. 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
+
+```c++
+class Solution {
+public:
+    bool isSubStructure(TreeNode* A, TreeNode* B) {
+        if(!A || !B) return false;
+        if(issame(A, B)) return true;
+        return isSubStructure(A->left, B) || isSubStructure(A->right, B);
+    }
+    bool issame(TreeNode* a, TreeNode* b)
+    {
+        if(!b) return true;
+        if(!a || a->val != b->val) return false;
+        return issame(a->left, b->left) && issame(a->right, b->right);
+    }
+};
+```
+
+#### [剑指 Offer 27. 二叉树的镜像](https://leetcode-cn.com/problems/er-cha-shu-de-jing-xiang-lcof/)
+
+```c++
+class Solution 
+{
+    void dfs(TreeNode* root)
+    {
+        if (root == nullptr)
+            return ;
+        TreeNode *temp = root->left;
+        root->left = root->right;
+        root->right = temp;
+
+        dfs(root->left);
+        dfs(root->right);
+
+        
+    }
+public:
+    TreeNode* mirrorTree(TreeNode* root) 
+    {
+        dfs(root);
+        return root;     
+    }
+};
+```
+
+
+
+#### [剑指 Offer 28. 对称的二叉树](https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/)
+
+```c++
+class Solution {
+
+    bool dfs(TreeNode *root1, TreeNode *root2)
+    {
+    
+        if (root1 == nullptr && root2 == nullptr)
+            return true;
+        
+        if (root1 == nullptr || root2 == nullptr)
+            return false;
+    
+        if (root1 && root2)
+            return root1->val == root2->val && dfs(root1->left, root2->right) && dfs(root1->right, root2->left);
+        else
+            return false;
+    }
+
+public:
+    bool isSymmetric(TreeNode* root) 
+    {
+        if (!root)
+            return true;
+        return dfs(root, root);
+    }
+};
+```
+
+#### [剑指 Offer 33. 二叉搜索树的后序遍历序列](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/)
+
+```c++
+class Solution {
+public:
+    // 根据二叉树的定义来看 最后一个是根节点 前面的序列中必须存在一个拐点 拐点前后的值 要么均大于根 要么均小于根
+    vector<int> res;
+    bool verifyPostorder(vector<int>& postorder) {
+        res = postorder;
+        return dfs(0, postorder.size() - 1);
+    }
+    bool dfs(int l, int r)
+    {
+        if(l >= r) return true;//退出条件
+        int root = res[r];//最后一个点是根结点
+        int k = l;//从最左边开始
+        while(k < r && res[k] < root) k++;//符合左子树的点
+        for(int i = k; i < r; i++)//此时的k是右子树的第一个点
+        {
+            if(res[i] < root)//如果右子树小于根，说明不符合
+            return false;
+        }
+        return dfs(l, k - 1) && dfs(k, r - 1);//逐步缩小范围
+    }
+};
+```
+
+
+
 #### [剑指 Offer 30. 包含min函数的栈](https://leetcode-cn.com/problems/bao-han-minhan-shu-de-zhan-lcof/)
 
 ```c++
@@ -7913,6 +8135,39 @@ public:
     
     int min() {
         return s2.top();
+    }
+};
+```
+
+#### [剑指 Offer 41. 数据流中的中位数](https://leetcode-cn.com/problems/shu-ju-liu-zhong-de-zhong-wei-shu-lcof/)
+
+```c++
+class MedianFinder {
+public:
+    //因为我们要	取得中位数，所以只要关注前一半数字的最小值和后一段数字的最大值，采用堆来进行维护时间复杂度为O(logn)O(logn)。	
+    // 那么B在构造时用小顶堆+元素取负的方法将其转换为大顶堆
+
+
+
+    priority_queue<long> small, large;
+    /** initialize your data structure here. */
+    MedianFinder() {
+
+    }
+    
+    void addNum(int num) {
+        small.push(num);
+        large.push(-small.top());
+        small.pop();
+        if (small.size() < large.size())
+        {
+            small.push(-large.top());
+            large.pop();
+        }
+    }
+    
+    double findMedian() {
+        return small.size() > large.size() ? small.top() : 0.5 * (small.top() - large.top());
     }
 };
 ```

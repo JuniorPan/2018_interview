@@ -455,6 +455,30 @@ int majorityElement(vector<int>& nums)
 
 #### [20. 有效的括号](https://leetcode-cn.com/problems/valid-parentheses/)
 
+```c++
+stack<char> st;
+for (char c : s)
+{
+    if (c == '(' || c == '{' || c == '[')
+    {
+        st.push(c);
+    }
+    else
+    {
+        if (st.empty())
+            return false;
+        if (c == ')' && st.top() != '(')
+            return false;
+        if (c == '}' && st.top() != '{')
+            return false;
+        if (c == ']' && st.top() != '[')
+            return false;
+        st.pop();
+    }
+}
+return st.empty();
+```
+
 
 
 #### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
