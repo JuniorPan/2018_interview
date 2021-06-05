@@ -5753,7 +5753,7 @@ Node* treeToDoublyList(Node* root)
 }
 ```
 
-##### [109. Convert Sorted List to Binary Search Tree](https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/)
+#### [109. 有序链表转换二叉搜索树](https://leetcode-cn.com/problems/convert-sorted-list-to-binary-search-tree/)
 
 ```c++
 class Solution
@@ -5838,7 +5838,7 @@ TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder)
 }
 ```
 
-#### [[297. 二叉树的序列化与反序列化](https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/)](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)
+#### [297. 二叉树的序列化与反序列化](https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/)
 
 ```c++
 class Codec {
