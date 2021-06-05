@@ -1451,7 +1451,7 @@ ListNode *deleteDuplicates(ListNode *head)
 
 #### [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
 
-```
+```c++
 ListNode* deleteDuplicates(ListNode* head) {
     if (head == NULL || head->next == NULL)
         return head;
@@ -5041,47 +5041,9 @@ vector<string> wordBreak(string s, vector<string>& wordDict)
 
 ### 二叉树 (8)
 
-#### 完全二叉树
-
-```c++
 
 
-bool judgeTotal(TreeNode *root)
-    {
-        if (root == nullptr)
-            return true;    
-queue<TreeNode *> q;
-    q.push(root);
-    while(!q.empty())
-    {
-        root = q.front();
-        q.pop();
-        if (root->left && root->right)
-        {
-            q.push(root->left);
-            q.push(root->right);
-        }
-
-        else if (root->left == nullptr && root->right)
-        {
-            return false;
-        }
-        else
-        {
-            while(!q.empty())
-            {
-                root = q.front();
-                q.pop();
-                if (root->left || root->right)
-                    return false;
-            }            
-        }
-    }
-    return true;
-}
-```
-
-#### [98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/) 二叉树中序遍历非递归
+#### [97. 中序遍历二叉树](https://leetcode-cn.com/problems/validate-binary-search-tree/) 
 
 ```c++
 // 二叉树中序非递归遍历
@@ -5110,7 +5072,7 @@ vector<int> inorderTraversal(TreeNode* root)
 }
 ```
 
-#### [98. Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/) 二叉树中序遍历非递归
+#### [98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/) 
 
 ```c++
 bool isValidBST(TreeNode* root) 
@@ -5133,6 +5095,44 @@ bool isValidBST(TreeNode* root)
             return false;
         pre = cur;
         cur = cur->right;
+    }
+    return true;
+}
+```
+
+#### 98_2 判断是否完全二叉树
+
+```c++
+bool judgeTotal(TreeNode *root)
+{
+    if (root == nullptr)
+        return true;    
+    queue<TreeNode *> q;
+    q.push(root);
+    while(!q.empty())
+    {
+        root = q.front();
+        q.pop();
+        if (root->left && root->right)
+        {
+            q.push(root->left);
+            q.push(root->right);
+        }
+
+        else if (root->left == nullptr && root->right)
+        {
+            return false;
+        }
+        else
+        {
+            while(!q.empty())
+            {
+                root = q.front();
+                q.pop();
+                if (root->left || root->right)
+                    return false;
+            }            
+        }
     }
     return true;
 }
@@ -5168,7 +5168,7 @@ void flatten(TreeNode* root)
 }
 ```
 
-#### [144. 二叉树的前序遍历](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/) 二叉树前序遍历非递归
+#### [144. 二叉树的前序遍历](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/) 
 
 ```c++
 // 二叉树前序遍历非递归
@@ -5196,7 +5196,7 @@ vector<int> preorderTraversal(TreeNode* root)
 }
 ```
 
-#### [145. Binary Tree Postorder Traversal](https://leetcode.com/problems/binary-tree-postorder-traversal/) 二叉树后续非递归遍历
+#### [[145. 二叉树的后序遍历](https://leetcode-cn.com/problems/binary-tree-postorder-traversal/)](https://leetcode.com/problems/binary-tree-postorder-traversal/)
 
 ```c++
 vector<int> postorderTraversal(TreeNode* root) 
@@ -5416,7 +5416,7 @@ public:
 
 
 
-### 树的DFS (8)
+### 二叉树的DFS (8)
 
 通常采用递归
 
@@ -5440,7 +5440,7 @@ bool isSameTree(TreeNode *p, TreeNode *q)
 }
 ```
 
-#### [101. Symmetric Tree](https://leetcode.com/problems/symmetric-tree/)
+#### [101. 对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/)
 
 ```c++
 class Solution
@@ -5467,7 +5467,7 @@ public:
 };
 ```
 
-#### [104. Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
+#### [104. 二叉树的最大深度](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/)
 
 ```c++
 int maxDepth(TreeNode* root)
@@ -5478,7 +5478,7 @@ int maxDepth(TreeNode* root)
 }
 ```
 
-#### [110. Balanced Binary Tree](https://leetcode.com/problems/balanced-binary-tree/)
+#### [110. 平衡二叉树](https://leetcode-cn.com/problems/balanced-binary-tree/)
 
 ```c++
 int height(TreeNode *root)
@@ -5529,7 +5529,7 @@ public:
 
 
 
-#### [112. Path Sum](https://leetcode.com/problems/path-sum/)
+#### [112. 路径总和](https://leetcode-cn.com/problems/path-sum/)
 
 ```c++
 bool hasPathSum(TreeNode *root, int sum)
@@ -5604,7 +5604,7 @@ void dfs(TreeNode* node, int sum, int curSum, vector<TreeNode*>& temp, int& res)
 }
 ```
 
-#### [124. Binary Tree Maximum Path Sum](https://leetcode.com/problems/binary-tree-maximum-path-sum/) todo: 还不是很懂
+#### [124. 二叉树中的最大路径和](https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/)todo: 还不是很懂
 
 ```c++
 class Solution
@@ -5788,7 +5788,7 @@ public:
 };
 ```
 
-### 树的重新构建
+### 二叉树的重新构建
 
 #### [105. Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal)
 
@@ -6345,7 +6345,7 @@ int removeDuplicates(vector<int>& nums)
 
 
 
-#### [41. First Missing Positive](https://leetcode.com/problems/first-missing-positive/) #todo
+#### [41. 缺失的第一个正数](https://leetcode-cn.com/problems/first-missing-positive/)](https://leetcode.com/problems/first-missing-positive/) #todo
 
 ```c++
 int firstMissingPositive(vector<int> &nums)
@@ -6370,7 +6370,7 @@ int firstMissingPositive(vector<int> &nums)
 }
 ```
 
-#### [48. Rotate Image](https://leetcode.com/problems/rotate-image/)  #todo 需要扣一下边界
+#### [48. 旋转图像](https://leetcode-cn.com/problems/rotate-image/) #todo 需要扣一下边界
 
 ```c++
 class Solution 
@@ -6404,24 +6404,7 @@ public:
 };
 ```
 
-#### [53.Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
-
-```c++
-int maxSubArray(vector<int>& nums) 
-{
-    int res = INT_MIN;
-    int cur_sum = 0;
-    for(int i = 0; i < nums.size(); i++)
-    {
-        cur_sum += nums[i];
-        res = max(res, cur_sum);
-        cur_sum = cur_sum > 0 ? cur_sum:0;
-    }
-    return res;
-}
-```
-
-#### [54. Spiral Matrix](https://leetcode.com/problems/spiral-matrix/) #todo 同48 注意边界
+#### [54. 螺旋矩阵](https://leetcode-cn.com/problems/spiral-matrix/)#todo 同48 注意边界
 
 ```c++
 vector<int> spiralOrder(vector<vector<int>>& matrix)
@@ -6454,7 +6437,7 @@ vector<int> spiralOrder(vector<vector<int>>& matrix)
 }
 ```
 
-#### [66. Plus One](https://leetcode.com/problems/plus-one/)
+#### [66. 加一](https://leetcode-cn.com/problems/plus-one/)
 
 ```c++
 vector<int> plusOne(vector<int> &digits)
@@ -6527,7 +6510,9 @@ public
 
 
 
-#### [88. Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array/)
+#### [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
+
+
 
 ```c++
 void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
@@ -6550,8 +6535,6 @@ void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
         nums1[i--] = nums2[b--];
 }
 ```
-
-#### [128. Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence)  不会   298 收费题 树上面的
 
 #### [128. 最长连续序列](https://leetcode-cn.com/problems/longest-consecutive-sequence/) #TODO
 
@@ -6589,7 +6572,7 @@ int singleNumber(vector<int> &nums)
 }
 ```
 
-#### [150. Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation/) #Todo 需要敲一遍
+#### [150. 逆波兰表达式求值](https://leetcode-cn.com/problems/evaluate-reverse-polish-notation/)#Todo 需要敲一遍
 
 ```c++
 // 逆波兰表达式
@@ -6624,7 +6607,7 @@ int evalRPN(vector<string> &tokens)
 }
 ```
 
-#### [152. Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/)
+#### [152. 乘积最大子数组](https://leetcode-cn.com/problems/maximum-product-subarray/)
 
 ```c++
 int maxProduct(vector<int>& nums) 
@@ -6804,7 +6787,7 @@ vector<int> productExceptSelf(vector<int>& nums)
 }
 ```
 
-#### [334. Increasing Triplet Subsequence](https://leetcode.com/problems/increasing-triplet-subsequence/)
+#### [334. 递增的三元子序列](https://leetcode-cn.com/problems/increasing-triplet-subsequence/)
 
 ```c++
 // you are fucking genius
@@ -6934,7 +6917,7 @@ int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D)
 }
 ```
 
-#### [560. Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/)
+#### [560. 和为K的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/)
 
 ```c++
 int subarraySum(vector<int>& nums, int k) 
