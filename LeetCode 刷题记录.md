@@ -1,6 +1,6 @@
 # LeetCode 刷题记录
 
-### 滑动窗口问题 (7)
+### 滑动窗口问题 
 
 核心思想: 我们可以用滑动窗口的思想解决这个问题，在滑动窗口类型的问题中都会有两个指针。一个用于「延伸」现有窗口的 r 指针，和一个用于「收缩」窗口的 l 指针。在任意时刻，只有一个指针运动，而另一个保持静止。我们在 ss上滑动窗口，通过移动 r 指针不断扩张窗口。当窗口包含 t 全部所需的字符后，如果能收缩，我们就收缩窗口直到得到最小窗口。
 <img src="https://assets.leetcode-cn.com/solution-static/76/76_fig1.gif" alt="滑动窗口示意"  />
@@ -247,7 +247,7 @@ bool checkInclusion(string s1, string s2)
 }
 ```
 
-### 双指针问题  (7)
+### 双指针问题
 
 todo: 11和42的区别
 
@@ -451,7 +451,7 @@ string findLongestWord(string s, vector<string> &d)
 }
 ```
 
-### 单调栈系列问题  (5)
+### 单调栈系列问题 
 
 **单调栈的两种写法**   [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
 
@@ -774,7 +774,7 @@ https://www.cnblogs.com/grandyang/p/5883736.html
 
 <https://www.cnblogs.com/grandyang/p/8850299.html>
 
-### 二分查找  (9)
+### 二分查找  
 
 #### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -1115,7 +1115,7 @@ int find(vector<int>& nums, int target) {
 }Kth Smallest Element in a Sorted Matrix](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
 ```
 
-### 排序 (3)
+### 排序 
 
 #### 归并排序
 
@@ -1378,7 +1378,7 @@ public:
 };
 ```
 
-### 链表 (18)
+### 链表 
 
 #### [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
 
@@ -2246,11 +2246,11 @@ public:
 
 
 
-### 动态规划  (33)
+### 动态规划 
 
 [Leetcode 题解 - 动态规划](https://github.com/CyC2018/CS-Notes/blob/master/notes/Leetcode%20%E9%A2%98%E8%A7%A3%20-%20%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92.md#0-1-%E8%83%8C%E5%8C%85)
 
-#### 1.坐标型动态规划  (5)
+#### 1.坐标型动态规划
 
 **状态: f(x)表示从起点走到坐标x, f\[x][y]表示我从起点走到坐标x,y; 方程: 研究走到x, y这个点之前的一步; 初始化: 起点; 答案: 终点**
 
@@ -2394,7 +2394,7 @@ int minimumTotal(vector<vector<int>>& triangle)
 ```
 
 
-#### 2.单序列动态规划 (10)
+#### 2.单序列动态规划
 
 ***状态: f[i]表示前i个位置/数字/字符, 第i个; 方程: f[i] = f(f[j]), j是i之前的一个位置; 初始化: f[0]; 答案: f[n-1]; 小技巧: 一般有N个数字/字符, 就开N+1个位置的数组, 第0个位置单独留出来作初始化.(跟坐标相关的动态规划除外)***
 
@@ -2724,7 +2724,7 @@ int cuttingRope(int n)
 }
 ```
 
-#### 3.双序列动态规划  (7)
+#### 3.双序列动态规划
 
 **状态: f\[i][j]表示第一个sequence的前i个数字/字符, 配上第二个sequence的前j个;**
 
@@ -2992,13 +2992,13 @@ int longestCommonSubsequence(string word1, string word2)
 }
 ```
 
-#### 4.划分型动态规划 （1）
+#### 4.划分型动态规划
 
 ***状态: f[i]表示前i个元素的最大值; 方程: f[i] = 前i个元素里面选一个区间的最大值; 初始化: f[0]; 答案: f[n - 1]***
 
 ##### [188. Best Time to Buy and Sell Stock IV](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/)
 
-#### 5.背包型动态规划 （5）
+#### 5.背包型动态规划 
 
 **特点: 1). 用值作为DP维度, 2). DP过程就是填写矩阵, 3). 可以滚动数组优化 状态: f\[i][S]前i个物品, 取出一些能否组成和为S; 方程: f\[i][S] = f\[i-1][S-a[i]] or f\[i-1][S]; 初始化: f\[i][0]=true; f\[0][1...target]=false; 答案: 检查所有f\[n][j]**
 
@@ -3262,7 +3262,7 @@ public:
 
 
 
-#### 6.区间型动态规划  （5）
+#### 6.区间型动态规划 
 
 **特点: 1). 求一段区间的解max/min/count; 2). 转移方程通过区间更新; 3). 从大到小的更新; 这种题目共性就是区间最后求[0, n-1]这样一个区间逆向思维分析, 从大到小就能迎刃而解** 
 
@@ -3487,7 +3487,7 @@ int countSubstrings(string s)
 ```
 
 
-####  7.博弈型动态规划状态 （1）
+####  7.博弈型动态规划状态 
 
 ***定义一个人的状态; 方程: 考虑两个人的状态做状态更新; 初始化: 暂无; 答案: 先思考最小状态, 再思考大的状态 -> 往小的递推, 适合记忆话搜索 动态规划, 循环(从小到大递推), 记忆化搜索(从大到小搜索, 画搜索树); 什么时候 用记忆化搜索: 1). 状态转移特别麻烦, 不是顺序性, 2). 初始化状态不是很容易找到; 题目类型: 1). 博弈类问题, 2). 区间类问题; 适合解决题目: 1). 状态特别复杂, 2). 不好初始化***
 
@@ -3566,7 +3566,7 @@ int maximalSquare(vector<vector<char>>& matrix)
 #### [395. Longest Substring with At Least K Repeating Characters](https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/)
 
 
-### DFS (11)
+### 深度优先搜索DFS 
 #### [经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
 ```
 int dirs[8][2] = {1,1,1,0,1,-1,0,1,0,-1,-1,1,-1,0,-1,-1};
@@ -4101,7 +4101,7 @@ int largestIsland(vector<vector<int>>& grid)
 }
 ```
 
-### BFS (6)
+### BFS
 
 #### [判断一棵二叉树是否完全二叉树](https://www.nowcoder.com/practice/f31fc6d3caf24e7f8b4deb5cd9b5fa97?tpId=191&&tqId=35928&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking) #TODO
 
@@ -4486,7 +4486,7 @@ public:
 
 
 
-### 回溯  (13)
+### 回溯
 
 #### [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
 
@@ -5106,9 +5106,7 @@ vector<string> wordBreak(string s, vector<string>& wordDict)
 }
 ```
 
-### 二叉树遍历相关 (8)
-
-
+### 二叉树遍历相关
 
 #### [97. 中序遍历二叉树](https://leetcode-cn.com/problems/validate-binary-search-tree/) 
 
@@ -5545,7 +5543,7 @@ public:
 
 
 
-### 二叉树的DFS (8)
+### 二叉树的DFS 
 
 通常采用递归
 
@@ -5819,7 +5817,7 @@ TreeNode* mergeTrees(TreeNode* t1, TreeNode* t2) {
 
 [剑指 Offer 33. 二叉搜索树的后序遍历序列](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/)
 [剑指 Offer 54. 二叉搜索树的第k大节点](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/)(inorder)
-### 树和链表结合 (3)
+### 树和链表结合
 
 ##### [剑指 Offer 36. 二叉搜索树与双向链表](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/)  没看懂 感觉非递归方式可能好理解点 424 收费题
 
@@ -6010,7 +6008,7 @@ public:
 
 [889.Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal)
 
-### 区间合并 (3)
+### 区间合并 
 
 #### [56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/)
 
