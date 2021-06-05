@@ -2676,6 +2676,32 @@ int lengthOfLIS(vector<int> &nums)
 
 ```
 
+##### [312. 戳气球](https://leetcode-cn.com/problems/burst-balloons/)
+
+```c++
+int maxCoins(vector<int>& nums) 
+{
+    int n = nums.size();
+    nums.insert(nums.begin(), 1);
+    nums.push_back(1);
+    //  dp，其中 dp[i][j] 表示打爆区间 [i,j] 中的所有气球能得到的最多金币
+    // dp[i][j] 的值，这个区间可能比较大，但是如果知道了所有的小区间的 dp 值，然后聚沙成塔，逐步的就能推出大区间的 dp 值了。还是要遍历这个区间内的每个气球，就用k来遍历吧，k在区间 [i, j] 中，假如第k个气球最后被打爆，那么此时区间 [i, j] 被分成了三部分，[i, k-1]，[k]，和 [k+1, j]，只要之前更新过了 [i, k-1] 和 [k+1, j] 这两个子区间的 dp 值，可以直接用 dp[i][k-1] 和 dp[k+1][j]，那么最后被打爆的第k个气球的得分该怎么算呢，你可能会下意识的说，就乘以周围两个气球被 nums[k-1] * nums[k] * nums[k+1]，但其实这样是错误的，为啥呢？dp[i][k-1] 的意义是什么呢，是打爆区间 [i, k-1] 内所有的气球后的最大得分，此时第 k-1 个气球已经不能用了，同理，第 k+1 个气球也不能用了，相当于区间 [i, j] 中除了第k个气球，其他的已经爆了，那么周围的气球只能是第 i-1 个，和第 j+1 个了，所以得分应为 nums[i-1] * nums[k] * nums[j+1]，分析到这里，状态转移方程应该已经跃然纸上了吧，如下所示：
+//dp[i][j] = max(dp[i][j], nums[i - 1] * nums[k] * nums[j + 1] + dp[i][k - 1] + dp[k + 1][j])                 ( i ≤ k ≤ j )
+    vector<vector<int>> dp(n + 2, vector<int>(n + 2, 0));
+    for (int len = 1; len <= n; ++len) {
+        for (int i = 1; i <= n - len + 1; ++i) {
+            int j = i + len - 1;
+            for (int k = i; k <= j; ++k) {
+                dp[i][j] = max(dp[i][j], nums[i - 1] * nums[k] * nums[j + 1] + dp[i][k - 1] + dp[k + 1][j]);
+            }
+        }
+    }
+    return dp[1][n];
+}
+```
+
+
+
 ##### [343. 整数拆分](https://leetcode-cn.com/problems/integer-break/) #todo 20210415
 
 ```
@@ -4319,7 +4345,9 @@ int ladderLength(string beginWord, string endWord, vector<string> &wordList)
 }
 ```
 
-#### [207. Course Schedule](https://leetcode.com/problems/course-schedule/)【拓扑排序】
+#### [207. 课程表](https://leetcode-cn.com/problems/course-schedule/)
+
+难度中等833【拓扑排序】
 
 ```c++
  bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) 
@@ -4359,7 +4387,46 @@ int ladderLength(string beginWord, string endWord, vector<string> &wordList)
 }
 ```
 
-#### [297. Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)
+#### [301. 删除无效的括号](https://leetcode-cn.com/problems/remove-invalid-parentheses/)
+
+```c++
+class Solution {
+public:
+    vector<string> removeInvalidParentheses(string s) 
+    {
+        //可以用 BFS 来解，我把给定字符串排入队中，然后取出检测其是否合法，若合法直接返回，不合法的话，对其进行遍历，对于遇到的左右括号的字符，去掉括号字符生成一个新的字符串，如果这个字符串之前没有遇到过，将其排入队中，用 HashSet 记录一个字符串是否出现过。对队列中的每个元素都进行相同的操作，直到队列为空还没找到合法的字符串的话，那就返回空集
+        vector<string> res;
+        unordered_set<string> visited{{s}};
+        queue<string> q{{s}};
+        bool found = false;
+        while (!q.empty()) {
+            string t = q.front(); q.pop();
+            if (isValid(t)) {
+                res.push_back(t);
+                found = true;
+            }
+            if (found) continue;
+            for (int i = 0; i < t.size(); ++i) {
+                if (t[i] != '(' && t[i] != ')') continue;
+                string str = t.substr(0, i) + t.substr(i + 1);
+                if (!visited.count(str)) {
+                    q.push(str);
+                    visited.insert(str);
+                }
+            }
+        }
+        return res;
+    }
+    bool isValid(string t) {
+        int cnt = 0;
+        for (int i = 0; i < t.size(); ++i) {
+            if (t[i] == '(') ++cnt;
+            else if (t[i] == ')' && --cnt < 0) return false;
+        }
+        return cnt == 0;
+    }
+};
+```
 
 
 
@@ -4540,7 +4607,7 @@ public:
 
 ```
 
-#### [40. Combination Sum II](https://leetcode.com/problems/combination-sum-ii/)  todo 去重策略不是很懂
+#### [40. 组合总和 II](https://leetcode-cn.com/problems/combination-sum-ii/)todo 去重策略不是很懂
 
 <img src="https://pic.leetcode-cn.com/1599718525-iXEiiy-image.png" alt="image.png" style="zoom: 50%;" />
 
@@ -5039,7 +5106,7 @@ vector<string> wordBreak(string s, vector<string>& wordDict)
 }
 ```
 
-### 二叉树 (8)
+### 二叉树遍历相关 (8)
 
 
 
@@ -5196,7 +5263,7 @@ vector<int> preorderTraversal(TreeNode* root)
 }
 ```
 
-#### [[145. 二叉树的后序遍历](https://leetcode-cn.com/problems/binary-tree-postorder-traversal/)](https://leetcode.com/problems/binary-tree-postorder-traversal/)
+#### [145. 二叉树的后序遍历](https://leetcode-cn.com/problems/binary-tree-postorder-traversal/)
 
 ```c++
 vector<int> postorderTraversal(TreeNode* root) 
@@ -5358,7 +5425,69 @@ int maxDepth(TreeNode* node, int& res) {
 }
 ```
 
-#### [找到搜索二叉树中两个错误的节点](javascript:void(0);)
+#### [99. 恢复二叉搜索树](https://leetcode-cn.com/problems/recover-binary-search-tree/)
+
+```c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    void inOrderTraverse(TreeNode* &root, TreeNode* &pre,TreeNode* &first,TreeNode* &second)
+    {
+        if (root == nullptr)
+            return;
+
+        stack<TreeNode*> s;
+      
+        while(!s.empty() || root)
+        {
+            if(root)
+            {
+                s.push(root);
+                root = root->left;
+            }
+            else
+            {
+                root = s.top();
+                s.pop();
+                
+                if (pre != nullptr && pre->val > root->val)
+                {
+                    first = first == nullptr ? pre : first;
+                    second = root;
+                }
+                pre = root;
+                root = root->right;
+            }
+        }
+    }
+    
+public:
+    void recoverTree(TreeNode* root)
+    {
+                
+        TreeNode *first = nullptr; 
+        TreeNode *second = nullptr;
+        TreeNode *pre = nullptr;
+        inOrderTraverse(root, pre, first, second);
+        
+        int temp = first->val;
+        first->val = second->val;
+        second->val = temp;
+        
+    }
+};
+```
+
+
+
+#### 99_2[找到搜索二叉树中两个错误的节点](javascript:void(0);)
 
 ```c++
 class Solution {
@@ -6345,7 +6474,7 @@ int removeDuplicates(vector<int>& nums)
 
 
 
-#### [41. 缺失的第一个正数](https://leetcode-cn.com/problems/first-missing-positive/)](https://leetcode.com/problems/first-missing-positive/) #todo
+#### [41. 缺失的第一个正数](https://leetcode.com/problems/first-missing-positive/) #todo
 
 ```c++
 int firstMissingPositive(vector<int> &nums)
@@ -6629,6 +6758,39 @@ int maxProduct(vector<int>& nums)
     return res;
 }
 ```
+
+#### [169. 多数元素](https://leetcode-cn.com/problems/majority-element/)
+
+```c++
+int majorityElement(vector<int>& nums)
+{
+    int n = nums.size();
+    if (n <= 0)
+        return 0;
+
+    int time = 0;
+    int cand = 0;
+    for(int i = 0; i < n; i++)
+    {
+        if (time == 0)
+        {
+            cand = nums[i];
+            time =1;
+        }
+        else if (nums[i] == cand)
+        {
+            time++;
+        }
+        else
+        {
+            time--;
+        }
+    }
+    return cand;
+}
+```
+
+
 
 #### [179. 最大数](https://leetcode-cn.com/problems/largest-number/)
 
