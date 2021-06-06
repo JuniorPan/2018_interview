@@ -780,22 +780,8 @@ https://www.cnblogs.com/grandyang/p/5883736.html
 
 ```c++
 class Solution
-{   
-    // 找第一个大于等于target的值得位置
-    int getFirstK(vector<int> &nums, int target) 
-    {
-        int left = 0, right = nums.size();
-        while (left < right)
-        {
-            int mid = left + (right - left) / 2;
-            if (nums[mid] < target)
-                left = mid + 1;
-            else
-                right = mid;
-        }
-        return right; // 这个地方 right和left都可以
-    }
-    
+{
+public:
     int lower_bound(vector<int> &nums, int target)
     {
         int left = 0;
@@ -810,7 +796,7 @@ class Solution
                 left = mid + 1;
             }
         }
-        return right; // 这个地方 right和left都可以
+        return right;
     }
 
     int upper_bound(vector<int> &nums, int target)
@@ -827,16 +813,19 @@ class Solution
                 left = mid + 1;
             }
         }
-        return right; // 这个地方 right和left都可以
+        return right;
     }
 
-public:
     vector<int> searchRange(vector<int> &nums, int target)
     {
-        int start = getFirstK(nums, target);
-        if (start == nums.size() || nums[start] != target)
-            return {-1, -1};
-        return {start, getFirstK(nums, target + 1) - 1};
+        if (nums.empty())
+            return vector<int>{-1,-1};
+        int low = lower_bound(nums, target);
+        int up = upper_bound(nums, target) - 1;
+
+        if (low == nums.size() || nums[low] != target)
+            return vector<int>{-1,-1};
+        return vector<int>{low,up};
     }
 };
 ```
@@ -979,7 +968,7 @@ int findMin(vector<int> &nums)
 }
 ```
 
-#### [154. Find Minimum in Rotated Sorted Array II](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)  
+#### [154. 寻找旋转排序数组中的最小值 II](https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array-ii/)
 
 ```c++
 int findMin(vector<int> &nums)
@@ -1007,6 +996,22 @@ int findMin(vector<int> &nums)
     return -1;
 }
 ```
+
+#### [278. 第一个错误的版本](https://leetcode-cn.com/problems/first-bad-version/)
+
+```c++
+int firstBadVersion(int n) {
+    int left = 1, right = n;
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (isBadVersion(mid)) right = mid;
+        else left = mid + 1;
+    }
+    return left;
+}
+```
+
+
 
 #### [287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/) #TODOz
 
@@ -1195,9 +1200,47 @@ public:
 };
 ```
 
-#### 快速排序
+
+
+#### [912. 排序数组](https://leetcode-cn.com/problems/sort-an-array/)
 
 ```
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+    	mergeSort(nums, 0, (int)nums.size() - 1);
+    	return nums;
+    }
+    void mergeSort(vector<int>& nums, int start, int end) {
+    	if (start >= end) return;
+    	int mid = (start + end) / 2;
+    	mergeSort(nums, start, mid);
+    	mergeSort(nums, mid + 1, end);
+    	merge(nums, start, mid, end);
+    }
+    void merge(vector<int>& nums, int start, int mid, int end) {
+        vector<int> tmp(end - start + 1);
+        int i = start, j = mid + 1, k = 0;
+        while (i <= mid && j <= end) {
+        	if (nums[i] < nums[j]) tmp[k++] = nums[i++];
+        	else tmp[k++] = nums[j++];
+        }
+        while (i <= mid) tmp[k++] = nums[i++];
+        while (j <= end) tmp[k++] = nums[j++];
+        for (int idx = 0; idx < tmp.size(); ++idx) {
+        	nums[idx + start] = tmp[idx];
+        }
+    }
+};
+```
+
+
+
+
+
+#### 快速排序
+
+```c++
  int partition(vector<int> &nums, int left, int right)
 {
     int small = left -1;
@@ -1218,9 +1261,6 @@ void quickSort(vector<int> &nums, int left, int right)
         quickSort(nums, left, index - 1);
         quickSort(nums, index + 1, right);
     }
-
-
-
 }
 
 vector<int> MySort(vector<int>& arr) {
@@ -2074,7 +2114,7 @@ ListNode *sortList(ListNode *head)
 }
 ```
 
-#### 原地链表翻转 #todo  看到这里了
+#### 链表翻转 
 
 ##### [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)  #todo
 
@@ -2141,7 +2181,7 @@ ListNode* reverseKGroup(ListNode* head, int k)
 }
 ```
 
-##### [92. 反转链表 II](https://leetcode-cn.com/problems/reverse-linked-list-ii/) # todo
+##### [92. 反转链表 II](https://leetcode-cn.com/problems/reverse-linked-list-ii/) 
 
 ```c++
 ListNode *reverseBetween(ListNode *head, int m, int n)
@@ -2645,33 +2685,32 @@ int numSquares(int n)
 }
 ```
 
-##### [300. 最长递增子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/) #todo 20210415
+##### [300. 最长递增子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/) 
 
 难度中等1533
 
 ```c++
-int lengthOfLIS(vector<int> &nums)
+int lengthOfLIS(vector<int>& nums) 
 {
     if (nums.empty())
         return 0;
 
-    int n = nums.size();
-    // dp[i] 表示以nums[i]结尾的最长公共子序列
-    vector<int> dp(n, 0);
-    int max2 = INT_MIN;
-    for (int i = 0; i < nums.size(); i++)
+    vector<int> dp(nums.size()+1, 1);
+    dp[0] =0;
+    int res= INT_MIN;
+    for(int i = 1; i <= nums.size(); i++)
     {
-        dp[i] = 1;
-        for (int j = 0; j < i; j++)
+        // dp[i] = 1;
+        for(int j = 1; j < i; j++)
         {
-            if (nums[i] > nums[j])
+            if(nums[i-1] > nums[j-1])
             {
-                dp[i] = max(dp[i], dp[j] + 1);
+                dp[i] = max(dp[i], dp[j]+1);
             }
         }
-        max2 = max(dp[i], max2);
+        res = max(res, dp[i]);
     }
-    return max2;
+    return res;
 }
 
 ```
@@ -3974,6 +4013,37 @@ int combinationSum4(vector<int>& nums, int target)
 }
 ```
 
+#### [547. 省份数量](https://leetcode-cn.com/problems/number-of-provinces/)
+
+```
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& M)
+	{
+		int sum = 0;
+		int m = M.size();
+		vector<bool> visited(m, false);
+		for (int i = 0; i < m; i++)
+		{
+			if (visited[i]) continue;
+			dfs(M, i, visited);
+			++sum;
+		}
+		return sum;
+	}
+
+	void dfs(vector<vector<int>>& M, int i, vector<bool>& visited)
+	{
+		visited[i] = true;
+		for (int j = 0; j < M.size(); j++)
+		{
+			if (M[i][j] == 0 || visited[j]) continue;
+			dfs(M, j, visited);
+		}
+	}
+};
+```
+
 
 
 #### [576. Out of Boundary Paths](https://leetcode.com/submissions/detail/154021975/)    记忆化搜索 
@@ -4344,6 +4414,80 @@ int ladderLength(string beginWord, string endWord, vector<string> &wordList)
     return 0;
 }
 ```
+
+#### [513. 找树左下角的值](https://leetcode-cn.com/problems/find-bottom-left-tree-value/)
+
+```c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    
+public:
+    int findBottomLeftValue(TreeNode* root)
+    {
+        return levelOrder(root, depth(root));
+    }
+private:
+   
+    int depth(TreeNode *root)
+    {
+        if (root == NULL)
+            return 0;
+        int ldepth = depth(root->left);
+        int rdepth = depth(root->right);
+        return ldepth > rdepth ? ldepth + 1 : rdepth + 1;
+    }
+    
+    int levelOrder(TreeNode *root, int d)
+    {
+        queue<TreeNode *> q;
+        q.push(root);
+        int level = 0;
+        TreeNode *last = root;
+        TreeNode *nlast = nullptr;
+        int res;
+        while(!q.empty())
+        {
+            root = q.front();
+            q.pop();
+            
+            if (level == d-1)
+                return root->val;
+            
+            if (root->left)
+            {
+                q.push(root->left);
+                nlast = root->left;
+            }
+                
+            if (root->right)
+            {
+                q.push(root->right);
+                nlast = root->right;
+            }
+               
+            
+            if(root == last && !q.empty())
+            {
+                level ++;
+                last = nlast;
+            }
+        }
+        
+        return res;
+        
+    }
+};
+```
+
+
 
 #### [207. 课程表](https://leetcode-cn.com/problems/course-schedule/)
 
@@ -5796,6 +5940,24 @@ public:
 };
 ```
 
+#### [226. 翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
+
+```c++
+TreeNode* invertTree(TreeNode* root) {
+    if (root == nullptr)
+        return root;
+    TreeNode *temp = root->left;
+    root->left = root->right;
+    root->right = temp;
+
+    root->left = invertTree(root->left);
+    root->right = invertTree(root->right);
+
+    return root;
+
+}
+```
+
 
 
 #### [617. 合并二叉树](https://leetcode-cn.com/problems/merge-two-binary-trees/)
@@ -6352,6 +6514,30 @@ int maxlenEqualK(vector<int>& arr, int k) {
 }
 ```
 
+#### [1. 两数之和](https://leetcode-cn.com/problems/two-sum/)
+
+```c++
+vector<int> twoSum(vector<int>& nums, int target)
+{
+    unordered_map<int, int> hash; // 记录每个出现的数字的位置
+    vector<int> res;
+
+    for(int i = 0; i < nums.size(); i++)
+    {
+        if (hash.find(target-nums[i]) != hash.end())
+        {
+            res.push_back(i);
+            res.push_back(hash[target-nums[i]]);
+        }
+        else
+        {
+            hash[nums[i]] = i;
+        }
+    }
+    return res;
+}
+```
+
 
 
 #### [53. 最大子序和](https://leetcode-cn.com/problems/maximum-subarray/)
@@ -6564,6 +6750,37 @@ vector<int> spiralOrder(vector<vector<int>>& matrix)
 }
 ```
 
+#### [59. 螺旋矩阵 II](https://leetcode-cn.com/problems/spiral-matrix-ii/)
+
+```
+vector<vector<int>> generateMatrix(int n) {
+    vector<vector<int>> res(n, vector<int>(n));
+    int up = 0, down = n - 1, left = 0, right = n - 1, val = 1;
+    while (true)
+    {
+        for (int j = left; j <= right; ++j)
+            res[up][j] = val++;
+        if (++up > down)
+            break;
+        for (int i = up; i <= down; ++i)
+            res[i][right] = val++;
+        if (--right < left)
+            break;
+        for (int j = right; j >= left; --j)
+            res[down][j] = val++;
+        if (--down < up)
+            break;
+        for (int i = down; i >= up; --i)
+            res[i][left] = val++;
+        if (++left > right)
+            break;
+    }
+    return res;
+}
+```
+
+
+
 #### [66. 加一](https://leetcode-cn.com/problems/plus-one/)
 
 ```c++
@@ -6639,8 +6856,6 @@ public
 
 #### [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
 
-
-
 ```c++
 void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
 {
@@ -6683,11 +6898,12 @@ int longestConsecutive(vector<int>& nums)
 }
 ```
 
-#### [136. Single Number](https://leetcode.com/problems/single-number/)  #todo 位运算 还不会
+#### [136. 只出现一次的数字](https://leetcode-cn.com/problems/single-number/)#todo 位运算 还不会
 
 ```c++
 int singleNumber(vector<int> &nums)
 {
+    // 如果我们把两个相同的数字异或，0与0 '异或' 是0，1与1 '异或' 也是0，那么我们会得到0。根据这个特点，我们把数组中所有的数字都 '异或' 起来，则每对相同的数字都会得0，然后最后剩下来的数字就是那个只有1次的数字
     if (nums.empty())
         return 0;
     int first = nums[0];
@@ -6826,7 +7042,7 @@ public:
 };
 ```
 
-#### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/) #todo 堆排序还不会  还可以通过快排partition 搞定
+#### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/) 
 
 ```c++
 class Solution 
@@ -6947,6 +7163,30 @@ vector<int> productExceptSelf(vector<int>& nums)
 }
 ```
 
+#### [283. 移动零](https://leetcode-cn.com/problems/move-zeroes/)
+
+```
+void moveZeroes(vector<int>& nums) 
+{
+    if (nums.empty()) 
+        return;
+    int len = 0;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        if (nums[i] != 0)
+        {
+            nums[len++] = nums[i];
+        }
+    }
+    for(int i = len; i < nums.size(); i++)
+    {
+        nums[i] = 0;
+    }
+}
+```
+
+
+
 #### [334. 递增的三元子序列](https://leetcode-cn.com/problems/increasing-triplet-subsequence/)
 
 ```c++
@@ -6994,6 +7234,34 @@ vector<int> intersection(vector<int>& nums1, vector<int>& nums2)
         }
         return res;
     }
+```
+
+#### [350. 两个数组的交集 II](https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/)
+
+```c++
+vector<int> intersect(vector<int> &nums1, vector<int> &nums2)
+{
+    vector<int> res;
+    int i = 0, j = 0;
+    sort(nums1.begin(), nums1.end());
+    sort(nums2.begin(), nums2.end());
+    while (i < nums1.size() && j < nums2.size())
+    {
+        if (nums1[i] < nums2[j])
+            ++i;
+        else if (nums1[i] > nums2[j])
+            ++j;
+        else
+        {
+
+            res.push_back(nums1[i]);
+
+            ++i;
+            ++j;
+        }
+    }
+    return res;
+}
 ```
 
 
@@ -7077,6 +7345,26 @@ int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D)
 }
 ```
 
+#### [523. 连续的子数组和](https://leetcode-cn.com/problems/continuous-subarray-sum/)
+
+```c++
+bool checkSubarraySum(vector<int>& nums, int k) {
+    int n = nums.size(), sum = 0;
+    // 余数和当前位置之间的映射
+    unordered_map<int, int> m{{0,-1}};
+    for (int i = 0; i < n; ++i) {
+        sum += nums[i];
+        int t = (k == 0) ? sum : (sum % k);
+        if (m.count(t)) {
+            if (i - m[t] > 1) return true;
+        } else m[t] = i;
+    }
+    return false;
+}
+```
+
+
+
 #### [560. 和为K的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/)
 
 ```c++
@@ -7099,6 +7387,25 @@ int subarraySum(vector<int>& nums, int k)
 }
 ```
 
+#### [718. 最长重复子数组](https://leetcode-cn.com/problems/maximum-length-of-repeated-subarray/)
+
+```c++
+int findLength(vector<int>& A, vector<int>& B) {
+    int res = 0, m = A.size(), n = B.size();
+    // dp[i][j] 表示数组A的前i个数字和数组B的前j个数字的最长子数组的长度
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+    for (int i = 1; i <= m; ++i) {
+        for (int j = 1; j <= n; ++j) {
+            dp[i][j] = (A[i - 1] == B[j - 1]) ? dp[i - 1][j - 1] + 1 : 0;
+            res = max(res, dp[i][j]);
+        }
+    }
+    return res;
+}
+```
+
+
+
 #### [845. 数组中的最长山脉](https://leetcode-cn.com/problems/longest-mountain-in-array/)
 
 难度中等190
@@ -7117,6 +7424,24 @@ int longestMountain(vector<int>& A) {
     }
     return res;
 }
+```
+
+#### [915. 分割数组](https://leetcode-cn.com/problems/partition-array-into-disjoint-intervals/)
+
+```
+int partitionDisjoint(vector<int>& A) 
+    {
+        // 里使用三个变量，partitionIdx 表示分割点的位置，preMax 表示 left 中的最大值，curMax 表示当前的最大值。思路是遍历每个数字，更新当前最大值 curMax，并且判断若当前数字 A[i] 小于 preMax，说明这个数字也一定是属于 left 数组的，此时整个遍历到的区域应该都是属于 left 的，所以 preMax 要更新为 curMax，并且当前位置也就是潜在的分割点，所以 partitionIdx 更新为i。由于题目中限定了一定会有分割点，所以这种方法是可以得到正确结果的
+        int partitionIdx = 0, preMax = A[0], curMax = preMax;
+		for (int i = 1; i < A.size(); ++i) {
+            curMax = max(curMax, A[i]);
+			if (A[i] < preMax) {
+				preMax = curMax;
+				partitionIdx = i;
+			}
+		}
+		return partitionIdx + 1;
+    }
 ```
 
 
@@ -7268,27 +7593,93 @@ public:
 };
 ```
 
+#### [224. 基本计算器](https://leetcode-cn.com/problems/basic-calculator/)
+
+```c++
+int calculate(string s) {
+    int res = 0, sign = 1, n = s.size();
+    stack<int> st;
+    for (int i = 0; i < n; ++i) {
+        char c = s[i];
+        if (c >= '0') {
+            int num = 0;
+            while (i < n && s[i] >= '0') {
+                num = 10 * num + (s[i++] - '0');
+            }
+            res += sign * num;
+            --i;
+        } else if (c == '+') {
+            sign = 1;
+        } else if (c == '-') {
+            sign = -1;
+        } else if (c == '(') {
+            st.push(res);
+            st.push(sign);
+            res = 0;
+            sign = 1;
+        } else if (c == ')') {
+            res *= st.top(); st.pop();
+            res += st.top(); st.pop();
+        }
+    }
+    return res;
+}
+```
+
+#### [227. 基本计算器 II](https://leetcode-cn.com/problems/basic-calculator-ii/)
+
+```
+int calculate(string s) {
+    long res = 0, num = 0, n = s.size();
+    char op = '+';
+    stack<int> st;
+    for (int i = 0; i < n; ++i) {
+        if (s[i] >= '0') {
+            num = num * 10 + s[i] - '0';
+        }
+        if ((s[i] < '0' && s[i] != ' ') || i == n - 1) {
+            if (op == '+') st.push(num);
+            if (op == '-') st.push(-num);
+            if (op == '*' || op == '/') {
+                int tmp = (op == '*') ? st.top() * num : st.top() / num;
+                st.pop();
+                st.push(tmp);
+            }
+            op = s[i];
+            num = 0;
+        } 
+    }
+    while (!st.empty()) {
+        res += st.top();
+        st.pop();
+    }
+    return res;
+}
+```
+
+
+
 #### [415. 字符串相加 大数加法](https://leetcode-cn.com/problems/add-strings/) 
 
 ```c++
 string addStrings(string num1, string num2) 
 {
     string res = "";
-    int add=0,i=num1.size()-1,j=num2.size()-1;
-    while(i>=0 || j>=0 || add>0)
-    {
-        int cur=add;
-        cur += (i >= 0 ? num1[i--] - '0' : 0);
-        cur += (j >= 0 ? num2[j--] - '0' : 0);
+        int add=0, i=num1.size()-1, j=num2.size()-1;
+        while(i>=0 || j>=0 || add>0)
+        {
+            int cur = add;
+            cur += (i >= 0 ? num1[i--] - '0' : 0);
+            cur += (j >= 0 ? num2[j--] - '0' : 0);
 
-        add = cur / 10;//用来判断是否有进位
+            add = cur / 10;//用来判断是否有进位
 
-        cur %= 10;
+            cur %= 10;
 
-        res += ('0'+cur);
-    }
-    reverse(res.begin(), res.end());//翻转字符串
-    return res;
+            res += (cur + '0');
+        }
+        reverse(res.begin(), res.end());//翻转字符串
+        return res;
 }
 
 string addStrings(string num1, string num2) {
@@ -7555,6 +7946,32 @@ bool isPalindrome(string s)
 
 
 ### 其他
+
+#### [135. 分发糖果](https://leetcode-cn.com/problems/candy/)
+
+```c++
+int candy(vector<int>& ratings)
+{
+    // 先来看看两遍遍历的解法，首先初始化每个人一个糖果，然后这个算法需要遍历两遍，第一遍从左向右遍历，如果右边的小盆友的等级高，等加一个糖果，这样保证了一个方向上高等级的糖果多。然后再从右向左遍历一遍，如果相邻两个左边的等级高，而左边的糖果又少的话，则左边糖果数为右边糖果数加一。最后再把所有小盆友的糖果数都加起来返回即可。
+    int res = 0, n = ratings.size();
+    vector<int> nums(n, 1);
+    for (int i = 0; i < n - 1; ++i) 
+    {
+        if (ratings[i + 1] > ratings[i])
+            nums[i + 1] = nums[i] + 1;
+    }
+    for (int i = n - 1; i > 0; --i) 
+    {
+        if (ratings[i - 1] > ratings[i]) 
+            nums[i - 1] = max(nums[i - 1], nums[i] + 1);
+    }
+    for (int num : nums) 
+        res += num;
+    return res;
+}
+```
+
+
 
 #### [208. 实现 Trie (前缀树)](https://leetcode-cn.com/problems/implement-trie-prefix-tree/)
 
@@ -8187,6 +8604,23 @@ public:
         return root;     
     }
 };
+```
+
+#### [剑指 Offer 31. 栈的压入、弹出序列](https://leetcode-cn.com/problems/zhan-de-ya-ru-dan-chu-xu-lie-lcof/)
+
+```
+bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
+        stack<int> st;
+        int i = 0;
+        for (int num : pushed) {
+        	st.push(num);
+        	while (!st.empty() && st.top() == popped[i]) {
+        		st.pop();
+        		++i;
+        	}
+        }
+        return st.empty();
+    }
 ```
 
 
