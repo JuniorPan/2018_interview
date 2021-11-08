@@ -1275,9 +1275,7 @@ vector<int> MySort(vector<int>& arr) {
 ##### [75. Sort Colors](https://leetcode.com/problems/sort-colors/) 快排partion
 
 ```c++
-class Solution
-{
-public:
+
     void sortColors(vector<int> &nums)
     {
         if (nums.size() < 0)
@@ -5553,12 +5551,14 @@ TreeNode* convertBST(TreeNode* root) {
 #### [543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/)
 
 ```
-int diameterOfBinaryTree(TreeNode* root) {
+int diameterOfBinaryTree(TreeNode* root) 
+{
     int res = 0;
     maxDepth(root, res);
     return res;
 }
-int maxDepth(TreeNode* node, int& res) {
+int maxDepth(TreeNode* node, int& res
+{
     if (!node) return 0;
     int left = maxDepth(node->left, res);
     int right = maxDepth(node->right, res);
