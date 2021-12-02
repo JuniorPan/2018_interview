@@ -336,9 +336,32 @@ int trap(vector<int> &height)
     }
     return res;
 }
+
+int trap(vector<int>& height) 
+{
+    if (height.empty())
+        return 0;
+
+    int res = 0; 
+    stack<int> monoStack;
+    for(int i = 0; i < height.size(); i++)
+    {
+        while(!monoStack.empty() && height[i] >= height[monoStack.top()])
+        {
+            int tmp = monoStack.top();
+            monoStack.pop();
+            if (monoStack.empty())
+                continue;
+            int h = min(height[i], height[monoStack.top()]);
+            res = res + (h - height[tmp]) * (i - monoStack.top() - 1);
+        }
+        monoStack.push(i);
+    }
+    return res;
+}
 ```
 
-#### [75. Sort Colors](https://leetcode.com/problems/sort-colors/) 
+#### [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/)
 
 ```c++
 class Solution
@@ -1124,7 +1147,7 @@ int find(vector<int>& nums, int target) {
 
 #### 归并排序
 
-##### [493. Reverse Pairs](https://leetcode.com/problems/reverse-pairs/)
+#### [493. 翻转对](https://leetcode-cn.com/problems/reverse-pairs/)
 
 ```c++
 class Solution
@@ -4672,7 +4695,7 @@ public:
 };
 ```
 
-#### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/)
+#### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/) #todo: 20211202 不会
 
 ```c++
 class Solution 
@@ -4904,7 +4927,7 @@ public:
 };
 ```
 
-#### [77. Combinations](https://leetcode.com/problems/combinations/)
+#### [77. 组合](https://leetcode-cn.com/problems/combinations/)
 
 ```c++
 class Solution 
@@ -4934,7 +4957,7 @@ public:
 };
 ```
 
-#### [78. 子集](https://leetcode-cn.com/problems/subsets/)
+#### [78. 子集](https://leetcode-cn.com/problems/subsets/) todo: 20211202 还不会
 
 <img src="https://pic.leetcode-cn.com/1600557223-hvNyjD-image.png" alt="image.png" style="zoom:67%;" />
 
