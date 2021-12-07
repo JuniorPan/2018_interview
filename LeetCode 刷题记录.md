@@ -3628,11 +3628,12 @@ int maximalSquare(vector<vector<char>>& matrix)
 
 ### 深度优先搜索DFS 
 #### [经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
-```
+```c++
 int dirs[8][2] = {1,1,1,0,1,-1,0,1,0,-1,-1,1,-1,0,-1,-1};
 
 void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, int j, int& value)
 {
+    // 先写终止条件
     if ( nums[i][i] == 0 || visit[i][j])
         return;
     visit[i][j] = true;
@@ -3850,7 +3851,7 @@ vector<string> wordBreak(string s, vector<string> &wordDict)
 }
 ```
 
-#### [200. Number of Islands](https://leetcode.com/submissions/detail/103885458/)  
+#### [200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
 
 ```c++
 class Solution
@@ -3949,7 +3950,7 @@ public:
 
 ```
 
-#### [329. Longest Increasing Path in a Matrix](https://leetcode.com/problems/longest-increasing-path-in-a-matrix/submissions/1)   记忆化搜索
+#### [329. 矩阵中的最长递增路径](https://leetcode-cn.com/problems/longest-increasing-path-in-a-matrix/)  记忆化搜索
 
 ```
 
@@ -3994,7 +3995,7 @@ int longestIncreasingPath(vector<vector<int>>& matrix)
 }
 ```
 
-#### [377. Combination Sum IV](https://leetcode.com/problems/combination-sum-iv/submissions/)  #todo 优化成动态规划
+#### [377. 组合总和 Ⅳ](https://leetcode-cn.com/problems/combination-sum-iv/)  #todo 优化成动态规划 20211207
 
 <img src="https://pic.leetcode-cn.com/fa278029267fedeb06686b784bd322f16b2abf6b61987dc3b5257630570cd38f-377-1.png" alt="377-1.png" style="zoom: 50%;" />
 
@@ -4067,7 +4068,7 @@ public:
 
 
 
-#### [576. Out of Boundary Paths](https://leetcode.com/submissions/detail/154021975/)    记忆化搜索 
+#### [576. 出界的路径数](https://leetcode-cn.com/problems/out-of-boundary-paths/)   记忆化搜索 
 
 ```c++
 int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
@@ -4103,7 +4104,7 @@ int findPaths(int m, int n, int N, int i, int j)
 }
 ```
 
-#### [688. Knight Probability in Chessboard](https://leetcode.com/submissions/detail/154023237/)     记忆化搜索
+#### [688. “马”在棋盘上的概率](https://leetcode-cn.com/problems/knight-probability-in-chessboard/)    记忆化搜索
 
 ```
 
@@ -4141,7 +4142,7 @@ double knightProbability(int N, int K, int r, int c)
 }
 ```
 
-#### [827. Making A Large Island](https://leetcode.com/submissions/detail/153847279/) 类似于回溯
+#### [827. 最大人工岛](https://leetcode-cn.com/problems/making-a-large-island/) 类似于回溯
 
 ```c++
 int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
