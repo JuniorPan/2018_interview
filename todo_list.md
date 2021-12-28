@@ -1,3 +1,19 @@
+## todo_list_2021_1227 小镇刷题家他又来了
+
+#### [437. 路径总和 III](https://leetcode-cn.com/problems/path-sum-iii/) 
+
+#### [124. 二叉树中的最大路径和](https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/)todo: 还不是很懂
+
+
+
+[剑指 Offer 26. 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
+
+[剑指 Offer 33. 二叉搜索树的后序遍历序列](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/)
+
+[493. 翻转对](https://leetcode-cn.com/problems/reverse-pairs/)
+
+## todo_list_history
+
 #### ~~[49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/)~~
 
 #### **~~[138. 复制带随机指针的链表](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)~~**
@@ -702,7 +718,9 @@ https://www.nowcoder.com/practice/046a55e6cd274cffb88fc32dba695668?tpId=117&&tqI
 
 
 
-# 链表总结
+# 总结
+
+## 链表总结
 
 ### 1） i 从零开始 最终fast会停在第n个节点上，n从零开始
 
@@ -751,5 +769,37 @@ ListNode* deleteDuplicates(ListNode* head)
         }
         return dummy->next;
     }
+```
+
+## 快手排序
+
+```c++
+int partition(vector<int> &nums, int left, int right)
+{
+    int small = left -1;
+    for(int i = left; i < right; i++)
+    {
+        if (nums[i] < nums[right])
+            swap(nums[i], nums[++small]);
+    }
+    swap(nums[++small], nums[right]);
+    return small;
+}
+
+void quickSort(vector<int> &nums, int left, int right)
+{
+    if (left < right)
+    {
+        int index = partition(nums, left, right);
+        quickSort(nums, left, index - 1);
+        quickSort(nums, index + 1, right);
+    }
+}
+
+vector<int> MySort(vector<int>& arr) {
+    // write code here
+    quickSort(arr, 0, arr.size()-1);
+    return arr;
+}
 ```
 

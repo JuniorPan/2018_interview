@@ -1150,75 +1150,64 @@ int find(vector<int>& nums, int target) {
 #### [493. 翻转对](https://leetcode-cn.com/problems/reverse-pairs/)
 
 ```c++
-class Solution
-{
-    int merge(vector<int> &arr, int left, int mid, int right)
+class Solution {
+    int merge(vector<int> &nums, int left, int mid, int right)
     {
-        vector<int> help;
-        int index = 0;
+        int index = 0, count = 0;
+        vector<int> help(right - left + 1); // 开辟一个辅助数组
         int i = left;
-        int j = mid + 1;
-        int count = 0;
-        // todo: 核心是这个循环
-        while (i <= mid && j <= right)
+        int j = mid+1;
+        // 按照升序的方式处理
+        while( i <= mid && j <= right)
         {
-            if (arr[i] > 2LL * arr[j])
+            if (nums[i] > 2LL * nums[j])
             {
                 count += mid - i + 1;
-                ++j;
+                j++;
             }
             else
-                ++i;
+            {
+                i++;
+            }
         }
-
+        // 真正的归并排序从这里开始
         i = left;
-        j = mid + 1;
-        index = 0;
-        while (i <= mid && j <= right)
+        j = mid+1;
+        while( i <= mid && j <= right)
         {
-            // help[index++] = arr[i] < arr[j] ? arr[i++] : arr[j++];
-            // int temp =
-
-            help.push_back(arr[i] < arr[j] ? arr[i++] : arr[j++]);
+           help[index++] = nums[i] < nums[j] ? nums[i++] :nums[j++];
         }
-
-        while (i <= mid)
+        while(i <= mid)
         {
-            help.push_back(arr[i++]);
+            help[index++] = nums[i++]; 
         }
-        while (j <= right)
+        while(j <= right)
         {
-            help.push_back(arr[j++]);
+            help[index++] = nums[j++]; 
         }
-
-        for (index = 0; index < help.size(); index++)
+        for(int i = 0; i < help.size(); i++)
         {
-            arr[left + index] = help[index];
+            nums[i+left] = help[i];
         }
         return count;
     }
 
-    int mergeSort(vector<int> &arr, int l, int r)
+
+    int mergeSort(vector<int> &nums, int left, int right)
     {
-        if (l == r)
+        if (left == right)
         {
             return 0;
         }
-        int mid = l + ((r - l) >> 1);
-        int left = mergeSort(arr, l, mid);
-        int right = mergeSort(arr, mid + 1, r);
-        int count = merge(arr, l, mid, r);
-        return left + right + count;
+        int mid = left + ((right -left ) >> 1);
+        return mergeSort(nums, left, mid) +  mergeSort(nums, mid+1, right) + merge(nums, left, mid, right);
     }
 
 public:
-    // 思路: 利用归并排序，但是代码写不出来
-    int reversePairs(vector<int> &nums)
-    {
+    int reversePairs(vector<int>& nums) {
         if (nums.size() <= 1)
             return 0;
-
-        return mergeSort(nums, 0, nums.size() - 1);
+        return mergeSort(nums, 0, nums.size()-1);
     }
 };
 ```
@@ -1264,7 +1253,7 @@ public:
 #### 快速排序
 
 ```c++
- int partition(vector<int> &nums, int left, int right)
+int partition(vector<int> &nums, int left, int right)
 {
     int small = left -1;
     for(int i = left; i < right; i++)
@@ -5528,11 +5517,13 @@ TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 {
     // 看当前结点是否为空，若为空则直接返回空，若为p或q中的任意一个，也直接返回当前结点。否则的话就对其左右子结点分别调用递归函数，由于这道题限制了p和q一定都在二叉树中存在，那么如果当前结点不等于p或q，p和q要么分别位于左右子树中，要么同时位于左子树，或者同时位于右子树
-    if (root == nullptr || root == p || root == q)
+    if (root == nullptr)
+            return nullptr;
+    if  (root == p || root == q)
         return root;
-    TreeNode *left = lowestCommonAncestor(root->left, p, q);
-    TreeNode *right = lowestCommonAncestor(root->right, p, q);
 
+    TreeNode *left = lowestCommonAncestor(root->left, p, q);
+    TreeNode *right = lowestCommonAncestor(root->right,p, q);
     if (left && right)
         return root;
     else
@@ -5869,7 +5860,7 @@ public:
 };
 ```
 
-#### [437. 路径总和 III](https://leetcode-cn.com/problems/path-sum-iii/)
+#### [437. 路径总和 III](https://leetcode-cn.com/problems/path-sum-iii/) 
 
 ```c++
 // 本质上还是回溯
@@ -5937,31 +5928,24 @@ public:
 #### [129. 求根节点到叶节点数字之和](https://leetcode-cn.com/problems/sum-root-to-leaf-numbers/)
 
 ```c++
-class Solution
+void dfs(TreeNode *root, int &sum, int cur_sum)
 {
-public:
-    int sumNumbers(TreeNode *root)
+    if (root == nullptr)
+        return;
+    cur_sum = cur_sum * 10 + root->val;
+    if (!root->left && !root->right)
     {
-        if(!root)
-            return 0;
-        int res = 0;
-        dfs(root, res, 0);
-        return res;
+        sum += cur_sum;
     }
-
-    void dfs(TreeNode *root, int &sum, int cur_sum)
-    {
-        cur_sum = cur_sum * 10 + root->val;
-        if (!root->left && !root->right)
-        {
-            sum += cur_sum;
-        }
-        if (root->left)
-            dfs(root->left, sum, cur_sum);
-        if (root->right)
-            dfs(root->right, sum, cur_sum);
-    }
-};
+    dfs(root->left, sum, cur_sum);
+    dfs(root->right, sum, cur_sum);
+}
+int sumNumbers(TreeNode* root) 
+{
+    int res = 0;
+    dfs(root, res, 0);
+    return res;
+}
 ```
 
 #### [226. 翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
@@ -6001,8 +5985,54 @@ TreeNode* mergeTrees(TreeNode* t1, TreeNode* t2) {
 
 #### [剑指 Offer 26. 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
 
+```
+bool isSubStructure(TreeNode* A, TreeNode* B) {
+    if(!A || !B) return false;
+    if(issame(A, B)) return true;
+    return isSubStructure(A->left, B) || isSubStructure(A->right, B);
+}
+bool issame(TreeNode* a, TreeNode* b)
+{
+    if(!b) return true;
+    if(!a || a->val != b->val) return false;
+    return issame(a->left, b->left) && issame(a->right, b->right);
+}
+```
+
+
+
 [剑指 Offer 33. 二叉搜索树的后序遍历序列](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/)
 [剑指 Offer 54. 二叉搜索树的第k大节点](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/)(inorder)
+
+```c++
+// 第k大 中序镜像即可
+int kthLargest(TreeNode* root, int k) {
+    if (root == nullptr || k < 0)
+        return 0;
+    stack<TreeNode *> s;
+    while(!s.empty() || root)
+    {
+        if (root)
+        {
+            s.push(root);
+            root = root->right;
+        }
+        else
+        {
+            root = s.top();
+            s.pop();
+            k--;
+            if (k == 0)
+                return root->val;
+            root = root->left;
+        }
+    }
+    return 0;
+}
+```
+
+
+
 ### 树和链表结合
 
 ##### [剑指 Offer 36. 二叉搜索树与双向链表](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/)  没看懂 感觉非递归方式可能好理解点 424 收费题
@@ -6041,24 +6071,34 @@ private:
 };
 
 // 
-Node* treeToDoublyList(Node* root) 
+Node* treeToDoublyList(Node* root)
 {
-    if (!root) return NULL;
-    Node *head = NULL, *pre = NULL;
-    stack<Node*> st;
-    while (root || !st.empty()) {
-        while (root) {
-            st.push(root);
+    if (root == nullptr)
+        return root;
+    stack<Node *> s;
+    Node *head = nullptr;
+    Node *pre = nullptr;
+    while(!s.empty() || root)
+    {
+        if (root)
+        {
+            s.push(root);
             root = root->left;
         }
-        root = st.top(); st.pop();
-        if (!head) head = root;
-        if (pre) {
-            pre->right = root;
-            root->left = pre;
+        else
+        {
+            root = s.top();
+            s.pop();
+            if (head == nullptr)
+                head = root;
+            if (pre)
+            {
+                pre->right = root;
+                root->left = pre;
+            }
+            pre = root;
+            root = root->right;
         }
-        pre = root;
-        root = root->right;
     }
     head->left = pre;
     pre->right = head;
