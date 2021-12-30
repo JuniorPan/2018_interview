@@ -1255,7 +1255,7 @@ public:
 ```c++
 int partition(vector<int> &nums, int left, int right)
 {
-    int small = left -1;
+    int small = left -1; // small 指向小于区域的最后一个元素
     for(int i = left; i < right; i++)
     {
         if (nums[i] < nums[right])
@@ -3320,29 +3320,30 @@ public:
 ##### [5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
 
 ```c++
-string longestPalindrome(string s) // todo: 时间上还得优化
-{
-    if (s.empty())
-        return "";
-    int len = 0;  // 记录最长回文子串的长度
-    int left = 0, right = 0; // 记录最长回文子串的左右边界
-    // dp[i][j] 表示 s[i...j]上是否为回文子串
-    vector<vector<bool>> dp(s.size(), vector<bool>(s.size(), false));、
-    for (int i = 0; i < s.size(); i++)
+string longestPalindrome(string s) 
     {
-        for (int j = 0; j <= i; j++)
+        if (s.empty())
+            return "";
+
+        // dp[i][j] 表示 s[i...j]上是否为回文子串
+        vector<vector<bool>> dp(s.size(), vector<bool>(s.size(), false));
+        int len = 0;
+        int left = 0;
+
+        for(int i = 0; i < s.size(); i++)
         {
-            dp[j][i] = s[i] == s[j] && ( i - j < 2 || dp[j+1][i-1]); 
-            if (dp[j][i] && i - j + 1 > len)
+            for(int j = 0; j <= i; j++)
             {
-                len = i - j +1;
-                left = j;
-                right = i;
+                dp[j][i] = s[i] == s[j] && (i - j < 2 || dp[j+1][i-1]);
+                if (dp[j][i] && i - j + 1 > len)
+                {
+                    len = i - j + 1;
+                    left = j;
+                }
             }
         }
+        return s.substr(left, len);
     }
-    return s.substr(left,right - left + 1);
-}
 
 int getLongestPalindrome(string str, int n) {
     // write code here
@@ -5081,7 +5082,7 @@ public:
 };
 ```
 
-#### [131. Palindrome Partitioning](https://leetcode.com/problems/palindrome-partitioning/)
+#### [131. 分割回文串](https://leetcode-cn.com/problems/palindrome-partitioning/)
 
 <img src="https://pic.leetcode-cn.com/1604822955-WbvWRE-131.%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2.png" alt="131.分割回文串.png" style="zoom:50%;" />
 

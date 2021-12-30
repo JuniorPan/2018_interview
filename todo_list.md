@@ -776,7 +776,7 @@ ListNode* deleteDuplicates(ListNode* head)
 ```c++
 int partition(vector<int> &nums, int left, int right)
 {
-    int small = left -1;
+    int small = left -1; // small 指向小于区域的最后一个元素
     for(int i = left; i < right; i++)
     {
         if (nums[i] < nums[right])
@@ -801,5 +801,34 @@ vector<int> MySort(vector<int>& arr) {
     quickSort(arr, 0, arr.size()-1);
     return arr;
 }
+```
+
+## 归并排序
+
+```c++
+vector<int> sortArray(vector<int>& nums) {
+    mergeSort(nums, 0, (int)nums.size() - 1);
+    return nums;
+  }
+  void mergeSort(vector<int>& nums, int start, int end) {
+    if (start >= end) return;
+    int mid = (start + end) / 2;
+    mergeSort(nums, start, mid);
+    mergeSort(nums, mid + 1, end);
+    merge(nums, start, mid, end);
+  }
+  void merge(vector<int>& nums, int start, int mid, int end) {
+      vector<int> tmp(end - start + 1);
+      int i = start, j = mid + 1, k = 0;
+      while (i <= mid && j <= end) {
+        if (nums[i] < nums[j]) tmp[k++] = nums[i++];
+        else tmp[k++] = nums[j++];
+      }
+      while (i <= mid) tmp[k++] = nums[i++];
+      while (j <= end) tmp[k++] = nums[j++];
+      for (int idx = 0; idx < tmp.size(); ++idx) {
+        nums[idx + start] = tmp[idx];
+      }
+  }
 ```
 
