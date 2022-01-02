@@ -12,6 +12,10 @@
 
 [493. 翻转对](https://leetcode-cn.com/problems/reverse-pairs/)
 
+#### [416. 分割等和子集](https://leetcode-cn.com/problems/partition-equal-subset-sum/)
+
+[474. 一和零](https://leetcode-cn.com/problems/ones-and-zeroes/)
+
 ## todo_list_history
 
 #### ~~[49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/)~~

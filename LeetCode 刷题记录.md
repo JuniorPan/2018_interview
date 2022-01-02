@@ -51,7 +51,7 @@ int lengthOfLongestSubstring(string s)
 #### [53. Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
 
 ```c++
-class Solution {
+ class Solution {
 public:
     int maxSubArray(vector<int>& nums) 
     {
@@ -3099,7 +3099,7 @@ int coinChange(vector<int> &coins, int amount)
 }
 ```
 
-##### [518. Coin Change 2](https://leetcode.com/problems/coin-change-2/)  #todo 空间优化  377
+##### [518. 零钱兑换 II](https://leetcode-cn.com/problems/coin-change-2/)#todo 空间优化  377
 
 ```c++
 int change(int amount, vector<int> &coins)
@@ -3122,7 +3122,7 @@ int change(int amount, vector<int> &coins)
 }
 ```
 
-##### [416. Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/) # todo 空间优化
+##### [416. 分割等和子集](https://leetcode-cn.com/problems/partition-equal-subset-sum/)# todo 空间优化 
 
 ```c++
 // 解法一: 需要空间优化
@@ -3191,7 +3191,7 @@ bool canPartition(vector<int> &nums)
 
 ```
 
-##### [474. Ones and Zeroes](https://leetcode.com/problems/ones-and-zeroes/)
+##### [474. 一和零](https://leetcode-cn.com/problems/ones-and-zeroes/)
 
 ```c++
 int findMaxForm(vector<string> &strs, int m, int n)
@@ -3217,7 +3217,7 @@ int findMaxForm(vector<string> &strs, int m, int n)
 
 
 
-##### [494. Target Sum](https://leetcode.com/problems/target-sum/)
+##### [494. 目标和](https://leetcode-cn.com/problems/target-sum/)
 
 ```c++
 class Solution {
@@ -3293,8 +3293,6 @@ private:
             }
         }
         return dp[sum];
-        
-
     }
 public:
     int findTargetSumWays(vector<int>& nums, int target)
