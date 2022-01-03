@@ -5812,6 +5812,26 @@ int maxDepth(TreeNode* root)
 }
 ```
 
+#### [108. 将有序数组转换为二叉搜索树](https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree/)
+
+```c++
+TreeNode* dfs(vector<int>& nums, int left, int right) 
+{
+  if (left > right) return NULL;
+  int mid = left + (right - left) / 2;
+  TreeNode *cur = new TreeNode(nums[mid]);
+  cur->left = dfs(nums, left, mid - 1);
+  cur->right = dfs(nums, mid + 1, right);
+  return cur;
+}
+TreeNode* sortedArrayToBST(vector<int>& nums) 
+{
+  return dfs(nums, 0 , (int)nums.size() - 1);
+}
+```
+
+
+
 #### [110. 平衡二叉树](https://leetcode-cn.com/problems/balanced-binary-tree/)
 
 ```c++
