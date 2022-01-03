@@ -2307,18 +2307,24 @@ public:
 ##### [62. 不同路径](https://leetcode-cn.com/problems/unique-paths/)
 
 ```c++
+// 空间优化: https://leetcode-cn.com/problems/unique-paths/solution/san-chong-shi-xian-xiang-xi-tu-jie-62-bu-4jz1/
+int uniquePaths(int m, int n) {
+    vector<int> dp(n, 1);
+    for(int i = 1; i < m; i++)
+    {
+        for(int j = 1; j < n; j++)
+        {
+            dp[j] = dp[j] + dp[j-1];
+        }
+    }
+    return dp[n-1];
+}
+
 int uniquePaths(int m, int n) 
 {
-    // int dp[m][n];
-    // dp[0][0] = 0;
-    // dp[0][1] = 1;
-    // dp[1][0] = 1;
-    // dp[1][1] = 2;
-    
     // dp[i][j] 表示从[0][0]--->[i][j] 有多少种走法
     // 第0行和第0列 在边界上所以只有一种方法
     vector<vector<int>> dp(m, vector<int>(n, 1));
-    
     for(int i = 1; i < m; i++)
     {
         for(int j = 1; j < n; j++)
@@ -2335,6 +2341,28 @@ int uniquePaths(int m, int n)
 难度中等531
 
 ```c++
+// https://leetcode-cn.com/problems/unique-paths-ii/solution/si-chong-shi-xian-xiang-xi-tu-jie-63-bu-0qyz7/
+int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+    int m = obstacleGrid.size();
+    int n = obstacleGrid[0].size();
+    if (obstacleGrid.empty() || obstacleGrid[0].empty() || obstacleGrid[0][0] == 1)
+        return 0;
+    vector<int> dp(n, 0);
+    dp[0] = obstacleGrid[0][0] == 1 ? 0 :1;
+    for(int i = 0; i < m; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            if (obstacleGrid[i][j] == 1)
+                dp[j] = 0;
+            else if (obstacleGrid[i][j] == 0 && j - 1 >= 0)
+                dp[j] = dp[j] + dp[j-1];
+        }
+    }
+    return dp[n-1];
+}
+
+
 int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
 {
     int m = obstacleGrid.size();
@@ -2378,6 +2406,24 @@ int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
 ##### [64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
 
 ```c++
+int minPathSum(vector<vector<int>>& grid) {
+    int m = grid.size();
+    int n = grid[0].size();
+    // dp[i][j] 表示从[0][0]-->[i][j]的最短路径和
+    vector<int> dp(n, 0);
+    dp[0] = grid[0][0];
+    for (int j = 1; j < n; j++) {
+        dp[j] = dp[j - 1] + grid[0][j];
+    }
+    for (int i = 1; i < m; i++) {
+        dp[0] += grid[i][0];
+        for (int j = 1; j < n; j++) {
+            dp[j] = min(dp[j], dp[j - 1]) + grid[i][j];
+        }
+    }
+    return dp[n - 1];
+}
+
 int minPathSum(vector<vector<int>> &grid)
 {
     int m = grid.size();
@@ -2406,7 +2452,9 @@ int minPathSum(vector<vector<int>> &grid)
 }
 ```
 
-##### [70. Climbing Stairs](https://leetcode.com/problems/climbing-stairs/)
+#### [70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
+
+难度简单2096
 
 ```c++
 int climbStairs(int n)
@@ -2424,7 +2472,7 @@ int climbStairs(int n)
 }
 ```
 
-##### [120. Triangle](https://leetcode.com/problems/triangle/) #todo
+#### [120. 三角形最小路径和](https://leetcode-cn.com/problems/triangle/) #todo
 
 ```c++
 
@@ -2476,8 +2524,7 @@ int longestValidParentheses(string s)
 }
 ```
 
-
-##### [45. Jump Game II](https://leetcode.com/problems/jump-game-ii/)  好像不是dp #todo 20210415
+##### [45. 跳跃游戏 II](https://leetcode-cn.com/problems/jump-game-ii/)好像不是dp #todo 20210415
 
 ```
 int jump(vector<int>& nums) 
@@ -2503,7 +2550,7 @@ int jump(vector<int>& nums)
 }
 ```
 
-##### [55. 跳跃游戏](https://leetcode-cn.com/problems/jump-game/)
+##### [55. 跳跃游戏](https://leetcode-cn.com/problems/jump-game/) todo
 
 ```c++
 bool canJump(vector<int>& nums) 
@@ -2563,28 +2610,26 @@ int numDecodings(string s)
 // 解法1:
 int minCut(string s)
 {
-    if (s.empty())
-        return 0;
-    int n = s.size();
-    //p[i][j] 表示区间 [i, j] 内的子串是否为回文串，
-    vector<vector<bool>> p(n, vector<bool>(n));
-    // dp[i]表示子串 [0...i] 范围内的最小分割数
-    vector<int> dp(n);
-	// 两个for循环 子串
-    for (int j = 0; j < n; j++)
-    {
-        dp[j] = j;
-        for(int i = 0; i <= j; i++)
-        {
-            p[i][j] = s[i] == s[j] && (j - i < 2 || p[i+1][j-1]);
+  if (s.empty())
+  return 0;
+  int n = s.size();
+  vector<vector<bool>> p(n, vector<bool>(n)); //p[i][j] 表示区间 [i, j] 内的子串是否为回文串，
+  vector<int> dp(n, INT_MAX); // dp[i]表示子串 [0...i] 范围内的最小分割数
+  // 两个for循环 子串
+  for (int j = 0; j < n; j++)
+  {
+      // dp[j] = j;
+      for(int i = 0; i <= j; i++)
+      {
+          p[i][j] = s[i] == s[j] && (j - i < 2 || p[i+1][j-1]);
 
-            if (p[i][j])
-            {
-                dp[j] = (i == 0) ? 0 : min(dp[i-1] + 1, dp[j]);
-            }
-        }
-    }
-    return dp[n-1];
+          if (p[i][j])
+          {
+              dp[j] = (i == 0) ? 0 : min(dp[i-1] + 1, dp[j]);
+          }
+      }
+  }
+  return dp[n-1];
 }
 
 
@@ -2630,6 +2675,10 @@ bool wordBreak(string s, vector<string> &wordDict)
     dp[0] = true;
     //其中 dp[i] 表示子串 s[0...i-1] 内的子串是否可以拆分
     // 子串
+  	//要遍历所有的子串，
+    // 用j把 [0, i) 范围内的子串分为了两部分，
+    // [0, j) 和 [j, i)，其中范围 [0, j) 就是 dp[j]，
+    // 范围 [j, i) 就是 s.substr(j, i-j)，其中 dp[j] 是之前的状态
     for (int i = 1; i <= n; i++)
     {
         for (int j = 0; j < i; j++)
@@ -2645,7 +2694,7 @@ bool wordBreak(string s, vector<string> &wordDict)
 }
 ```
 
-##### [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)
+##### [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)  
 
 难度中等1395
 
@@ -2753,7 +2802,7 @@ int maxCoins(vector<int>& nums)
 
 ##### [343. 整数拆分](https://leetcode-cn.com/problems/integer-break/) #todo 20210415
 
-```
+```c++
 int cuttingRope(int n)
 {
     if (n <= 2)

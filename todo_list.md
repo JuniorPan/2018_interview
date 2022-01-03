@@ -16,6 +16,14 @@
 
 [474. 一和零](https://leetcode-cn.com/problems/ones-and-zeroes/)
 
+[55. 跳跃游戏](https://leetcode-cn.com/problems/jump-game/) todo
+
+[91. 解码方法](https://leetcode-cn.com/problems/decode-ways/) #todo 20210415 
+
+[198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)  
+
+[312. 戳气球](https://leetcode-cn.com/problems/burst-balloons/)
+
 ## todo_list_history
 
 #### ~~[49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/)~~
