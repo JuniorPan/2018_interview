@@ -6769,7 +6769,7 @@ int removeDuplicates(vector<int>& nums)
 
 
 
-#### [41. 缺失的第一个正数](https://leetcode.com/problems/first-missing-positive/) #todo
+#### [41. 缺失的第一个正数](https://leetcode-cn.com/problems/first-missing-positive/)#todo
 
 ```c++
 int firstMissingPositive(vector<int> &nums)
