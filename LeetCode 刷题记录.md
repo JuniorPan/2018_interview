@@ -6737,7 +6737,6 @@ vector<vector<int>> threeSum(vector<int>& nums)
                     right--;
                 }
             }
-
         }
     }
     return res;
