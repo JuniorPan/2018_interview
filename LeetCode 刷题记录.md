@@ -24,14 +24,26 @@ while (right < s.size()) {
 #### [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/) #todo
 
 ```c++
- // 维护了一个滑动窗口，窗口内的都是没有重复的字符，需要尽可能的扩大窗口的大小。由于窗口在不停向右滑动，所以只关心每个字符最后出现的位置，并建立映射。窗口的右边界就是当前遍历到的字符的位置，为了求出窗口的大小，需要一个变量 left 来指向滑动窗口的左边界，这样，如果当前遍历到的字符从未出现过，那么直接扩大右边界，如果之前出现过，那么就分两种情况，在或不在滑动窗口内，如果不在滑动窗口内，那么就没事，当前字符可以加进来，如果在的话，就需要先在滑动窗口内去掉这个已经出现过的字符了，去掉的方法并不需要将左边界 left 一位一位向右遍历查找，由于 HashMap 已经保存了该重复字符最后出现的位置，所以直接移动 left 指针就可以了。维护一个结果 res，每次用出现过的窗口大小来更新结果 res，就可以得到最终结果
+int lengthOfLongestSubstring(string s) {
+  vector<int> m(128, -1);
+  int res = 0, left = -1;
+  for (int i = 0; i < s.size(); ++i) {
+      left = max(left, m[s[i]]);
+      m[s[i]] = i;
+      res = max(res, i - left);
+  }
+  return res;
+}
+
+
+// 维护了一个滑动窗口，窗口内的都是没有重复的字符，需要尽可能的扩大窗口的大小。由于窗口在不停向右滑动，所以只关心每个字符最后出现的位置，并建立映射。窗口的右边界就是当前遍历到的字符的位置，为了求出窗口的大小，需要一个变量 left 来指向滑动窗口的左边界，这样，如果当前遍历到的字符从未出现过，那么直接扩大右边界，如果之前出现过，那么就分两种情况，在或不在滑动窗口内，如果不在滑动窗口内，那么就没事，当前字符可以加进来，如果在的话，就需要先在滑动窗口内去掉这个已经出现过的字符了，去掉的方法并不需要将左边界 left 一位一位向右遍历查找，由于 HashMap 已经保存了该重复字符最后出现的位置，所以直接移动 left 指针就可以了。维护一个结果 res，每次用出现过的窗口大小来更新结果 res，就可以得到最终结果
 int lengthOfLongestSubstring(string s) 
 {
     int res = 0, n = s.size();
     //窗口的右边界就是当前遍历到的字符的位置，为了求出窗口的大小，需要一个变量 left 来指向滑动窗口的左边界
     int left = -1; // left 指向该无重复子串左边的起始位置的前一个
     //如果当前遍历到的字符从未出现过，那么直接扩大右边界，如果之前出现过，那么就分两种情况，在或不在滑动窗口内，如果不在滑动窗口内，那么就没事，当前字符可以加进来，如果在的话，就需要先在滑动窗口内去掉这个已经出现过的字符了，去掉的方法并不需要将左边界 left 一位一位向右遍历查找，由于 HashMap 已经保存了该重复字符最后出现的位置，所以直接移动 left 指针就可以了
-    unordered_map<int, int> m;
+    unordered_map<int, int> m; // 建立每个字符和其最后出现位置之间的映射
     for (int i = 0; i < n; ++i) 
     {
         //两个条件 m.count(s[i]) && m[s[i]] > left，因为一旦当前字符 s[i] 在 HashMap 已经存在映射，说明当前的字符已经出现过了，而若 m[s[i]] > left 成立，说明之前出现过的字符在窗口内，那么如果要加上当前这个重复的字符，就要移除之前的那个，所以让 left 赋值为 m[s[i]]，由于 left 是窗口左边界的前一个位置
@@ -48,7 +60,7 @@ int lengthOfLongestSubstring(string s)
 
 参考 https://www.cnblogs.com/grandyang/p/4480780.html
 
-#### [53. Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
+#### [53. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/)
 
 ```c++
  class Solution {
@@ -96,7 +108,7 @@ string minWindow(string s, string t)
                 min_left = left;
             } 
             // 开始收缩左边界
-            if (++m[s[left]] > 0)
+            if (++m[s[left]] > 0) // 不在t中的字符，++ 之后不可能出现大于1的情况
             {   
                 count--;
             }
@@ -136,7 +148,7 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
 }
 ```
 
-#### [424. 替换后的最长重复字符](https://leetcode-cn.com/problems/longest-repeating-character-replacement/) #todo 20210419
+#### [424. 替换后的最长重复字符](https://leetcode-cn.com/problems/longest-repeating-character-replacement/) #todo
 
 见https://www.cnblogs.com/grandyang/p/5999050.html
 
@@ -186,7 +198,7 @@ int characterReplacement(string s, int k)
 }
 ```
 
-#### [438. 找到字符串中所有字母异位词](https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/)
+#### [438. 找到字符串中所有字母异位词](https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/) todo
 
 ```c++
 vector<int> findAnagrams(string s, string p)
@@ -213,7 +225,7 @@ vector<int> findAnagrams(string s, string p)
 }
 ```
 
-#### [567. 字符串的排列](https://leetcode-cn.com/problems/permutation-in-string/) (和438 差不多)
+#### [567. 字符串的排列](https://leetcode-cn.com/problems/permutation-in-string/) (和438 差不多) todo
 
  解法一 其他解法见 [[LeetCode] Permutation in String 字符串中的全排列](https://www.cnblogs.com/grandyang/p/6815227.html)
 
@@ -263,7 +275,7 @@ int maxArea(vector<int>& height)
     int right = height.size() -1;
     while (left < right)
     {
-        res  = max(res, min(height[left], height[right]) * (right - left));
+        res = max(res, min(height[left], height[right]) * (right - left));
         // todo: 为什么是谁小谁移动
         if (height[left] <= height[right])
             left++;
@@ -531,7 +543,7 @@ int largestRectangleArea(vector<int> height)
 }
 ```
 
-#### [42. Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/)
+#### [42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/)
 
 ```c++
 int trap_1(vector<int> &height)
@@ -620,7 +632,7 @@ int trap(vector<int>& height)
 }
 ```
 
-#### [84. Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+#### [84. 柱状图中最大的矩形](https://leetcode-cn.com/problems/largest-rectangle-in-histogram/)
 
 ```c++
 int largestRectangleArea(vector<int> &heights)
@@ -697,7 +709,7 @@ public:
 };
 ```
 
-#### [162. Find Peak Element](https://leetcode.com/problems/find-peak-element)
+#### [162. 寻找峰值](https://leetcode-cn.com/problems/find-peak-element/)
 
 ```c++
 int findPeakElement(vector<int>& nums) 
@@ -838,17 +850,15 @@ public:
         }
         return right;
     }
-
-    vector<int> searchRange(vector<int> &nums, int target)
-    {
+   vector<int> searchRange(vector<int>& nums, int target) {
         if (nums.empty())
             return vector<int>{-1,-1};
         int low = lower_bound(nums, target);
-        int up = upper_bound(nums, target) - 1;
+        int up = lower_bound(nums, target+1);
 
-        if (low == nums.size() || nums[low] != target)
+        if (low == nums.size() ||  nums[low] != target)
             return vector<int>{-1,-1};
-        return vector<int>{low,up};
+        return vector<int>{low, up-1};
     }
 };
 ```
@@ -906,7 +916,7 @@ int search(vector<int>& nums, int target)
                 else
                     left = mid + 1;
             }
-            else // [mid,right] 连续递增
+            else // (mid,right] 连续递增
             {
                 if (nums[mid] < target && target <= nums[right]) // 加等号，因为 right 可能是 target
                     left = mid + 1; // 在右侧 (mid,right] 查找  因为到了这个地方 num[mid] 已经不可能等于target了
@@ -1036,7 +1046,7 @@ int firstBadVersion(int n) {
 
 
 
-#### [287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/) #TODOz
+#### [287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/) #TODO
 
 ```c++
 // 解法一: 二分查找
@@ -3556,9 +3566,10 @@ int longestPalindromeSubseq(string s)
 }
 ```
 
-##### [647. 回文子串](https://leetcode-cn.com/problems/palindromic-substrings/)
+##### [647. 回文子串](https://leetcode-cn.com/problems/palindromic-substrings/) todo: 空间优化
 
 ```c++
+
 int countSubstrings(string s)
 {
     int n = s.size();
@@ -5409,6 +5420,30 @@ bool judgeTotal(TreeNode *root)
 #### [114. 二叉树展开为链表](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)  二叉树前序遍历非递归
 
 ```c++
+void flatten(TreeNode* root) {
+  if (root == nullptr) {
+      return;
+  }
+  stack<TreeNode*> s;
+  s.push(root);
+  TreeNode *pre = nullptr;
+  while (!s.empty()) {
+      TreeNode *cur = s.top(); s.pop();
+      if (pre != nullptr) {
+          pre->left = nullptr;
+          pre->right = cur;
+      }
+      if (cur->right) {
+          s.push(cur->right);
+      }
+      if (cur->left) {
+          s.push(cur->left);
+      }
+      pre = cur;
+  }
+}
+
+
 void flatten(TreeNode* root) 
 {
     if(root == nullptr)
@@ -6583,7 +6618,7 @@ public:
 };
 ```
 
-#### [347. Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
+#### [347. 前 K 个高频元素](https://leetcode-cn.com/problems/top-k-frequent-elements/)
 
 ```c++
 vector<int> topKFrequent(vector<int>& nums, int k) 

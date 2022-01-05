@@ -24,6 +24,20 @@
 
 [312. 戳气球](https://leetcode-cn.com/problems/burst-balloons/)
 
+[114. 二叉树展开为链表](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/) 
+
+#### [424. 替换后的最长重复字符](https://leetcode-cn.com/problems/longest-repeating-character-replacement/)
+
+#### [543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/)
+
+#### [287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/)
+
+[647. 回文子串](https://leetcode-cn.com/problems/palindromic-substrings/) todo: 空间优化
+
+#### [560. 和为 K 的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/)
+
+#### [347. 前 K 个高频元素](https://leetcode-cn.com/problems/top-k-frequent-elements/)
+
 ## todo_list_history
 
 #### ~~[49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/)~~
