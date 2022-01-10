@@ -1,6 +1,6 @@
 # LeetCode 刷题记录
 
-### 滑动窗口问题 
+### 滑动窗口问题(7)
 
 核心思想: 我们可以用滑动窗口的思想解决这个问题，在滑动窗口类型的问题中都会有两个指针。一个用于「延伸」现有窗口的 r 指针，和一个用于「收缩」窗口的 l 指针。在任意时刻，只有一个指针运动，而另一个保持静止。我们在 ss上滑动窗口，通过移动 r 指针不断扩张窗口。当窗口包含 t 全部所需的字符后，如果能收缩，我们就收缩窗口直到得到最小窗口。
 <img src="https://assets.leetcode-cn.com/solution-static/76/76_fig1.gif" alt="滑动窗口示意"  />
@@ -259,7 +259,7 @@ bool checkInclusion(string s1, string s2)
 }
 ```
 
-### 双指针问题
+### 双指针问题(6)
 
 todo: 11和42的区别
 
@@ -401,7 +401,7 @@ public:
 };
 ```
 
-#### [167. Two Sum II - Input array is sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/submissions/)
+#### [167. 两数之和 II - 输入有序数组](https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/)
 
 ```c++
 vector<int> twoSum(vector<int>& numbers, int target)
@@ -434,7 +434,7 @@ vector<int> twoSum(vector<int>& numbers, int target)
 }
 ```
 
-#### [240. Search a 2D Matrix II](https://leetcode.com/problems/search-a-2d-matrix-ii/)
+#### [240. 搜索二维矩阵 II](https://leetcode-cn.com/problems/search-a-2d-matrix-ii/)
 
 ```c++
 bool searchMatrix(vector<vector<int>> &matrix, int target)
@@ -460,7 +460,7 @@ bool searchMatrix(vector<vector<int>> &matrix, int target)
 }
 ```
 
-#### [524. Longest Word in Dictionary through Deleting](https://leetcode.com/problems/longest-word-in-dictionary-through-deleting/)  #todo
+#### [524. 通过删除字母匹配到字典里最长单词](https://leetcode-cn.com/problems/longest-word-in-dictionary-through-deleting/)  #todo
 
 ```c++
 string findLongestWord(string s, vector<string> &d)
@@ -486,7 +486,7 @@ string findLongestWord(string s, vector<string> &d)
 }
 ```
 
-### 单调栈系列问题 
+### 单调栈系列问题 (8)
 
 **单调栈的两种写法**   [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
 
@@ -801,15 +801,54 @@ vector<int> dailyTemperatures(vector<int>& T)
 }
 ```
 
-#### [402. Remove K Digits](https://leetcode.com/problems/remove-k-digits/)
+#### [402. 移掉 K 位数字](https://leetcode-cn.com/problems/remove-k-digits/)
 
-https://www.cnblogs.com/grandyang/p/5883736.html
+```c++
+// https://www.cnblogs.com/grandyang/p/5883736.html
+string removeKdigits(string num, int k) {
+    string res = "";
+    int n = num.size(), keep = n - k;
+    for (char c : num) {
+        while (k && res.size() && res.back() > c) {
+            res.pop_back();
+            --k;
+        }
+        res.push_back(c);
+    }
+    res.resize(keep);
+    while (!res.empty() && res[0] == '0') res.erase(res.begin());
+    return res.empty() ? "0" : res;
+}
+```
 
-#### [768. Max Chunks To Make Sorted II](https://leetcode.com/problems/max-chunks-to-make-sorted-ii/)
 
-<https://www.cnblogs.com/grandyang/p/8850299.html>
 
-### 二分查找  
+
+
+#### [768. 最多能完成排序的块 II](https://leetcode-cn.com/problems/max-chunks-to-make-sorted-ii/)
+
+```c++
+// <https://www.cnblogs.com/grandyang/p/8850299.html>
+int maxChunksToSorted(vector<int>& arr) {
+  stack<int> st;
+  for (int i = 0; i < arr.size(); ++i) {
+      if (st.empty() || st.top() <= arr[i]) {
+          st.push(arr[i]);
+      } else {
+          int curMax = st.top(); st.pop();
+          while (!st.empty() && st.top() > arr[i]) st.pop();
+          st.push(curMax);
+      }
+  }
+  return st.size();
+}
+```
+
+
+
+
+
+### 二分查找  (11)
 
 #### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -880,7 +919,7 @@ double myPow(double x, int n) {
 
 
 
-#### [69. Sqrt(x)](https://leetcode.com/problems/sqrtx/)  #todo 
+#### [69. Sqrt(x)](https://leetcode-cn.com/problems/sqrtx/)  #todo 
 
 ```c++
 int mySqrt(int x) 
@@ -1108,7 +1147,7 @@ public:
 };
 ```
 
-#### [704. Binary Search](https://leetcode.com/problems/binary-search/)
+#### [704. 二分查找](https://leetcode-cn.com/problems/binary-search/)
 
 ```c++
 int search(vector<int> &nums, int target)
@@ -1153,11 +1192,11 @@ int find(vector<int>& nums, int target) {
 }Kth Smallest Element in a Sorted Matrix](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
 ```
 
-### 排序 
+### 排序 (4)
 
 #### 归并排序
 
-#### [493. 翻转对](https://leetcode-cn.com/problems/reverse-pairs/)
+##### [493. 翻转对](https://leetcode-cn.com/problems/reverse-pairs/)
 
 ```c++
 class Solution {
@@ -1224,7 +1263,7 @@ public:
 
 
 
-#### [912. 排序数组](https://leetcode-cn.com/problems/sort-an-array/)
+##### [912. 排序数组](https://leetcode-cn.com/problems/sort-an-array/)
 
 ``` c++
 class Solution {
@@ -1294,7 +1333,7 @@ vector<int> MySort(vector<int>& arr) {
 
 
 
-##### [75. Sort Colors](https://leetcode.com/problems/sort-colors/) 快排partion
+##### [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/) 快排partion
 
 ```c++
 
@@ -1320,7 +1359,7 @@ vector<int> MySort(vector<int>& arr) {
 };
 ```
 
-##### [324. Wiggle Sort II](https://leetcode.com/problems/wiggle-sort-ii/)    #todo
+##### [324. 摆动排序 II](https://leetcode-cn.com/problems/wiggle-sort-ii/)  #todo
 
 核心思想， 如果当前数小于num,当前数和小于区域的下一个数交换, 如果当前数大于num,当前数和大于区域的前一
 个数交换
@@ -1440,7 +1479,9 @@ public:
 
 ### 链表 
 
-#### [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
+#### 普通链表
+
+##### [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
 
 ```c++
 ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
@@ -1463,7 +1504,7 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
 }
 ```
 
-#### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)
+##### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)
 
 ```c++
 ListNode *swapPairs(ListNode *head)
@@ -1482,7 +1523,7 @@ ListNode *swapPairs(ListNode *head)
 }
 ```
 
-#### [82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
+##### [82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
 
 ```c++
 ListNode *deleteDuplicates(ListNode *head)
@@ -1509,7 +1550,7 @@ ListNode *deleteDuplicates(ListNode *head)
 
 
 
-#### [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
+##### [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
 
 ```c++
 ListNode* deleteDuplicates(ListNode* head) {
@@ -1533,7 +1574,7 @@ ListNode* deleteDuplicates(ListNode* head) {
 }
 ```
 
-#### [138. 复制带随机指针的链表](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)
+##### [138. 复制带随机指针的链表](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)
 
 ```c++
 Node* copyRandomList(Node* head) 
