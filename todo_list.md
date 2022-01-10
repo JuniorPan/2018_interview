@@ -40,6 +40,12 @@
 
 #### [90. 子集 II](https://leetcode-cn.com/problems/subsets-ii/)
 
+#### [136. 只出现一次的数字](https://leetcode-cn.com/problems/single-number/)
+
+#### [169. 多数元素](https://leetcode-cn.com/problems/majority-element/)
+
+#### [221. 最大正方形](https://leetcode-cn.com/problems/maximal-square/)
+
 ## todo_list_history
 
 #### ~~[49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/)~~

@@ -2462,7 +2462,7 @@ int minPathSum(vector<vector<int>> &grid)
 }
 ```
 
-#### [70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
+##### [70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
 
 难度简单2096
 
@@ -2482,7 +2482,7 @@ int climbStairs(int n)
 }
 ```
 
-#### [120. 三角形最小路径和](https://leetcode-cn.com/problems/triangle/) #todo
+##### [120. 三角形最小路径和](https://leetcode-cn.com/problems/triangle/) #todo
 
 ```c++
 
@@ -3639,9 +3639,81 @@ public:
 };
 ```
 
-#### 其他
+#### 8.打家劫舍系列
 
-#### [221. 最大正方形](https://leetcode-cn.com/problems/maximal-square/)
+##### [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)
+
+```c++
+// 本质相当于在一列数组中取出一个或多个不相邻数，使其和最大
+// dp，其中 dp[i] 表示 [0, i] 区间可以抢夺的最大值
+// 对当前i来说，有抢和不抢两种互斥的选择，不抢即为 dp[i-1]（等价于去掉 nums[i] 只抢 [0, i-1] 区间最大值），
+// 抢即为 dp[i-2] + nums[i]（等价于去掉 nums[i-1]）
+int rob(vector<int>& nums) {
+    if (nums.size() <= 1) return nums.empty() ? 0 : nums[0];
+    vector<int> dp = {nums[0], max(nums[0], nums[1])};
+    for (int i = 2; i < nums.size(); ++i) {
+        dp.push_back(max(nums[i] + dp[i - 2], dp[i - 1]));
+    }
+    return dp.back();
+}
+```
+
+##### [213. 打家劫舍 II](https://leetcode-cn.com/problems/house-robber-ii/)
+
+```c++
+// 现在房子排成了一个圆圈，则如果抢了第一家，就不能抢最后一家，因为首尾相连了，所以第一家和最后一家只能抢其中的一家，或者都不抢，
+// 那这里变通一下，如果把第一家和最后一家分别去掉，各算一遍能抢的最大值，然后比较两个值取其中较大的一个即为所求
+int rob(vector<int> &nums, int left, int right) {
+    if (right - left <= 1) return nums[left];
+    vector<int> dp(right, 0);
+    dp[left] = nums[left];
+    dp[left + 1] = max(nums[left], nums[left + 1]);
+    for (int i = left + 2; i < right; ++i) {
+        dp[i] = max(nums[i] + dp[i - 2], dp[i - 1]);
+    }
+    return dp.back();
+}
+
+int rob(vector<int>& nums) {
+    if (nums.size() <= 1) return nums.empty() ? 0 : nums[0];
+    return max(rob(nums, 0, nums.size() - 1), rob(nums, 1, nums.size()));
+}
+```
+
+##### [337. 打家劫舍 III](https://leetcode-cn.com/problems/house-robber-iii/)
+
+```c++
+// https://www.cnblogs.com/grandyang/p/5275096.html
+int dfs(TreeNode *root, unordered_map<TreeNode*, int> &m) 
+{
+    if (!root) return 0;
+    if (m.count(root)) return m[root];
+    int val = 0;
+    if (root->left) {
+        val += dfs(root->left->left, m) + dfs(root->left->right, m);
+    }
+    if (root->right) {
+        val += dfs(root->right->left, m) + dfs(root->right->right, m);
+    }
+    val = max(val + root->val, dfs(root->left, m) + dfs(root->right, m));
+    m[root] = val;
+    return val;
+}
+int rob(TreeNode* root) {
+    unordered_map<TreeNode*, int> m;
+    return dfs(root, m);
+}
+```
+
+
+
+
+
+
+
+#### 9.其他
+
+##### [221. 最大正方形](https://leetcode-cn.com/problems/maximal-square/)
 
 ```c++
 int maximalSquare(vector<vector<char>>& matrix) 
@@ -6441,6 +6513,23 @@ int maxProfit(vector<int>& prices)
 
 ```
 
+```
+
+
+
+#### [309. 最佳买卖股票时机含冷冻期](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/)
+
+```c++
+int maxProfit(vector<int>& prices) {
+   int buy = INT_MIN, pre_buy = 0, sell = 0, pre_sell = 0;
+  for (int price : prices) {
+      pre_buy = buy;
+      buy = max(pre_sell - price, pre_buy);
+      pre_sell = sell;
+      sell = max(pre_buy + price, pre_sell);
+  }
+  return sell;
+}
 ```
 
 
