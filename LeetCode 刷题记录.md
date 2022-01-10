@@ -486,6 +486,42 @@ string findLongestWord(string s, vector<string> &d)
 }
 ```
 
+### **双指针（2 Pointer）：**
+
+- 基础知识：常见双指针算法分为三类，同向（即两个指针都相同一个方向移动），背向（两个指针从相同或者相邻的位置出发，背向移动直到其中一根指针到达边界为止），相向（两个指针从两边出发一起向中间移动直到两个指针相遇）
+
+- 背向双指针：(基本上全是回文串的题)
+
+- - Leetcode 409. Longest Palindrome
+  - Leetcode 125. Valid Palindrome
+  - Leetcode 5. Longest Palindromic Substring
+
+- 相向双指针：(以two sum为基础的一系列题)
+
+- - Leetcode 1. Two Sum (这里使用的是先排序的双指针算法，不同于hashmap做法)
+  - Leetcode 167. Two Sum II - Input array is sorted
+  - Leetcode 15. 3Sum
+  - Leetcode 16. 3Sum Closest
+  - Leetcode 18. 4Sum
+  - Leetcode 454. 4Sum II
+  - Leetcode 277. Find the Celebrity
+  - Leetcode 11. Container With Most Water
+
+- 同向双指针：（个人觉得最难的一类题，可以参考下这里 [TimothyL：Leetcode 同向双指针/滑动窗口类代码模板](https://zhuanlan.zhihu.com/p/390570255)）
+
+- - Leetcode 283. Move Zeroes
+  - Leetcode 26. Remove Duplicate Numbers in Array
+  - Leetcode 395. Longest Substring with At Least K Repeating Characters
+  - Leetcode 340. Longest Substring with At Most K Distinct Characters
+  - Leetcode 424. Longest Repeating Character Replacement
+  - Leetcode 76. Minimum Window Substring
+  - Leetcode 3. Longest Substring Without Repeating Characters
+  - Leetcode 1004 Max Consecutive Ones III
+
+
+
+
+
 ### 单调栈系列问题 (8)
 
 **单调栈的两种写法**   [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
@@ -4354,6 +4390,128 @@ int largestIsland(vector<vector<int>>& grid)
 }
 ```
 
+- - 
+
+### 深度优先搜索（DFS）：面试中最常考的
+
+- 基础知识：
+
+- - 常见的DFS用来解决什么问题？(1) 图中（有向无向皆可）的符合某种特征（比如最长）的路径以及长度（2）排列组合（3） 遍历一个图（或者树）（4）找出图或者树中符合题目要求的全部方案
+  - DFS基本模板（需要记录路径，不需要返回值 and 不需要记录路径，但需要记录某些特征的返回值）
+  - 除了遍历之外多数情况下时间复杂度是指数级别，一般是O(方案数×找到每个方案的时间复杂度)
+  - 递归题目都可以用非递归迭代的方法写，但一般实现起来非常麻烦
+
+- 基于树的DFS：需要记住递归写前序中序后序遍历二叉树的模板
+
+- - Leetcode 543 Diameter of Binary Tree
+  - Leetcode 226 Invert Binary Tree
+  - Leetcode 101 Symmetric Tree
+  - Leetcode 951 Flip Equivalent Binary Trees
+  - Leetcode 124 Binary Tree Maximum Path Sum
+  - Leetcode 236 Lowest Common Ancestor of a Binary Tree (相似题：235、1650)
+  - Leetcode 105 Construct Binary Tree from Preorder and Inorder Traversal
+  - Leetcode 104 Maximum Depth of Binary Tree
+  - Leetcode 987 Vertical Order Traversal of a Binary Tree
+  - Leetcode 1485 Clone Binary Tree With Random Pointer
+  - Leetcode 572 Subtree of Another Tree
+  - Leetcode 863 All Nodes Distance K in Binary Tree
+  - Leetcode 1110 Delete Nodes And Return Forest
+
+- 二叉搜索树（BST）：BST特征：中序遍历为单调递增的二叉树，换句话说，根节点的值比左子树任意节点值都大，比右子树任意节点值都小，增删查改均为O（h）复杂度，h为树的高度；注意不是所有的BST题目都需要递归，有的题目只需要while循环即可
+
+- - Leetcode 230 Kth Smallest element in a BST
+  - Leetcode 98 Validate Binary Search Tree
+  - Leetcode 270 Cloest Binary Search Tree Value
+  - Leetcode 235 Lowest Common Ancestor of a Binary Search Tree
+  - Leetcode 669 Trim a Binary Search Tree
+  - Leetcode 700 Search in a Binary Search Tree
+  - Leetcode 108 Convert Sorted Array to Binary Search Tree
+  - Leetcode 333 Largest BST Subtree (与98类似)
+  - Leetcode 285 Inorder Successor in BST (I, II)
+
+- 基于图的DFS: 和BFS一样一般需要一个set来记录访问过的节点，避免重复访问造成死循环; Word XXX 系列面试中非常常见，例如word break，word ladder，word pattern，word search。
+
+- - Leetcode 341 Flatten Nested List Iterator (339 364)
+  - Leetcode 394 Decode String
+  - Leetcode 51 N-Queens (I II基本相同)
+  - Leetcode 291 Word Pattern II (I为简单的Hashmap题)
+  - Leetcode 126 Word Ladder II （I为BFS题目）
+  - Leetcode 93 Restore IP Addresses
+  - Leetcode 22 Generate Parentheses
+  - Leetcode 586 Score of Parentheses
+  - Leetcode 301 Remove Invalid Parentheses
+  - Leetcode 37 Sodoku Solver
+  - Leetcode 212 Word Search II （I, II）
+  - Leetcode 1087 Brace Expansion
+  - Leetcode 399 Evaluate Division
+  - Leetcode 1274 Number of Ships in a Rectangle
+  - Leetcode 1376 Time Needed to Inform All Employees
+  - Leetcode 694 Number of Distinct Islands
+  - Leetcode 131 Palindrome Partitioning
+
+- 基于排列组合的DFS: 其实与图类DFS方法一致，但是排列组合的特征更明显
+
+- - Leetcode 17 Letter Combinations of a Phone Number
+  - Leetcode 39 Combination Sum（I, II, III相似， IV为动态规划题目）
+  - Leetcode 78 Subsets （I, II 重点在于如何去重）
+  - Leetcode 46 Permutation (I, II 重点在于如何去重)
+  - Leetcode 77 Combinations (I, II 重点在于如何去重)
+  - Leetcode 698 Partition to K Equal Sum Subsets
+  - Leetcode 526 Beautiful Arrangement (similar to 46)
+
+- 记忆化搜索（DFS + Memoization Search）：算是动态规划的一种，递归每次返回时同时记录下已访问过的节点特征，避免重复访问同一个节点，可以有效的把指数级别的DFS时间复杂度降为多项式级别; 注意这一类的DFS必须在最后有返回值，不可以用排列组合类型的DFS方法写; for循环的dp题目都可以用记忆化搜索的方式写，但是不是所有的记忆化搜索题目都可以用for循环的dp方式写。
+
+- - Leetcode 139 Word Break II
+  - Leetcode 72 Edit Distance
+  - Leetcode 377 Combination Sum IV
+  - Leetcode 1235 [Maximum Profit in Job Scheduling](https://link.zhihu.com/?target=https%3A//leetcode.com/explore/item/3950)
+  - Leetcode 1335 Minimum Difficulty of a Job Schedule
+  - Leetcode 1216 Valid Palindrome III
+  - Leetcode 97 Interleaving String
+  - Leetcode 472 Concatenated Words
+  - Leetcode 403 Frog Jump
+  - Leetcode 329 Longest Increasing Path in a Matrix
+
+
+
+### 宽度优先搜索（BFS）：面试中最常考的
+
+- 基础知识：
+
+- - 常见的BFS用来解决什么问题？(1) 简单图（有向无向皆可）的最短路径长度，注意是长度而不是具体的路径（2）拓扑排序 （3） 遍历一个图（或者树）
+
+- BFS基本模板（需要记录层数或者不需要记录层数）
+
+- 多数情况下时间复杂度空间复杂度都是O（N+M），N为节点个数，M为边的个数
+
+- 基于树的BFS：不需要专门一个set来记录访问过的节点
+
+- - Leetcode 102 Binary Tree Level Order Traversal
+  - Leetcode 103 Binary Tree Zigzag Level Order Traversal
+  - Leetcode 297 Serialize and Deserialize Binary Tree （很好的BFS和双指针结合的题）
+  - Leetcode 314 Binary Tree Vertical Order Traversal
+
+- 基于图的BFS：（一般需要一个set来记录访问过的节点）
+
+- - Leetcode 200. Number of Islands
+  - Leetcode 133. Clone Graph
+  - Leetcode 127. Word Ladder
+  - Leetcode 490. The Maze
+  - Leetcode 323. Connected Component in Undirected Graph
+  - Leetcode 130. Surrounded Regions
+  - Leetcode 752. Open the Lock
+  - Leetcode 815. Bus Routes
+  - Leetcode 1091. Shortest Path in Binary Matrix
+  - Leetcode 542. 01 Matrix
+  - Leetcode 1293. Shortest Path in a Grid with Obstacles Elimination
+
+- 拓扑排序：（[https://zh.wikipedia.org/wiki/%E6%8B%93%E6%92%B2%E6%8E%92%E5%BA%8F](https://link.zhihu.com/?target=https%3A//zh.wikipedia.org/wiki/%E6%8B%93%E6%92%B2%E6%8E%92%E5%BA%8F)）
+
+- - Leetcode 207 Course Schedule （I, II）
+  - Leetcode 444 Sequence Reconstruction
+  - Leetcode 269 Alien Dictionary
+  - Leetcode 310 Minimum Height Trees
+
 ### BFS
 
 #### [判断一棵二叉树是否完全二叉树](https://www.nowcoder.com/practice/f31fc6d3caf24e7f8b4deb5cd9b5fa97?tpId=191&&tqId=35928&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking) #TODO
@@ -6820,6 +6978,66 @@ vector<int> topKFrequent(vector<int>& nums, int k)
 ```
 
 #### [373. Find K Pairs with Smallest Sums](https://leetcode.com/problems/find-k-pairs-with-smallest-sums/)
+
+### 前缀和
+
+前缀和本质上是在一个list当中，用O（N）的时间提前算好从第0个数字到第i个数字之和，在后续使用中可以在O（1）时间内计算出第i到第j个数字之和，一般很少单独作为一道题出现，而是很多题目中的用到的一个小技巧
+
+
+
+[53. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/)
+
+```c++ 
+int maxSubArray(vector<int>& nums) {
+        int res = INT_MIN;
+        int cur_sum = 0;
+        for(int i = 0; i < nums.size(); i++)
+        {
+            cur_sum += nums[i];
+            res = max(cur_sum, res);
+            cur_sum = cur_sum > 0 ? cur_sum : 0;
+        }
+        return res;
+    }
+```
+
+
+
+[304. 二维区域和检索 - 矩阵不可变](https://leetcode-cn.com/problems/range-sum-query-2d-immutable/)
+
+[523. 连续的子数组和](https://leetcode-cn.com/problems/continuous-subarray-sum/)
+
+[560. 和为 K 的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/)
+
+```c++
+int subarraySum(vector<int>& nums, int k)
+{
+    unordered_map<int, int> hasSum; // 记录每个累加和出现的次数
+    int cur_cum = 0;
+    hasSum[0] = 1;
+    int res = 0;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        cur_cum += nums[i];
+        // 如果能在hasSum中能找到 说明在i 位置至少存在一个位置j 使得[0...j]的累加和为sum-k, 那么从[j+1...i]的累加和就是k了.
+        // 所以有可能不只一个j满足条件,用hasSum记录在i位置之前出现多少j满足条件
+        if (hasSum.count(cur_cum - k))
+            res += hasSum[cur_cum-k];
+        hasSum[cur_cum] ++;
+    }
+    return res;
+}
+```
+
+
+
+[1031. 两个非重叠子数组的最大和](https://leetcode-cn.com/problems/maximum-sum-of-two-non-overlapping-subarrays/)
+
+[1423. 可获得的最大点数](https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/)
+
+
+
+
 
 ### 数组
 
