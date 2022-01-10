@@ -6400,6 +6400,55 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 
 #### [986. Interval List Intersections](https://leetcode.com/problems/interval-list-intersections/)
 
+
+
+### 股票系列
+
+#### [121. 买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
+
+```c++
+// 遍历一次数组，用一个变量记录遍历过数中的最小值，然后每次计算当前值和这个最小值之间的差值最为利润，然后每次选较大的利润来更新
+int maxProfit(vector<int>& prices)
+{
+    int res = INT_MIN;
+    int cur_min = INT_MAX;
+    for(int i = 0; i < prices.size(); i++)
+    {
+        cur_min = min(cur_min, prices[i]);
+        res = max(prices[i]-cur_min, res);
+    }
+    return res;
+}
+```
+
+#### [122. 买卖股票的最佳时机 II](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/)
+
+```c++
+int maxProfit(vector<int>& prices) 
+{
+  // 从第二天开始，如果当前价格比之前价格高，则把差值加入利润中
+  int res = 0, n = prices.size();
+  for (int i = 0; i < n - 1; ++i) {
+      if (prices[i] < prices[i + 1]) {
+          res += prices[i + 1] - prices[i];
+      }
+  }
+  return res;
+}
+```
+
+#### [123. 买卖股票的最佳时机 III](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/)
+
+```
+
+```
+
+
+
+
+
+
+
 ### 双堆模式
 
 #### [155. 最小栈](https://leetcode-cn.com/problems/min-stack/)
