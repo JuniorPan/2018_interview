@@ -3870,6 +3870,33 @@ int maximalSquare(vector<vector<char>>& matrix)
 
 ##### [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)  
 
+```c++
+// https://www.cnblogs.com/grandyang/p/4344107.html
+int dfs(string& word1, int i, string& word2, int j, vector<vector<int>>& dp) {
+    if (i == word1.size()) return (int)word2.size() - j;
+    if (j == word2.size()) return (int)word1.size() - i;
+    if (dp[i][j] > 0) return dp[i][j];
+    int res = 0;
+    if (word1[i] == word2[j]) {
+        return dfs(word1, i + 1, word2, j + 1, dp);
+    } else {
+        int insertCnt = dfs(word1, i, word2, j + 1, dp);
+        int deleteCnt = dfs(word1, i + 1, word2, j, dp);
+        int replaceCnt = dfs(word1, i + 1, word2, j + 1, dp);
+        res = min(insertCnt, min(deleteCnt, replaceCnt)) + 1;
+    }
+    return dp[i][j] = res;
+}
+int minDistance(string word1, string word2)
+{
+    int m = word1.size(), n = word2.size();
+    vector<vector<int>> dp(m, vector<int>(n));
+    return dfs(word1, 0, word2, 0, dp);
+}
+```
+
+
+
 ##### [97. 交错字符串](https://leetcode-cn.com/problems/interleaving-string/)
 
 ##### [139. 单词拆分](https://leetcode-cn.com/problems/word-break/) 回溯+记忆化搜索
@@ -3905,24 +3932,27 @@ bool wordBreak(string s, vector<string> &wordDict)
     return dfs(s, wordSet, 0, memo);
 }
 // dfs 表示字符串s[start,n] 是否可分
-bool dfs(string s, unordered_set<string> &wordSet, int start, vector<int> &memo)
+bool dfs(string s, unordered_set<string>& wordDict, int index, vector<int> &dp)
 {
-    if (start >= s.size())
+    if (index >= s.size())
         return true;
-    if (memo[start] != -1)
-        return memo[start];
-    for (int i = start + 1; i <= s.size(); ++i)
+    if (dp[index] != -1)
+        return dp[index];
+
+    for(int i = index + 1; i <= s.size(); i++)
     {
-        if (wordSet.count(s.substr(start, i - start)) && dfs(s, wordSet, i, memo))
-        {
-            return memo[start] = 1;
-        }
+         if (wordDict.count(s.substr(index, i - index)) && dfs(s, wordDict, i, dp))
+         {
+             dp[index] = true;
+             return true;
+         }    
     }
-    return memo[start] = 0;
+    dp[index] = false;
+    return false;
 }
 ```
 
-##### [140. Word Break II](https://leetcode.com/problems/word-break-ii/) 注意和139的区别
+##### [140. 单词拆分 II](https://leetcode-cn.com/problems/word-break-ii/)注意和139的区别 todo 好像还不怎么会
 
 <img src="https://pic.leetcode-cn.com/1604197605-MUoIgt-image.png" alt="image.png" style="zoom:50%;" />
 
@@ -7025,7 +7055,7 @@ vector<int> topKFrequent(vector<int>& nums, int k)
 
 
 
-[53. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/)
+#### [53. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/)
 
 ```c++ 
 int maxSubArray(vector<int>& nums) {
@@ -7043,11 +7073,11 @@ int maxSubArray(vector<int>& nums) {
 
 
 
-[304. 二维区域和检索 - 矩阵不可变](https://leetcode-cn.com/problems/range-sum-query-2d-immutable/)
+#### [304. 二维区域和检索 - 矩阵不可变](https://leetcode-cn.com/problems/range-sum-query-2d-immutable/)
 
-[523. 连续的子数组和](https://leetcode-cn.com/problems/continuous-subarray-sum/)
+#### [523. 连续的子数组和](https://leetcode-cn.com/problems/continuous-subarray-sum/)
 
-[560. 和为 K 的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/)
+#### [560. 和为 K 的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/)
 
 ```c++
 int subarraySum(vector<int>& nums, int k)
@@ -7071,9 +7101,9 @@ int subarraySum(vector<int>& nums, int k)
 
 
 
-[1031. 两个非重叠子数组的最大和](https://leetcode-cn.com/problems/maximum-sum-of-two-non-overlapping-subarrays/)
+#### [1031. 两个非重叠子数组的最大和](https://leetcode-cn.com/problems/maximum-sum-of-two-non-overlapping-subarrays/)
 
-[1423. 可获得的最大点数](https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/)
+#### [1423. 可获得的最大点数](https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/)
 
 
 
