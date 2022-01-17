@@ -3822,8 +3822,343 @@ int maximalSquare(vector<vector<char>>& matrix)
 
 #### [395. Longest Substring with At Least K Repeating Characters](https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/)
 
-
 ### 深度优先搜索DFS 
+
+
+
+#### 基于图的DFS
+
+和BFS一样一般需要一个set来记录访问过的节点，避免重复访问造成死循环; Word XXX 系列面试中非常常见，例如word break，word ladder，word pattern，word search。
+
+##### Leetcode 341 Flatten Nested List Iterator (339 364)
+
+##### Leetcode 394 Decode String
+
+##### Leetcode 51 N-Queens (I II基本相同)
+
+##### Leetcode 291 Word Pattern II (I为简单的Hashmap题)
+
+##### Leetcode 126 Word Ladder II （I为BFS题目）
+
+##### Leetcode 93 Restore IP Addresses
+
+##### Leetcode 22 Generate Parentheses
+
+##### Leetcode 586 Score of Parentheses
+
+##### Leetcode 301 Remove Invalid Parentheses
+
+##### Leetcode 37 Sodoku Solver
+
+##### Leetcode 212 Word Search II （I, II）
+
+##### Leetcode 1087 Brace Expansion
+
+##### Leetcode 399 Evaluate Division
+
+##### Leetcode 1274 Number of Ships in a Rectangle
+
+##### Leetcode 1376 Time Needed to Inform All Employees
+
+##### Leetcode 694 Number of Distinct Islands
+
+##### Leetcode 131 Palindrome Partitioning
+
+#### 记忆化搜索
+
+算是动态规划的一种，递归每次返回时同时记录下已访问过的节点特征，避免重复访问同一个节点，可以有效的把指数级别的DFS时间复杂度降为多项式级别; 注意这一类的DFS必须在最后有返回值，不可以用排列组合类型的DFS方法写; for循环的dp题目都可以用记忆化搜索的方式写，但是不是所有的记忆化搜索题目都可以用for循环的dp方式写。
+
+##### [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)  
+
+##### [97. 交错字符串](https://leetcode-cn.com/problems/interleaving-string/)
+
+##### [139. 单词拆分](https://leetcode-cn.com/problems/word-break/) 回溯+记忆化搜索
+
+<img src="https://pic.leetcode-cn.com/78fd09b2deabeae972809c2795ddb8be96720b8e62377cf01b7f70e7fb3dbf8c-image.png" alt="image.png" style="zoom: 50%;" />
+
+```c++
+// 解法一：暴力递归超时了
+bool dfs(string &s, unordered_set<string> &wordSet, int i, vector<int> &memo)
+{
+    if ( i >= s.size())
+        return true;
+    for(int j = i+1; j <= s.size(); j++)
+    {
+        if (wordSet.count(s.substr(i, j - i)) && dfs(s, wordSet, j, memo))
+            return true;
+    }
+    return false;
+}
+
+bool wordBreak(string s, vector<string> &wordDict)
+{
+    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+    vector<int> memo(s.size(), -1);
+    return dfs(s, wordSet, 0, memo);
+}
+
+// 解法一：增加记忆化搜索
+bool wordBreak(string s, vector<string> &wordDict)
+{
+    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+    vector<int> memo(s.size(), -1);
+    return dfs(s, wordSet, 0, memo);
+}
+// dfs 表示字符串s[start,n] 是否可分
+bool dfs(string s, unordered_set<string> &wordSet, int start, vector<int> &memo)
+{
+    if (start >= s.size())
+        return true;
+    if (memo[start] != -1)
+        return memo[start];
+    for (int i = start + 1; i <= s.size(); ++i)
+    {
+        if (wordSet.count(s.substr(start, i - start)) && dfs(s, wordSet, i, memo))
+        {
+            return memo[start] = 1;
+        }
+    }
+    return memo[start] = 0;
+}
+```
+
+##### [140. Word Break II](https://leetcode.com/problems/word-break-ii/) 注意和139的区别
+
+<img src="https://pic.leetcode-cn.com/1604197605-MUoIgt-image.png" alt="image.png" style="zoom:50%;" />
+
+```c++
+// 解法一 暴力递归超时了  想改成不带返回值得形式
+vector<string> dfs(string s, unordered_set<string> &wordSet, int start)
+{
+    if (start == s.size())
+    {
+        return {""};
+    }
+    vector<string> res;
+    for (int i = start; i < s.size(); ++i)
+    {
+        if (wordSet.count(s.substr(start, i - start+1)) > 0)
+        {
+            vector<string> tmp = dfs(s, wordSet, i+1);
+            for (auto str : tmp)
+            {
+                res.push_back(s.substr(start, i - start + 1) + (str.empty() ? "" : " ") + str);
+            }
+        }
+    }
+    return res;
+}
+
+vector<string> wordBreak(string s, vector<string> &wordDict)
+{
+    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+    return dfs(s, wordSet, 0);
+}
+
+// 解法二: 增加记忆化搜索
+vector<string> dfs(string s, unordered_set<string> &wordSet, int start, unordered_map<int, vector<string>> &memo)
+{
+    if (memo.count(start) > 0)
+    {
+        return memo[start];
+    }
+    if (start == s.size())
+    {
+        return {""};
+    }
+    vector<string> res;
+    for (int i = start; i < s.size(); ++i)
+    {
+        if (wordSet.count(s.substr(start, i - start + 1)) > 0)
+        {
+            vector<string> tmp = dfs(s, wordSet, i+1, memo);
+            for (auto str : tmp)
+            {
+                res.push_back(s.substr(start, i - start + 1) + (str.empty() ? "" : " ") + str);
+            }
+        }
+    }
+    memo[start] = res;
+    return res;
+}
+
+vector<string> wordBreak(string s, vector<string> &wordDict)
+{
+    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+    unordered_map<int, vector<string>> memo;
+    return dfs(s, wordSet, 0, memo);
+}
+```
+
+##### [329. 矩阵中的最长递增路径](https://leetcode-cn.com/problems/longest-increasing-path-in-a-matrix/)  记忆化搜索
+
+```
+int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
+
+// 表示从（i，j）出发的最长路径长度
+int dfs(vector<vector<int>>& matrix, vector<vector<int>>& dp, int i, int j)
+{
+    
+    if (dp[i][j] > 0)
+        return dp[i][j];
+    int res = 1;
+    for(int k = 0; k < 4; k++)
+    {
+        int x = i + dirs[k][0];
+        int y = j + dirs[k][1];
+        if (x >= 0 && x < matrix.size() && y >= 0 && y < matrix[0].size() && matrix[x][y] > matrix[i][j])
+        {
+            int dist = 1 + dfs(matrix, dp, x, y); 
+            res = max(dist, res);
+        }    
+    }
+    dp[i][j] = res;
+    return res;     
+} 
+int longestIncreasingPath(vector<vector<int>>& matrix)
+{
+    if (matrix.empty())
+        return 0;
+    // dp[i][j]表示数组中以(i,j)为起点的最长递增路径的长度，初始将dp数组都赋为0，当我们用递归调用时，遇到某个位置(x, y), 如果dp[x][y]不为0的话，我们直接返回dp[x][y]即可，不需要重复计算。
+    vector<vector<int> > dp( matrix.size(), vector<int>(matrix[0].size(), 0) );
+    int longest = INT_MIN;
+    for(int i = 0; i < matrix.size(); i++)
+    {
+        for(int j = 0; j < matrix[0].size(); j++)
+        {
+            int len = dfs(matrix, dp, i, j);
+            longest = max(longest,len);
+        }
+    }
+    return longest;    
+}
+```
+
+##### [377. 组合总和 Ⅳ](https://leetcode-cn.com/problems/combination-sum-iv/)  #todo 优化成动态规划 20211207
+
+<img src="https://pic.leetcode-cn.com/fa278029267fedeb06686b784bd322f16b2abf6b61987dc3b5257630570cd38f-377-1.png" alt="377-1.png" style="zoom: 50%;" />
+
+```c++
+// 记忆化搜索
+int dfs(vector<int> &nums, int target, unordered_map<int, int> &memo)
+{
+    if(memo.count(target)) return memo[target];
+    if (target < 0) return 0;
+    if (target == 0) return 1;
+
+    int res = 0;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        res += dfs(nums, target - nums[i], memo);
+    }
+    memo[target] = res;
+    return res;
+}
+int combinationSum4(vector<int>& nums, int target)
+{
+    unordered_map<int, int> memo;
+    return dfs(nums, target, memo);
+}
+
+// 优化成动态规划
+int combinationSum4(vector<int>& nums, int target)
+{
+    vector<int> dp(target + 1);
+    dp[0] = 1;
+    for (int i = 1; i <= target; ++i) {
+        for (auto a : nums) {
+            if (i >= a) dp[i] += dp[i - a];
+        }
+    }
+    return dp.back();
+}
+```
+
+##### [403. 青蛙过河](https://leetcode-cn.com/problems/frog-jump/)
+
+##### [472. 连接词](https://leetcode-cn.com/problems/concatenated-words/)
+
+##### [576. 出界的路径数](https://leetcode-cn.com/problems/out-of-boundary-paths/)   记忆化搜索 
+
+```c++
+int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
+int dfs(vector<vector<vector<uint>>> &dp, int x, int y, int step,int m, int n)
+{
+    if (x < 0 || y < 0 || x >= m || y >= n)   // 一旦超出边界直接返回1
+        return 1;
+    if (x-step >= 0 && x + step < m && y - step >= 0 && y + step < n)   // 不管从哪个方向走step步之后 都到不了边界外
+        return 0;
+    if(step <= 0)  // 如果没得走了
+        return 0;
+    
+    if (dp[step][x][y] > 0)
+        return dp[step][x][y];
+    int count = 0;
+    for(int k = 0; k < 4; k++)
+    {
+        int i = x + dirs[k][0];
+        int j = y + dirs[k][1];
+        count += dfs(dp, i, j, step - 1, m, n);
+        count %= 1000000007;
+    }
+    
+    dp[step][x][y] = count;
+    return count;     
+}
+int findPaths(int m, int n, int N, int i, int j)
+{
+    // dp[k][i][j]表示总共走k步，从(i,j)位置走出边界的总路径数
+    vector<vector<vector<uint>>> dp(N+1,vector<vector<uint>>(m,vector<uint>(n,0)));
+    int count = dfs(dp, i, j, N, m, n) % 1000000007;
+    return coun;
+}
+```
+
+##### [688. “马”在棋盘上的概率](https://leetcode-cn.com/problems/knight-probability-in-chessboard/)    记忆化搜索
+
+```
+vector<vector<int>> dirs{{-1,-2},{-2,-1},{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2}};
+double dfs(vector<vector<vector<double>>> &dp, int i, int j, int k, int N)
+{
+    if (i < 0 || i >= N || j < 0 || j >=N)
+        return 0.0;
+    if (k == 0)
+        return 1.0;
+    
+    if (dp[k][i][j] != 0.0)
+        return dp[k][i][j];
+    double count = 0.0;
+    
+    for (auto dir : dirs)
+    {
+        int x = i + dir[0];
+        int y = j + dir[1];
+        // if (x < 0 || x >= N || y < 0 || y >= N)
+        //     continue;
+        count += dfs(dp, x, y, k-1, N);;
+    }
+    dp[k][i][j] = count;
+    return count;
+}
+double knightProbability(int N, int K, int r, int c) 
+{
+    // dp[k][i][j]表示总共走k步，从(i,j)位置没有走出边界的总路径数
+    if (K == 0)
+        return 1;
+    vector<vector<vector<double>>> dp(K+1,vector<vector<double>>(N,vector<double>(N, 0.0)));
+    double total_step = dfs(dp, r, c, K, N);
+    return dp[K][r][c] / pow(8, K);  
+}
+```
+
+##### [1235. 规划兼职工作](https://leetcode-cn.com/problems/maximum-profit-in-job-scheduling/)
+
+##### [1335. 工作计划的最低难度](https://leetcode-cn.com/problems/minimum-difficulty-of-a-job-schedule/)
+
+- Leetcode 1216 Valid Palindrome III （收费题）
+
+  
+
 #### [经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
 ```c++
 int dirs[8][2] = {1,1,1,0,1,-1,0,1,0,-1,-1,1,-1,0,-1,-1};
@@ -3930,124 +4265,6 @@ public:
 };
 ```
 
-#### [139. 单词拆分](https://leetcode-cn.com/problems/word-break/) 回溯+记忆化搜索
-
-<img src="https://pic.leetcode-cn.com/78fd09b2deabeae972809c2795ddb8be96720b8e62377cf01b7f70e7fb3dbf8c-image.png" alt="image.png" style="zoom: 50%;" />
-
-```c++
-// 解法一：暴力递归超时了
-bool dfs(string &s, unordered_set<string> &wordSet, int i, vector<int> &memo)
-{
-    if ( i >= s.size())
-        return true;
-    for(int j = i+1; j <= s.size(); j++)
-    {
-        if (wordSet.count(s.substr(i, j - i)) && dfs(s, wordSet, j, memo))
-            return true;
-    }
-    return false;
-}
-
-bool wordBreak(string s, vector<string> &wordDict)
-{
-    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
-    vector<int> memo(s.size(), -1);
-    return dfs(s, wordSet, 0, memo);
-}
-
-// 解法一：增加记忆化搜索
-bool wordBreak(string s, vector<string> &wordDict)
-{
-    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
-    vector<int> memo(s.size(), -1);
-    return dfs(s, wordSet, 0, memo);
-}
-// dfs 表示字符串s[start,n] 是否可分
-bool dfs(string s, unordered_set<string> &wordSet, int start, vector<int> &memo)
-{
-    if (start >= s.size())
-        return true;
-    if (memo[start] != -1)
-        return memo[start];
-    for (int i = start + 1; i <= s.size(); ++i)
-    {
-        if (wordSet.count(s.substr(start, i - start)) && dfs(s, wordSet, i, memo))
-        {
-            return memo[start] = 1;
-        }
-    }
-    return memo[start] = 0;
-}
-```
-
-#### [140. Word Break II](https://leetcode.com/problems/word-break-ii/) 注意和139的区别
-
-<img src="https://pic.leetcode-cn.com/1604197605-MUoIgt-image.png" alt="image.png" style="zoom:50%;" />
-
-```c++
-// 解法一 暴力递归超时了  想改成不带返回值得形式
-vector<string> dfs(string s, unordered_set<string> &wordSet, int start)
-{
-    if (start == s.size())
-    {
-        return {""};
-    }
-    vector<string> res;
-    for (int i = start; i < s.size(); ++i)
-    {
-        if (wordSet.count(s.substr(start, i - start+1)) > 0)
-        {
-            vector<string> tmp = dfs(s, wordSet, i+1);
-            for (auto str : tmp)
-            {
-                res.push_back(s.substr(start, i - start + 1) + (str.empty() ? "" : " ") + str);
-            }
-        }
-    }
-    return res;
-}
-
-vector<string> wordBreak(string s, vector<string> &wordDict)
-{
-    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
-    return dfs(s, wordSet, 0);
-}
-
-// 解法二: 增加记忆化搜索
-vector<string> dfs(string s, unordered_set<string> &wordSet, int start, unordered_map<int, vector<string>> &memo)
-{
-    if (memo.count(start) > 0)
-    {
-        return memo[start];
-    }
-    if (start == s.size())
-    {
-        return {""};
-    }
-    vector<string> res;
-    for (int i = start; i < s.size(); ++i)
-    {
-        if (wordSet.count(s.substr(start, i - start + 1)) > 0)
-        {
-            vector<string> tmp = dfs(s, wordSet, i+1, memo);
-            for (auto str : tmp)
-            {
-                res.push_back(s.substr(start, i - start + 1) + (str.empty() ? "" : " ") + str);
-            }
-        }
-    }
-    memo[start] = res;
-    return res;
-}
-
-vector<string> wordBreak(string s, vector<string> &wordDict)
-{
-    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
-    unordered_map<int, vector<string>> memo;
-    return dfs(s, wordSet, 0, memo);
-}
-```
-
 #### [200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
 
 ```c++
@@ -4147,91 +4364,6 @@ public:
 
 ```
 
-#### [329. 矩阵中的最长递增路径](https://leetcode-cn.com/problems/longest-increasing-path-in-a-matrix/)  记忆化搜索
-
-```
-
-int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
-
-// 表示从（i，j）出发的最长路径长度
-int dfs(vector<vector<int>>& matrix, vector<vector<int>>& dp, int i, int j)
-{
-    
-    if (dp[i][j] > 0)
-        return dp[i][j];
-    int res = 1;
-    for(int k = 0; k < 4; k++)
-    {
-        int x = i + dirs[k][0];
-        int y = j + dirs[k][1];
-        if (x >= 0 && x < matrix.size() && y >= 0 && y < matrix[0].size() && matrix[x][y] > matrix[i][j])
-        {
-            int dist = 1 + dfs(matrix, dp, x, y); 
-            res = max(dist, res);
-        }    
-    }
-    dp[i][j] = res;
-    return res;     
-} 
-int longestIncreasingPath(vector<vector<int>>& matrix)
-{
-    if (matrix.empty())
-        return 0;
-    // dp[i][j]表示数组中以(i,j)为起点的最长递增路径的长度，初始将dp数组都赋为0，当我们用递归调用时，遇到某个位置(x, y), 如果dp[x][y]不为0的话，我们直接返回dp[x][y]即可，不需要重复计算。
-    vector<vector<int> > dp( matrix.size(), vector<int>(matrix[0].size(), 0) );
-    int longest = INT_MIN;
-    for(int i = 0; i < matrix.size(); i++)
-    {
-        for(int j = 0; j < matrix[0].size(); j++)
-        {
-            int len = dfs(matrix, dp, i, j);
-            longest = max(longest,len);
-        }
-    }
-    return longest;    
-}
-```
-
-#### [377. 组合总和 Ⅳ](https://leetcode-cn.com/problems/combination-sum-iv/)  #todo 优化成动态规划 20211207
-
-<img src="https://pic.leetcode-cn.com/fa278029267fedeb06686b784bd322f16b2abf6b61987dc3b5257630570cd38f-377-1.png" alt="377-1.png" style="zoom: 50%;" />
-
-```c++
-// 记忆化搜索
-int dfs(vector<int> &nums, int target, unordered_map<int, int> &memo)
-{
-    if(memo.count(target)) return memo[target];
-    if (target < 0) return 0;
-    if (target == 0) return 1;
-
-    int res = 0;
-    for(int i = 0; i < nums.size(); i++)
-    {
-        res += dfs(nums, target - nums[i], memo);
-    }
-    memo[target] = res;
-    return res;
-}
-int combinationSum4(vector<int>& nums, int target)
-{
-    unordered_map<int, int> memo;
-    return dfs(nums, target, memo);
-}
-
-// 优化成动态规划
-int combinationSum4(vector<int>& nums, int target)
-{
-    vector<int> dp(target + 1);
-    dp[0] = 1;
-    for (int i = 1; i <= target; ++i) {
-        for (auto a : nums) {
-            if (i >= a) dp[i] += dp[i - a];
-        }
-    }
-    return dp.back();
-}
-```
-
 #### [547. 省份数量](https://leetcode-cn.com/problems/number-of-provinces/)
 
 ```
@@ -4264,80 +4396,6 @@ public:
 ```
 
 
-
-#### [576. 出界的路径数](https://leetcode-cn.com/problems/out-of-boundary-paths/)   记忆化搜索 
-
-```c++
-int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
-int dfs(vector<vector<vector<uint>>> &dp, int x, int y, int step,int m, int n)
-{
-    if (x < 0 || y < 0 || x >= m || y >= n)   // 一旦超出边界直接返回1
-        return 1;
-    if (x-step >= 0 && x + step < m && y - step >= 0 && y + step < n)   // 不管从哪个方向走step步之后 都到不了边界外
-        return 0;
-    if(step <= 0)  // 如果没得走了
-        return 0;
-    
-    if (dp[step][x][y] > 0)
-        return dp[step][x][y];
-    int count = 0;
-    for(int k = 0; k < 4; k++)
-    {
-        int i = x + dirs[k][0];
-        int j = y + dirs[k][1];
-        count += dfs(dp, i, j, step - 1, m, n);
-        count %= 1000000007;
-    }
-    
-    dp[step][x][y] = count;
-    return count;     
-}
-int findPaths(int m, int n, int N, int i, int j)
-{
-    // dp[k][i][j]表示总共走k步，从(i,j)位置走出边界的总路径数
-    vector<vector<vector<uint>>> dp(N+1,vector<vector<uint>>(m,vector<uint>(n,0)));
-    int count = dfs(dp, i, j, N, m, n) % 1000000007;
-    return coun;
-}
-```
-
-#### [688. “马”在棋盘上的概率](https://leetcode-cn.com/problems/knight-probability-in-chessboard/)    记忆化搜索
-
-```
-
-vector<vector<int>> dirs{{-1,-2},{-2,-1},{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2}};
-double dfs(vector<vector<vector<double>>> &dp, int i, int j, int k, int N)
-{
-    if (i < 0 || i >= N || j < 0 || j >=N)
-        return 0.0;
-    if (k == 0)
-        return 1.0;
-    
-    if (dp[k][i][j] != 0.0)
-        return dp[k][i][j];
-    double count = 0.0;
-    
-    for (auto dir : dirs)
-    {
-        int x = i + dir[0];
-        int y = j + dir[1];
-        // if (x < 0 || x >= N || y < 0 || y >= N)
-        //     continue;
-        count += dfs(dp, x, y, k-1, N);;
-    }
-    dp[k][i][j] = count;
-    return count;
-}
-double knightProbability(int N, int K, int r, int c) 
-{
-    // dp[k][i][j]表示总共走k步，从(i,j)位置没有走出边界的总路径数
-    if (K == 0)
-        return 1;
-    vector<vector<vector<double>>> dp(K+1,vector<vector<double>>(N,vector<double>(N, 0.0)));
-    double total_step = dfs(dp, r, c, K, N);
-    return dp[K][r][c] / pow(8, K);  
-}
-```
 
 #### [827. 最大人工岛](https://leetcode-cn.com/problems/making-a-large-island/) 类似于回溯
 
@@ -4429,25 +4487,7 @@ int largestIsland(vector<vector<int>>& grid)
   - Leetcode 333 Largest BST Subtree (与98类似)
   - Leetcode 285 Inorder Successor in BST (I, II)
 
-- 基于图的DFS: 和BFS一样一般需要一个set来记录访问过的节点，避免重复访问造成死循环; Word XXX 系列面试中非常常见，例如word break，word ladder，word pattern，word search。
-
-- - Leetcode 341 Flatten Nested List Iterator (339 364)
-  - Leetcode 394 Decode String
-  - Leetcode 51 N-Queens (I II基本相同)
-  - Leetcode 291 Word Pattern II (I为简单的Hashmap题)
-  - Leetcode 126 Word Ladder II （I为BFS题目）
-  - Leetcode 93 Restore IP Addresses
-  - Leetcode 22 Generate Parentheses
-  - Leetcode 586 Score of Parentheses
-  - Leetcode 301 Remove Invalid Parentheses
-  - Leetcode 37 Sodoku Solver
-  - Leetcode 212 Word Search II （I, II）
-  - Leetcode 1087 Brace Expansion
-  - Leetcode 399 Evaluate Division
-  - Leetcode 1274 Number of Ships in a Rectangle
-  - Leetcode 1376 Time Needed to Inform All Employees
-  - Leetcode 694 Number of Distinct Islands
-  - Leetcode 131 Palindrome Partitioning
+- 
 
 - 基于排列组合的DFS: 其实与图类DFS方法一致，但是排列组合的特征更明显
 
