@@ -4546,41 +4546,195 @@ int largestIsland(vector<vector<int>>& grid)
 
 ### 宽度优先搜索（BFS）：面试中最常考的
 
-- 基础知识：
+基础知识：
 
-- - 常见的BFS用来解决什么问题？(1) 简单图（有向无向皆可）的最短路径长度，注意是长度而不是具体的路径（2）拓扑排序 （3） 遍历一个图（或者树）
+常见的BFS用来解决什么问题？(1) 简单图（有向无向皆可）的最短路径长度，注意是长度而不是具体的路径（2）拓扑排序 （3） 遍历一个图（或者树）BFS基本模板（需要记录层数或者不需要记录层数）
 
-- BFS基本模板（需要记录层数或者不需要记录层数）
+多数情况下时间复杂度空间复杂度都是O（N+M），N为节点个数，M为边的个数
 
-- 多数情况下时间复杂度空间复杂度都是O（N+M），N为节点个数，M为边的个数
+#### 基于树的BFS：
 
-- 基于树的BFS：不需要专门一个set来记录访问过的节点
+不需要专门一个set来记录访问过的节点
 
-- - Leetcode 102 Binary Tree Level Order Traversal
-  - Leetcode 103 Binary Tree Zigzag Level Order Traversal
-  - Leetcode 297 Serialize and Deserialize Binary Tree （很好的BFS和双指针结合的题）
-  - Leetcode 314 Binary Tree Vertical Order Traversal
+##### Leetcode 102 Binary Tree Level Order Traversal
 
-- 基于图的BFS：（一般需要一个set来记录访问过的节点）
+##### Leetcode 103 Binary Tree Zigzag Level Order Traversal
 
-- - Leetcode 200. Number of Islands
-  - Leetcode 133. Clone Graph
-  - Leetcode 127. Word Ladder
-  - Leetcode 490. The Maze
-  - Leetcode 323. Connected Component in Undirected Graph
-  - Leetcode 130. Surrounded Regions
-  - Leetcode 752. Open the Lock
-  - Leetcode 815. Bus Routes
-  - Leetcode 1091. Shortest Path in Binary Matrix
-  - Leetcode 542. 01 Matrix
-  - Leetcode 1293. Shortest Path in a Grid with Obstacles Elimination
+##### Leetcode 297 Serialize and Deserialize Binary Tree （很好的BFS和双指针结合的题）
 
-- 拓扑排序：（[https://zh.wikipedia.org/wiki/%E6%8B%93%E6%92%B2%E6%8E%92%E5%BA%8F](https://link.zhihu.com/?target=https%3A//zh.wikipedia.org/wiki/%E6%8B%93%E6%92%B2%E6%8E%92%E5%BA%8F)）
+##### Leetcode 314 Binary Tree Vertical Order Traversal
 
-- - Leetcode 207 Course Schedule （I, II）
-  - Leetcode 444 Sequence Reconstruction
-  - Leetcode 269 Alien Dictionary
-  - Leetcode 310 Minimum Height Trees
+#### 基于图的BFS：
+
+（一般需要一个set来记录访问过的节点）
+
+##### Leetcode 200. Number of Islands
+
+
+
+##### [127. 单词接龙](https://leetcode-cn.com/problems/word-ladder/)
+
+```c++
+int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+    unordered_set<string> wordSet(wordList.begin(), wordList.end());
+    if (!wordSet.count(endWord)) return 0;
+    queue<string> q;
+    q.push(beginWord);
+    int res = 0;
+    while (!q.empty()) {
+        for (int k = q.size(); k > 0; --k) {
+            string word = q.front(); q.pop();
+            if (word == endWord) return res + 1;
+            for (int i = 0; i < word.size(); ++i) {
+                string newWord = word;
+                for (char ch = 'a'; ch <= 'z'; ++ch) {
+                    newWord[i] = ch;
+                    if (wordSet.count(newWord) && newWord != word) {
+                        q.push(newWord);
+                        wordSet.erase(newWord);
+                    }   
+                }
+            }
+        }
+        ++res;
+    }
+    return 0;
+}
+```
+
+
+
+##### [133. 克隆图](https://leetcode-cn.com/problems/clone-graph/)
+
+```c++
+Node *cloneGraph(Node *node)
+{
+    // BFS 来遍历图，使用队列 queue 进行辅助，还是需要一个 HashMap 来建立原图结点和克隆结点之间的映射。
+    // 先克隆当前结点，然后建立映射，并加入 queue 中，进行 while 循环。在循环中，取出队首结点，遍历其所有 neighbor 结点，
+    // 若不在 HashMap 中，我们根据 neigbor 结点值克隆一个新 neighbor 结点，建立映射，并且排入 queue 中。
+    // 然后将 neighbor 结点在 HashMap 中的映射结点加入到克隆结点的 neighbors 数组中即可
+    if (!node)
+        return NULL;
+    unordered_map<Node *, Node *> m;
+    queue<Node *> q;
+    q.push(node);
+    Node *clone = new Node(node->val);
+    m[node] = clone;
+    while (!q.empty())
+    {
+        Node *t = q.front();
+        q.pop();
+        for (Node *neighbor : t->neighbors)
+        {
+            if (!m.count(neighbor))
+            {
+                m[neighbor] = new Node(neighbor->val);
+                q.push(neighbor);
+            }
+            m[t]->neighbors.push_back(m[neighbor]);
+        }
+    }
+    return clone;
+}
+```
+
+
+
+##### Leetcode 490. The Maze
+
+##### Leetcode 323. Connected Component in Undirected Graph
+
+##### Leetcode 130. Surrounded Regions
+
+##### Leetcode 752. Open the Lock
+
+##### Leetcode 815. Bus Routes
+
+##### Leetcode 1091. Shortest Path in Binary Matrix
+
+##### Leetcode 542. 01 Matrix
+
+##### Leetcode 1293. Shortest Path in a Grid with Obstacles Elimination
+
+
+
+#### 拓扑排序
+
+#### [207. 课程表](https://leetcode-cn.com/problems/course-schedule/)
+
+```c++
+bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+    vector<vector<int>> graph(numCourses); // 构建图 领接表的形式
+    vector<int> indegree(numCourses,0);    // 顶点的入度表
+
+    for(int i = 0; i < prerequisites.size(); i++)
+    {
+        graph[prerequisites[i][1]].push_back(prerequisites[i][0]);
+        ++indegree[prerequisites[i][0]];   
+    }
+
+    queue<int> q; // 所有入度为0的结点入队列
+    for(int i = 0; i < numCourses; i++)
+    {
+        if (indegree[i] == 0)
+        {
+            q.push(i);
+        }
+    }
+    int counter = 0;
+    while(!q.empty())
+    {
+        int u = q.front();
+        q.pop();
+        ++counter;
+        for(int i = 0; i < graph[u].size(); i++)
+        {
+            if (--indegree[graph[u][i]] == 0)
+            {
+            	q.push(graph[u][i]); 
+            }
+        }
+    }
+  return counter==numCourses;
+}
+```
+
+#### [210. 课程表 II](https://leetcode-cn.com/problems/course-schedule-ii/)
+
+```c++
+vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+    vector<int> res;
+    vector<vector<int> > graph(numCourses, vector<int>(0));
+    vector<int> in(numCourses, 0);
+    for (auto &a : prerequisites) {
+        graph[a[1]].push_back(a[0]);
+        ++in[a[0]];
+    }
+    queue<int> q;
+    for (int i = 0; i < numCourses; ++i) {
+        if (in[i] == 0) q.push(i);
+    }
+    while (!q.empty()) {
+        int t = q.front();
+        res.push_back(t);
+        q.pop();
+        for (auto &a : graph[t]) {
+            --in[a];
+            if (in[a] == 0) q.push(a);
+        }
+    }
+    if (res.size() != numCourses) res.clear();
+    return res;
+}
+```
+
+
+
+##### Leetcode 444 Sequence Reconstruction
+
+##### Leetcode 269 Alien Dictionary
+
+##### Leetcode 310 Minimum Height Trees
 
 ### BFS
 
