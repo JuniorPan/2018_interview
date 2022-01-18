@@ -4480,7 +4480,7 @@ int largestIsland(vector<vector<int>>& grid)
 
 - - 
 
-### 深度优先搜索（DFS）：面试中最常考的
+### 深度优先搜索（DFS）
 
 - 基础知识：
 
@@ -4544,7 +4544,7 @@ int largestIsland(vector<vector<int>>& grid)
 
 
 
-### 宽度优先搜索（BFS）：面试中最常考的
+### 宽度优先搜索（BFS）
 
 基础知识：
 
@@ -4556,9 +4556,317 @@ int largestIsland(vector<vector<int>>& grid)
 
 不需要专门一个set来记录访问过的节点
 
-##### Leetcode 102 Binary Tree Level Order Traversal
+##### [判断一棵二叉树是否完全二叉树](https://www.nowcoder.com/practice/f31fc6d3caf24e7f8b4deb5cd9b5fa97?tpId=191&&tqId=35928&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking) #TODO
 
-##### Leetcode 103 Binary Tree Zigzag Level Order Traversal
+```c++
+bool judgeTotal(TreeNode *root)
+{
+    if (root == nullptr)
+        return true;
+
+    queue<TreeNode *> q;
+    q.push(root);
+    while(!q.empty())
+    {
+        root = q.front();
+        q.pop();
+        if (root->left && root->right)
+        {
+            q.push(root->left);
+            q.push(root->right);
+        }
+        else if (root->left == nullptr && root->right)
+            return false;
+        else if (root->left && root->right == nullptr)
+        {
+            while(!q.empty())
+            {
+                root = q.front();
+                q.pop();
+                if (root->left || root->right)
+                    return false;
+            }            
+        }
+    }
+    return true;
+}
+
+```
+
+##### [102. 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/)
+
+```
+vector<vector<int>> levelOrder(TreeNode *root)
+{
+    vector<vector<int>> ret;
+    if (root == NULL)
+        return ret;
+
+    queue<TreeNode *> q;
+    q.push(root);
+    while (!q.empty())
+    {
+        int size = q.size();
+        vector<int> level;
+        for (int i = 0; i < size; i++)
+        {
+            TreeNode *node = q.front();
+            level.push_back(node->val);
+            q.pop();
+            if (node->left)
+                q.push(node->left);
+            if (node->right)
+                q.push(node->right);
+        }
+        ret.push_back(level);
+    }
+    return ret;
+}
+```
+
+##### [103. 二叉树的锯齿形层序遍历](https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/)
+
+```c++
+//由于每层的结点数是知道的，就是队列的元素个数，所以可以直接初始化数组的大小,使用一个变量 leftToRight 来标记顺序，初始时是 true，当此变量为 true 的时候，每次加入数组的位置就是i本身，若变量为 false 了，则加入到 size-1-i 位置上，这样就直接相当于翻转了数组
+vector<vector<int>> zigzagLevelOrder(TreeNode *root)
+{
+    vector<vector<int>> res;
+    if (root == NULL)
+        return res;
+    queue<TreeNode *> q;
+    q.push(root);
+    bool leftToRight = true;
+    while (!q.empty())
+    {
+        int size = q.size();
+        vector<int> oneLevel(size); // 这个地方注意 要给定数组大小
+        for (int i = 0; i < size; ++i)
+        {
+            TreeNode *t = q.front();
+            q.pop();
+            int idx = leftToRight ? i : (size - 1 - i);
+            oneLevel[idx] = t->val;
+            if (t->left)
+                q.push(t->left);
+            if (t->right)
+                q.push(t->right);
+        }
+        leftToRight = !leftToRight;
+        res.push_back(oneLevel);
+    }
+    return res;
+}
+```
+
+##### [111. 二叉树的最小深度](https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/)
+
+```
+int minDepth(TreeNode *root)
+{
+    if (!root)
+        return 0;
+
+    queue<TreeNode *> q;
+    q.push(root);
+    int res = 1;
+    while (!q.empty())
+    {
+        int size = q.size();
+        for (int i = 0; i < size; i++)
+        {
+            root = q.front();
+            q.pop();
+            if (!root->left && !root->right)
+                return res;
+            if (root->left)
+                q.push(root->left);
+
+            if (root->right)
+                q.push(root->right);
+        }
+        res++;
+    }
+    return -1;
+}
+```
+
+##### [116. 填充每个节点的下一个右侧节点指针](https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node/)
+
+```c++
+Node *connect(Node *root)
+{
+    if (!root) return NULL;
+    queue<Node *> q;
+    q.push(root);
+    while (!q.empty())
+    {
+        int size = q.size();
+        for (int i = 0; i < size; ++i)
+        {
+            Node *t = q.front();
+            q.pop();
+            if (i < size - 1)
+                t->next = q.front();
+            if (t->left) q.push(t->left);
+            if (t->right) q.push(t->right);
+        }
+    }
+    return root;
+}
+```
+
+##### [199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
+
+```c++
+vector<int> rightSideView(TreeNode* root)
+{
+    vector<int> res;
+    if (!root)
+        return res;
+
+    queue<TreeNode *> q;
+    TreeNode *last = root;
+    TreeNode *nlast = nullptr;
+    q.push(root);
+    while(!q.empty())
+    {
+        root = q.front();
+        q.pop();
+
+        if (root->left)
+        {
+            q.push(root->left);
+            nlast = root->left;
+        }
+        if (root->right)
+        {
+            q.push(root->right);
+            nlast = root->right;
+        }
+
+        if (root == last)
+        {
+            res.push_back(root->val);
+            last = nlast;
+        }
+
+    }
+    return res;
+}
+```
+
+##### [127. 单词接龙](https://leetcode-cn.com/problems/word-ladder/)  todo: 还有种解法不是很懂
+
+```c++
+//用BFS来求最短路径的长度
+int ladderLength(string beginWord, string endWord, vector<string> &wordList)
+{
+    // todo: 直接使用vector 会超时,主要是因为有大量删除操作
+    unordered_set<string> wordSet(wordList.begin(), wordList.end());
+    if (!wordSet.count(endWord))
+        return 0;
+    queue<string> q;
+    q.push(beginWord);
+    int res = 0;
+    while (!q.empty())
+    {
+        for (int k = q.size(); k > 0; --k)
+        {
+            string word = q.front();
+            q.pop();
+            if (word == endWord)
+                return res + 1;
+            for (int i = 0; i < word.size(); ++i)
+            {
+                string newWord = word;
+                for (char ch = 'a'; ch <= 'z'; ++ch)
+                {
+                    newWord[i] = ch;
+                    if (wordSet.count(newWord) && newWord != word)
+                    {
+                        q.push(newWord);
+                        wordSet.erase(newWord);
+                    }
+                }
+            }
+        }
+        ++res;
+    }
+    return 0;
+}
+```
+
+##### [513. 找树左下角的值](https://leetcode-cn.com/problems/find-bottom-left-tree-value/)
+
+```c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    
+public:
+    int findBottomLeftValue(TreeNode* root)
+    {
+        return levelOrder(root, depth(root));
+    }
+private:
+   
+    int depth(TreeNode *root)
+    {
+        if (root == NULL)
+            return 0;
+        int ldepth = depth(root->left);
+        int rdepth = depth(root->right);
+        return ldepth > rdepth ? ldepth + 1 : rdepth + 1;
+    }
+    
+    int levelOrder(TreeNode *root, int d)
+    {
+        queue<TreeNode *> q;
+        q.push(root);
+        int level = 0;
+        TreeNode *last = root;
+        TreeNode *nlast = nullptr;
+        int res;
+        while(!q.empty())
+        {
+            root = q.front();
+            q.pop();
+            
+            if (level == d-1)
+                return root->val;
+            
+            if (root->left)
+            {
+                q.push(root->left);
+                nlast = root->left;
+            }
+                
+            if (root->right)
+            {
+                q.push(root->right);
+                nlast = root->right;
+            }
+               
+            
+            if(root == last && !q.empty())
+            {
+                level ++;
+                last = nlast;
+            }
+        }
+        
+        return res;
+        
+    }
+};
+```
 
 ##### Leetcode 297 Serialize and Deserialize Binary Tree （很好的BFS和双指针结合的题）
 
@@ -4668,6 +4976,101 @@ Node *cloneGraph(Node *node)
 }
 ```
 
+##### [301. 删除无效的括号](https://leetcode-cn.com/problems/remove-invalid-parentheses/)
+
+```c++
+class Solution {
+public:
+    vector<string> removeInvalidParentheses(string s) 
+    {
+        //可以用 BFS 来解，我把给定字符串排入队中，然后取出检测其是否合法，若合法直接返回，不合法的话，对其进行遍历，对于遇到的左右括号的字符，去掉括号字符生成一个新的字符串，如果这个字符串之前没有遇到过，将其排入队中，用 HashSet 记录一个字符串是否出现过。对队列中的每个元素都进行相同的操作，直到队列为空还没找到合法的字符串的话，那就返回空集
+        vector<string> res;
+        unordered_set<string> visited{{s}};
+        queue<string> q{{s}};
+        bool found = false;
+        while (!q.empty()) {
+            string t = q.front(); q.pop();
+            if (isValid(t)) {
+                res.push_back(t);
+                found = true;
+            }
+            if (found) continue;
+            for (int i = 0; i < t.size(); ++i) {
+                if (t[i] != '(' && t[i] != ')') continue;
+                string str = t.substr(0, i) + t.substr(i + 1);
+                if (!visited.count(str)) {
+                    q.push(str);
+                    visited.insert(str);
+                }
+            }
+        }
+        return res;
+    }
+    bool isValid(string t) {
+        int cnt = 0;
+        for (int i = 0; i < t.size(); ++i) {
+            if (t[i] == '(') ++cnt;
+            else if (t[i] == ')' && --cnt < 0) return false;
+        }
+        return cnt == 0;
+    }
+};
+```
+
+##### [542. 01 矩阵](https://leetcode-cn.com/problems/01-matrix/)
+
+```
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+        
+        if(matrix.empty() || matrix[0].empty())
+            return matrix;
+        queue<pair<int,int>> q;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        
+        for(int i = 0; i < m; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                if (matrix[i][j] == 0)
+                {
+                    q.push({i,j});
+                }
+                else
+                {
+                    matrix[i][j] = INT_MAX;
+                }
+            }
+        }
+    
+        int dirs[4][2]= {-1, 0, 1, 0, 0, -1, 0, 1};
+        
+        while(!q.empty())   // 广度优先遍历
+        {
+
+            int x = q.front().first, y = q.front().second;
+            q.pop();
+            for(int i = 0; i < 4; i++)  // 遍历4个方向
+            {
+                int nx = x + dirs[i][0];
+                int ny = y + dirs[i][1];
+                if(nx >= 0 && ny >= 0 && nx < m &&  ny < n && matrix[nx][ny] > matrix[x][y])
+                {
+                    matrix[nx][ny] = matrix[x][y] + 1;
+                    q.push({nx,ny});
+                }
+                
+            }
+        }
+ 
+        return matrix;
+        
+    }
+};
+```
+
 
 
 ##### Leetcode 490. The Maze
@@ -4763,465 +5166,6 @@ vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
 ##### Leetcode 269 Alien Dictionary
 
 ##### Leetcode 310 Minimum Height Trees
-
-### BFS
-
-#### [判断一棵二叉树是否完全二叉树](https://www.nowcoder.com/practice/f31fc6d3caf24e7f8b4deb5cd9b5fa97?tpId=191&&tqId=35928&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking) #TODO
-
-```c++
-bool judgeTotal(TreeNode *root)
-{
-    if (root == nullptr)
-        return true;
-
-    queue<TreeNode *> q;
-    q.push(root);
-    while(!q.empty())
-    {
-        root = q.front();
-        q.pop();
-        if (root->left && root->right)
-        {
-            q.push(root->left);
-            q.push(root->right);
-        }
-        else if (root->left == nullptr && root->right)
-            return false;
-        else if (root->left && root->right == nullptr)
-        {
-            while(!q.empty())
-            {
-                root = q.front();
-                q.pop();
-                if (root->left || root->right)
-                    return false;
-            }            
-        }
-    }
-    return true;
-}
-
-```
-
-#### [102. Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/)
-
-```
-vector<vector<int>> levelOrder(TreeNode *root)
-{
-    vector<vector<int>> ret;
-    if (root == NULL)
-        return ret;
-
-    queue<TreeNode *> q;
-    q.push(root);
-    while (!q.empty())
-    {
-        int size = q.size();
-        vector<int> level;
-        for (int i = 0; i < size; i++)
-        {
-            TreeNode *node = q.front();
-            level.push_back(node->val);
-            q.pop();
-            if (node->left)
-                q.push(node->left);
-            if (node->right)
-                q.push(node->right);
-        }
-        ret.push_back(level);
-    }
-    return ret;
-}
-```
-
-#### [103. Binary Tree Zigzag Level Order Traversal](https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/)
-
-```c++
-//由于每层的结点数是知道的，就是队列的元素个数，所以可以直接初始化数组的大小,使用一个变量 leftToRight 来标记顺序，初始时是 true，当此变量为 true 的时候，每次加入数组的位置就是i本身，若变量为 false 了，则加入到 size-1-i 位置上，这样就直接相当于翻转了数组
-vector<vector<int>> zigzagLevelOrder(TreeNode *root)
-{
-    vector<vector<int>> res;
-    if (root == NULL)
-        return res;
-    queue<TreeNode *> q;
-    q.push(root);
-    bool leftToRight = true;
-    while (!q.empty())
-    {
-        int size = q.size();
-        vector<int> oneLevel(size); // 这个地方注意 要给定数组大小
-        for (int i = 0; i < size; ++i)
-        {
-            TreeNode *t = q.front();
-            q.pop();
-            int idx = leftToRight ? i : (size - 1 - i);
-            oneLevel[idx] = t->val;
-            if (t->left)
-                q.push(t->left);
-            if (t->right)
-                q.push(t->right);
-        }
-        leftToRight = !leftToRight;
-        res.push_back(oneLevel);
-    }
-    return res;
-}
-```
-
-#### [111. 二叉树的最小深度](https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/)
-
-```
-int minDepth(TreeNode *root)
-{
-    if (!root)
-        return 0;
-
-    queue<TreeNode *> q;
-    q.push(root);
-    int res = 1;
-    while (!q.empty())
-    {
-        int size = q.size();
-        for (int i = 0; i < size; i++)
-        {
-            root = q.front();
-            q.pop();
-            if (!root->left && !root->right)
-                return res;
-            if (root->left)
-                q.push(root->left);
-
-            if (root->right)
-                q.push(root->right);
-        }
-        res++;
-    }
-    return -1;
-}
-```
-
-#### [116. 填充每个节点的下一个右侧节点指针](https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node/)
-
-```c++
-Node *connect(Node *root)
-{
-    if (!root) return NULL;
-    queue<Node *> q;
-    q.push(root);
-    while (!q.empty())
-    {
-        int size = q.size();
-        for (int i = 0; i < size; ++i)
-        {
-            Node *t = q.front();
-            q.pop();
-            if (i < size - 1)
-                t->next = q.front();
-            if (t->left) q.push(t->left);
-            if (t->right) q.push(t->right);
-        }
-    }
-    return root;
-}
-```
-
-#### [199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
-
-```c++
-vector<int> rightSideView(TreeNode* root)
-{
-    vector<int> res;
-    if (!root)
-        return res;
-
-    queue<TreeNode *> q;
-    TreeNode *last = root;
-    TreeNode *nlast = nullptr;
-    q.push(root);
-    while(!q.empty())
-    {
-        root = q.front();
-        q.pop();
-
-        if (root->left)
-        {
-            q.push(root->left);
-            nlast = root->left;
-        }
-        if (root->right)
-        {
-            q.push(root->right);
-            nlast = root->right;
-        }
-
-        if (root == last)
-        {
-            res.push_back(root->val);
-            last = nlast;
-        }
-
-    }
-    return res;
-}
-```
-
-
-
-#### [127. 单词接龙](https://leetcode-cn.com/problems/word-ladder/)  todo: 还有种解法不是很懂
-
-```c++
-//用BFS来求最短路径的长度
-int ladderLength(string beginWord, string endWord, vector<string> &wordList)
-{
-    // todo: 直接使用vector 会超时,主要是因为有大量删除操作
-    unordered_set<string> wordSet(wordList.begin(), wordList.end());
-    if (!wordSet.count(endWord))
-        return 0;
-    queue<string> q;
-    q.push(beginWord);
-    int res = 0;
-    while (!q.empty())
-    {
-        for (int k = q.size(); k > 0; --k)
-        {
-            string word = q.front();
-            q.pop();
-            if (word == endWord)
-                return res + 1;
-            for (int i = 0; i < word.size(); ++i)
-            {
-                string newWord = word;
-                for (char ch = 'a'; ch <= 'z'; ++ch)
-                {
-                    newWord[i] = ch;
-                    if (wordSet.count(newWord) && newWord != word)
-                    {
-                        q.push(newWord);
-                        wordSet.erase(newWord);
-                    }
-                }
-            }
-        }
-        ++res;
-    }
-    return 0;
-}
-```
-
-#### [513. 找树左下角的值](https://leetcode-cn.com/problems/find-bottom-left-tree-value/)
-
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
-class Solution {
-    
-public:
-    int findBottomLeftValue(TreeNode* root)
-    {
-        return levelOrder(root, depth(root));
-    }
-private:
-   
-    int depth(TreeNode *root)
-    {
-        if (root == NULL)
-            return 0;
-        int ldepth = depth(root->left);
-        int rdepth = depth(root->right);
-        return ldepth > rdepth ? ldepth + 1 : rdepth + 1;
-    }
-    
-    int levelOrder(TreeNode *root, int d)
-    {
-        queue<TreeNode *> q;
-        q.push(root);
-        int level = 0;
-        TreeNode *last = root;
-        TreeNode *nlast = nullptr;
-        int res;
-        while(!q.empty())
-        {
-            root = q.front();
-            q.pop();
-            
-            if (level == d-1)
-                return root->val;
-            
-            if (root->left)
-            {
-                q.push(root->left);
-                nlast = root->left;
-            }
-                
-            if (root->right)
-            {
-                q.push(root->right);
-                nlast = root->right;
-            }
-               
-            
-            if(root == last && !q.empty())
-            {
-                level ++;
-                last = nlast;
-            }
-        }
-        
-        return res;
-        
-    }
-};
-```
-
-
-
-#### [207. 课程表](https://leetcode-cn.com/problems/course-schedule/)
-
-难度中等833【拓扑排序】
-
-```c++
- bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) 
-{
-    vector<vector<int>> graph(numCourses); // 构建图 领接表的形式
-    vector<int> indegree(numCourses,0);    // 顶点的入度表
-
-    for(int i = 0; i < prerequisites.size(); i++)
-    {
-        graph[prerequisites[i].second].push_back(prerequisites[i].first);
-        ++indegree[prerequisites[i].first];   
-    }
-
-    queue<int> q; // 所有入度为0的结点入队列
-    for(int i = 0; i < numCourses; i++)
-    {
-        if (indegree[i] == 0)
-        {
-            q.push(i);
-        }
-    }
-    int counter = 0;
-    while(!q.empty())
-    {
-        int u = q.front();
-        q.pop();
-        ++counter;
-        for(int i = 0; i < graph[u].size(); i++)
-        {
-            if (--indegree[graph[u][i]] == 0)
-            {
-               q.push(graph[u][i]); 
-            }
-        }
-    }
-    return counter==numCourses;
-}
-```
-
-#### [301. 删除无效的括号](https://leetcode-cn.com/problems/remove-invalid-parentheses/)
-
-```c++
-class Solution {
-public:
-    vector<string> removeInvalidParentheses(string s) 
-    {
-        //可以用 BFS 来解，我把给定字符串排入队中，然后取出检测其是否合法，若合法直接返回，不合法的话，对其进行遍历，对于遇到的左右括号的字符，去掉括号字符生成一个新的字符串，如果这个字符串之前没有遇到过，将其排入队中，用 HashSet 记录一个字符串是否出现过。对队列中的每个元素都进行相同的操作，直到队列为空还没找到合法的字符串的话，那就返回空集
-        vector<string> res;
-        unordered_set<string> visited{{s}};
-        queue<string> q{{s}};
-        bool found = false;
-        while (!q.empty()) {
-            string t = q.front(); q.pop();
-            if (isValid(t)) {
-                res.push_back(t);
-                found = true;
-            }
-            if (found) continue;
-            for (int i = 0; i < t.size(); ++i) {
-                if (t[i] != '(' && t[i] != ')') continue;
-                string str = t.substr(0, i) + t.substr(i + 1);
-                if (!visited.count(str)) {
-                    q.push(str);
-                    visited.insert(str);
-                }
-            }
-        }
-        return res;
-    }
-    bool isValid(string t) {
-        int cnt = 0;
-        for (int i = 0; i < t.size(); ++i) {
-            if (t[i] == '(') ++cnt;
-            else if (t[i] == ')' && --cnt < 0) return false;
-        }
-        return cnt == 0;
-    }
-};
-```
-
-
-
-#### [542. 01 矩阵](https://leetcode-cn.com/problems/01-matrix/)
-
-```
-class Solution {
-public:
-    vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
-        
-        if(matrix.empty() || matrix[0].empty())
-            return matrix;
-        queue<pair<int,int>> q;
-        int m = matrix.size();
-        int n = matrix[0].size();
-        
-        for(int i = 0; i < m; i++)
-        {
-            for(int j = 0; j < n; j++)
-            {
-                if (matrix[i][j] == 0)
-                {
-                    q.push({i,j});
-                }
-                else
-                {
-                    matrix[i][j] = INT_MAX;
-                }
-            }
-        }
-    
-        int dirs[4][2]= {-1, 0, 1, 0, 0, -1, 0, 1};
-        
-        while(!q.empty())   // 广度优先遍历
-        {
-
-            int x = q.front().first, y = q.front().second;
-            q.pop();
-            for(int i = 0; i < 4; i++)  // 遍历4个方向
-            {
-                int nx = x + dirs[i][0];
-                int ny = y + dirs[i][1];
-                if(nx >= 0 && ny >= 0 && nx < m &&  ny < n && matrix[nx][ny] > matrix[x][y])
-                {
-                    matrix[nx][ny] = matrix[x][y] + 1;
-                    q.push({nx,ny});
-                }
-                
-            }
-        }
- 
-        return matrix;
-        
-    }
-};
-```
-
-
 
 ### 回溯
 
