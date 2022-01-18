@@ -4552,7 +4552,7 @@ int largestIsland(vector<vector<int>>& grid)
 
 多数情况下时间复杂度空间复杂度都是O（N+M），N为节点个数，M为边的个数
 
-#### 基于树的BFS：
+#### 基于树的BFS
 
 不需要专门一个set来记录访问过的节点
 
@@ -4564,7 +4564,7 @@ int largestIsland(vector<vector<int>>& grid)
 
 ##### Leetcode 314 Binary Tree Vertical Order Traversal
 
-#### 基于图的BFS：
+#### 基于图的BFS
 
 （一般需要一个set来记录访问过的节点）
 
