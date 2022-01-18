@@ -4688,7 +4688,7 @@ Node *cloneGraph(Node *node)
 
 #### 拓扑排序
 
-#### [207. 课程表](https://leetcode-cn.com/problems/course-schedule/)
+##### [207. 课程表](https://leetcode-cn.com/problems/course-schedule/)
 
 ```c++
 bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
@@ -4727,7 +4727,7 @@ bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
 }
 ```
 
-#### [210. 课程表 II](https://leetcode-cn.com/problems/course-schedule-ii/)
+##### [210. 课程表 II](https://leetcode-cn.com/problems/course-schedule-ii/)
 
 ```c++
 vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
