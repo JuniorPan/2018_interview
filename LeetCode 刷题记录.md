@@ -5108,49 +5108,6 @@ double knightProbability(int N, int K, int r, int c)
 
   
 
-
-### 深度优先搜索（DFS）
-
-- 基础知识：
-
-- - 常见的DFS用来解决什么问题？(1) 图中（有向无向皆可）的符合某种特征（比如最长）的路径以及长度（2）排列组合（3） 遍历一个图（或者树）（4）找出图或者树中符合题目要求的全部方案
-  - DFS基本模板（需要记录路径，不需要返回值 and 不需要记录路径，但需要记录某些特征的返回值）
-  - 除了遍历之外多数情况下时间复杂度是指数级别，一般是O(方案数×找到每个方案的时间复杂度)
-  - 递归题目都可以用非递归迭代的方法写，但一般实现起来非常麻烦
-
-- 基于树的DFS：需要记住递归写前序中序后序遍历二叉树的模板
-
-- - Leetcode 543 Diameter of Binary Tree
-  - Leetcode 226 Invert Binary Tree
-  - Leetcode 101 Symmetric Tree
-  - Leetcode 951 Flip Equivalent Binary Trees
-  - Leetcode 124 Binary Tree Maximum Path Sum
-  - Leetcode 236 Lowest Common Ancestor of a Binary Tree (相似题：235、1650)
-  - Leetcode 105 Construct Binary Tree from Preorder and Inorder Traversal
-  - Leetcode 104 Maximum Depth of Binary Tree
-  - Leetcode 987 Vertical Order Traversal of a Binary Tree
-  - Leetcode 1485 Clone Binary Tree With Random Pointer
-  - Leetcode 572 Subtree of Another Tree
-  - Leetcode 863 All Nodes Distance K in Binary Tree
-  - Leetcode 1110 Delete Nodes And Return Forest
-
-- 二叉搜索树（BST）：BST特征：中序遍历为单调递增的二叉树，换句话说，根节点的值比左子树任意节点值都大，比右子树任意节点值都小，增删查改均为O（h）复杂度，h为树的高度；注意不是所有的BST题目都需要递归，有的题目只需要while循环即可
-
-- - Leetcode 230 Kth Smallest element in a BST
-  - Leetcode 98 Validate Binary Search Tree
-  - Leetcode 270 Cloest Binary Search Tree Value
-  - Leetcode 235 Lowest Common Ancestor of a Binary Search Tree
-  - Leetcode 669 Trim a Binary Search Tree
-  - Leetcode 700 Search in a Binary Search Tree
-  - Leetcode 108 Convert Sorted Array to Binary Search Tree
-  - Leetcode 333 Largest BST Subtree (与98类似)
-  - Leetcode 285 Inorder Successor in BST (I, II)
-
-  
-  
-
-
-
 ### 宽度优先搜索（BFS）
 
 基础知识：
@@ -6244,6 +6201,40 @@ public:
 
 通常采用递归
 
+- 基于树的DFS：需要记住递归写前序中序后序遍历二叉树的模板
+
+- - Leetcode 543 Diameter of Binary Tree
+
+  - Leetcode 226 Invert Binary Tree
+
+  - Leetcode 101 Symmetric Tree
+
+  - Leetcode 951 Flip Equivalent Binary Trees
+
+  - Leetcode 124 Binary Tree Maximum Path Sum
+
+  - Leetcode 236 Lowest Common Ancestor of a Binary Tree (相似题：235、1650)
+
+  - Leetcode 105 Construct Binary Tree from Preorder and Inorder Traversal
+
+  - Leetcode 104 Maximum Depth of Binary Tree
+
+  - Leetcode 987 Vertical Order Traversal of a Binary Tree
+
+  - Leetcode 1485 Clone Binary Tree With Random Pointer
+
+  - Leetcode 572 Subtree of Another Tree
+
+  - Leetcode 863 All Nodes Distance K in Binary Tree
+
+  - Leetcode 1110 Delete Nodes And Return Forest
+
+    
+
+    
+
+    #### 
+
 #### [100. 相同的树](https://leetcode-cn.com/problems/same-tree/)
 
 ```c++
@@ -6588,6 +6579,30 @@ int kthLargest(TreeNode* root, int k) {
     return 0;
 }
 ```
+
+
+
+### 二叉搜索树（BST）
+
+BST特征：中序遍历为单调递增的二叉树，换句话说，根节点的值比左子树任意节点值都大，比右子树任意节点值都小，增删查改均为O（h）复杂度，h为树的高度；注意不是所有的BST题目都需要递归，有的题目只需要while循环即可
+
+#### Leetcode 230 Kth Smallest element in a BST
+
+#### Leetcode 98 Validate Binary Search Tree
+
+#### Leetcode 270 Cloest Binary Search Tree Value
+
+#### Leetcode 235 Lowest Common Ancestor of a Binary Search Tree
+
+#### Leetcode 669 Trim a Binary Search Tree
+
+#### Leetcode 700 Search in a Binary Search Tree
+
+#### Leetcode 108 Convert Sorted Array to Binary Search Tree
+
+#### Leetcode 333 Largest BST Subtree (与98类似)
+
+#### Leetcode 285 Inorder Successor in BST (I, II)
 
 
 
