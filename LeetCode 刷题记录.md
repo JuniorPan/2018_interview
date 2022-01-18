@@ -3829,6 +3829,296 @@ int maximalSquare(vector<vector<char>>& matrix)
 #### 基于图的DFS
 
 和BFS一样一般需要一个set来记录访问过的节点，避免重复访问造成死循环; Word XXX 系列面试中非常常见，例如word break，word ladder，word pattern，word search。
+##### [经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
+```c++
+int dirs[8][2] = {1,1,1,0,1,-1,0,1,0,-1,-1,1,-1,0,-1,-1};
+
+void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, int j, int& value)
+{
+    // 先写终止条件
+    if ( nums[i][i] == 0 || visit[i][j])
+        return;
+    visit[i][j] = true;
+    value += nums[i][j];
+    for(int k = 0; k < 8; k++)
+    {
+        int x = i + dirs[k][0];
+        int y = j + dirs[k][1];
+        if (x < 0 || x > nums.size() || y < 0 || y > nums[0].size() || visit[x][y])
+            continue;
+        dfs(nums, visit, x, y, value);
+    }    
+}
+
+```
+##### [79. 单词搜索](https://leetcode-cn.com/problems/word-search/)
+
+```c++
+class Solution
+{
+    bool dfs(vector<vector<char>> &board, string &word, int i, int j, int pos)
+    {
+        if (i >= board.size() || j >= board[0].size() || i < 0 || j < 0 || pos >= word.size() || word[pos] != board[i][j])
+            return false;
+        if (pos == word.size() - 1 && word[pos] == board[i][j])
+            return true;
+		// 这个地方修改临时值和回溯思想不一样，只是为了不重复访问，需要一个和原数组等大小的 visited 数组，是 bool 型的，用来记录当前位置是否已经被访问过，因为题目要求一个 cell 只能被访问一次
+        char temp = board[i][j];
+        board[i][j] = '0';
+        bool flag = dfs(board, word, i, j + 1, pos + 1) ||
+                    dfs(board, word, i, j - 1, pos + 1) ||
+                    dfs(board, word, i + 1, j, pos + 1) ||
+                    dfs(board, word, i - 1, j, pos + 1);
+        board[i][j] = temp; 
+        return flag;
+    }
+
+public:
+    bool exist(vector<vector<char>> &board, string word)
+    {
+        if (board.size() == 0)
+            return false;
+        for (int i = 0; i < board.size(); i++)
+        {
+            for (int j = 0; j < board[0].size(); j++)
+            {
+                if (dfs(board, word, i, j, 0))
+                    return true;
+            }
+        }
+        return false;
+    }
+};
+```
+
+##### [130. 被围绕的区域](https://leetcode-cn.com/problems/surrounded-regions/)
+
+```c++
+class Solution {
+public:
+   void solve(vector<vector<char> >& board) 
+   {
+        
+       if (board.empty() || board[0].empty())
+           return;
+       
+       int m = board.size();
+       int n = board[0].size();
+       for (int i = 0; i < m;  ++i) 
+        {
+            for (int j = 0; j < n; ++j) 
+            {
+                // 从出边界出发，将边界上为O的并且连在一起的都变成$
+                if ((i == 0 || i == m - 1 || j == 0 || j == n - 1) && board[i][j] == 'O')
+                    solveDFS(board, i, j, m, n);
+            }
+        }
+       // 先将没有变成$也就是不和边界上的O连在一起的改为X，
+        for (int i = 0; i < board.size(); ++i) {
+            for (int j = 0; j < board[i].size(); ++j) {
+                if (board[i][j] == 'O') board[i][j] = 'X';
+                if (board[i][j] == '$') board[i][j] = 'O';
+            }
+        }
+    }
+    void solveDFS(vector<vector<char> > &board, int i, int j, int m, int n) {
+        
+        if (i >= m || i < 0 || j >= n || j < 0 || board[i][j] != 'O') return;
+        
+        board[i][j] = '$';
+        solveDFS(board, i - 1, j, m, n);
+        solveDFS(board, i, j + 1, m, n);
+        solveDFS(board, i + 1, j, m, n);
+        solveDFS(board, i, j - 1, m, n);
+
+    }
+};
+```
+
+##### [200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
+
+```c++
+class Solution
+{
+    void dfs(vector<vector<char>> &grid, int i, int j, int m, int n)
+    {
+        if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] != '1')
+            return;
+        grid[i][j] = '2';
+        dfs(grid, i + 1, j, m, n);
+        dfs(grid, i - 1, j, m, n);
+        dfs(grid, i, j + 1, m, n);
+        dfs(grid, i, j - 1, m, n);
+    }
+
+public:
+    int numIslands(vector<vector<char>> &grid)
+    {
+        if (grid.empty())
+            return 0;
+        int m = grid.size();
+        int n = grid[0].size();
+        int res = 0;
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (grid[i][j] == '1')
+                {
+                    res++;
+                    dfs(grid, i, j, m, n);
+                }
+            }
+        }
+        return res;
+    }
+};
+```
+
+##### [212. Word Search II](https://leetcode.com/problems/word-search-ii/) dfs+字典树 **#todo** 
+
+```
+class Solution {
+public:
+    struct TrieNode {
+        TrieNode *child[26];
+        string str;
+        TrieNode() : str("") {
+            for (auto &a : child) a = NULL;
+        }
+    };
+    struct Trie {
+        TrieNode *root;
+        Trie() : root(new TrieNode()) {}
+        void insert(string s) {
+            TrieNode *p = root;
+            for (auto &a : s) {
+                int i = a - 'a';
+                if (!p->child[i]) p->child[i] = new TrieNode();
+                p = p->child[i];
+            }
+            p->str = s;
+        }
+    };
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        vector<string> res;
+        if (words.empty() || board.empty() || board[0].empty()) return res;
+        vector<vector<bool>> visit(board.size(), vector<bool>(board[0].size(), false));
+        Trie T;
+        for (auto &a : words) T.insert(a);
+        for (int i = 0; i < board.size(); ++i) {
+            for (int j = 0; j < board[i].size(); ++j) {
+                if (T.root->child[board[i][j] - 'a']) {
+                    search(board, T.root->child[board[i][j] - 'a'], i, j, visit, res);
+                }
+            }
+        }
+        return res;
+    }
+    void search(vector<vector<char>>& board, TrieNode* p, int i, int j, vector<vector<bool>>& visit, vector<string>& res) { 
+        if (!p->str.empty()) {
+            res.push_back(p->str);
+            p->str.clear();
+        }
+        int d[][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        visit[i][j] = true;
+        for (auto &a : d) {
+            int nx = a[0] + i, ny = a[1] + j;
+            if (nx >= 0 && nx < board.size() && ny >= 0 && ny < board[0].size() && !visit[nx][ny] && p->child[board[nx][ny] - 'a']) {
+                search(board, p->child[board[nx][ny] - 'a'], nx, ny, visit, res);
+            }
+        }
+        visit[i][j] = false;
+    }
+};
+
+```
+
+##### [547. 省份数量](https://leetcode-cn.com/problems/number-of-provinces/)
+
+```
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& M)
+	{
+		int sum = 0;
+		int m = M.size();
+		vector<bool> visited(m, false);
+		for (int i = 0; i < m; i++)
+		{
+			if (visited[i]) continue;
+			dfs(M, i, visited);
+			++sum;
+		}
+		return sum;
+	}
+
+	void dfs(vector<vector<int>>& M, int i, vector<bool>& visited)
+	{
+		visited[i] = true;
+		for (int j = 0; j < M.size(); j++)
+		{
+			if (M[i][j] == 0 || visited[j]) continue;
+			dfs(M, j, visited);
+		}
+	}
+};
+```
+
+
+
+##### [827. 最大人工岛](https://leetcode-cn.com/problems/making-a-large-island/) 类似于回溯
+
+```c++
+int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
+int dfs(vector<vector<int>>& grid, vector<vector<bool>>& visited, int i, int j)
+{
+    int m = grid.size();
+    int n = grid[0].size();
+    if (i < 0 || i >= m || j < 0 || j >= n || visited[i][j] == true || grid[i][j] != 1 )
+        return 0;
+    visited[i][j]=true;
+    int curSize = 1;
+    
+    for(int k = 0; k < 4; k++)
+    {
+        int x = i + dirs[k][0];
+        int y = j + dirs[k][1];
+        curSize +=  dfs(grid, visited, x, y);  
+   }
+    return curSize;
+    // return 1 + dfs(grid, visited, i+1,j) + dfs(grid, visited, i-1,j) + dfs(grid, visited, i,j+1) + dfs(grid, visited, i,j-1);
+}
+int largestIsland(vector<vector<int>>& grid) 
+{
+    if (grid.empty())
+        return 0;
+    int m = grid.size();
+    int n = grid[0].size();
+    if(grid==vector<vector<int>>(m,vector<int>(n,1))) return m*n;  
+    vector<vector<bool>> visited(m, vector<bool>(n, false));
+    vector<vector<bool>> temp(m, vector<bool>(n, false));
+    int res = 0;
+    int maxSize = INT_MIN;
+    for(int i = 0; i < m; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            if (grid[i][j] == 0)
+            {
+           	    grid[i][j] = 1;    
+                res = dfs(grid, visited, i, j);
+                visited=temp;
+                maxSize = max(res, maxSize);
+                grid[i][j]=0;
+            }
+        }
+    }
+    return maxSize;
+}
+```
+
+- - 
 
 ##### Leetcode 341 Flatten Nested List Iterator (339 364)
 
@@ -3863,6 +4153,635 @@ int maximalSquare(vector<vector<char>>& matrix)
 ##### Leetcode 694 Number of Distinct Islands
 
 ##### Leetcode 131 Palindrome Partitioning
+
+
+
+#### 基于排列组合的DFS （回溯）
+ 其实与图类DFS方法一致，但是排列组合的特征更明显
+
+##### [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
+
+![1573829897(1).jpg](https://pic.leetcode-cn.com/02b0ec926e3da5f12a0a118293b8ac10dc236741ccb04414ded44a30f7fc70af-1573829897(1).jpg)
+
+```c++
+//Input: digits = "23"
+//Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+class Solution 
+{
+public:
+    vector<string> dict = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    void dfs(string &digits, int start, string &temp, vector<string> &res)
+    {
+        if (start == digits.size() && temp.size() == digits.size())
+        {
+            res.push_back(temp);
+            return;
+        }
+        for(int i = start; i < digits.size(); i++)
+        {
+            int digit = digits[i] - '0' - 2;
+            
+            for(int j = 0; j < dict[digit].size(); j++)
+            {
+                temp.push_back(dict[digit][j]);
+                dfs(digits, i+1, temp, res);
+                temp.pop_back();
+            }
+        }
+    }
+public:
+    vector<string> letterCombinations(string digits) {
+        string temp;
+        vector<string> res;
+        if (digits.empty())
+            return res;
+        dfs(digits, 0, temp, res);
+        return res;
+    }
+};
+```
+
+##### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/) #todo: 20211202 不会
+
+```c++
+class Solution 
+{
+    void dfs(vector<string> & res, string &temp, int left, int right, int n)
+    {
+        if (temp.size() == 2 *n)
+        {
+            res.push_back(temp);
+            return;
+        }
+
+        if (left < n)
+        {
+            temp.push_back('(');
+            dfs(res, temp, left + 1, right, n);
+            temp.pop_back();
+        }
+        if (right < left)
+        {
+            temp.push_back(')');
+            dfs(res, temp, left, right + 1, n);
+            temp.pop_back();
+        }
+    } 
+
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        string temp;
+        dfs(res, temp, 0, 0, n);
+        return res;
+    }
+};
+```
+
+##### [39. 组合总和](https://leetcode-cn.com/problems/combination-sum/)
+
+<img src="https://pic.leetcode-cn.com/1598091943-hZjibJ-file_1598091940241" alt="img" style="zoom: 33%;" />
+
+```c++
+class Solution 
+{
+public:   
+    void backtrack(vector<int>& candidates, int target, vector<int> &temp, vector<vector<int>> &res, int start)
+    {
+        if (target < 0)
+            return;
+        if (target == 0) // 满足条件了 直接返回
+        {
+            res.push_back(temp);
+            return ;
+        }
+        
+        for(int i = start; i < candidates.size(); i++)
+        {
+            if(target - candidates[i] < 0)
+                break;
+            temp.push_back(candidates[i]);
+            backtrack(candidates, target - candidates[i], temp, res, i); // i表示每个数字可以用多次
+            temp.pop_back();
+        }
+    }  
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) 
+    {       
+        sort(candidates.begin(), candidates.end()); // 减枝
+        vector<vector<int>> res;
+        vector<int> tmp; // 用来存放每一次满足条件的结果
+        backtrack(candidates, target, tmp, res, 0);
+        return res;
+    }
+};
+
+```
+
+##### [40. 组合总和 II](https://leetcode-cn.com/problems/combination-sum-ii/)todo 去重策略不是很懂
+
+<img src="https://pic.leetcode-cn.com/1599718525-iXEiiy-image.png" alt="image.png" style="zoom: 50%;" />
+
+```c++
+class Solution 
+{
+public:
+    void backtrack(vector<int>& candidates, int target, vector<int> &temp, vector<vector<int>> &res, int start)
+    {
+        if (target < 0)
+            return;
+        if (target == 0)
+        {
+            res.push_back(temp);
+            return ;
+        }
+        
+        for(int i = start; i < candidates.size(); i++)
+        {
+            if(candidates[i] > target) return;
+            if(i && candidates[i] == candidates[i-1] && i > start) continue; // check duplicate combination
+            temp.push_back(candidates[i]);
+            backtrack(candidates, target - candidates[i], temp, res, i+1);
+            temp.pop_back();
+        }
+    }
+public:
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
+        vector<vector<int>> res;
+        vector<int> tmp;
+        backtrack(candidates, target, tmp, res, 0);
+        return res;
+    }
+};
+```
+
+##### [31. 下一个排列](https://leetcode-cn.com/problems/next-permutation/)
+
+```c++
+那么是如何得到的呢，我们通过观察原数组可以发现，如果从末尾往前看，数字逐渐变大，到了2时才减小的，然后再从后往前找第一个比2大的数字，是3，那么我们交换2和3，再把此时3后面的所有数字转置一下即可，步骤如下：
+
+1　　2　　7　　4　　3　　1
+
+1　　2　　7　　4　　3　　1
+
+1　　3　　7　　4　　2　　1
+
+1　　3　　1　　2　　4　　7
+void nextPermutation(vector<int>& num) 
+{
+    int i, j, n = num.size();
+    for (i = n - 2; i >= 0; --i) {
+        if (num[i + 1] > num[i]) {
+            for (j = n - 1; j > i; --j) {
+                if (num[j] > num[i]) break;
+            }
+            swap(num[i], num[j]);
+            reverse(num.begin() + i + 1, num.end());
+            return;
+        }
+        
+    }
+    reverse(num.begin(), num.end());
+}   
+```
+
+
+
+##### [46. 全排列](https://leetcode-cn.com/problems/permutations/)
+
+难度中等1294
+
+![image.png](https://pic.leetcode-cn.com/0bf18f9b86a2542d1f6aa8db6cc45475fce5aa329a07ca02a9357c2ead81eec1-image.png)
+
+```c++
+class Solution
+{
+public:
+    vector<vector<int>> res;
+    vector<int> temp;
+
+    void dfs(vector<int> &nums, vector<bool> &uesd)
+    {
+
+        if (temp.size() == nums.size())
+        {
+            res.push_back(temp);
+            return;
+        }
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (!uesd[i])
+            {
+                temp.push_back(nums[i]);
+                uesd[i] = true;
+                dfs(nums,uesd);
+                uesd[i] = false;
+                temp.pop_back();
+            }
+        }
+    }
+    vector<vector<int>> permute(vector<int> &nums)
+    {   
+        vector<bool> uesd(nums.size());
+        dfs(nums,uesd);
+        return res;
+    }
+};
+```
+
+##### [47. 全排列 II](https://leetcode-cn.com/problems/permutations-ii/) 同40
+
+```c++
+class Solution 
+{  
+public: 
+    void dfs(vector<vector<int>> &res, vector<int> &temp, vector<int> &nums, vector<bool> &uesd, int start)
+    {
+
+        if (temp.size() == nums.size())
+        {
+            res.push_back(temp);
+            return;
+        }
+
+        for(int i = 0; i < nums.size(); i++)
+        {
+            if (!uesd[i])
+            {
+                if (i > 0 && nums[i] == nums[i-1] && uesd[i-1])
+                    continue;
+                uesd[i] = true;
+                temp.push_back(nums[i]);   
+                dfs(res, temp, nums, uesd, i+1);
+                uesd[i] = false;
+                temp.pop_back();
+            }
+        } 
+    }
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) 
+    {
+        vector<vector<int>> res; 
+        vector<int> temp;
+        vector<bool> uesd(nums.size());
+        sort(nums.begin(), nums.end());
+        dfs(res, temp, nums, uesd, 0);
+        return res;
+        
+    }
+};
+```
+
+##### [77. 组合](https://leetcode-cn.com/problems/combinations/)
+
+```c++
+class Solution 
+{
+private:    
+    void dfs(vector<vector<int>> &res,vector<int>& nums, int n, int k, int first)
+    {
+        if (nums.size() == k)
+        {
+            res.push_back(nums);
+            return;
+        }      
+        for (int i = first; i <= n; i ++)
+        {
+            nums.push_back(i);
+            dfs(res, nums, n, k, i+1);
+            nums.pop_back();
+        }
+    }
+public:
+    vector<vector<int>> combine(int n, int k) {
+        vector<vector<int>> res;
+        vector<int> nums;
+        dfs(res, nums, n, k, 1);
+        return res;
+    }
+};
+```
+
+##### [78. 子集](https://leetcode-cn.com/problems/subsets/) todo: 20211202 还不会
+
+<img src="https://pic.leetcode-cn.com/1600557223-hvNyjD-image.png" alt="image.png" style="zoom:67%;" />
+
+![image.png](https://pic.leetcode-cn.com/1600565878-FTjJsK-image.png)
+
+```c++
+class Solution 
+{   // 解法一： 每个元素，都有两种选择：选入子集，或不选入子集。
+    void dfs(vector<int>& nums, int i, vector<int> &temp, vector<vector<int>> &res )
+    {    
+        if (i == nums.size())
+        {
+            res.push_back(temp);
+            return;
+        }     
+        temp.push_back(nums[i]); 	// 选择这个数
+        dfs(nums, i+1, temp, res);  // 基于该选择，继续往下递归
+        temp.pop_back();   			// 上面的递归结束，撤销该选择
+        dfs(nums, i+1, temp, res);  // 不选这个数，继续往下递归
+    }    
+public:
+    vector<vector<int>> subsets(vector<int>& nums)
+    {
+        vector<vector<int>> res;
+        if (nums.empty())
+            return res;
+        
+        vector<int> temp;
+        dfs(nums,0, temp, res);
+        return res;
+    }
+};
+
+// 解法二：
+//每次看看有几个数能选，然后选一个
+//用 for 枚举出当前可选的数，比如选第一个数：有 1、2、3 可选。
+//选了 1，选第二个数，有 2、3 可选；如果选 2，选第二个数，只有 3 可选，如下图
+class Solution 
+{
+public:
+    void dfs(vector<vector<int>> &res, vector<int> &temp, vector<int> &nums, int index)
+    {
+        res.push_back(temp);
+        for(int i = index; i < nums.size(); i++)
+        {
+            temp.push_back(nums[i]);
+            dfs(res, temp, nums, i+1);
+            temp.pop_back();
+        }
+    }
+    vector<vector<int>> subsets(vector<int>& nums)
+    {
+        vector<vector<int>> res;
+        vector<int> temp;
+        dfs(res, temp, nums, 0);
+        // res.push_back({});
+        return res;
+    }
+};
+```
+
+##### [90. 子集 II](https://leetcode-cn.com/problems/subsets-ii/)
+
+```c++
+class Solution 
+{
+    void dfs(vector<int>& nums, int start, vector<int>& temp, vector<vector<int>>& res)
+    {
+        res.push_back(temp);
+        for(int i = start; i < nums.size(); i++)
+        {
+            if (i == start || nums[i] != nums[i-1])
+            {
+            
+                temp.push_back(nums[i]);
+                dfs(nums, i+1, temp, res);
+                temp.pop_back();          
+            }
+        }
+    }
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums)
+    {
+        vector<int> temp;
+        vector<vector<int>> res;
+        sort(nums.begin(), nums.end());
+        dfs(nums, 0, temp, res);
+        return res;
+    }
+};
+```
+
+##### [93. 复原IP地址](https://leetcode-cn.com/problems/restore-ip-addresses/)
+
+```c++
+class Solution
+{
+public:
+    vector<string> restoreIpAddresses(string s)
+    {
+        vector<string> result;
+        string ip;
+        dfs(s, 0, 0, ip, result); //paras:string s,start index of s,step(from0-3),intermediate ip,final result
+        return result;
+    }
+    void dfs(string s, int start, int step, string ip, vector<string> &result)
+    {
+        if (start == s.size() && step == 4)
+        {
+            ip.erase(ip.end() - 1); //remove the last '.' from the last decimal number
+            result.push_back(ip);
+            return;
+        }
+        if (s.size() - start > (4 - step) * 3)
+            return;
+        if (s.size() - start < (4 - step))
+            return;
+        int num = 0;
+        for (int i = start; i < start + 3; i++)
+        {
+            num = num * 10 + (s[i] - '0');
+            if (num <= 255)
+            {
+                ip += s[i];
+                dfs(s, i + 1, step + 1, ip + '.', result);
+            }
+            if (num == 0)
+                break;
+        }
+    }
+};
+```
+
+##### [131. 分割回文串](https://leetcode-cn.com/problems/palindrome-partitioning/)
+
+<img src="https://pic.leetcode-cn.com/1604822955-WbvWRE-131.%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2.png" alt="131.分割回文串.png" style="zoom:50%;" />
+
+```c++
+class Solution 
+{
+    bool isPalindrome(const string& s, int start, int end) 
+    {
+        while(start <= end) {
+            if(s[start++] != s[end--])
+                return false;
+        }
+        return true;
+    }
+    // dfs含义是 
+    void dfs(string &s, int index, vector<string> &temp, vector<vector<string>> &res)
+    {
+        if (index == s.size())
+        {
+            res.push_back(temp);
+            return;
+        }
+        for(int i = index; i < s.size(); i++)  // a, aa, aab for循环横向遍历
+        {
+            if (isPalindrome(s, index, i)) // 这个地方可以用动态规划去优化
+            {
+                temp.push_back(s.substr(index, i - index + 1)); // 获取[index,i]在s中的子串
+                dfs(s, i + 1, temp, res);
+                temp.pop_back();
+            }
+        }
+    }
+public:
+    vector<vector<string>> partition(string s)
+    {
+        vector<vector<string> > res;
+        if(s.empty()) return res;  
+        vector<string> temp;
+        dfs(s, 0, temp, res);  
+        return res;
+    }
+};
+```
+
+##### [139. 单词拆分](https://leetcode-cn.com/problems/word-break/)
+
+<img src="https://pic.leetcode-cn.com/78fd09b2deabeae972809c2795ddb8be96720b8e62377cf01b7f70e7fb3dbf8c-image.png" alt="image.png" style="zoom: 50%;" />
+
+<img src="https://pic.leetcode-cn.com/5cba31457da78b75f3d593ef6f3c64c34e80db00c5e619f7e03affb1d6b829f0-image.png" alt="image.png" style="zoom: 33%;" />
+
+<img src="https://pic.leetcode-cn.com/2f0982c37f7681f16fe290f89df77660597b828a4038689b563f40eaa4958fa8-image.png" alt="image.png" style="zoom: 50%;" />
+
+```c++
+class Solution
+{
+public:
+    /**
+     * 解法一: 
+     * memo[i] 定义为范围为 [i, n] 的子字符串是否可以拆分，初始化为 -1，表示没有计算过，如果可以拆分，则赋值为1，反之为0
+     */
+    bool dfs(string &s, vector<string>& wordDict, int index,  vector<int> &memo)
+    {
+        if (index == s.size())  // 指针越界，s都划分成单词了才走到这步的，没有剩余子串了，返回真，结束递归
+            return true;
+        if (memo[index] != -1)
+            return memo[index];
+
+        for(int i = index; i < s.size(); i++)
+        {   
+            // 先判断字典中是否能找到子串 [index...i] 然后递归调用[i+1...s.size()]
+            if (find(wordDict.begin(),wordDict.end(), s.substr(index, i - index + 1)) != wordDict.end() && dfs(s, wordDict, i +1, memo))
+            {
+                memo[index] = true;
+                return true;
+            }
+        } 
+        memo[index]=false;
+        return false;
+    }
+
+
+
+    bool wordBreak(string s, vector<string>& wordDict)
+    {
+        vector<int> memo(s.size(), -1);
+        return dfs(s, wordDict, 0, memo);
+    }
+
+    /**
+     * 解法二: 
+     * 其中 dp[i] 表示范围 [0, i) 内的子串是否可以拆分，注意这里 dp 数组的长度比s串的长度大1，是因为我们要 handle 空串的情况，我们初始化 dp[0] 为 true，然后开始遍历
+     */
+    bool wordBreak(string s, vector<string> &wordDict)
+    {
+        unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+        vector<bool> dp(s.size() + 1);
+        dp[0] = true;
+        for (int i = 0; i < dp.size(); ++i)
+        {
+            for (int j = 0; j < i; ++j)
+            {
+                if (dp[j] && wordSet.count(s.substr(j, i - j)))
+                {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp.back();
+    }
+};
+```
+
+##### [140. Word Break II](https://leetcode.com/problems/word-break-ii/) 注意和139的区别
+
+<img src="https://pic.leetcode-cn.com/1604197605-MUoIgt-image.png" alt="image.png" style="zoom:50%;" />
+
+```c++
+// 解法一 暴力递归超时了  想改成不带返回值得形式
+vector<string> dfs(string s, unordered_set<string> &wordSet, int start)
+{
+    if (start == s.size())
+    {
+        return {""};
+    }
+    vector<string> res;
+    for (int i = start; i < s.size(); ++i)
+    {
+        if (wordSet.count(s.substr(start, i - start+1)) > 0)
+        {
+            vector<string> tmp = dfs(s, wordSet, i+1);
+            for (auto str : tmp)
+            {
+                res.push_back(s.substr(start, i - start + 1) + (str.empty() ? "" : " ") + str);
+            }
+        }
+    }
+    return res;
+}
+
+vector<string> wordBreak(string s, vector<string> &wordDict)
+{
+    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+    return dfs(s, wordSet, 0);
+}
+
+// 解法二: 增加记忆化搜索
+vector<string> dfs(string &s, vector<string> &wordDict, unordered_map<int, vector<string>> &memo, int index)
+{
+    if (index == s.size())
+        return {""};
+
+    if (memo.count(index) > 0)
+        return memo[index];
+
+    vector<string> res;
+    for (int i = index; i < s.size();i++)  // 横向切割字符串 [index...i] 和[i+1...s.size()]
+    {
+        // 先判断字典中是否能找到子串 [index...i] 然后递归调用[i+1...s.size()]
+        if (find(wordDict.begin(),wordDict.end(), s.substr(index, i - index + 1)) != wordDict.end())
+        {
+            vector<string> temp = dfs(s, wordDict, memo, i+1);
+            for(auto str : temp)
+            {
+                res.push_back(s.substr(index, i - index + 1) +  (str.empty() ? "" : " ") + str);
+            }
+        }
+    }
+    memo[index] = res;
+    return res;
+}
+
+vector<string> wordBreak(string s, vector<string>& wordDict) 
+{
+    unordered_map<int, vector<string>> memo;
+    return dfs(s, wordDict,  memo, 0);
+}
+```
+
+##### [526. 优美的排列](https://leetcode-cn.com/problems/beautiful-arrangement/)
+
+##### [698. 划分为k个相等的子集](https://leetcode-cn.com/problems/partition-to-k-equal-sum-subsets/)
+
+
 
 #### 记忆化搜索
 
@@ -4189,296 +5108,6 @@ double knightProbability(int N, int K, int r, int c)
 
   
 
-#### [经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
-```c++
-int dirs[8][2] = {1,1,1,0,1,-1,0,1,0,-1,-1,1,-1,0,-1,-1};
-
-void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, int j, int& value)
-{
-    // 先写终止条件
-    if ( nums[i][i] == 0 || visit[i][j])
-        return;
-    visit[i][j] = true;
-    value += nums[i][j];
-    for(int k = 0; k < 8; k++)
-    {
-        int x = i + dirs[k][0];
-        int y = j + dirs[k][1];
-        if (x < 0 || x > nums.size() || y < 0 || y > nums[0].size() || visit[x][y])
-            continue;
-        dfs(nums, visit, x, y, value);
-    }    
-}
-
-```
-#### [79. 单词搜索](https://leetcode-cn.com/problems/word-search/)
-
-```c++
-class Solution
-{
-    bool dfs(vector<vector<char>> &board, string &word, int i, int j, int pos)
-    {
-        if (i >= board.size() || j >= board[0].size() || i < 0 || j < 0 || pos >= word.size() || word[pos] != board[i][j])
-            return false;
-        if (pos == word.size() - 1 && word[pos] == board[i][j])
-            return true;
-		// 这个地方修改临时值和回溯思想不一样，只是为了不重复访问，需要一个和原数组等大小的 visited 数组，是 bool 型的，用来记录当前位置是否已经被访问过，因为题目要求一个 cell 只能被访问一次
-        char temp = board[i][j];
-        board[i][j] = '0';
-        bool flag = dfs(board, word, i, j + 1, pos + 1) ||
-                    dfs(board, word, i, j - 1, pos + 1) ||
-                    dfs(board, word, i + 1, j, pos + 1) ||
-                    dfs(board, word, i - 1, j, pos + 1);
-        board[i][j] = temp; 
-        return flag;
-    }
-
-public:
-    bool exist(vector<vector<char>> &board, string word)
-    {
-        if (board.size() == 0)
-            return false;
-        for (int i = 0; i < board.size(); i++)
-        {
-            for (int j = 0; j < board[0].size(); j++)
-            {
-                if (dfs(board, word, i, j, 0))
-                    return true;
-            }
-        }
-        return false;
-    }
-};
-```
-
-#### [130. 被围绕的区域](https://leetcode-cn.com/problems/surrounded-regions/)
-
-```c++
-class Solution {
-public:
-   void solve(vector<vector<char> >& board) 
-   {
-        
-       if (board.empty() || board[0].empty())
-           return;
-       
-       int m = board.size();
-       int n = board[0].size();
-       for (int i = 0; i < m;  ++i) 
-        {
-            for (int j = 0; j < n; ++j) 
-            {
-                // 从出边界出发，将边界上为O的并且连在一起的都变成$
-                if ((i == 0 || i == m - 1 || j == 0 || j == n - 1) && board[i][j] == 'O')
-                    solveDFS(board, i, j, m, n);
-            }
-        }
-       // 先将没有变成$也就是不和边界上的O连在一起的改为X，
-        for (int i = 0; i < board.size(); ++i) {
-            for (int j = 0; j < board[i].size(); ++j) {
-                if (board[i][j] == 'O') board[i][j] = 'X';
-                if (board[i][j] == '$') board[i][j] = 'O';
-            }
-        }
-    }
-    void solveDFS(vector<vector<char> > &board, int i, int j, int m, int n) {
-        
-        if (i >= m || i < 0 || j >= n || j < 0 || board[i][j] != 'O') return;
-        
-        board[i][j] = '$';
-        solveDFS(board, i - 1, j, m, n);
-        solveDFS(board, i, j + 1, m, n);
-        solveDFS(board, i + 1, j, m, n);
-        solveDFS(board, i, j - 1, m, n);
-
-    }
-};
-```
-
-#### [200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
-
-```c++
-class Solution
-{
-    void dfs(vector<vector<char>> &grid, int i, int j, int m, int n)
-    {
-        if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] != '1')
-            return;
-        grid[i][j] = '2';
-        dfs(grid, i + 1, j, m, n);
-        dfs(grid, i - 1, j, m, n);
-        dfs(grid, i, j + 1, m, n);
-        dfs(grid, i, j - 1, m, n);
-    }
-
-public:
-    int numIslands(vector<vector<char>> &grid)
-    {
-        if (grid.empty())
-            return 0;
-        int m = grid.size();
-        int n = grid[0].size();
-        int res = 0;
-        for (int i = 0; i < m; i++)
-        {
-            for (int j = 0; j < n; j++)
-            {
-                if (grid[i][j] == '1')
-                {
-                    res++;
-                    dfs(grid, i, j, m, n);
-                }
-            }
-        }
-        return res;
-    }
-};
-```
-
-#### [212. Word Search II](https://leetcode.com/problems/word-search-ii/) dfs+字典树 **#todo** 
-
-```
-class Solution {
-public:
-    struct TrieNode {
-        TrieNode *child[26];
-        string str;
-        TrieNode() : str("") {
-            for (auto &a : child) a = NULL;
-        }
-    };
-    struct Trie {
-        TrieNode *root;
-        Trie() : root(new TrieNode()) {}
-        void insert(string s) {
-            TrieNode *p = root;
-            for (auto &a : s) {
-                int i = a - 'a';
-                if (!p->child[i]) p->child[i] = new TrieNode();
-                p = p->child[i];
-            }
-            p->str = s;
-        }
-    };
-    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
-        vector<string> res;
-        if (words.empty() || board.empty() || board[0].empty()) return res;
-        vector<vector<bool>> visit(board.size(), vector<bool>(board[0].size(), false));
-        Trie T;
-        for (auto &a : words) T.insert(a);
-        for (int i = 0; i < board.size(); ++i) {
-            for (int j = 0; j < board[i].size(); ++j) {
-                if (T.root->child[board[i][j] - 'a']) {
-                    search(board, T.root->child[board[i][j] - 'a'], i, j, visit, res);
-                }
-            }
-        }
-        return res;
-    }
-    void search(vector<vector<char>>& board, TrieNode* p, int i, int j, vector<vector<bool>>& visit, vector<string>& res) { 
-        if (!p->str.empty()) {
-            res.push_back(p->str);
-            p->str.clear();
-        }
-        int d[][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-        visit[i][j] = true;
-        for (auto &a : d) {
-            int nx = a[0] + i, ny = a[1] + j;
-            if (nx >= 0 && nx < board.size() && ny >= 0 && ny < board[0].size() && !visit[nx][ny] && p->child[board[nx][ny] - 'a']) {
-                search(board, p->child[board[nx][ny] - 'a'], nx, ny, visit, res);
-            }
-        }
-        visit[i][j] = false;
-    }
-};
-
-```
-
-#### [547. 省份数量](https://leetcode-cn.com/problems/number-of-provinces/)
-
-```
-class Solution {
-public:
-    int findCircleNum(vector<vector<int>>& M)
-	{
-		int sum = 0;
-		int m = M.size();
-		vector<bool> visited(m, false);
-		for (int i = 0; i < m; i++)
-		{
-			if (visited[i]) continue;
-			dfs(M, i, visited);
-			++sum;
-		}
-		return sum;
-	}
-
-	void dfs(vector<vector<int>>& M, int i, vector<bool>& visited)
-	{
-		visited[i] = true;
-		for (int j = 0; j < M.size(); j++)
-		{
-			if (M[i][j] == 0 || visited[j]) continue;
-			dfs(M, j, visited);
-		}
-	}
-};
-```
-
-
-
-#### [827. 最大人工岛](https://leetcode-cn.com/problems/making-a-large-island/) 类似于回溯
-
-```c++
-int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
-int dfs(vector<vector<int>>& grid, vector<vector<bool>>& visited, int i, int j)
-{
-    int m = grid.size();
-    int n = grid[0].size();
-    if (i < 0 || i >= m || j < 0 || j >= n || visited[i][j] == true || grid[i][j] != 1 )
-        return 0;
-    visited[i][j]=true;
-    int curSize = 1;
-    
-    for(int k = 0; k < 4; k++)
-    {
-        int x = i + dirs[k][0];
-        int y = j + dirs[k][1];
-        curSize +=  dfs(grid, visited, x, y);  
-   }
-    return curSize;
-    // return 1 + dfs(grid, visited, i+1,j) + dfs(grid, visited, i-1,j) + dfs(grid, visited, i,j+1) + dfs(grid, visited, i,j-1);
-}
-int largestIsland(vector<vector<int>>& grid) 
-{
-    if (grid.empty())
-        return 0;
-    int m = grid.size();
-    int n = grid[0].size();
-    if(grid==vector<vector<int>>(m,vector<int>(n,1))) return m*n;  
-    vector<vector<bool>> visited(m, vector<bool>(n, false));
-    vector<vector<bool>> temp(m, vector<bool>(n, false));
-    int res = 0;
-    int maxSize = INT_MIN;
-    for(int i = 0; i < m; i++)
-    {
-        for(int j = 0; j < n; j++)
-        {
-            if (grid[i][j] == 0)
-            {
-           	    grid[i][j] = 1;    
-                res = dfs(grid, visited, i, j);
-                visited=temp;
-                maxSize = max(res, maxSize);
-                grid[i][j]=0;
-            }
-        }
-    }
-    return maxSize;
-}
-```
-
-- - 
 
 ### 深度优先搜索（DFS）
 
@@ -4517,30 +5146,8 @@ int largestIsland(vector<vector<int>>& grid)
   - Leetcode 333 Largest BST Subtree (与98类似)
   - Leetcode 285 Inorder Successor in BST (I, II)
 
-- 
-
-- 基于排列组合的DFS: 其实与图类DFS方法一致，但是排列组合的特征更明显
-
-- - Leetcode 17 Letter Combinations of a Phone Number
-  - Leetcode 39 Combination Sum（I, II, III相似， IV为动态规划题目）
-  - Leetcode 78 Subsets （I, II 重点在于如何去重）
-  - Leetcode 46 Permutation (I, II 重点在于如何去重)
-  - Leetcode 77 Combinations (I, II 重点在于如何去重)
-  - Leetcode 698 Partition to K Equal Sum Subsets
-  - Leetcode 526 Beautiful Arrangement (similar to 46)
-
-- 记忆化搜索（DFS + Memoization Search）：算是动态规划的一种，递归每次返回时同时记录下已访问过的节点特征，避免重复访问同一个节点，可以有效的把指数级别的DFS时间复杂度降为多项式级别; 注意这一类的DFS必须在最后有返回值，不可以用排列组合类型的DFS方法写; for循环的dp题目都可以用记忆化搜索的方式写，但是不是所有的记忆化搜索题目都可以用for循环的dp方式写。
-
-- - Leetcode 139 Word Break II
-  - Leetcode 72 Edit Distance
-  - Leetcode 377 Combination Sum IV
-  - Leetcode 1235 [Maximum Profit in Job Scheduling](https://link.zhihu.com/?target=https%3A//leetcode.com/explore/item/3950)
-  - Leetcode 1335 Minimum Difficulty of a Job Schedule
-  - Leetcode 1216 Valid Palindrome III
-  - Leetcode 97 Interleaving String
-  - Leetcode 472 Concatenated Words
-  - Leetcode 403 Frog Jump
-  - Leetcode 329 Longest Increasing Path in a Matrix
+  
+  
 
 
 
@@ -5167,625 +5774,6 @@ vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
 
 ##### Leetcode 310 Minimum Height Trees
 
-### 回溯
-
-#### [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
-
-![1573829897(1).jpg](https://pic.leetcode-cn.com/02b0ec926e3da5f12a0a118293b8ac10dc236741ccb04414ded44a30f7fc70af-1573829897(1).jpg)
-
-```c++
-//Input: digits = "23"
-//Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
-class Solution 
-{
-public:
-    vector<string> dict = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-    void dfs(string &digits, int start, string &temp, vector<string> &res)
-    {
-        if (start == digits.size() && temp.size() == digits.size())
-        {
-            res.push_back(temp);
-            return;
-        }
-        for(int i = start; i < digits.size(); i++)
-        {
-            int digit = digits[i] - '0' - 2;
-            
-            for(int j = 0; j < dict[digit].size(); j++)
-            {
-                temp.push_back(dict[digit][j]);
-                dfs(digits, i+1, temp, res);
-                temp.pop_back();
-            }
-        }
-    }
-public:
-    vector<string> letterCombinations(string digits) {
-        string temp;
-        vector<string> res;
-        if (digits.empty())
-            return res;
-        dfs(digits, 0, temp, res);
-        return res;
-    }
-};
-```
-
-#### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/) #todo: 20211202 不会
-
-```c++
-class Solution 
-{
-    void dfs(vector<string> & res, string &temp, int left, int right, int n)
-    {
-        if (temp.size() == 2 *n)
-        {
-            res.push_back(temp);
-            return;
-        }
-
-        if (left < n)
-        {
-            temp.push_back('(');
-            dfs(res, temp, left + 1, right, n);
-            temp.pop_back();
-        }
-        if (right < left)
-        {
-            temp.push_back(')');
-            dfs(res, temp, left, right + 1, n);
-            temp.pop_back();
-        }
-    } 
-
-public:
-    vector<string> generateParenthesis(int n) {
-        vector<string> res;
-        string temp;
-        dfs(res, temp, 0, 0, n);
-        return res;
-    }
-};
-```
-
-#### [39. 组合总和](https://leetcode-cn.com/problems/combination-sum/)
-
-<img src="https://pic.leetcode-cn.com/1598091943-hZjibJ-file_1598091940241" alt="img" style="zoom: 33%;" />
-
-```c++
-class Solution 
-{
-public:   
-    void backtrack(vector<int>& candidates, int target, vector<int> &temp, vector<vector<int>> &res, int start)
-    {
-        if (target < 0)
-            return;
-        if (target == 0) // 满足条件了 直接返回
-        {
-            res.push_back(temp);
-            return ;
-        }
-        
-        for(int i = start; i < candidates.size(); i++)
-        {
-            if(target - candidates[i] < 0)
-                break;
-            temp.push_back(candidates[i]);
-            backtrack(candidates, target - candidates[i], temp, res, i); // i表示每个数字可以用多次
-            temp.pop_back();
-        }
-    }  
-public:
-    vector<vector<int>> combinationSum(vector<int>& candidates, int target) 
-    {       
-        sort(candidates.begin(), candidates.end()); // 减枝
-        vector<vector<int>> res;
-        vector<int> tmp; // 用来存放每一次满足条件的结果
-        backtrack(candidates, target, tmp, res, 0);
-        return res;
-    }
-};
-
-```
-
-#### [40. 组合总和 II](https://leetcode-cn.com/problems/combination-sum-ii/)todo 去重策略不是很懂
-
-<img src="https://pic.leetcode-cn.com/1599718525-iXEiiy-image.png" alt="image.png" style="zoom: 50%;" />
-
-```c++
-class Solution 
-{
-public:
-    void backtrack(vector<int>& candidates, int target, vector<int> &temp, vector<vector<int>> &res, int start)
-    {
-        if (target < 0)
-            return;
-        if (target == 0)
-        {
-            res.push_back(temp);
-            return ;
-        }
-        
-        for(int i = start; i < candidates.size(); i++)
-        {
-            if(candidates[i] > target) return;
-            if(i && candidates[i] == candidates[i-1] && i > start) continue; // check duplicate combination
-            temp.push_back(candidates[i]);
-            backtrack(candidates, target - candidates[i], temp, res, i+1);
-            temp.pop_back();
-        }
-    }
-public:
-    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        sort(candidates.begin(), candidates.end());
-        vector<vector<int>> res;
-        vector<int> tmp;
-        backtrack(candidates, target, tmp, res, 0);
-        return res;
-    }
-};
-```
-
-#### [31. 下一个排列](https://leetcode-cn.com/problems/next-permutation/)
-
-```c++
-那么是如何得到的呢，我们通过观察原数组可以发现，如果从末尾往前看，数字逐渐变大，到了2时才减小的，然后再从后往前找第一个比2大的数字，是3，那么我们交换2和3，再把此时3后面的所有数字转置一下即可，步骤如下：
-
-1　　2　　7　　4　　3　　1
-
-1　　2　　7　　4　　3　　1
-
-1　　3　　7　　4　　2　　1
-
-1　　3　　1　　2　　4　　7
-void nextPermutation(vector<int>& num) 
-{
-    int i, j, n = num.size();
-    for (i = n - 2; i >= 0; --i) {
-        if (num[i + 1] > num[i]) {
-            for (j = n - 1; j > i; --j) {
-                if (num[j] > num[i]) break;
-            }
-            swap(num[i], num[j]);
-            reverse(num.begin() + i + 1, num.end());
-            return;
-        }
-        
-    }
-    reverse(num.begin(), num.end());
-}   
-```
-
-
-
-#### [46. 全排列](https://leetcode-cn.com/problems/permutations/)
-
-难度中等1294
-
-![image.png](https://pic.leetcode-cn.com/0bf18f9b86a2542d1f6aa8db6cc45475fce5aa329a07ca02a9357c2ead81eec1-image.png)
-
-```c++
-class Solution
-{
-public:
-    vector<vector<int>> res;
-    vector<int> temp;
-
-    void dfs(vector<int> &nums, vector<bool> &uesd)
-    {
-
-        if (temp.size() == nums.size())
-        {
-            res.push_back(temp);
-            return;
-        }
-        for (int i = 0; i < nums.size(); i++)
-        {
-            if (!uesd[i])
-            {
-                temp.push_back(nums[i]);
-                uesd[i] = true;
-                dfs(nums,uesd);
-                uesd[i] = false;
-                temp.pop_back();
-            }
-        }
-    }
-    vector<vector<int>> permute(vector<int> &nums)
-    {   
-        vector<bool> uesd(nums.size());
-        dfs(nums,uesd);
-        return res;
-    }
-};
-```
-
-#### [47. 全排列 II](https://leetcode-cn.com/problems/permutations-ii/) 同40
-
-```c++
-class Solution 
-{  
-public: 
-    void dfs(vector<vector<int>> &res, vector<int> &temp, vector<int> &nums, vector<bool> &uesd, int start)
-    {
-
-        if (temp.size() == nums.size())
-        {
-            res.push_back(temp);
-            return;
-        }
-
-        for(int i = 0; i < nums.size(); i++)
-        {
-            if (!uesd[i])
-            {
-                if (i > 0 && nums[i] == nums[i-1] && uesd[i-1])
-                    continue;
-                uesd[i] = true;
-                temp.push_back(nums[i]);   
-                dfs(res, temp, nums, uesd, i+1);
-                uesd[i] = false;
-                temp.pop_back();
-            }
-        } 
-    }
-public:
-    vector<vector<int>> permuteUnique(vector<int>& nums) 
-    {
-        vector<vector<int>> res; 
-        vector<int> temp;
-        vector<bool> uesd(nums.size());
-        sort(nums.begin(), nums.end());
-        dfs(res, temp, nums, uesd, 0);
-        return res;
-        
-    }
-};
-```
-
-#### [77. 组合](https://leetcode-cn.com/problems/combinations/)
-
-```c++
-class Solution 
-{
-private:    
-    void dfs(vector<vector<int>> &res,vector<int>& nums, int n, int k, int first)
-    {
-        if (nums.size() == k)
-        {
-            res.push_back(nums);
-            return;
-        }      
-        for (int i = first; i <= n; i ++)
-        {
-            nums.push_back(i);
-            dfs(res, nums, n, k, i+1);
-            nums.pop_back();
-        }
-    }
-public:
-    vector<vector<int>> combine(int n, int k) {
-        vector<vector<int>> res;
-        vector<int> nums;
-        dfs(res, nums, n, k, 1);
-        return res;
-    }
-};
-```
-
-#### [78. 子集](https://leetcode-cn.com/problems/subsets/) todo: 20211202 还不会
-
-<img src="https://pic.leetcode-cn.com/1600557223-hvNyjD-image.png" alt="image.png" style="zoom:67%;" />
-
-![image.png](https://pic.leetcode-cn.com/1600565878-FTjJsK-image.png)
-
-```c++
-class Solution 
-{   // 解法一： 每个元素，都有两种选择：选入子集，或不选入子集。
-    void dfs(vector<int>& nums, int i, vector<int> &temp, vector<vector<int>> &res )
-    {    
-        if (i == nums.size())
-        {
-            res.push_back(temp);
-            return;
-        }     
-        temp.push_back(nums[i]); 	// 选择这个数
-        dfs(nums, i+1, temp, res);  // 基于该选择，继续往下递归
-        temp.pop_back();   			// 上面的递归结束，撤销该选择
-        dfs(nums, i+1, temp, res);  // 不选这个数，继续往下递归
-    }    
-public:
-    vector<vector<int>> subsets(vector<int>& nums)
-    {
-        vector<vector<int>> res;
-        if (nums.empty())
-            return res;
-        
-        vector<int> temp;
-        dfs(nums,0, temp, res);
-        return res;
-    }
-};
-
-// 解法二：
-//每次看看有几个数能选，然后选一个
-//用 for 枚举出当前可选的数，比如选第一个数：有 1、2、3 可选。
-//选了 1，选第二个数，有 2、3 可选；如果选 2，选第二个数，只有 3 可选，如下图
-class Solution 
-{
-public:
-    void dfs(vector<vector<int>> &res, vector<int> &temp, vector<int> &nums, int index)
-    {
-        res.push_back(temp);
-        for(int i = index; i < nums.size(); i++)
-        {
-            temp.push_back(nums[i]);
-            dfs(res, temp, nums, i+1);
-            temp.pop_back();
-        }
-    }
-    vector<vector<int>> subsets(vector<int>& nums)
-    {
-        vector<vector<int>> res;
-        vector<int> temp;
-        dfs(res, temp, nums, 0);
-        // res.push_back({});
-        return res;
-    }
-};
-```
-
-#### [90. 子集 II](https://leetcode-cn.com/problems/subsets-ii/)
-
-```c++
-class Solution 
-{
-    void dfs(vector<int>& nums, int start, vector<int>& temp, vector<vector<int>>& res)
-    {
-        res.push_back(temp);
-        for(int i = start; i < nums.size(); i++)
-        {
-            if (i == start || nums[i] != nums[i-1])
-            {
-            
-                temp.push_back(nums[i]);
-                dfs(nums, i+1, temp, res);
-                temp.pop_back();          
-            }
-        }
-    }
-public:
-    vector<vector<int>> subsetsWithDup(vector<int>& nums)
-    {
-        vector<int> temp;
-        vector<vector<int>> res;
-        sort(nums.begin(), nums.end());
-        dfs(nums, 0, temp, res);
-        return res;
-    }
-};
-```
-
-#### [93. 复原IP地址](https://leetcode-cn.com/problems/restore-ip-addresses/)
-
-```c++
-class Solution
-{
-public:
-    vector<string> restoreIpAddresses(string s)
-    {
-        vector<string> result;
-        string ip;
-        dfs(s, 0, 0, ip, result); //paras:string s,start index of s,step(from0-3),intermediate ip,final result
-        return result;
-    }
-    void dfs(string s, int start, int step, string ip, vector<string> &result)
-    {
-        if (start == s.size() && step == 4)
-        {
-            ip.erase(ip.end() - 1); //remove the last '.' from the last decimal number
-            result.push_back(ip);
-            return;
-        }
-        if (s.size() - start > (4 - step) * 3)
-            return;
-        if (s.size() - start < (4 - step))
-            return;
-        int num = 0;
-        for (int i = start; i < start + 3; i++)
-        {
-            num = num * 10 + (s[i] - '0');
-            if (num <= 255)
-            {
-                ip += s[i];
-                dfs(s, i + 1, step + 1, ip + '.', result);
-            }
-            if (num == 0)
-                break;
-        }
-    }
-};
-```
-
-#### [131. 分割回文串](https://leetcode-cn.com/problems/palindrome-partitioning/)
-
-<img src="https://pic.leetcode-cn.com/1604822955-WbvWRE-131.%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2.png" alt="131.分割回文串.png" style="zoom:50%;" />
-
-```c++
-class Solution 
-{
-    bool isPalindrome(const string& s, int start, int end) 
-    {
-        while(start <= end) {
-            if(s[start++] != s[end--])
-                return false;
-        }
-        return true;
-    }
-    // dfs含义是 
-    void dfs(string &s, int index, vector<string> &temp, vector<vector<string>> &res)
-    {
-        if (index == s.size())
-        {
-            res.push_back(temp);
-            return;
-        }
-        for(int i = index; i < s.size(); i++)  // a, aa, aab for循环横向遍历
-        {
-            if (isPalindrome(s, index, i)) // 这个地方可以用动态规划去优化
-            {
-                temp.push_back(s.substr(index, i - index + 1)); // 获取[index,i]在s中的子串
-                dfs(s, i + 1, temp, res);
-                temp.pop_back();
-            }
-        }
-    }
-public:
-    vector<vector<string>> partition(string s)
-    {
-        vector<vector<string> > res;
-        if(s.empty()) return res;  
-        vector<string> temp;
-        dfs(s, 0, temp, res);  
-        return res;
-    }
-};
-```
-
-#### [139. 单词拆分](https://leetcode-cn.com/problems/word-break/)
-
-<img src="https://pic.leetcode-cn.com/78fd09b2deabeae972809c2795ddb8be96720b8e62377cf01b7f70e7fb3dbf8c-image.png" alt="image.png" style="zoom: 50%;" />
-
-<img src="https://pic.leetcode-cn.com/5cba31457da78b75f3d593ef6f3c64c34e80db00c5e619f7e03affb1d6b829f0-image.png" alt="image.png" style="zoom: 33%;" />
-
-<img src="https://pic.leetcode-cn.com/2f0982c37f7681f16fe290f89df77660597b828a4038689b563f40eaa4958fa8-image.png" alt="image.png" style="zoom: 50%;" />
-
-```c++
-class Solution
-{
-public:
-    /**
-     * 解法一: 
-     * memo[i] 定义为范围为 [i, n] 的子字符串是否可以拆分，初始化为 -1，表示没有计算过，如果可以拆分，则赋值为1，反之为0
-     */
-    bool dfs(string &s, vector<string>& wordDict, int index,  vector<int> &memo)
-    {
-        if (index == s.size())  // 指针越界，s都划分成单词了才走到这步的，没有剩余子串了，返回真，结束递归
-            return true;
-        if (memo[index] != -1)
-            return memo[index];
-
-        for(int i = index; i < s.size(); i++)
-        {   
-            // 先判断字典中是否能找到子串 [index...i] 然后递归调用[i+1...s.size()]
-            if (find(wordDict.begin(),wordDict.end(), s.substr(index, i - index + 1)) != wordDict.end() && dfs(s, wordDict, i +1, memo))
-            {
-                memo[index] = true;
-                return true;
-            }
-        } 
-        memo[index]=false;
-        return false;
-    }
-
-
-
-    bool wordBreak(string s, vector<string>& wordDict)
-    {
-        vector<int> memo(s.size(), -1);
-        return dfs(s, wordDict, 0, memo);
-    }
-
-    /**
-     * 解法二: 
-     * 其中 dp[i] 表示范围 [0, i) 内的子串是否可以拆分，注意这里 dp 数组的长度比s串的长度大1，是因为我们要 handle 空串的情况，我们初始化 dp[0] 为 true，然后开始遍历
-     */
-    bool wordBreak(string s, vector<string> &wordDict)
-    {
-        unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
-        vector<bool> dp(s.size() + 1);
-        dp[0] = true;
-        for (int i = 0; i < dp.size(); ++i)
-        {
-            for (int j = 0; j < i; ++j)
-            {
-                if (dp[j] && wordSet.count(s.substr(j, i - j)))
-                {
-                    dp[i] = true;
-                    break;
-                }
-            }
-        }
-        return dp.back();
-    }
-};
-```
-
-#### [140. Word Break II](https://leetcode.com/problems/word-break-ii/) 注意和139的区别
-
-<img src="https://pic.leetcode-cn.com/1604197605-MUoIgt-image.png" alt="image.png" style="zoom:50%;" />
-
-```c++
-// 解法一 暴力递归超时了  想改成不带返回值得形式
-vector<string> dfs(string s, unordered_set<string> &wordSet, int start)
-{
-    if (start == s.size())
-    {
-        return {""};
-    }
-    vector<string> res;
-    for (int i = start; i < s.size(); ++i)
-    {
-        if (wordSet.count(s.substr(start, i - start+1)) > 0)
-        {
-            vector<string> tmp = dfs(s, wordSet, i+1);
-            for (auto str : tmp)
-            {
-                res.push_back(s.substr(start, i - start + 1) + (str.empty() ? "" : " ") + str);
-            }
-        }
-    }
-    return res;
-}
-
-vector<string> wordBreak(string s, vector<string> &wordDict)
-{
-    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
-    return dfs(s, wordSet, 0);
-}
-
-// 解法二: 增加记忆化搜索
-vector<string> dfs(string &s, vector<string> &wordDict, unordered_map<int, vector<string>> &memo, int index)
-{
-    if (index == s.size())
-        return {""};
-
-    if (memo.count(index) > 0)
-        return memo[index];
-
-    vector<string> res;
-    for (int i = index; i < s.size();i++)  // 横向切割字符串 [index...i] 和[i+1...s.size()]
-    {
-        // 先判断字典中是否能找到子串 [index...i] 然后递归调用[i+1...s.size()]
-        if (find(wordDict.begin(),wordDict.end(), s.substr(index, i - index + 1)) != wordDict.end())
-        {
-            vector<string> temp = dfs(s, wordDict, memo, i+1);
-            for(auto str : temp)
-            {
-                res.push_back(s.substr(index, i - index + 1) +  (str.empty() ? "" : " ") + str);
-            }
-        }
-    }
-    memo[index] = res;
-    return res;
-}
-
-vector<string> wordBreak(string s, vector<string>& wordDict) 
-{
-    unordered_map<int, vector<string>> memo;
-    return dfs(s, wordDict,  memo, 0);
-}
-```
 
 ### 二叉树遍历相关
 
