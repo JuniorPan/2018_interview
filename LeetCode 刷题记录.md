@@ -5631,19 +5631,19 @@ public:
 
 
 
-##### Leetcode 490. The Maze
+##### 490. The Maze
 
-##### Leetcode 323. Connected Component in Undirected Graph
+##### 323. Connected Component in Undirected Graph
 
-##### Leetcode 752. Open the Lock
+##### 752. Open the Lock
 
-##### Leetcode 815. Bus Routes
+##### 815. Bus Routes
 
-##### Leetcode 1091. Shortest Path in Binary Matrix
+##### 1091. Shortest Path in Binary Matrix
 
-##### Leetcode 542. 01 Matrix
+##### 542. 01 Matrix
 
-##### Leetcode 1293. Shortest Path in a Grid with Obstacles Elimination
+##### 1293. Shortest Path in a Grid with Obstacles Elimination
 
 
 
