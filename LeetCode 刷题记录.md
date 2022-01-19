@@ -3824,8 +3824,6 @@ int maximalSquare(vector<vector<char>>& matrix)
 
 ### 深度优先搜索DFS 
 
-
-
 #### 基于图的DFS
 
 和BFS一样一般需要一个set来记录访问过的节点，避免重复访问造成死循环; Word XXX 系列面试中非常常见，例如word break，word ladder，word pattern，word search。
@@ -3851,6 +3849,14 @@ void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, 
 }
 
 ```
+##### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/)
+
+##### [37. 解数独](https://leetcode-cn.com/problems/sudoku-solver/)
+
+##### [51. N 皇后](https://leetcode-cn.com/problems/n-queens/)
+
+##### [52. N皇后 II](https://leetcode-cn.com/problems/n-queens-ii/)
+
 ##### [79. 单词搜索](https://leetcode-cn.com/problems/word-search/)
 
 ```c++
@@ -3890,6 +3896,10 @@ public:
     }
 };
 ```
+
+##### [93. 复原 IP 地址](https://leetcode-cn.com/problems/restore-ip-addresses/)
+
+##### [126. 单词接龙 II](https://leetcode-cn.com/problems/word-ladder-ii/)
 
 ##### [130. 被围绕的区域](https://leetcode-cn.com/problems/surrounded-regions/)
 
@@ -3934,6 +3944,8 @@ public:
     }
 };
 ```
+
+##### [131. 分割回文串](https://leetcode-cn.com/problems/palindrome-partitioning/)
 
 ##### [200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
 
@@ -4034,6 +4046,16 @@ public:
 
 ```
 
+##### 291 Word Pattern II (收费)
+
+##### [301. 删除无效的括号](https://leetcode-cn.com/problems/remove-invalid-parentheses/)
+
+##### [341. 扁平化嵌套列表迭代器](https://leetcode-cn.com/problems/flatten-nested-list-iterator/)
+
+##### [394. 字符串解码](https://leetcode-cn.com/problems/decode-string/)
+
+##### [399. 除法求值](https://leetcode-cn.com/problems/evaluate-division/)
+
 ##### [547. 省份数量](https://leetcode-cn.com/problems/number-of-provinces/)
 
 ```
@@ -4064,8 +4086,6 @@ public:
 	}
 };
 ```
-
-
 
 ##### [827. 最大人工岛](https://leetcode-cn.com/problems/making-a-large-island/) 类似于回溯
 
@@ -4118,41 +4138,15 @@ int largestIsland(vector<vector<int>>& grid)
 }
 ```
 
-- - 
+##### 694 Number of Distinct Islands(收费)
 
-##### Leetcode 341 Flatten Nested List Iterator (339 364)
+##### [856. 括号的分数](https://leetcode-cn.com/problems/score-of-parentheses/)
 
-##### Leetcode 394 Decode String
+##### 1087 Brace Expansion（收费）
 
-##### Leetcode 51 N-Queens (I II基本相同)
+##### 1274 Number of Ships in a Rectangle (收费)
 
-##### Leetcode 291 Word Pattern II (I为简单的Hashmap题)
-
-##### Leetcode 126 Word Ladder II （I为BFS题目）
-
-##### Leetcode 93 Restore IP Addresses
-
-##### Leetcode 22 Generate Parentheses
-
-##### Leetcode 586 Score of Parentheses
-
-##### Leetcode 301 Remove Invalid Parentheses
-
-##### Leetcode 37 Sodoku Solver
-
-##### Leetcode 212 Word Search II （I, II）
-
-##### Leetcode 1087 Brace Expansion
-
-##### Leetcode 399 Evaluate Division
-
-##### Leetcode 1274 Number of Ships in a Rectangle
-
-##### Leetcode 1376 Time Needed to Inform All Employees
-
-##### Leetcode 694 Number of Distinct Islands
-
-##### Leetcode 131 Palindrome Partitioning
+##### [1376. 通知所有员工所需的时间](https://leetcode-cn.com/problems/time-needed-to-inform-all-employees/)
 
 
 
