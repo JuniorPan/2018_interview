@@ -1230,145 +1230,7 @@ int find(vector<int>& nums, int target) {
 
 ### 排序 (4)
 
-**排序类（Sort）：**
-
-- 基础知识：快速排序（Quick Sort）， 归并排序（Merge Sort）的原理与代码实现。需要能讲明白代码中每一行的目的。快速排序时间复杂度平均状态下O（NlogN），空间复杂度O（1），归并排序最坏情况下时间复杂度O（NlogN），空间复杂度O（N）
-
-- 入门题目：
-
-- - Leetcode 148. Sort List
-  - Leetcode 56. Merge Intervals
-  - Leetcode 27. Remove elements
-
-- 进阶题目：
-
-- - Leetcode 179. Largest Number
-  - Leetcode 75. Sort Colors
-  - Leetcode 215. Kth Largest Element （可以用堆的解法替代）
-  - Leetcode 4. Median of Two Sorted Arrays
-
-#### [4. 寻找两个正序数组的中位数](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)
-
-#### [27. 移除元素](https://leetcode-cn.com/problems/remove-element/)
-
-#### [56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/)
-
-#### [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/)
-
-#### [148. 排序链表](https://leetcode-cn.com/problems/sort-list/)
-
-#### [179. 最大数](https://leetcode-cn.com/problems/largest-number/)
-
-#### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
-
-```
-
-```
-
-#### [493. 翻转对](https://leetcode-cn.com/problems/reverse-pairs/)
-
-```c++
-class Solution {
-    int merge(vector<int> &nums, int left, int mid, int right)
-    {
-        int index = 0, count = 0;
-        vector<int> help(right - left + 1); // 开辟一个辅助数组
-        int i = left;
-        int j = mid+1;
-        // 按照升序的方式处理
-        while( i <= mid && j <= right)
-        {
-            if (nums[i] > 2LL * nums[j])
-            {
-                count += mid - i + 1;
-                j++;
-            }
-            else
-            {
-                i++;
-            }
-        }
-        // 真正的归并排序从这里开始
-        i = left;
-        j = mid+1;
-        while( i <= mid && j <= right)
-        {
-           help[index++] = nums[i] < nums[j] ? nums[i++] :nums[j++];
-        }
-        while(i <= mid)
-        {
-            help[index++] = nums[i++]; 
-        }
-        while(j <= right)
-        {
-            help[index++] = nums[j++]; 
-        }
-        for(int i = 0; i < help.size(); i++)
-        {
-            nums[i+left] = help[i];
-        }
-        return count;
-    }
-
-
-    int mergeSort(vector<int> &nums, int left, int right)
-    {
-        if (left == right)
-        {
-            return 0;
-        }
-        int mid = left + ((right -left ) >> 1);
-        return mergeSort(nums, left, mid) +  mergeSort(nums, mid+1, right) + merge(nums, left, mid, right);
-    }
-
-public:
-    int reversePairs(vector<int>& nums) {
-        if (nums.size() <= 1)
-            return 0;
-        return mergeSort(nums, 0, nums.size()-1);
-    }
-};
-```
-
-
-
-##### [912. 排序数组](https://leetcode-cn.com/problems/sort-an-array/)
-
-``` c++
-class Solution {
-public:
-    vector<int> sortArray(vector<int>& nums) {
-    	mergeSort(nums, 0, (int)nums.size() - 1);
-    	return nums;
-    }
-    void mergeSort(vector<int>& nums, int start, int end) {
-    	if (start >= end) return;
-    	int mid = (start + end) / 2;
-    	mergeSort(nums, start, mid);
-    	mergeSort(nums, mid + 1, end);
-    	merge(nums, start, mid, end);
-    }
-    void merge(vector<int>& nums, int start, int mid, int end) {
-        vector<int> tmp(end - start + 1);
-        int i = start, j = mid + 1, k = 0;
-        while (i <= mid && j <= end) {
-        	if (nums[i] < nums[j]) tmp[k++] = nums[i++];
-        	else tmp[k++] = nums[j++];
-        }
-        while (i <= mid) tmp[k++] = nums[i++];
-        while (j <= end) tmp[k++] = nums[j++];
-        for (int idx = 0; idx < tmp.size(); ++idx) {
-        	nums[idx + start] = tmp[idx];
-        }
-    }
-};
-```
-
-
-
-
-
-#### 快速排序
+#### 快排模板
 
 ```c++
 int partition(vector<int> &nums, int left, int right)
@@ -1392,7 +1254,6 @@ void quickSort(vector<int> &nums, int left, int right)
         quickSort(nums, index + 1, right);
     }
 }
-
 vector<int> MySort(vector<int>& arr) {
     // write code here
     quickSort(arr, 0, arr.size()-1);
@@ -1400,35 +1261,37 @@ vector<int> MySort(vector<int>& arr) {
 }
 ```
 
+#### 归并排序模板
 
-
-##### [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/) 快排partion
-
-```c++
-
-    void sortColors(vector<int> &nums)
-    {
-        if (nums.size() < 0)
-            return;
-        int left = 0; // 小于区域的下一个位置
-        int right = nums.size() -1; // 大于区域的上一个位置
-        int index = 0;
-        while(index <= right)
-        {
-            if(nums[index] < 1)
-                swap(nums[index++], nums[left++]);
-            else if (nums[index] == 1)
-            {
-                index ++;
-            }
-            else 
-                swap(nums[index], nums[right--]);
-        }
-    }
-};
 ```
 
-##### [324. 摆动排序 II](https://leetcode-cn.com/problems/wiggle-sort-ii/)  #todo
+```
+
+#### 堆排序模板
+
+```
+```
+
+
+
+#### [4. 寻找两个正序数组的中位数](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)
+
+#### [27. 移除元素](https://leetcode-cn.com/problems/remove-element/)
+
+#### [56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/)
+
+#### [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/)
+
+#### [148. 排序链表](https://leetcode-cn.com/problems/sort-list/)
+
+#### [179. 最大数](https://leetcode-cn.com/problems/largest-number/)
+
+#### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
+
+```
+
+```
+#### [324. 摆动排序 II](https://leetcode-cn.com/problems/wiggle-sort-ii/)  #todo
 
 核心思想， 如果当前数小于num,当前数和小于区域的下一个数交换, 如果当前数大于num,当前数和大于区域的前一
 个数交换
@@ -1545,6 +1408,106 @@ public:
     }
 };
 ```
+
+#### [493. 翻转对](https://leetcode-cn.com/problems/reverse-pairs/)
+
+```c++
+class Solution {
+    int merge(vector<int> &nums, int left, int mid, int right)
+    {
+        int index = 0, count = 0;
+        vector<int> help(right - left + 1); // 开辟一个辅助数组
+        int i = left;
+        int j = mid+1;
+        // 按照升序的方式处理
+        while( i <= mid && j <= right)
+        {
+            if (nums[i] > 2LL * nums[j])
+            {
+                count += mid - i + 1;
+                j++;
+            }
+            else
+            {
+                i++;
+            }
+        }
+        // 真正的归并排序从这里开始
+        i = left;
+        j = mid+1;
+        while( i <= mid && j <= right)
+        {
+           help[index++] = nums[i] < nums[j] ? nums[i++] :nums[j++];
+        }
+        while(i <= mid)
+        {
+            help[index++] = nums[i++]; 
+        }
+        while(j <= right)
+        {
+            help[index++] = nums[j++]; 
+        }
+        for(int i = 0; i < help.size(); i++)
+        {
+            nums[i+left] = help[i];
+        }
+        return count;
+    }
+
+
+    int mergeSort(vector<int> &nums, int left, int right)
+    {
+        if (left == right)
+        {
+            return 0;
+        }
+        int mid = left + ((right -left ) >> 1);
+        return mergeSort(nums, left, mid) +  mergeSort(nums, mid+1, right) + merge(nums, left, mid, right);
+    }
+
+public:
+    int reversePairs(vector<int>& nums) {
+        if (nums.size() <= 1)
+            return 0;
+        return mergeSort(nums, 0, nums.size()-1);
+    }
+};
+```
+
+
+
+#### [912. 排序数组](https://leetcode-cn.com/problems/sort-an-array/)
+
+``` c++
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+    	mergeSort(nums, 0, (int)nums.size() - 1);
+    	return nums;
+    }
+    void mergeSort(vector<int>& nums, int start, int end) {
+    	if (start >= end) return;
+    	int mid = (start + end) / 2;
+    	mergeSort(nums, start, mid);
+    	mergeSort(nums, mid + 1, end);
+    	merge(nums, start, mid, end);
+    }
+    void merge(vector<int>& nums, int start, int mid, int end) {
+        vector<int> tmp(end - start + 1);
+        int i = start, j = mid + 1, k = 0;
+        while (i <= mid && j <= end) {
+        	if (nums[i] < nums[j]) tmp[k++] = nums[i++];
+        	else tmp[k++] = nums[j++];
+        }
+        while (i <= mid) tmp[k++] = nums[i++];
+        while (j <= end) tmp[k++] = nums[j++];
+        for (int idx = 0; idx < tmp.size(); ++idx) {
+        	nums[idx + start] = tmp[idx];
+        }
+    }
+};
+```
+
 
 ### 链表 
 
