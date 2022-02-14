@@ -1247,11 +1247,25 @@ int find(vector<int>& nums, int target) {
   - Leetcode 215. Kth Largest Element （可以用堆的解法替代）
   - Leetcode 4. Median of Two Sorted Arrays
 
+#### [4. 寻找两个正序数组的中位数](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)
 
+#### [27. 移除元素](https://leetcode-cn.com/problems/remove-element/)
 
-#### 归并排序
+#### [56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/)
 
-##### [493. 翻转对](https://leetcode-cn.com/problems/reverse-pairs/)
+#### [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/)
+
+#### [148. 排序链表](https://leetcode-cn.com/problems/sort-list/)
+
+#### [179. 最大数](https://leetcode-cn.com/problems/largest-number/)
+
+#### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
+
+```
+
+```
+
+#### [493. 翻转对](https://leetcode-cn.com/problems/reverse-pairs/)
 
 ```c++
 class Solution {
