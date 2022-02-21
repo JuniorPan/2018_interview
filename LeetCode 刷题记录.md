@@ -5503,9 +5503,7 @@ void solve(vector<vector<char>>& board) {
 }
 ```
 
-
-
-##### [133. 克隆图](https://leetcode-cn.com/problems/clone-graph/)
+##### [133. 克隆图](https://leetcode-cn.com/problems/clone-graph/) TODO
 
 ```c++
 Node *cloneGraph(Node *node)
@@ -5539,7 +5537,36 @@ Node *cloneGraph(Node *node)
 }
 ```
 
-##### Leetcode 200. Number of Islands
+##### [200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
+
+```c++
+//遍历到 ‘1’ 的时候，且该位置没有被访问过，那么就调用一个 BFS 即可，借助队列 queue 来实现，现将当前位置加入队列，然后进行 while 循环，将队首元素提取出来，并遍历其周围四个位置，若没有越界的话，就将 visited 中该邻居位置标记为 true，并将其加入队列中等待下次遍历即可
+int numIslands(vector<vector<char>>& grid) {
+    if (grid.empty() || grid[0].empty()) return 0;
+    int m = grid.size(), n = grid[0].size(), res = 0;
+    vector<vector<bool>> visited(m, vector<bool>(n));
+    vector<int> dirX{-1, 0, 1, 0}, dirY{0, 1, 0, -1};
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (grid[i][j] == '0' || visited[i][j]) continue;
+            ++res;
+            queue<int> q{{i * n + j}};
+            while (!q.empty()) {
+                int t = q.front(); q.pop();
+                for (int k = 0; k < 4; ++k) {
+                    int x = t / n + dirX[k], y = t % n + dirY[k];
+                    if (x < 0 || x >= m || y < 0 || y >= n || grid[x][y] == '0' || visited[x][y]) continue;
+                    visited[x][y] = true;
+                    q.push(x * n + y);
+                }
+            }
+        }
+    }
+    return res;
+}
+```
+
+
 
 ##### [301. 删除无效的括号](https://leetcode-cn.com/problems/remove-invalid-parentheses/)
 
