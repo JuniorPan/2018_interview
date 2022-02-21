@@ -5131,6 +5131,7 @@ bool judgeTotal(TreeNode *root)
         }
         else if (root->left == nullptr && root->right)
             return false;
+      	// 遍历最后一层的节点，如果出现不为空的情况，那么肯定不是完全二叉树
         else if (root->left && root->right == nullptr)
         {
             while(!q.empty())
@@ -5430,37 +5431,42 @@ private:
 
 （一般需要一个set来记录访问过的节点）
 
-##### Leetcode 200. Number of Islands
-
-
-
 ##### [127. 单词接龙](https://leetcode-cn.com/problems/word-ladder/)
 
 ```c++
 int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
     unordered_set<string> wordSet(wordList.begin(), wordList.end());
-    if (!wordSet.count(endWord)) return 0;
-    queue<string> q;
-    q.push(beginWord);
-    int res = 0;
-    while (!q.empty()) {
-        for (int k = q.size(); k > 0; --k) {
-            string word = q.front(); q.pop();
-            if (word == endWord) return res + 1;
-            for (int i = 0; i < word.size(); ++i) {
-                string newWord = word;
-                for (char ch = 'a'; ch <= 'z'; ++ch) {
-                    newWord[i] = ch;
-                    if (wordSet.count(newWord) && newWord != word) {
-                        q.push(newWord);
-                        wordSet.erase(newWord);
-                    }   
+        if (!wordSet.count(endWord))
+            return 0;
+        queue<string> q;
+        q.push(beginWord);
+        int res = 0;
+        while (!q.empty())
+        {
+            int n = q.size();
+            for (int k = 0; k < n; k++)
+            {
+                string word = q.front();
+                q.pop();
+                if (word == endWord)
+                    return res + 1;
+                for (int i = 0; i < word.size(); ++i)
+                {
+                    string newWord = word;
+                    for (char ch = 'a'; ch <= 'z'; ++ch)
+                    {
+                        newWord[i] = ch;
+                        if (wordSet.count(newWord) && newWord != word)
+                        {
+                            q.push(newWord);
+                            wordSet.erase(newWord);
+                        }
+                    }
                 }
             }
+            ++res;
         }
-        ++res;
-    }
-    return 0;
+        return 0;
 }
 ```
 
@@ -5529,6 +5535,8 @@ Node *cloneGraph(Node *node)
     return clone;
 }
 ```
+
+##### Leetcode 200. Number of Islands
 
 ##### [301. 删除无效的括号](https://leetcode-cn.com/problems/remove-invalid-parentheses/)
 
