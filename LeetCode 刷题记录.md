@@ -5444,12 +5444,15 @@ int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
         while (!q.empty())
         {
             int n = q.size();
+          	// 层次遍历，一层一层的
             for (int k = 0; k < n; k++)
             {
                 string word = q.front();
                 q.pop();
                 if (word == endWord)
                     return res + 1;
+              
+              	// 开始遍历每一个字母，
                 for (int i = 0; i < word.size(); ++i)
                 {
                     string newWord = word;
