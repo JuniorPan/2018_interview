@@ -3845,14 +3845,6 @@ void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, 
 }
 
 ```
-##### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/)
-
-##### [37. 解数独](https://leetcode-cn.com/problems/sudoku-solver/)
-
-##### [51. N 皇后](https://leetcode-cn.com/problems/n-queens/)
-
-##### [52. N皇后 II](https://leetcode-cn.com/problems/n-queens-ii/)
-
 ##### [79. 单词搜索](https://leetcode-cn.com/problems/word-search/)
 
 ```c++
@@ -3892,10 +3884,6 @@ public:
     }
 };
 ```
-
-##### [93. 复原 IP 地址](https://leetcode-cn.com/problems/restore-ip-addresses/)
-
-##### [126. 单词接龙 II](https://leetcode-cn.com/problems/word-ladder-ii/)
 
 ##### [130. 被围绕的区域](https://leetcode-cn.com/problems/surrounded-regions/)
 
@@ -3940,8 +3928,6 @@ public:
     }
 };
 ```
-
-##### [131. 分割回文串](https://leetcode-cn.com/problems/palindrome-partitioning/)
 
 ##### [200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
 
@@ -5670,38 +5656,37 @@ public:
 
 ```c++
 bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-    vector<vector<int>> graph(numCourses); // 构建图 领接表的形式
-    vector<int> indegree(numCourses,0);    // 顶点的入度表
+     vector<vector<int>> graph(numCourses, vector<int>(0));
+        vector<int> indegree(numCourses, 0); // 定点入度表
 
-    for(int i = 0; i < prerequisites.size(); i++)
-    {
-        graph[prerequisites[i][1]].push_back(prerequisites[i][0]);
-        ++indegree[prerequisites[i][0]];   
-    }
-
-    queue<int> q; // 所有入度为0的结点入队列
-    for(int i = 0; i < numCourses; i++)
-    {
-        if (indegree[i] == 0)
+        for (int i = 0; i < prerequisites.size(); i++)
         {
-            q.push(i);
+            graph[prerequisites[i][0]].push_back(prerequisites[i][1]);
+            ++indegree[prerequisites[i][1]];
         }
-    }
-    int counter = 0;
-    while(!q.empty())
-    {
-        int u = q.front();
-        q.pop();
-        ++counter;
-        for(int i = 0; i < graph[u].size(); i++)
+        queue<int> q;
+        for (int i = 0; i < numCourses; i++)
         {
-            if (--indegree[graph[u][i]] == 0)
+            if (indegree[i] == 0)
             {
-            	q.push(graph[u][i]); 
+                q.push(i);
             }
         }
-    }
-  return counter==numCourses;
+        int count = 0;
+        while (!q.empty())
+        {
+            int temp = q.front();
+            q.pop();
+            count++;
+            for (int i = 0; i < graph[temp].size(); i++)
+            {
+                if (--indegree[graph[temp][i]] == 0)
+                {
+                    q.push(graph[temp][i]);
+                }
+            }
+        }
+        return count == numCourses;
 }
 ```
 
