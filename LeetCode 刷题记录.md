@@ -3845,6 +3845,53 @@ void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, 
 }
 
 ```
+##### [51. N 皇后](https://leetcode-cn.com/problems/n-queens/)
+
+##### [52. N皇后 II](https://leetcode-cn.com/problems/n-queens-ii/)
+
+```java
+public static int num1(int n) {
+    	if(n<1){
+        	return 0;
+    	}
+    // record[0] ? record[1] ? record[2]
+    int[] record = new int[n]; // record[i] -> i行的早，收在I
+    return process1(0， record, n);
+    }
+    //潜台训: record[0..i-1]的皇后。 任何两个皇后一定都不共行、不共列。
+    // 目前前来到了第i行
+    // record[0..i-1]表示之前的行， 放了皇后的位置
+    // n代表整体共有名少行
+    //返回值为。摆定所有的皇后。合理的摆法有多少种
+    public static int process1(int i, int[] record, int n) {
+    	if(i==n){//终止行
+    		return 1;
+    	}
+    int res = 0;
+    for (int j = 0; j < n; j++) { //“前行在i行。类试i行断有的列
+    //当前行i行的皇后。放在j列。会不会和之前(0..i-1)的皇后 满足要求
+    //如果是。认为有效
+    //如果不是，认为无效
+    if (isValid(record, i, j)) {
+        record[i] = j;
+        res += process1(i + 1，record, n);
+    }
+    return res;
+ }
+// record[0..i-1]需要看。 record[i...]不需要看
+//返回i行皇后，放在了j列，是否有效
+public static boolean isValid(int[] record, int i, int j) {
+    for(intk=e;k<i;k++){//之前的某个k行的里后
+  	  if (j == record[k] | Math. abs(record[k] - j) == Math. abs(i . k)) {
+	    	return false;
+		}
+  }
+	return true ;
+}
+```
+
+
+
 ##### [79. 单词搜索](https://leetcode-cn.com/problems/word-search/)
 
 ```c++
@@ -4464,6 +4511,8 @@ public:
     }
 };
 ```
+
+##### [91. 解码方法](https://leetcode-cn.com/problems/decode-ways/)
 
 ##### [93. 复原IP地址](https://leetcode-cn.com/problems/restore-ip-addresses/)
 
