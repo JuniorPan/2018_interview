@@ -4483,6 +4483,8 @@ public:
 
 ##### [90. 子集 II](https://leetcode-cn.com/problems/subsets-ii/)
 
+![90.子集II.png](https://pic.leetcode-cn.com/1604912138-sosMZx-90.%E5%AD%90%E9%9B%86II.png)
+
 ```c++
 class Solution 
 {
