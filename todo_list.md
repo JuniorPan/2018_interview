@@ -1,10 +1,10 @@
-左程云
+## 左神的课
 
-P17 --- 2:03:16
+### p1
 
-![image-20220301230908662](/Users/panqiang/Library/Application Support/typora-user-images/image-20220301230908662.png)
+#### code1 位运算  
 
-P18--- 
+#### code2 插入排序  1:14:20~
 
 
 
@@ -14,17 +14,15 @@ http://erdengk.top/archives/zuo-lao-shi-suan-fa-ke-xue-xi-jian-yi
 
 https://blog.csdn.net/qq_41852212/article/details/120628784
 
-[旧课 p8-p45 基础班，基础提升，中级班，高级班](https://www.bilibili.com/video/BV1gL4y1a7Fu)
-
-[新课 p46-p61 基础班](https://www.bilibili.com/video/BV1gL4y1a7Fu)
-
-[新课：基础提升，训练营](https://www.bilibili.com/video/BV11v411G7xR?p=1)
 
 
 
-新课: https://www.bilibili.com/video/BV1db4y1m7Xc?p=12 基础
 
 
+
+左神课程 68小时版本对应第四期
+
+新课: https://www.bilibili.com/video/BV1db4y1m7Xc?spm_id_from=333.999.0.0
 
 ##### [判断一棵二叉树是否完全二叉树](https://www.nowcoder.com/practice/f31fc6d3caf24e7f8b4deb5cd9b5fa97?tpId=191&&tqId=35928&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking) #TODO
 
