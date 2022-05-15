@@ -7,7 +7,15 @@
 #### code 插入排序  1:14:20~1:32:27
 
 ```c++
-
+// 这里做的是为了 0~i 上有序
+for (int i = 1; i < nums.size(); i++)
+{
+  for (int j = i - 1; j >= 0; j--)
+  {
+    if (nums[j + 1] < nums[j])
+        swap(nums[j + 1], nums[j]);
+  }
+}
 ```
 
 #### code 二分的详解与扩展  1:32:27~
@@ -15,6 +23,20 @@
 ```c++
 // 1）在一个有序数组中，找某个数是否存在
 // 2）在一个有序数组中，找大于等于某个数最左侧的位置 low_bound
+int lower_bound(vector<int>& nums, int target)
+{
+  int left = 0;
+  int right = nums.size();
+  while(left < right)
+  {
+      int mid = left + (right - left) / 2;
+      if (nums[mid] < target)
+          left = mid + 1;
+      else
+          right = mid;
+  }
+  return left;
+}
 // 3）局部最小值问题
 ```
 
