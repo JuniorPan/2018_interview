@@ -955,19 +955,28 @@ double myPow(double x, int n) {
 
 
 
-#### [69. Sqrt(x)](https://leetcode-cn.com/problems/sqrtx/)  #todo 
+#### [69. Sqrt(x)](https://leetcode-cn.com/problems/sqrtx/)  #todo 20220516 左右边界如何确定
 
 ```c++
 int mySqrt(int x) 
 {
-    if (x <= 1) return x;
-    int left = 0, right = x;
-    while (left < right) {
-        int mid = left + (right - left) / 2;
-        if (x / mid >= mid) left = mid + 1;
-        else right = mid;
+    if (x == 0)
+       return x;
+    int left = 1, right = x, mid, sqrt;
+
+    while(left <= right)
+    {
+        mid = left + (right - left) /2 ;
+
+        sqrt = x / mid;
+        if(sqrt == mid)
+            return sqrt;
+        else if (sqrt < mid)
+            right = mid -1;
+        else
+            left = mid + 1;
     }
-    return right - 1;
+    return right;
 }
 ```
 
