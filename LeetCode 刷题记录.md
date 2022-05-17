@@ -1272,8 +1272,39 @@ vector<int> MySort(vector<int>& arr) {
 
 #### 归并排序模板
 
-```
+```c++
+void merge(vector<int> &nums, int left, int mid, int right)
+{
+   vector<int> temp; // 注意这个地方 如果这样写 就不用指定数组的大小了
 
+    int i = left, j = mid + 1;
+    int index = 0;
+    while(i <= mid && j <= right)
+    {
+        temp.push_back(nums[i] < nums[j] ? nums[i++] :nums[j++]);
+    }
+    while(i <= mid)
+        temp.push_back(nums[i++]);
+    while(j <= right)
+       temp.push_back(nums[j++]);
+
+    for(int i = 0; i < temp.size(); i++)
+    {
+        nums[i+left] = temp[i];
+    }
+}
+
+void merge_sort(vector<int> &nums, int left, int right)
+{
+    if (left == right)
+    {
+        return;
+    }
+    int mid = left + (right - left) / 2;
+    merge_sort(nums, left, mid);
+    merge_sort(nums, mid+1, right);
+    merge(nums, left, mid, right);
+}
 ```
 
 #### 堆排序模板
@@ -1291,14 +1322,83 @@ vector<int> MySort(vector<int>& arr) {
 
 #### [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/)
 
+```c++
+void sortColors(vector<int>& nums) 
+{     
+    if (nums.empty())
+        return;
+
+    int small = 0; // 小于区域的下一个元素位置
+    int large = nums.size() - 1; // 大于区域的第一个位置
+    int index = 0;
+    while(index <= large)
+    {
+        if (nums[index] < 1)
+        {
+            swap(nums[index++], nums[small++]);
+        }
+        else if (nums[index] == 1)
+        {   
+            index++;
+        }
+        else 
+        {
+            swap(nums[index], nums[large--]);
+        }
+    }
+}
+```
+
+
+
 #### [148. 排序链表](https://leetcode-cn.com/problems/sort-list/)
 
 #### [179. 最大数](https://leetcode-cn.com/problems/largest-number/)
 
 #### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
 
-```
+```c++
+class Solution {
+public:
 
+
+    // int partition(vector<int> &nums, int left, int right)
+    // {       
+    //     int small = left -1;
+    //     for(int i = left; i < right; i++)
+    //     {
+    //         if (nums[left] > nums[right])
+    //             swap(nums[i],  nums[++small]);
+    //     }
+
+    //     swap(nums[++small], nums[right]);
+    //     return small;
+
+    // }
+
+    int partition(vector<int> &nums, int left, int right)
+    {
+        int small = left; // 小于等于区域的下一个位置
+        for(int i = left; i < right; i++)
+        {
+            if (nums[i] > nums[right]) // 从大到小
+                swap(nums[i], nums[small++]);
+        }
+        swap(nums[small], nums[right]);
+        return small;
+    }
+
+    int findKthLargest(vector<int>& nums, int k) {
+       int left = 0, right = nums.size() - 1;
+        while (true) {
+            int pos = partition(nums, left, right);
+            if (pos == k - 1) return nums[pos];
+            if (pos > k - 1) right = pos - 1;
+            else left = pos + 1;
+        }
+
+    }
+};
 ```
 #### [324. 摆动排序 II](https://leetcode-cn.com/problems/wiggle-sort-ii/)  #todo
 

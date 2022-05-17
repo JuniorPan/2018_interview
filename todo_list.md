@@ -7,6 +7,7 @@
 #### code 插入排序  1:14:20~1:32:27
 
 ```c++
+https://leetcode.cn/problems/sort-an-array/
 // 这里做的是为了 0~i 上有序
 for (int i = 1; i < nums.size(); i++)
 {
@@ -42,10 +43,61 @@ int lower_bound(vector<int>& nums, int target)
 
 ### p2
 
-#### code 归并排序  0:34:57~0:59:42
+#### code 归并排序  0:34:57~0:59:42 [912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
 
 ```c++
+ void merge(vector<int> &nums, int left, int mid, int right)
+    {
+        vector<int> temp; // 注意这个地方 如果这样写 就不用指定数组的大小了
 
+        int i = left, j = mid + 1;
+        int index = 0;
+        while(i <= mid && j <= right)
+        {
+            // if (nums[i] <= nums[j])
+            // {
+            //     temp.push_back(nums[i]);
+            //     i++;
+            // }
+            // else 
+            // {
+            //     temp.push_back(nums[j]);
+            //     j++;
+            // }  
+            // temp[index++] = nums[i] < nums[j] ? nums[i++] :nums[j++]; 
+            temp.push_back(nums[i] < nums[j] ? nums[i++] :nums[j++]);
+        }
+
+        while(i <= mid)
+        {
+            // temp[index++] = nums[i++]; 
+            temp.push_back(nums[i++]);
+        }
+            
+
+        while(j <= right)
+        {
+           temp.push_back(nums[j++]);
+        }
+            
+
+        for(int i = 0; i < temp.size(); i++)
+        {
+            nums[i+left] = temp[i];
+        }
+    }
+
+    void merge_sort(vector<int> &nums, int left, int right)
+    {
+        if (left == right)
+        {
+            return;
+        }
+        int mid = left + (right - left) / 2;
+        merge_sort(nums, left, mid);
+        merge_sort(nums, mid+1, right);
+        merge(nums, left, mid, right);
+    }
 ```
 
 #### code 小和问题和逆序对问题 1:01:32~1:31:11
@@ -55,11 +107,36 @@ int lower_bound(vector<int>& nums, int target)
 
 
 
-#### code 快排 荷兰国旗问题 1:44:00~2:25:00
+#### code 快排 荷兰国旗问题 1:44:00~2:25:00  [215. 数组中的第K个最大元素](https://leetcode.cn/problems/kth-largest-element-in-an-array/)
 
 ```c++
 // 1）给定一个数组arr和指定的num,请把小于等于num的数放在数组的左边，大于num的数放在右边，要求额外空间复杂度O(1),时间复杂度O(N)
+215. 数组中的第K个最大元素
 // 2）给定一个数组arr和指定的num,请把小于num的数放在数组的左边，等于num的放中间，大于num的数放在右边，要求额外空间复杂度O(1),时间复杂度O(N)
+void sortColors(vector<int>& nums) 
+{
+    if (nums.empty())
+        return;
+
+    int small = 0; // 小于区域的最后一个元素位置
+    int large = nums.size() - 1; // 大于区域的第一个位置
+    int index = 0;
+    while(index <= large)
+    {
+        if (nums[index] < 1)
+        {
+            swap(nums[index++], nums[small++]);
+        }
+        else if (nums[index] == 1)
+        {   
+            index++;
+        }
+        else 
+        {
+            swap(nums[index], nums[large--]);
+        }
+    }
+}
 
 ```
 
