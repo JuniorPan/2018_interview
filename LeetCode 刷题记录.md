@@ -1272,6 +1272,8 @@ vector<int> MySort(vector<int>& arr) {
 
 #### 归并排序模板
 
+​	![meger_sort.png](https://pic.leetcode-cn.com/1651123691-dEdJgZ-meger_sort.png)
+
 ```c++
 void merge(vector<int> &nums, int left, int mid, int right)
 {
@@ -1517,6 +1519,13 @@ public:
     }
 };
 ```
+
+#### [315. 计算右侧小于当前元素的个数](https://leetcode-cn.com/problems/count-of-smaller-numbers-after-self/)
+
+```
+```
+
+
 
 #### [493. 翻转对](https://leetcode-cn.com/problems/reverse-pairs/)
 
