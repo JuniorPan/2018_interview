@@ -1520,9 +1520,70 @@ public:
 };
 ```
 
-#### [315. 计算右侧小于当前元素的个数](https://leetcode-cn.com/problems/count-of-smaller-numbers-after-self/)
+#### [315. 计算右侧小于当前元素的个数](https://leetcode-cn.com/problems/count-of-smaller-numbers-after-self/)  todo
 
-```
+```c++
+class Solution
+{
+public:
+    vector<int> index; //用于解决排序后原数组元素顺序变更问题
+    void merge(vector<int> &nums, int left, int mid, int right, vector<int> &res)
+    {
+        vector<int> temp;
+        vector<int> tempIndex;
+        int tmpPos = 0;
+        int i = left, j = mid + 1;
+        while (i <= mid && j <= right)
+        {
+            if (nums[i] > nums[j]) //数组降序排列
+            {
+                res[index[i]] += right - j + 1; //用下标直接计算排序好的右半部分小于nums[i]元素的数目
+                tempIndex.push_back(index[i]);  //记录元素位置的改变，与排序思想相同
+                temp.push_back(nums[i++]);
+            }
+            else // nums[i]<=nums[j]，等号放在这里是为了更方便上面计算right-j+1这个数目
+            {
+                tempIndex.push_back(index[j]); //记录元素位置的改变，与排序思想相同
+                temp.push_back(nums[j++]);
+            }
+        }
+        while (i <= mid)
+        {
+            tempIndex.push_back(index[i]); //记录元素位置的改变，与排序思想相同
+            temp.push_back(nums[i++]);
+        }
+
+        while (j <= right)
+        {
+            tempIndex.push_back(index[j]); //记录元素位置的改变，与排序思想相同
+            temp.push_back(nums[j++]);
+        }
+
+        for (int i = 0; i < tempIndex.size(); ++i)
+        {
+            nums[left + i] = temp[i];
+            index[left + i] = tempIndex[i];
+        }
+    }
+    void mergesort(vector<int> &nums, int left, int right, vector<int> &res)
+    {
+        if (left == right)
+            return;
+        int mid = (right - left) / 2 + left;
+        mergesort(nums, left, mid, res);
+        mergesort(nums, mid + 1, right, res);
+        merge(nums, left, mid, right, res);
+    }
+    vector<int> countSmaller(vector<int> &nums)
+    {
+        vector<int> res(nums.size(), 0);
+        index.resize(nums.size());
+        for (int i = 0; i < nums.size(); ++i)
+            index[i] = i;
+        mergesort(nums, 0, nums.size() - 1, res);
+        return res;
+    }
+};
 ```
 
 
