@@ -1001,7 +1001,7 @@ ListNode* deleteDuplicates(ListNode* head)
     }
 ```
 
-## 快手排序
+## 快速排序
 
 ```c++
 int partition(vector<int> &nums, int left, int right)
