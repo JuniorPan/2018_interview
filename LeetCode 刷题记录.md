@@ -1522,6 +1522,8 @@ public:
 
 #### [315. 计算右侧小于当前元素的个数](https://leetcode-cn.com/problems/count-of-smaller-numbers-after-self/)  todo
 
+​	![meger_sort-index.png](https://pic.leetcode-cn.com/1651143665-Tmdcmg-meger_sort-index.png)
+
 ```c++
 class Solution
 {
@@ -1531,7 +1533,6 @@ public:
     {
         vector<int> temp;
         vector<int> tempIndex;
-        int tmpPos = 0;
         int i = left, j = mid + 1;
         while (i <= mid && j <= right)
         {
