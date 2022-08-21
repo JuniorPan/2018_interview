@@ -977,7 +977,7 @@ while(fast->next && fast->next->next)
 
 https://www.nowcoder.com/practice/71cef9f8b5564579bf7ed93fbe0b2024?tpId=117&tqId=37729&companyId=665&rp=1&ru=%2Fcompany%2Fhome%2Fcode%2F665&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey
 
-```
+```c++
 ListNode* deleteDuplicates(ListNode* head)
 {
         // write code here

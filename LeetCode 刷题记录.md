@@ -1688,8 +1688,58 @@ public:
 };
 ```
 
-
 ### 链表 
+
+#### 链表总结
+
+##### 1） i 从零开始 最终fast会停在第n个节点上，n从零开始
+
+```
+ListNode *fast = head;
+for(int i = 0; i < n; i++)
+{
+    fast = fast->next;
+}
+```
+
+##### 2） 找链表的中间节点
+
+```
+ListNode *fast = head;
+ListNode *slow = head;
+// 如果链表个数为奇数，那么直接找到了中间结点，如果是偶数则是中间结点的前一个
+while(fast->next && fast->next->next)
+{
+    slow = slow->next;
+    fast = fast->next->next;
+}
+```
+
+https://www.nowcoder.com/practice/71cef9f8b5564579bf7ed93fbe0b2024?tpId=117&tqId=37729&companyId=665&rp=1&ru=%2Fcompany%2Fhome%2Fcode%2F665&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey
+
+```c++
+ListNode* deleteDuplicates(ListNode* head)
+{
+        // write code here
+        if (!head || !head->next)
+            return head;
+        ListNode *dummy = new ListNode(-1), *pre = dummy;
+        dummy->next = head;
+        while (pre->next)
+        {
+            ListNode *cur = pre->next;
+            while (cur->next && cur->next->val == cur->val)
+            {
+                cur = cur->next;
+            }
+            if (cur != pre->next)
+                pre->next = cur->next;
+            else
+                pre = pre->next;
+        }
+        return dummy->next;
+    }
+```
 
 #### 普通链表
 
@@ -1759,8 +1809,6 @@ ListNode *deleteDuplicates(ListNode *head)
     return dummy->next;
 }
 ```
-
-
 
 ##### [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
 
