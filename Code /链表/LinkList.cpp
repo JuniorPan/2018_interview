@@ -40,13 +40,14 @@ int main()
     cout << endl;
 
     // 找第n个节点 
-    ListNode *fast = head; 
-    for(int i = 0; i < 2; i ++)
+    ListNode *fast = head;
+    int i = 0; 
+    for(i = 0; i < 2; i ++)
     {
         fast = fast->next;
     }
 
-    cout << "n --> " << fast->val << endl;
+    cout << "i --> " << i <<  " n --> " << fast->val << endl;
 
     // 找链表的中间节点
     fast = head;
