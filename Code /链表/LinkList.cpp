@@ -49,7 +49,6 @@ int main()
     cout << "n --> " << fast->val << endl;
 
     // 找链表的中间节点
-
     fast = head;
     ListNode *slow = head;
     // 如果链表个数为奇数，那么直接找到了中间结点，如果是偶数则是中间结点的前一个
