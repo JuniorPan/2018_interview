@@ -1694,7 +1694,7 @@ public:
 
 ##### 1） i 从零开始 最终fast会停在第n个节点上，n从零开始
 
-```
+```c++
 ListNode *fast = head;
 for(int i = 0; i < n; i++)
 {
@@ -1704,7 +1704,7 @@ for(int i = 0; i < n; i++)
 
 ##### 2）找链表的中间节点
 
-```
+```c++
 ListNode *fast = head;
 ListNode *slow = head;
 // 如果链表个数为奇数，那么直接找到了中间结点，如果是偶数则是中间结点的前一个
@@ -1714,6 +1714,21 @@ while(fast->next && fast->next->next)
     fast = fast->next->next;
 }
 ```
+
+##### 3）链表尾插法和头插
+
+```c++
+// 尾插法
+cur->next = new ListNode(sum % 10);
+cur = cur->next;
+
+// 头插法
+ListNode *temp = new ListNode(-1)
+temp->next = fake_head->next;
+
+```
+
+
 
 https://www.nowcoder.com/practice/71cef9f8b5564579bf7ed93fbe0b2024?tpId=117&tqId=37729&companyId=665&rp=1&ru=%2Fcompany%2Fhome%2Fcode%2F665&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey
 
@@ -1756,6 +1771,7 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
         int val2 = l2 ? l2->val : 0;
         int sum = val1 + val2 + carry;
         carry = sum / 10;
+        // 尾插法
         cur->next = new ListNode(sum % 10);
         cur = cur->next;
         if (l1) l1 = l1->next;

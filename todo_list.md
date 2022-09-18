@@ -170,11 +170,13 @@ void sortColors(vector<int>& nums)
 2)基数排序
 ```
 
+### [p6_4][https://www.bilibili.com/video/BV13g41157hK?p=6]
 
+code  链表 1:10:24 
 
-
-
-
+```c++
+// 翻转单向和双向链表
+```
 
 
 
