@@ -1850,7 +1850,20 @@ ListNode* deleteDuplicates(ListNode* head) {
 }
 ```
 
-##### [138. 复制带随机指针的链表](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)
+##### [237. 删除链表中的节点](https://leetcode.cn/problems/delete-node-in-a-linked-list/)
+
+```c++
+void deleteNode(ListNode* node) { 
+    node->val = node->next->val;
+    ListNode *temp = node->next;
+    node->next = node->next->next;
+    delete temp;
+}
+```
+
+
+
+##### [138. 复制带随机指针的链表](https://leetcode-cn.com/problems/copy-list-with-random-pointer/) todo 
 
 ```c++
 Node* copyRandomList(Node* head) 
@@ -2105,7 +2118,7 @@ bool hasCycle(ListNode *head)
 }
 ```
 
-##### [142. Linked List Cycle II](https://leetcode.com/problems/linked-list-cycle-ii/)
+##### [142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/)
 
 ```c++
  ListNode *detectCycle(ListNode *head) 
