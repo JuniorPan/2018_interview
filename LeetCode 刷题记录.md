@@ -1791,6 +1791,7 @@ ListNode *swapPairs(ListNode *head)
       fakeHead->next = head;
       while (pre->next && pre->next->next)
       {
+          // 挨个摘下节点 然后使用头插法
           ListNode *t = pre->next->next;
           pre->next->next = t->next;
           t->next = pre->next;
