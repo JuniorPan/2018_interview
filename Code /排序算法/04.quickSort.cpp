@@ -93,6 +93,20 @@ int partrition(vector<int> &input, int start, int end)
     return small;
 }
 
+int partition2(vector<int> &nums, int left, int right)
+    {
+        int small = left;
+        for(int i = 0; i < right; i++)
+        {
+            if (nums[i] < nums[right])
+            {
+                swap(nums[i], nums[small++]);
+            }
+        }
+        swap(nums[small], nums[right]);
+        return small;
+    }
+
 void quicksort2(vector<int> &nums, int start, int end)
 {
     if (start == end)

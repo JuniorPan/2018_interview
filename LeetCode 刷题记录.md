@@ -1239,6 +1239,8 @@ int find(vector<int>& nums, int target) {
 
 ### 排序 (4)
 
+##### [912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
+
 #### 快排模板
 
 ```c++
@@ -1263,7 +1265,7 @@ void quickSort(vector<int> &nums, int left, int right)
         quickSort(nums, index + 1, right);
     }
 }
-vector<int> MySort(vector<int>& arr) {
+vector<int> sortArray(vector<int>& arr) {
     // write code here
     quickSort(arr, 0, arr.size()-1);
     return arr;
@@ -1889,36 +1891,25 @@ Node* copyRandomList(Node* head)
 ##### [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
 
 ```C++
-class Solution {
-public:
-    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2)
-    {
-        if (l1 == NULL && l2 == NULL)
-            return NULL;
-        ListNode *pHead = new ListNode(-1);
-        ListNode *tail = pHead;
-        
-        ListNode *p = l1;
-        ListNode *q = l2;
-        // 依次摘下一个节点相当于尾插法
-        while (p && q)
-        {
-            if (p->val < q->val)
-            {
-                tail->next = p;
-                p = p->next;
-            }
-            else
-            {
-                tail->next = q;
-                q = q->next;
-            }
-            tail= tail->next;
+ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+    if (list1 == nullptr && list2 == nullptr)
+        return nullptr;
+    ListNode *fake_head = new ListNode(-1);
+    ListNode *cur = fake_head; 
+    while(list1 && list2){
+        if (list1->val < list2->val) {      
+            cur->next = list1;
+             list1 = list1->next;         
         }
-        tail->next = p ? p : q;
-        return pHead->next;
+        else { 
+            cur->next = list2;
+            list2= list2->next;
+        }
+        cur = cur->next;
     }
-};
+    cur->next = list1 ? list1 : list2;
+    return fake_head->next;
+}
 ```
 
 ##### [23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/) #Todo 最小堆的做法 需要熟悉STL
