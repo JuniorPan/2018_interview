@@ -1331,7 +1331,7 @@ void sortColors(vector<int>& nums)
         return;
 
     int small = 0; // 小于区域的下一个元素位置
-    int large = nums.size() - 1; // 大于区域的第一个位置
+    int large = nums.size() - 1; // 大于区域的下一个位置
     int index = 0;
     while(index <= large)
     {
