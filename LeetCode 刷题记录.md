@@ -2181,13 +2181,15 @@ void reorderList_1(ListNode *head)
         pre = last;
         last = temp;
     }
+  	// 依次摘下后半个链表的节点 采用头插法的方式
     while (head && pre)
     {
         ListNode *temp = head->next;
+        ListNode *temp2 = pre->next;
+        pre->next = head->next;
         head->next = pre;
-        pre = pre->next;
-        head->next->next = temp;
         head = temp;
+        pre = temp2;
     }
 }
 /**
@@ -2223,7 +2225,7 @@ void reorderList(ListNode *head)
 
 ##### [160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/)
 
-```
+```c++
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -2276,8 +2278,6 @@ public:
     }
 };
 ```
-
-
 
 ##### [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
 
