@@ -2065,7 +2065,7 @@ ListNode* removeNthFromEnd(ListNode* head, int n)
 }
 ```
 
-##### [61. 旋转链表](https://leetcode-cn.com/problems/rotate-list/)  #todo
+##### [61. 旋转链表](https://leetcode-cn.com/problems/rotate-list/)  # todo 
 
 ```c++
 ListNode *rotateRight(ListNode *head, int k)
@@ -2151,7 +2151,7 @@ bool hasCycle(ListNode *head)
 }
 ```
 
-##### [143. Reorder List](https://leetcode.com/problems/reorder-list/) #TODO
+##### [143. 重排链表](https://leetcode.cn/problems/reorder-list/) #TODO
 
 ```c++
 /* 
