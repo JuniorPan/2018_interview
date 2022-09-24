@@ -1244,13 +1244,13 @@ int find(vector<int>& nums, int target) {
 ```c++
 int partition(vector<int> &nums, int left, int right)
 {
-    int small = left -1; // small 指向小于区域的最后一个元素
+    int small = left; // small 指向小于区域的下一个元素
     for(int i = left; i < right; i++)
     {
         if (nums[i] < nums[right])
-            swap(nums[i], nums[++small]);
+            swap(nums[i], nums[small++]);
     }
-    swap(nums[++small], nums[right]);
+    swap(nums[small], nums[right]);
     return small;
 }
 
@@ -1357,27 +1357,11 @@ void sortColors(vector<int>& nums)
 
 #### [179. 最大数](https://leetcode-cn.com/problems/largest-number/)
 
-#### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
+#### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/) todo
 
 ```c++
 class Solution {
 public:
-
-
-    // int partition(vector<int> &nums, int left, int right)
-    // {       
-    //     int small = left -1;
-    //     for(int i = left; i < right; i++)
-    //     {
-    //         if (nums[left] > nums[right])
-    //             swap(nums[i],  nums[++small]);
-    //     }
-
-    //     swap(nums[++small], nums[right]);
-    //     return small;
-
-    // }
-
     int partition(vector<int> &nums, int left, int right)
     {
         int small = left; // 小于等于区域的下一个位置
