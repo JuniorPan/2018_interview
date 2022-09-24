@@ -2036,8 +2036,6 @@ ListNode* getKthFromEnd(ListNode* head, int k)
 }
 ```
 
-
-
 ##### [19. 删除链表的倒数第 N 个结点](https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/) # todo 注意细节
 
 ```c++
@@ -2098,8 +2096,6 @@ ListNode *rotateRight(ListNode *head, int k)
 ```
 
 ##### [141. 环形链表](https://leetcode.cn/problems/linked-list-cycle/)
-
-难度简单1621
 
 ```c++
 bool hasCycle(ListNode *head) 
@@ -2181,7 +2177,7 @@ void reorderList_1(ListNode *head)
         pre = last;
         last = temp;
     }
-  	// 依次摘下后半个链表的节点 采用头插法的方式
+  	// 依次摘下后半个链表的节点 采用头插法的
     while (head && pre)
     {
         ListNode *temp = head->next;
@@ -2373,7 +2369,7 @@ public:
 };
 ```
 
-##### [147. Insertion Sort List](https://leetcode.com/problems/insertion-sort-list/)  #todo 对链表使用插入排序
+##### [147. 对链表进行插入排序](https://leetcode.cn/problems/insertion-sort-list/) todo 
 
 ```c++
 ListNode *insertionSortList(ListNode *head)
@@ -2468,35 +2464,6 @@ ListNode *sortList(ListNode *head)
 ```
 
 #### 链表翻转 
-
-##### [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)  #todo
-
-```c++
-ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
-{
-    ListNode *fakeHead = new ListNode(-1), *cur = fakeHead;
-    int carry = 0; // 表示进位
-
-    while (l1 || l2)
-    {
-        int val1 = l1 ? l1->val : 0;
-        int val2 = l2 ? l2->val : 0;
-        int sum = val1 + val2 + carry;
-
-        carry = sum / 10;
-        cur->next = new ListNode(sum % 10);
-        cur = cur->next;
-        if (l1)
-            l1 = l1->next;
-        if (l2)
-            l2 = l2->next;
-    }
-    if (carry)
-        cur->next = new ListNode(1);
-
-    return fakeHead->next;
-}
-```
 
 ##### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)  #todo
 
