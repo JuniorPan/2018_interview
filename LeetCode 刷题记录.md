@@ -1802,7 +1802,7 @@ ListNode *swapPairs(ListNode *head)
 }
 ```
 
-##### [82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
+##### [82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/) todo
 
 ```c++
 ListNode *deleteDuplicates(ListNode *head)
@@ -1827,7 +1827,7 @@ ListNode *deleteDuplicates(ListNode *head)
 }
 ```
 
-##### [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
+##### [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/) todo
 
 ```c++
 ListNode* deleteDuplicates(ListNode* head) {
@@ -2097,7 +2097,9 @@ ListNode *rotateRight(ListNode *head, int k)
 }
 ```
 
-##### [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
+##### [141. 环形链表](https://leetcode.cn/problems/linked-list-cycle/)
+
+难度简单1621
 
 ```c++
 bool hasCycle(ListNode *head) 
