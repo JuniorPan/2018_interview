@@ -886,6 +886,8 @@ int maxChunksToSorted(vector<int>& arr) {
 
 ### 二分查找  (11)
 
+https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/solution/yi-wen-dai-ni-gao-ding-er-fen-cha-zhao-j-ymwl/
+
 #### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
 ```c++
@@ -985,31 +987,28 @@ int mySqrt(int x)
 ```c++
 int search(vector<int>& nums, int target) 
 {
-    int search(vector<int>& nums, int target) 
+    int left = 0, right = nums.size() -1;
+    while(left <= right)
     {
-        int left = 0, right = nums.size() -1;
-        while(left <= right)
+        int mid = left + (right - left);
+        if (nums[mid] == target)
+            return mid;
+        if (nums[left] <= nums[mid])  // [left, mid] 递增序列
         {
-            int mid = left + (right - left);
-            if (nums[mid] == target)
-                return mid;
-            if (nums[left] <= nums[mid])  // [left, mid] 递增序列
-            {
-                if (nums[left] <= target && target < nums[mid])  // 加等号，因为 left 可能是 target
-                    right = mid - 1; // 在左侧 [left,mid) 查找  因为到了这个地方 num[mid] 已经不可能等于target了
-                else
-                    left = mid + 1;
-            }
-            else // (mid,right] 连续递增
-            {
-                if (nums[mid] < target && target <= nums[right]) // 加等号，因为 right 可能是 target
-                    left = mid + 1; // 在右侧 (mid,right] 查找  因为到了这个地方 num[mid] 已经不可能等于target了
-                else  
-                    right =  mid -1;
-            }
+            if (nums[left] <= target && target < nums[mid])  // 加等号，因为 left 可能是 target
+                right = mid - 1; // 在左侧 [left,mid) 查找  因为到了这个地方 num[mid] 已经不可能等于target了
+            else
+                left = mid + 1;
         }
-        return -1;
+        else // (mid,right] 连续递增
+        {
+            if (nums[mid] < target && target <= nums[right]) // 加等号，因为 right 可能是 target
+                left = mid + 1; // 在右侧 (mid,right] 查找  因为到了这个地方 num[mid] 已经不可能等于target了
+            else  
+                right =  mid -1;
+        }
     }
+    return -1;
 }
 ```
 
