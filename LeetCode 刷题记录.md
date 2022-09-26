@@ -888,6 +888,29 @@ int maxChunksToSorted(vector<int>& arr) {
 
 https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/solution/yi-wen-dai-ni-gao-ding-er-fen-cha-zhao-j-ymwl/
 
+#### [35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
+
+```c++
+int searchInsert(vector<int>& nums, int target) {
+    if (nums.empty())
+        return -1;
+    int left = 0, right = nums.size() -1;
+    while(left <= right)
+    {
+        int mid = left + (right - left) / 2;
+
+        if (nums[mid] == target)
+            return mid;
+
+        if (nums[mid] < target)
+            left = mid + 1;
+        else
+            right = mid -1;
+    }
+    return left; // todo: 这个地方为什么是返回left
+}
+```
+
 #### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
 ```c++
@@ -940,7 +963,7 @@ public:
 };
 ```
 
-#### [50. Pow(x, n)](https://leetcode-cn.com/problems/powx-n/)
+#### [50. Pow(x, n)](https://leetcode-cn.com/problems/powx-n/)  #todo
 
 ```c++
 double myPow(double x, int n) {
@@ -954,8 +977,6 @@ double myPow(double x, int n) {
     return n < 0 ? 1 / res : res;
 }
 ```
-
-
 
 #### [69. Sqrt(x)](https://leetcode-cn.com/problems/sqrtx/)  #todo 20220516 左右边界如何确定
 
@@ -1127,8 +1148,6 @@ int firstBadVersion(int n) {
 }
 ```
 
-
-
 #### [287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/) #TODO
 
 ```c++
@@ -1172,7 +1191,6 @@ public:
         }
         return res;
     }
-
     int kthSmallest(vector<vector<int>>& matrix, int k) 
     {
         int left = matrix[0][0], 
