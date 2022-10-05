@@ -182,7 +182,7 @@ code  链表 1:10:24
 
 ### [p7_5二叉树](https://www.bilibili.com/video/BV13g41157hK?p=7&vd_source=f740ff72b448a270a8990e020d263b59)
 
-code 二叉树遍历 0:52:19~
+code 二叉树遍历 递归 0:52:19~1:09:25
 
 ```c++
 // 递归序
@@ -198,6 +198,40 @@ void pre_order(TreeNode *root)
     pre_order(root->right);
     // 第三次来到当前节点
     cout << root->val << ", ";
+}
+```
+
+code 二叉树遍历非递归 1:09:25~
+
+```c++ 
+先序非递归
+// 1）根节点先入栈 
+// 2）从栈中弹出一个节点 记为cur
+// 3）打印（处理）cur节点
+// 4）先右后左 （cur的左右节点 如果有的话）
+// 5) 重复以上步骤
+  // 二叉树前序遍历非递归
+vector<int> preorderTraversal(TreeNode* root) 
+{
+  vector<int> res;
+  if (root == nullptr)
+      return res;
+
+  stack<TreeNode *> s;
+  s.push(root);
+
+  while(!s.empty())
+  {
+      root = s.top();
+      s.pop();
+      res.push_back(root->val);
+
+      if (root->right)
+          s.push(root->right);
+      if (root->left)
+          s.push(root->left);  
+  }
+  return res;
 }
 ```
 

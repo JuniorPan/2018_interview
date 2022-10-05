@@ -1,15 +1,16 @@
 #include <iostream>
+#include <stack>
 using namespace std;
 
-struct TreeNode {
-   int val;
-   TreeNode *left;
-   TreeNode *right;
-   TreeNode() : val(0), left(nullptr), right(nullptr) {}
-   TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-   TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+struct TreeNode
+{
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
-
 
 // 递归序
 void pre_order(TreeNode *root)
@@ -24,6 +25,28 @@ void pre_order(TreeNode *root)
     pre_order(root->right);
     // 第三次来到当前节点
     cout << root->val << ", ";
+}
+
+// 先序非递归
+// 先序非递归
+// 1）根节点先入栈 
+// 2）从栈中弹出一个节点 记为cur
+// 3）打印（处理）cur节点
+// 4）先右后左 （cur的左右节点 如果有的话）
+// 5) 重复以上步骤
+void pre_oreder_no_recur(TreeNode *root)
+{
+    stack<TreeNode *> s;
+    s.push(root);
+    while(!s.empty())
+    {
+        root = s.top();s.pop();
+        cout << root->val << ",";
+        if (root->right)
+            s.push(root->right);
+        if (root->left)
+            s.push(root->left);
+    }
 }
 
 int main()
@@ -56,9 +79,8 @@ int main()
 
     pre_order(&t1);
 
-    
-
-
+    cout << "\n----------------------------------" << endl;
+    pre_oreder_no_recur(&t1);
 
     return 0;
 }
