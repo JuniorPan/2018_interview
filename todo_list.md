@@ -182,7 +182,26 @@ code  链表 1:10:24
 
 ### [p7_5二叉树](https://www.bilibili.com/video/BV13g41157hK?p=7&vd_source=f740ff72b448a270a8990e020d263b59)
 
-code 二叉树 0:52:19~
+code 二叉树遍历 0:52:19~
+
+```c++
+// 递归序
+void pre_order(TreeNode *root)
+{
+    if (root == nullptr)
+        return;
+    // 第一次来到当前节点
+    cout << root->val << ", ";
+    pre_order(root->left);
+    // 第二次来到当前节点
+    cout << root->val << ", ";
+    pre_order(root->right);
+    // 第三次来到当前节点
+    cout << root->val << ", ";
+}
+```
+
+
 
 ## todo_list_2021_1227 小镇刷题家他又来了
 
