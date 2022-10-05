@@ -5961,10 +5961,11 @@ vector<int> preorderTraversal(TreeNode* root)
 }
 ```
 
-#### [97. 中序遍历二叉树](https://leetcode-cn.com/problems/validate-binary-search-tree/) 
+#### [94. 二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/) 
 
 ```c++
 // 二叉树中序非递归遍历
+// 逮到一棵树，不管三七二十一，先把左边界全部压栈， 依次弹出每一个节点的时候，让他的右节点也进行同样的操作
 vector<int> inorderTraversal(TreeNode* root)
 {
     vector<int> res;
@@ -5975,16 +5976,17 @@ vector<int> inorderTraversal(TreeNode* root)
     stack<TreeNode *> s;
     while(!s.empty() || root)
     {
-        while (root != nullptr)
+        // 一路压左边界
+      	if  (root != nullptr)
         {
             s.push(root);
             root = root->left;
+        } else {
+          root = s.top();
+          res.push_back(root->val); // 弹出即打印
+          s.pop();
+          root = root->right;
         }
-        root = s.top();
-        res.push_back(root->val);
-        s.pop();
-        root = root->right;
-
     }
     return res;
 }

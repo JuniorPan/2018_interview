@@ -210,7 +210,7 @@ code 二叉树遍历非递归 1:09:25~
 // 3）打印（处理）cur节点
 // 4）先右后左 （cur的左右节点 如果有的话）
 // 5) 重复以上步骤
-  // 二叉树前序遍历非递归
+// 二叉树前序遍历非递归
 vector<int> preorderTraversal(TreeNode* root) 
 {
   vector<int> res;
@@ -232,6 +232,74 @@ vector<int> preorderTraversal(TreeNode* root)
           s.push(root->left);  
   }
   return res;
+}
+```
+
+```c++
+后序非递归 
+）先搞一个栈 头右左  // 这个地方相当于 先序的镜像 
+）再搞一个栈 收集起来 在弹出 就能得到 左右头 即后序遍历
+
+// 1）根节点先入栈 
+// 2）从栈中弹出一个节点 记为cur 放在收集栈
+// 3）打印（处理）cur节点
+// 4）先左后右 （cur的左右节点 如果有的话） 
+// 5) 重复以上步骤 
+vector<int> postorderTraversal(TreeNode* root) 
+{
+    vector<int> res;
+    if (root == nullptr)
+        return res;
+
+    stack<TreeNode *> s1;
+    stack<TreeNode *> s2;
+    s1.push(root);
+    while(!s1.empty())
+    {
+        root = s1.top();
+        s1.pop();
+        s2.push(root);
+        if (root->left)
+            s1.push(root->left);
+        if (root->right)
+            s1.push(root->right);
+    }
+    while(!s2.empty())
+    {
+        res.push_back(s2.top()->val);
+        s2.pop();
+    }
+    return res;
+}
+```
+
+
+
+```c++
+// 中序 非递归
+// 逮到一棵树，不管三七二十一，先把左边界全部压栈， 依次弹出每一个节点的时候，让他的右节点也进行同样的操作
+vector<int> inorderTraversal(TreeNode* root)
+{
+    vector<int> res;
+    if (root == nullptr)
+    {
+        return {};
+    }
+    stack<TreeNode *> s;
+    while(!s.empty() || root)
+    {
+        if (root != nullptr)
+        {
+            s.push(root);
+            root = root->left;
+        } else {
+           root = s.top();
+          res.push_back(root->val);
+          s.pop();
+          root = root->right;
+        }
+    }
+    return res;
 }
 ```
 

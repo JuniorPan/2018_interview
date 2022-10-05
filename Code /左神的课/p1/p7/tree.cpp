@@ -29,7 +29,7 @@ void pre_order(TreeNode *root)
 
 // 先序非递归
 // 先序非递归
-// 1）根节点先入栈 
+// 1）根节点先入栈
 // 2）从栈中弹出一个节点 记为cur
 // 3）打印（处理）cur节点
 // 4）先右后左 （cur的左右节点 如果有的话）
@@ -38,14 +38,46 @@ void pre_oreder_no_recur(TreeNode *root)
 {
     stack<TreeNode *> s;
     s.push(root);
-    while(!s.empty())
+    while (!s.empty())
     {
-        root = s.top();s.pop();
+        root = s.top();
+        s.pop();
         cout << root->val << ",";
         if (root->right)
             s.push(root->right);
         if (root->left)
             s.push(root->left);
+    }
+}
+
+
+// 后序非递归
+// 1）根节点先入栈 
+// 2）从栈中弹出一个节点 记为cur 放在收集栈
+// 3）打印（处理）cur节点
+// 4）先左后右 （cur的左右节点 如果有的话） 
+// 5) 重复以上步骤 
+void post_order_no_recur(TreeNode *root)
+{
+    stack<TreeNode *> s1;
+    stack<TreeNode *> s2;
+
+    s1.push(root);
+    while (!s1.empty())
+    {
+        root = s1.top();s1.pop();
+        s2.push(root);
+
+        if (root->left)
+            s1.push(root->left);
+        if (root->right)
+            s1.push(root->right);
+    }
+
+     while(!s2.empty())
+    {
+        cout << s2.top()->val << ",";
+        s2.pop();
     }
 }
 
@@ -81,6 +113,9 @@ int main()
 
     cout << "\n----------------------------------" << endl;
     pre_oreder_no_recur(&t1);
+
+    cout << "\n----------------------------------" << endl;
+    post_order_no_recur(&t1);
 
     return 0;
 }
