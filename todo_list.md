@@ -303,6 +303,8 @@ vector<int> inorderTraversal(TreeNode* root)
 
 code 二叉树 宽度遍历 层次遍历 1:45:22 ~
 
+#### [662. 二叉树最大宽度](https://leetcode.cn/problems/maximum-width-of-binary-tree/)
+
 ## todo_list_2021_1227 小镇刷题家他又来了
 
 http://erdengk.top/archives/zuo-lao-shi-suan-fa-ke-xue-xi-jian-yi
