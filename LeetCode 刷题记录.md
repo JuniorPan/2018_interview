@@ -5933,6 +5933,34 @@ vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
 
 ### 二叉树遍历相关
 
+#### [144. 二叉树的前序遍历](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/) 
+
+```c++
+// 二叉树前序遍历非递归
+vector<int> preorderTraversal(TreeNode* root) 
+{
+    vector<int> res;
+    if (root == nullptr)
+        return res;
+
+    stack<TreeNode *> s;
+    s.push(root);
+
+    while(!s.empty())
+    {
+        root = s.top();
+        s.pop();
+        res.push_back(root->val);
+
+        if (root->right)
+            s.push(root->right);
+        if (root->left)
+            s.push(root->left);  
+    }
+    return res;
+}
+```
+
 #### [97. 中序遍历二叉树](https://leetcode-cn.com/problems/validate-binary-search-tree/) 
 
 ```c++
@@ -5961,6 +5989,40 @@ vector<int> inorderTraversal(TreeNode* root)
     return res;
 }
 ```
+
+#### [145. 二叉树的后序遍历](https://leetcode-cn.com/problems/binary-tree-postorder-traversal/)
+
+```c++
+vector<int> postorderTraversal(TreeNode* root) 
+{
+    vector<int> res;
+    if (root == nullptr)
+        return res;
+
+    stack<TreeNode *> s1;
+    stack<TreeNode *> s2;
+    s1.push(root);
+    while(!s1.empty())
+    {
+        root = s1.top();
+        s1.pop();
+        s2.push(root);
+
+        if (root->left)
+            s1.push(root->left);
+        if (root->right)
+            s1.push(root->right);
+    }
+    while(!s2.empty())
+    {
+        res.push_back(s2.top()->val);
+        s2.pop();
+    }
+    return res;
+}
+```
+
+
 
 #### [98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/) 
 
@@ -6079,66 +6141,6 @@ void flatten(TreeNode* root)
         prev->left = nullptr;
         prev->right = curr;
     } 
-}
-```
-
-#### [144. 二叉树的前序遍历](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/) 
-
-```c++
-// 二叉树前序遍历非递归
-vector<int> preorderTraversal(TreeNode* root) 
-{
-    vector<int> res;
-    if (root == nullptr)
-        return res;
-
-    stack<TreeNode *> s;
-    s.push(root);
-
-    while(!s.empty())
-    {
-        root = s.top();
-        s.pop();
-        res.push_back(root->val);
-
-        if (root->right)
-            s.push(root->right);
-        if (root->left)
-            s.push(root->left);  
-    }
-    return res;
-}
-```
-
-#### [145. 二叉树的后序遍历](https://leetcode-cn.com/problems/binary-tree-postorder-traversal/)
-
-```c++
-vector<int> postorderTraversal(TreeNode* root) 
-{
-    vector<int> res;
-    if (root == nullptr)
-        return res;
-
-    stack<TreeNode *> s1;
-    stack<TreeNode *> s2;
-    s1.push(root);
-    while(!s1.empty())
-    {
-        root = s1.top();
-        s1.pop();
-        s2.push(root);
-
-        if (root->left)
-            s1.push(root->left);
-        if (root->right)
-            s1.push(root->right);
-    }
-    while(!s2.empty())
-    {
-        res.push_back(s2.top()->val);
-        s2.pop();
-    }
-    return res;
 }
 ```
 
