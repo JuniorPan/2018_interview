@@ -201,7 +201,7 @@ void pre_order(TreeNode *root)
 }
 ```
 
-code 二叉树遍历非递归 1:09:25~
+code 二叉树遍历非递归 1:09:25~1:38:42
 
 ```c++ 
 先序非递归
@@ -273,8 +273,6 @@ vector<int> postorderTraversal(TreeNode* root)
 }
 ```
 
-
-
 ```c++
 // 中序 非递归
 // 逮到一棵树，不管三七二十一，先把左边界全部压栈， 依次弹出每一个节点的时候，让他的右节点也进行同样的操作
@@ -303,7 +301,7 @@ vector<int> inorderTraversal(TreeNode* root)
 }
 ```
 
-
+code 二叉树 宽度遍历 层次遍历 1:45:22 ~
 
 ## todo_list_2021_1227 小镇刷题家他又来了
 
