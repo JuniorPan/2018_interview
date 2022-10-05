@@ -180,6 +180,10 @@ code  链表 1:10:24
 
 
 
+### [p7_5二叉树](https://www.bilibili.com/video/BV13g41157hK?p=7&vd_source=f740ff72b448a270a8990e020d263b59)
+
+code 二叉树 0:52:19~
+
 ## todo_list_2021_1227 小镇刷题家他又来了
 
 http://erdengk.top/archives/zuo-lao-shi-suan-fa-ke-xue-xi-jian-yi
@@ -1065,5 +1069,7 @@ vector<int> sortArray(vector<int>& nums) {
 ```
 
 
+
+[https://www.bilibili.com/video/BV13g41157hK?p=6]: 
 
 [https://www.bilibili.com/video/BV13g41157hK?p=6]: 
