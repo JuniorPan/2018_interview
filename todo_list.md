@@ -305,6 +305,26 @@ code 二叉树 宽度遍历 层次遍历 1:45:22 ~
 
 #### [662. 二叉树最大宽度](https://leetcode.cn/problems/maximum-width-of-binary-tree/)
 
+
+
+### [p8_6 图（其实还是二叉树）](https://www.bilibili.com/video/BV13g41157hK/?p=8&vd_source=f740ff72b448a270a8990e020d263b59)
+
+code 二叉树的相关概念及其实现判断 0:0:0~
+
+```c++
+// 如何判断一颗二叉树是否是搜索二叉树？
+
+// 如何判断一颗二叉树是完全二叉树？
+   1) 任意节点 如果有右孩子但是没有左孩子，直接返回false
+   2) 在（1）不违规的情况下，遇到的第一个左右孩子不双全的情况下，那么接下的遇到的所有节点都必须是叶节点
+
+// 如何判断一颗二叉树是否是满二叉树？
+
+// 如何判断一颗二叉树是否是平衡二叉树？《二叉树题目套路)
+```
+
+
+
 ## todo_list_2021_1227 小镇刷题家他又来了
 
 http://erdengk.top/archives/zuo-lao-shi-suan-fa-ke-xue-xi-jian-yi

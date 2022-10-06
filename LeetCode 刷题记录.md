@@ -6069,18 +6069,14 @@ bool judgeTotal(TreeNode *root)
     {
         root = q.front();
         q.pop();
-        if (root->left && root->right)
-        {
+        if (root->left && root->right) {
             q.push(root->left);
             q.push(root->right);
         }
-
-        else if (root->left == nullptr && root->right)
-        {
+        else if (root->left == nullptr && root->right) {
             return false;
         }
-        else
-        {
+        else {
             while(!q.empty())
             {
                 root = q.front();
@@ -6093,6 +6089,8 @@ bool judgeTotal(TreeNode *root)
     return true;
 }
 ```
+
+#### [99. 恢复二叉搜索树](https://leetcode.cn/problems/recover-binary-search-tree/)
 
 #### [114. 二叉树展开为链表](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)  二叉树前序遍历非递归
 
