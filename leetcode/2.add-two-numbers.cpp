@@ -10,7 +10,7 @@
  * Likes:    9875
  * Dislikes: 2485
  * Total Accepted:    1.7M
- * Total Submissions: 4.8Mdd
+ * Total Submissions: 4.8M
  * Testcase Example:  '[2,4,3]\n[5,6,4]'
  *
  * You are given two non-empty linked lists representing two non-negative
