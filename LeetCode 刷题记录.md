@@ -4039,8 +4039,6 @@ int maximalSquare(vector<vector<char>>& matrix)
 
 ### 深度优先搜索DFS 
 
-#### 基于图的DFS
-
 和BFS一样一般需要一个set来记录访问过的节点，避免重复访问造成死循环; Word XXX 系列面试中非常常见，例如word break，word ladder，word pattern，word search。
 ##### [经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
 ```c++
@@ -4331,7 +4329,7 @@ int largestIsland(vector<vector<int>>& grid)
 
 
 
-#### 基于排列组合的DFS （回溯）
+### 回溯 （基于排列组合的DFS）
  其实与图类DFS方法一致，但是排列组合的特征更明显
 
 ##### [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
@@ -4962,7 +4960,7 @@ vector<string> wordBreak(string s, vector<string>& wordDict)
 
 
 
-#### 记忆化搜索
+### 记忆化搜索
 
 算是动态规划的一种，递归每次返回时同时记录下已访问过的节点特征，避免重复访问同一个节点，可以有效的把指数级别的DFS时间复杂度降为多项式级别; 注意这一类的DFS必须在最后有返回值，不可以用排列组合类型的DFS方法写; for循环的dp题目都可以用记忆化搜索的方式写，但是不是所有的记忆化搜索题目都可以用for循环的dp方式写。
 
