@@ -344,6 +344,31 @@ todo:
 
 code 二叉树序列化和反序列化 2:02:08
 
+
+
+### [p9 7.详解前缀树和贪心算法(实际是图算法)](https://www.bilibili.com/video/BV13g41157hK?p=9&vd_source=f740ff72b448a270a8990e020d263b59)
+
+
+
+### [p10_8. 暴力递归 (实际是前缀树和贪心) 0~1:50:03](https://www.bilibili.com/video/BV13g41157hK?p=10)
+
+
+
+### [p11_9. 补充视频（暴力递归 35:00:00~）](https://www.bilibili.com/video/BV13g41157hK?p=11)
+
+#### 题目二 汉诺塔问题 0:44:42~0:57:45
+
+```c++
+
+```
+
+#### 题目三 打印一个字符串的全部子序列 0:57:45~
+
+```
+```
+
+
+
 ## todo_list_2021_1227 小镇刷题家他又来了
 
 http://erdengk.top/archives/zuo-lao-shi-suan-fa-ke-xue-xi-jian-yi
@@ -352,7 +377,7 @@ https://blog.csdn.net/qq_41852212/article/details/120628784
 
 
 
-
+### 
 
 
 
