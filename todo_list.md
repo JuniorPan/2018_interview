@@ -379,6 +379,8 @@ code 二叉树序列化和反序列化 2:02:08
 
 #### 题目八 拿纸牌问题 1:20:24~1:31:16
 
+#### [486. 预测赢家](https://leetcode.cn/problems/predict-the-winner/)
+
 ```
 ```
 
@@ -391,17 +393,31 @@ code 二叉树序列化和反序列化 2:02:08
 
 #### 题目九 N皇后 2:04:28
 
+### [p_17 15.基础提升  大数据题目等](https://www.bilibili.com/video/BV13g41157hK?p=17)
+
+#### 题目一 机器人走动  0:0:0~0:59:54
+
+https://blog.csdn.net/weixin_43364551/article/details/115533919
+
+![image-20221020223126528](/Users/panqiang/Library/Application Support/typora-user-images/image-20221020223126528.png)
+
+#### 题目二  零钱兑换  0:59:54~
+
+#### [322. 零钱兑换](https://leetcode-cn.com/problems/coin-change/)
+
+![image-20221020231336254](/Users/panqiang/Library/Application Support/typora-user-images/image-20221020231336254.png)
+
+```
+零钱兑换
+```
+
+
+
 ## todo_list_2021_1227 小镇刷题家他又来了
 
 http://erdengk.top/archives/zuo-lao-shi-suan-fa-ke-xue-xi-jian-yi
 
 https://blog.csdn.net/qq_41852212/article/details/120628784
-
-
-
-### 
-
-
 
 左神课程 68小时版本对应第四期
 
