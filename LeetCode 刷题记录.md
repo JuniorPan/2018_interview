@@ -4424,19 +4424,20 @@ class Solution
 {
     void dfs(vector<string> &res, string &temp, int left, int right, int n)
     {
-        if (temp.size() == 2 *n)
+        if (temp.size() == 2 * n )
         {
             res.push_back(temp);
             return;
         }
-
+				// 在什么情况下添加左括号呢？很明显，最多能添加 n 个左括号
         if (left < n)
         {
             temp.push_back('(');
             dfs(res, temp, left + 1, right, n);
             temp.pop_back();
         }
-        if (right < left) /
+      	// 什么时候添加右括号呢？当左括号个数大于右括号的个数时添加右括号
+        if (right < left) 
         {
             temp.push_back(')');
             dfs(res, temp, left, right + 1, n);
