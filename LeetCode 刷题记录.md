@@ -4080,7 +4080,24 @@ void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, 
 ```
 ##### [22. 括号生成](https://leetcode.cn/problems/generate-parentheses/)
 
-```
+```c++
+void dfs(vector<string> &res, string temp, int left, int right, int n)
+  {
+      if (right > left || left > n || right > n)
+          return ;
+      if (left == n && right == n)
+          res.push_back(temp);
+
+      dfs(res, temp + '(' , left + 1, right, n);
+      dfs(res, temp + ')', left, right + 1, n);
+  }
+
+  vector<string> generateParenthesis(int n) {
+      vector<string> res;
+      string temp = "";
+      dfs(res, temp, 0, 0, n);
+      return res;
+  }
 ```
 
 ##### [37. 解数独](https://leetcode.cn/problems/sudoku-solver/)
