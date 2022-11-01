@@ -4045,6 +4045,17 @@ int maximalSquare(vector<vector<char>>& matrix)
 ### 深度优先搜索DFS 
 
 和BFS一样一般需要一个set来记录访问过的节点，避免重复访问造成死循环; Word XXX 系列面试中非常常见，例如word break，word ladder，word pattern，word search。
+
+- Leetcode 341	Flatten Nested List Iterator  (339 364)
+- Leetcode 394	Decode String
+- Leetcode 291	Word Pattern II (I为简单的Hashmap题)  收费
+- Leetcode 856	Score of Parentheses
+- Leetcode 1087 Brace Expansion
+- Leetcode 399	Evaluate Division
+- Leetcode 1274 Number of Ships in a Rectangle
+- Leetcode 1376 Time Needed to Inform All Employees
+- Leetcode 694	Number of Distinct Islands
+
 ##### [经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
 ```c++
 int dirs[8][2] = {1,1,1,0,1,-1,0,1,0,-1,-1,1,-1,0,-1,-1};
@@ -4067,6 +4078,17 @@ void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, 
 }
 
 ```
+##### [22. 括号生成](https://leetcode.cn/problems/generate-parentheses/)
+
+```
+```
+
+##### [37. 解数独](https://leetcode.cn/problems/sudoku-solver/)
+
+```
+
+```
+
 ##### [51. N 皇后](https://leetcode-cn.com/problems/n-queens/)
 
 ##### [52. N皇后 II](https://leetcode-cn.com/problems/n-queens-ii/)
@@ -4154,6 +4176,13 @@ public:
 };
 ```
 
+##### [93. 复原 IP 地址](https://leetcode.cn/problems/restore-ip-addresses/)
+
+```
+```
+
+##### [126. 单词接龙 II](https://leetcode.cn/problems/word-ladder-ii/)
+
 ##### [130. 被围绕的区域](https://leetcode-cn.com/problems/surrounded-regions/)
 
 ```c++
@@ -4198,6 +4227,13 @@ public:
 };
 ```
 
+##### [131. 分割回文串](https://leetcode.cn/problems/palindrome-partitioning/)
+
+```
+```
+
+
+
 ##### [200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
 
 ```c++
@@ -4237,6 +4273,8 @@ public:
     }
 };
 ```
+
+##### [212. 单词搜索 II](https://leetcode.cn/problems/word-search-ii/)
 
 ##### [301. 删除无效的括号](https://leetcode-cn.com/problems/remove-invalid-parentheses/)
 
@@ -4384,7 +4422,7 @@ public:
 ```c++
 class Solution 
 {
-    void dfs(vector<string> & res, string &temp, int left, int right, int n)
+    void dfs(vector<string> &res, string &temp, int left, int right, int n)
     {
         if (temp.size() == 2 *n)
         {
@@ -4398,7 +4436,7 @@ class Solution
             dfs(res, temp, left + 1, right, n);
             temp.pop_back();
         }
-        if (right < left)
+        if (right < left) /
         {
             temp.push_back(')');
             dfs(res, temp, left, right + 1, n);

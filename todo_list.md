@@ -413,6 +413,14 @@ https://blog.csdn.net/weixin_43364551/article/details/115533919
 
 
 
+### [p_18 16.基础提升  暴力递归（上）等](https://www.bilibili.com/video/BV13g41157hK?p=18&vd_source=f740ff72b448a270a8990e020d263b59)
+
+#### 题目一 拿纸牌问题 0:0:~0:0:0
+
+
+
+
+
 ## todo_list_2021_1227 小镇刷题家他又来了
 
 http://erdengk.top/archives/zuo-lao-shi-suan-fa-ke-xue-xi-jian-yi
