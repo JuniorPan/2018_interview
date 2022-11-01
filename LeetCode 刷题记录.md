@@ -4082,22 +4082,23 @@ void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, 
 
 ```c++
 void dfs(vector<string> &res, string temp, int left, int right, int n)
-  {
-      if (right > left || left > n || right > n)
-          return ;
-      if (left == n && right == n)
-          res.push_back(temp);
+{
+    // 当 right > left 即右括号比左括号多的时候，后续无论插入左括号还是右括号都不是合法的
+  	if (right > left || left > n || right > n)
+        return ;
+    if (left == n && right == n)
+        res.push_back(temp);
 
-      dfs(res, temp + '(' , left + 1, right, n);
-      dfs(res, temp + ')', left, right + 1, n);
-  }
+    dfs(res, temp + '(' , left + 1, right, n);
+    dfs(res, temp + ')', left, right + 1, n);
+}
 
-  vector<string> generateParenthesis(int n) {
-      vector<string> res;
-      string temp = "";
-      dfs(res, temp, 0, 0, n);
-      return res;
-  }
+vector<string> generateParenthesis(int n) {
+    vector<string> res;
+    string temp = "";
+    dfs(res, temp, 0, 0, n);
+    return res;
+}
 ```
 
 ##### [37. 解数独](https://leetcode.cn/problems/sudoku-solver/)
@@ -4394,82 +4395,61 @@ int largestIsland(vector<vector<int>>& grid)
 
 ##### [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
 
-![1573829897(1).jpg](https://pic.leetcode-cn.com/02b0ec926e3da5f12a0a118293b8ac10dc236741ccb04414ded44a30f7fc70af-1573829897(1).jpg)
+<img src="https://pic.leetcode-cn.com/1631605288-yybwua-file_1631605288254" alt="17. 电话号码的字母组合" style="zoom:67%;" />
 
 ```c++
 //Input: digits = "23"
 //Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
-class Solution 
+vector<string> dict = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+void dfs(vector<string> &res, string temp, string digits, int index)
 {
-public:
-    vector<string> dict = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-    void dfs(string &digits, int start, string &temp, vector<string> &res)
+    if (index == digits.size())
     {
-        if (start == digits.size() && temp.size() == digits.size())
-        {
-            res.push_back(temp);
-            return;
-        }
-        for(int i = start; i < digits.size(); i++)
-        {
-            int digit = digits[i] - '0' - 2;
-            
-            for(int j = 0; j < dict[digit].size(); j++)
-            {
-                temp.push_back(dict[digit][j]);
-                dfs(digits, i+1, temp, res);
-                temp.pop_back();
-            }
-        }
+        res.push_back(temp);
+        return ;
     }
-public:
-    vector<string> letterCombinations(string digits) {
-        string temp;
-        vector<string> res;
-        if (digits.empty())
-            return res;
-        dfs(digits, 0, temp, res);
+    int digit = digits[index] - '0' - 2;
+    string letters = dict[digit];
+    for(int i = 0; i < letters.size(); i++)
+    {
+        temp.push_back(letters[i]);
+        dfs(res, temp, digits, index+1);
+        temp.pop_back();
+    }
+}
+vector<string> letterCombinations(string digits) {
+    vector<string> res;
+    string  temp;
+    if (digits.empty())
         return res;
-    }
-};
+    dfs(res, temp, digits, 0);
+    return res;
+}
 ```
 
-##### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/) #todo: 20211202 不会
+##### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/)
+
+<img src="https://pic.leetcode-cn.com/a9944722e9307ade27ab98e36e3f29e4f5acd242007ae46c50e01ead122b9d45-image.png" alt="image.png" style="zoom:67%;" />
 
 ```c++
-class Solution 
+void dfs(vector<string> &res, string temp, int left, int right, int n)
 {
-    void dfs(vector<string> &res, string &temp, int left, int right, int n)
-    {
-        if (temp.size() == 2 * n )
-        {
-            res.push_back(temp);
-            return;
-        }
-				// 在什么情况下添加左括号呢？很明显，最多能添加 n 个左括号
-        if (left < n)
-        {
-            temp.push_back('(');
-            dfs(res, temp, left + 1, right, n);
-            temp.pop_back();
-        }
-      	// 什么时候添加右括号呢？当左括号个数大于右括号的个数时添加右括号
-        if (right < left) 
-        {
-            temp.push_back(')');
-            dfs(res, temp, left, right + 1, n);
-            temp.pop_back();
-        }
-    } 
+    // 当 right > left 即右括号比左括号多的时候，后续无论插入左括号还是右括号都不是合法的
+  	if (right > left || left > n || right > n)
+        return ;
+    if (left == n && right == n)
+        res.push_back(temp);
 
-public:
-    vector<string> generateParenthesis(int n) {
-        vector<string> res;
-        string temp;
-        dfs(res, temp, 0, 0, n);
-        return res;
-    }
-};
+    dfs(res, temp + '(' , left + 1, right, n);
+    dfs(res, temp + ')', left, right + 1, n);
+}
+
+vector<string> generateParenthesis(int n) {
+    vector<string> res;
+    string temp = "";
+    dfs(res, temp, 0, 0, n);
+    return res;
+}
 ```
 
 ##### [39. 组合总和](https://leetcode-cn.com/problems/combination-sum/)
