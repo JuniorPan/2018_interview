@@ -4492,7 +4492,7 @@ public:
 
 ```
 
-##### [40. 组合总和 II](https://leetcode-cn.com/problems/combination-sum-ii/)todo 去重策略不是很懂
+##### [40. 组合总和 II](https://leetcode-cn.com/problems/combination-sum-ii/)
 
 <img src="https://pic.leetcode-cn.com/1599718525-iXEiiy-image.png" alt="image.png" style="zoom: 50%;" />
 
@@ -4529,6 +4529,13 @@ public:
     }
 };
 ```
+
+##### [216. 组合总和 III](https://leetcode.cn/problems/combination-sum-iii/)
+
+```
+```
+
+
 
 ##### [31. 下一个排列](https://leetcode-cn.com/problems/next-permutation/)
 
@@ -4659,7 +4666,7 @@ void dfs(vector<vector<int>> &res, vector<int> path, int index, int n, int k)
         res.push_back(path);
         return;
     }
-
+		// todo: 这个地方的n 还是有优化空间的
     for(int i = index; i <= n; i++)
     {
         path.push_back(i);
