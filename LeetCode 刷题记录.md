@@ -4649,6 +4649,8 @@ public:
 
 ##### [77. 组合](https://leetcode-cn.com/problems/combinations/)
 
+<img src="/Users/panqiang/Desktop/图片来自 「代码随想录」回溯算法精讲（v2.0），第 10 页.png" alt="图片来自 「代码随想录」回溯算法精讲（v2.0），第 10 页" style="zoom:67%;" />
+
 ```c++
 class Solution 
 {
