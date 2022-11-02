@@ -4652,31 +4652,27 @@ public:
 <img src="/Users/panqiang/Desktop/图片来自 「代码随想录」回溯算法精讲（v2.0），第 10 页.png" alt="图片来自 「代码随想录」回溯算法精讲（v2.0），第 10 页" style="zoom:67%;" />
 
 ```c++
-class Solution 
+void dfs(vector<vector<int>> &res, vector<int> path, int index, int n, int k)
 {
-private:    
-    void dfs(vector<vector<int>> &res,vector<int>& nums, int n, int k, int first)
+    if (path.size() == k)
     {
-        if (nums.size() == k)
-        {
-            res.push_back(nums);
-            return;
-        }      
-        for (int i = first; i <= n; i ++)
-        {
-            nums.push_back(i);
-            dfs(res, nums, n, k, i+1);
-            nums.pop_back();
-        }
+        res.push_back(path);
+        return;
     }
-public:
-    vector<vector<int>> combine(int n, int k) {
-        vector<vector<int>> res;
-        vector<int> nums;
-        dfs(res, nums, n, k, 1);
-        return res;
+
+    for(int i = index; i <= n; i++)
+    {
+        path.push_back(i);
+        dfs(res, path, i+1, n, k);
+        path.pop_back();
     }
-};
+}
+vector<vector<int>> combine(int n, int k) {
+    vector<vector<int>> res;
+    vector<int> path;
+    dfs(res, path, 1, n, k);
+    return res;
+}
 ```
 
 ##### [78. 子集](https://leetcode-cn.com/problems/subsets/) todo: 20211202 还不会
