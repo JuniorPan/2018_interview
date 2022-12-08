@@ -5000,6 +5000,10 @@ vector<string> wordBreak(string s, vector<string>& wordDict)
 }
 ```
 
+##### [332. 重新安排行程](https://leetcode.cn/problems/reconstruct-itinerary/)
+
+##### [491. 递增子序列](https://leetcode.cn/problems/increasing-subsequences/)
+
 ##### [526. 优美的排列](https://leetcode-cn.com/problems/beautiful-arrangement/)
 
 ##### [698. 划分为k个相等的子集](https://leetcode-cn.com/problems/partition-to-k-equal-sum-subsets/)
@@ -6070,31 +6074,27 @@ vector<int> postorderTraversal(TreeNode* root)
 }
 ```
 
-
-
 #### [98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/) 
 
 ```c++
-bool isValidBST(TreeNode* root) 
-{
+bool isValidBST(TreeNode* root) {
     if (root == nullptr)
         return true;
     stack<TreeNode *> s;
-    TreeNode *cur = root;
     TreeNode *pre = nullptr;
-    while(!s.empty() || cur)
-    {
-        while(cur)
-        {
+    TreeNode *cur = root;
+
+    while(!s.empty() || cur) {
+        if (cur) {
             s.push(cur);
-            cur =cur->left;
+            cur = cur->left;
+        } else {
+            cur = s.top();s.pop();
+            if (pre && pre->val >= cur->val)
+                return false;
+            pre = cur;
+            cur = cur->right;
         }
-        cur = s.top();
-        s.pop();
-        if (pre != nullptr && pre->val >= cur->val)
-            return false;
-        pre = cur;
-        cur = cur->right;
     }
     return true;
 }
