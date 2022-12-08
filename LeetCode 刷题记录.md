@@ -6100,7 +6100,7 @@ bool isValidBST(TreeNode* root) {
 }
 ```
 
-#### 98_2 判断是否完全二叉树
+#### 98_2 判断是否完全二叉树 #todo
 
 ```c++
 bool judgeTotal(TreeNode *root)
@@ -6135,6 +6135,39 @@ bool judgeTotal(TreeNode *root)
 ```
 
 #### [99. 恢复二叉搜索树](https://leetcode.cn/problems/recover-binary-search-tree/)
+
+```c++
+void recoverTree(TreeNode* root) {
+    if (root == nullptr)
+        return;
+
+    stack<TreeNode *> s;
+    TreeNode *pre = nullptr;
+    TreeNode *cur = root;
+    TreeNode *first = nullptr;
+    TreeNode *second = nullptr;
+    while(!s.empty() || cur) {
+        if (cur) {
+            s.push(cur);
+            cur = cur->left;
+        } else {
+            cur = s.top();s.pop();
+            if (pre && pre->val> cur->val)
+                {
+                    if (!first) first = pre;
+                        second = cur;
+                }
+            pre = cur;
+            cur = cur->right;
+        }
+    }
+    swap(first->val, second->val);
+
+
+}
+```
+
+
 
 #### [114. 二叉树展开为链表](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)  二叉树前序遍历非递归
 
