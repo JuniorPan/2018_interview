@@ -526,6 +526,14 @@ string findLongestWord(string s, vector<string> &d)
 
 **单调栈的两种写法**   [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
 
+```
+1.单调栈里的元素具有单调性
+2.元素加入栈前，会在栈顶端把破坏栈单调性的元素都删除
+3.使用单调栈可以找到元素向左遍历第一个比他小的元素，也可以找到元素向左遍历第一个比他大的元素。
+```
+
+
+
 ```c++
 // 写法一
 int trap(vector<int>& height) 
