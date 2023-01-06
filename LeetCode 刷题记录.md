@@ -589,7 +589,10 @@ int largestRectangleArea(vector<int> height)
 
 #### [42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/)
 
+<img src="https://img-blog.csdnimg.cn/20210223092629946.png" alt="42.接雨水2" style="zoom: 67%;" />
+
 ```c++
+//首先单调栈是按照行方向来计算雨水
 int trap_1(vector<int> &height)
 {
     if (height.empty())
@@ -774,7 +777,6 @@ int findPeakElement(vector<int>& nums)
         {
             monoStack.push(i);
         }
-
     }
 
     if (monoStack.size() == nums.size())
@@ -897,10 +899,6 @@ int maxChunksToSorted(vector<int>& arr) {
   return st.size();
 }
 ```
-
-
-
-
 
 ### 二分查找  (11)
 
