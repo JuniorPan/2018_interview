@@ -867,6 +867,16 @@ string removeKdigits(string num, int k) {
 
 
 
+#### [496. 下一个更大元素 I](https://leetcode.cn/problems/next-greater-element-i/)
+
+```c++
+```
+
+#### [503. 下一个更大元素 II](https://leetcode.cn/problems/next-greater-element-ii/)
+
+```c++
+```
+
 
 
 #### [768. 最多能完成排序的块 II](https://leetcode-cn.com/problems/max-chunks-to-make-sorted-ii/)
