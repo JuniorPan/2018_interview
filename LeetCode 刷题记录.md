@@ -900,7 +900,7 @@ int maxChunksToSorted(vector<int>& arr) {
 }
 ```
 
-### 二分查找  (11)
+### 二分查找  (12)
 
 https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/solution/yi-wen-dai-ni-gao-ding-er-fen-cha-zhao-j-ymwl/
 
@@ -927,7 +927,7 @@ int searchInsert(vector<int>& nums, int target) {
 }
 ```
 
-#### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+#### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)  重点看下边界问题
 
 ```c++
 class Solution
@@ -941,23 +941,6 @@ public:
         {
             int mid = left + (right - left) / 2;
             if (target <= nums[mid])
-                right = mid;
-            else
-            {
-                left = mid + 1;
-            }
-        }
-        return right;
-    }
-
-    int upper_bound(vector<int> &nums, int target)
-    {
-        int left = 0;
-        int right = nums.size();
-        while (left < right)
-        {
-            int mid = left + (right - left) / 2;
-            if (target < nums[mid])
                 right = mid;
             else
             {

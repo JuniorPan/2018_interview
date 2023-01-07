@@ -4,8 +4,6 @@
 #include <stack>
 using namespace std;
 
-
-
 int trap_1(vector<int> &height)
     {
         if (height.empty())
