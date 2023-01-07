@@ -3112,7 +3112,6 @@ bool isMatch(string s, string p)
 {
     int m = s.length();
     int n = p.length();
-    
     // dp[i][j] 表示 s[0...i-1]和p[0...j-1] 匹配
     vector<vector<bool>> dp(m + 1, vector<bool>(n + 1, false));
     
@@ -3142,8 +3141,6 @@ bool isMatch(string s, string p)
 ```
 
 ##### [44. 通配符匹配](https://leetcode-cn.com/problems/wildcard-matching/)
-
-难度困难662
 
 ```c++
 bool isMatch(string s, string p)
@@ -3267,14 +3264,13 @@ int numDistinct(string s, string t)
     //     dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
     //     2.1 用s[i-1]     dp[i-1][j-1] 则s[:i-1]中匹配t[:j-2]子序列个数 ==s[:i-1]中匹配t[:j-1]子序列个数
     //     2.2 不用s[i-1]   dp[i-1][j]   则s[:i-2]中匹配t[:j-1]子序列个数  ==s[:i-1]中匹配t[:j]子序列个数
-
+  
+  	// dp[i][j]：以i-1为结尾的s子序列中出现以j-1为结尾的t的个数为dp[i][j]
     vector<vector<long long>> dp(m + 1, vector<long long>(n + 1, 0));
-
     for (int j = 0; j <= m; j++)
     {
         dp[j][0] = 1;
     }
-
     for (int i = 1; i <= m; i++)
     {
         for (int j = 1; j <= n; j++)
@@ -3289,6 +3285,53 @@ int numDistinct(string s, string t)
 }
 ```
 
+##### [392. 判断子序列](https://leetcode.cn/problems/is-subsequence/)
+
+<img src="https://img-blog.csdnimg.cn/2021030317364166.jpg" alt="392.判断子序列2" style="zoom:50%;" />
+
+```c++
+bool isSubsequence(string s, string t) {
+    // dp[i][j] 表示以下标i-1为结尾的字符串s，和以下标j-1为结尾的字符串t，相同子序列的长度为dp[i][j]
+    vector<vector<int>> dp(s.size() + 1, vector<int>(t.size() + 1, 0));
+    for (int i = 1; i <= s.size(); i++) {
+        for (int j = 1; j <= t.size(); j++) {
+            if (s[i - 1] == t[j - 1])  // 因为找到了一个相同的字符，相同子序列长度自然要在dp[i-1][j-1]的基础上加1
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            else  // 此时相当于t要删除元素，t如果把当前元素t[j - 1]删除，那么dp[i][j] 的数值就是 看s[i - 1]与 t[j - 2]的比较结果了
+                dp[i][j] = dp[i][j - 1];
+        }
+    }
+    if (dp[s.size()][t.size()] == s.size()) return true;
+    return false;
+  }
+```
+
+##### [583. 两个字符串的删除操作](https://leetcode.cn/problems/delete-operation-for-two-strings/)
+
+```c++
+int minDistance(string word1, string word2) {
+    // dp[i][j]：以i-1为结尾的字符串word1，和以j-1位结尾的字符串word2，想要达到相等，所需要删除元素的最少次数
+    vector<vector<int>> dp(word1.size() + 1, vector<int>(word2.size() + 1));
+
+    // dp[i][0]：word2为空字符串，以i-1为结尾的字符串word1要删除多少个元素，才能和word2相同呢，很明显dp[i][0] = i。
+    for (int i = 0; i <= word1.size(); i++) dp[i][0] = i;
+    for (int j = 0; j <= word2.size(); j++) dp[0][j] = j;
+    for (int i = 1; i <= word1.size(); i++) {
+        for (int j = 1; j <= word2.size(); j++) {
+            if (word1[i - 1] == word2[j - 1]) { //  当word1[i - 1] 与 word2[j - 1]相同的时候，dp[i][j] = dp[i - 1][j - 1];
+                dp[i][j] = dp[i - 1][j - 1]; 
+            } else {// 当word1[i - 1] 与 word2[j - 1]不相同的时候，有三种情况： 情况一：删word1[i - 1]，最少操作次数为dp[i - 1][j] + 1,
+                    // 情况二：删word2[j - 1]，最少操作次数为dp[i][j - 1] + 1
+                    // 情况三：同时删word1[i - 1]和word2[j - 1]，操作的最少次数为dp[i - 1][j - 1] + 2
+                    //  dp[i][j - 1] + 1 = dp[i - 1][j - 1] + 2，所以递推公式可简化为：dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1);
+                dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1);
+            }
+        }
+    }
+    return dp[word1.size()][word2.size()];
+}
+```
+
 ##### [712. 两个字符串的最小ASCII删除和](https://leetcode-cn.com/problems/minimum-ascii-delete-sum-for-two-strings/)
 
 ```c++
@@ -3299,17 +3342,14 @@ int minimumDeleteSum(string s1, string s2)
 
     //dp[i][j]表示s1[0...i-1]和s2[0...j-1]需要的最小cost
     vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
-
     for(int i = 1; i <= m; i++)
     {
         dp[i][0] = dp[i-1][0] + s1[i-1];
     }
-
     for(int j = 1; j <= n; j++)
     {
         dp[0][j] = dp[0][j-1] + s2[j-1];
     }
-
     for(int i = 1; i <= m; i++)
     {
         for(int j = 1; j <= n; j++)
@@ -3326,30 +3366,75 @@ int minimumDeleteSum(string s1, string s2)
 }
 ```
 
-##### [1143. 最长公共子序列](https://leetcode-cn.com/problems/longest-common-subsequence/)
+##### [718. 最长重复子数组](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/) todo 滚动数组
 
+```c++
+// 二维数组
+int findLength_1(vector<int>& nums1, vector<int>& nums2) {
+    // dp[i][j] 表示 nums1[0...i-1] 和nums2[0...j-1]上的最长重复子数组长度
+    vector<vector<int>> dp(nums1.size() + 1, vector<int>(nums2.size() + 1 , 0));
+    int res = 0;
+    for(int i = 1; i <= nums1.size(); i++)
+    {
+        for(int j = 1; j <= nums2.size(); j++)
+        {
+            if (nums1[i-1] == nums2[j-1])
+                dp[i][j] = dp[i-1][j-1] + 1;
+            res = max(dp[i][j], res);
+        }
+    }
+    return res;
+}
+// 利用滚动数组优化成一维
+int findLength(vector<int>& nums1, vector<int>& nums2) {
+    // dp[i][j] 表示 nums1[0...i-1] 和nums2[0...j-1]上的最长重复子数组长度
+    vector<int> dp(nums2.size() + 1,  0);
+    int res = 0;
+    for(int i = 1; i <= nums1.size(); i++)
+    {
+        for (int j = nums2.size(); j > 0; j--) {
+            if (nums1[i - 1] == nums2[j - 1]) {
+                dp[j] = dp[j - 1] + 1;
+            } else dp[j] = 0; // 注意这里不相等的时候要有赋0的操作
+            res = max(res,dp[j]);
+        }
+    }
+    return res;
+}
 ```
+
+##### [1035. 不相交的线](https://leetcode.cn/problems/uncrossed-lines/)
+
+```c++
+// 直线不能相交，这就是说明在字符串A中 找到一个与字符串B相同的子序列，且这个子序列不能改变相对顺序，只要相对顺序不改变，链接相同数字的直线就不会相交
+int maxUncrossedLines(vector<int>& nums1, vector<int>& nums2) {
+  vector<vector<int>> dp(nums1.size() + 1, vector<int>(nums2.size() + 1, 0));
+  for (int i = 1; i <= nums1.size(); i++) {
+      for (int j = 1; j <= nums2.size(); j++) {
+          if (nums1[i - 1] == nums2[j - 1]) {
+              dp[i][j] = dp[i - 1][j - 1] + 1;
+          } else {
+              dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+          }
+      }
+  }
+  return dp[nums1.size()][nums2.size()];
+}
+```
+
+##### [1143. 最长公共子序列](https://leetcode-cn.com/problems/longest-common-subsequence/) todo 滚动数组
+
+```c++
 int longestCommonSubsequence(string word1, string word2)
 {
     int m = word1.size();
     int n = word2.size();
-
     if (m == 0 && n == 0)
         return 0;
-
     // dp[i][j] 表示word1[0...i-1]和word2[0...j-1]上的最长公共子序列长度
     // 这里dp数组初始化长度为m+1,n+1,为了初始化方便考虑第0行和第0列
     vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
-    for (int j = 0; j <= n; j++)
-    {
-        dp[0][j] = 0;
-    }
-    for (int i = 0; i <= m; i++)
-    {
-        dp[i][0] = 0;
-    }
-
-    for (int i = 1; i <= m; i++) // 循环就得下标1开始
+    for (int i = 1; i <= m; i++)
     {
         for (int j = 1; j <= n; j++)
         {
