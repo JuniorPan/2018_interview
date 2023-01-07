@@ -962,7 +962,7 @@ public:
 };
 ```
 
-#### [50. Pow(x, n)](https://leetcode-cn.com/problems/powx-n/)  #todo
+#### [50. Pow(x, n)](https://leetcode-cn.com/problems/powx-n/) todo
 
 ```c++
 double myPow(double x, int n) {
