@@ -1251,7 +1251,7 @@ int find(vector<int>& nums, int target) {
 }Kth Smallest Element in a Sorted Matrix](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
 ```
 
-### 排序 (4)
+### 排序 (11)
 
 ##### [912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
 
