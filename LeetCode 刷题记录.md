@@ -1325,9 +1325,8 @@ void merge_sort(vector<int> &nums, int left, int right)
 #### 堆排序模板
 
 ```
+
 ```
-
-
 
 #### [4. 寻找两个正序数组的中位数](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)
 
@@ -1363,8 +1362,6 @@ void sortColors(vector<int>& nums)
     }
 }
 ```
-
-#### [148. 排序链表](https://leetcode-cn.com/problems/sort-list/)
 
 #### [179. 最大数](https://leetcode-cn.com/problems/largest-number/)
 
@@ -1777,23 +1774,27 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
 }
 ```
 
-##### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)
+##### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/) todo
 
 ```c++
-ListNode *swapPairs(ListNode *head)
-{
-    ListNode *fakeHead = new ListNode(-1), *pre = fakeHead;
-    fakeHead->next = head;
-    while (pre->next && pre->next->next)
-    {
-        // 挨个摘下节点 然后使用头插法
-        ListNode *t = pre->next->next;
-        pre->next->next = t->next;
-        t->next = pre->next;
-        pre->next = t;
-        pre = t->next;
-    }
-    return fakeHead->next;
+ListNode* swapPairs(ListNode* head) {
+  if (head == nullptr)
+      return head;
+
+  ListNode *fake_head = new ListNode(-1);
+  ListNode *cur = fake_head;
+  fake_head->next = head;
+
+  while(cur->next && cur->next->next)
+  {
+      // 挨个摘下节点 然后使用头插法
+      ListNode *temp = cur->next->next;
+      cur->next->next = temp->next;
+      temp->next = cur->next;
+      cur->next = temp;
+      cur = temp->next;
+  }
+  return fake_head->next;
 }
 ```
 
@@ -1855,8 +1856,6 @@ void deleteNode(ListNode* node) {
     delete temp;
 }
 ```
-
-
 
 ##### [138. 复制带随机指针的链表](https://leetcode-cn.com/problems/copy-list-with-random-pointer/) todo 
 
@@ -2520,7 +2519,7 @@ ListNode* reverseList(ListNode* head)
 }
 ```
 
-##### [328. 奇偶链表](https://leetcode-cn.com/problems/odd-even-linked-list/)
+##### [328. 奇偶链表](https://leetcode-cn.com/problems/odd-even-linked-list/) todo
 
 ```c++
 class Solution
