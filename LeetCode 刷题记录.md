@@ -1730,25 +1730,25 @@ https://www.nowcoder.com/practice/71cef9f8b5564579bf7ed93fbe0b2024?tpId=117&tqId
 ```c++
 ListNode* deleteDuplicates(ListNode* head)
 {
-        // write code here
-        if (!head || !head->next)
-            return head;
-        ListNode *dummy = new ListNode(-1), *pre = dummy;
-        dummy->next = head;
-        while (pre->next)
+    // write code here
+    if (!head || !head->next)
+        return head;
+    ListNode *dummy = new ListNode(-1), *pre = dummy;
+    dummy->next = head;
+    while (pre->next)
+    {
+        ListNode *cur = pre->next;
+        while (cur->next && cur->next->val == cur->val)
         {
-            ListNode *cur = pre->next;
-            while (cur->next && cur->next->val == cur->val)
-            {
-                cur = cur->next;
-            }
-            if (cur != pre->next)
-                pre->next = cur->next;
-            else
-                pre = pre->next;
+            cur = cur->next;
         }
-        return dummy->next;
+        if (cur != pre->next)
+            pre->next = cur->next;
+        else
+            pre = pre->next;
     }
+    return dummy->next;
+}
 ```
 
 #### 普通链表
