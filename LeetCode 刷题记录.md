@@ -522,7 +522,7 @@ string findLongestWord(string s, vector<string> &d)
 
 
 
-### 单调栈系列问题 (8)
+### 单调栈系列问题 (10)
 
 **单调栈的两种写法**   [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
 
@@ -1307,7 +1307,7 @@ vector<int> sortArray(vector<int>& arr) {
 
 #### 归并排序模板
 
-​	![meger_sort.png](https://pic.leetcode-cn.com/1651123691-dEdJgZ-meger_sort.png)
+<img src="/Users/panqiang/Downloads/1651123691-dEdJgZ-meger_sort.png" alt="1651123691-dEdJgZ-meger_sort" style="zoom: 25%;" />
 
 ```c++
 void merge(vector<int> &nums, int left, int mid, int right)
