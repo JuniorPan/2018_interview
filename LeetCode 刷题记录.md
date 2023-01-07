@@ -486,7 +486,7 @@ string findLongestWord(string s, vector<string> &d)
 }
 ```
 
-### **双指针（2 Pointer）：**
+#### **双指针（2 Pointer）：**
 
 - 基础知识：常见双指针算法分为三类，同向（即两个指针都相同一个方向移动），背向（两个指针从相同或者相邻的位置出发，背向移动直到其中一根指针到达边界为止），相向（两个指针从两边出发一起向中间移动直到两个指针相遇）
 
@@ -1253,11 +1253,10 @@ int find(vector<int>& nums, int target) {
 
 ### 排序 (11)
 
-##### [912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
-
 #### 快排模板
 
 ```c++
+[912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
 int partition(vector<int> &nums, int left, int right)
 {
     int small = left; // small 指向小于区域的下一个元素
@@ -1783,18 +1782,18 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
 ```c++
 ListNode *swapPairs(ListNode *head)
 {
-   ListNode *fakeHead = new ListNode(-1), *pre = fakeHead;
-      fakeHead->next = head;
-      while (pre->next && pre->next->next)
-      {
-          // 挨个摘下节点 然后使用头插法
-          ListNode *t = pre->next->next;
-          pre->next->next = t->next;
-          t->next = pre->next;
-          pre->next = t;
-          pre = t->next;
-      }
-      return fakeHead->next;
+    ListNode *fakeHead = new ListNode(-1), *pre = fakeHead;
+    fakeHead->next = head;
+    while (pre->next && pre->next->next)
+    {
+        // 挨个摘下节点 然后使用头插法
+        ListNode *t = pre->next->next;
+        pre->next->next = t->next;
+        t->next = pre->next;
+        pre->next = t;
+        pre = t->next;
+    }
+    return fakeHead->next;
 }
 ```
 
@@ -1841,7 +1840,6 @@ ListNode* deleteDuplicates(ListNode* head) {
         {
             p = p->next;
         }
-
     }
     return head; 
 }
@@ -1867,7 +1865,6 @@ Node* copyRandomList(Node* head)
 {
     if (head == nullptr)
         return head;
-
     Node *res = new Node(head->val, nullptr, nullptr); 
     Node *node = res;
     Node *cur = head->next;
@@ -1894,8 +1891,6 @@ Node* copyRandomList(Node* head)
 }
 ```
 
-
-
 #### K路归并
 
 ##### [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
@@ -1909,7 +1904,7 @@ ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
     while(list1 && list2){
         if (list1->val < list2->val) {      
             cur->next = list1;
-             list1 = list1->next;         
+            list1 = list1->next;         
         }
         else { 
             cur->next = list2;
@@ -1978,7 +1973,6 @@ public:
         auto cmp = [](ListNode*& a, ListNode*& b) {
             return a->val > b->val;
         };
-        
         priority_queue<ListNode*, vector<ListNode*>, decltype(cmp) > q(cmp);
         for (auto node : lists) {
             if (node) q.push(node);
