@@ -1305,13 +1305,11 @@ void merge(vector<int> &nums, int left, int mid, int right)
         temp.push_back(nums[i++]);
     while(j <= right)
        temp.push_back(nums[j++]);
-
     for(int i = 0; i < temp.size(); i++)
     {
         nums[i+left] = temp[i];
     }
 }
-
 void merge_sort(vector<int> &nums, int left, int right)
 {
     if (left == right)
@@ -1338,7 +1336,7 @@ void merge_sort(vector<int> &nums, int left, int right)
 
 #### [56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/)
 
-#### [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/)
+#### [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/)  TOOD
 
 ```c++
 void sortColors(vector<int>& nums) 
@@ -1349,7 +1347,7 @@ void sortColors(vector<int>& nums)
     int small = 0; // 小于区域的下一个元素位置
     int large = nums.size() - 1; // 大于区域的下一个位置
     int index = 0;
-    while(index <= large)
+    while(index <= large) // TODO：这个地方需要注意一下
     {
         if (nums[index] < 1)
         {
@@ -1366,8 +1364,6 @@ void sortColors(vector<int>& nums)
     }
 }
 ```
-
-
 
 #### [148. 排序链表](https://leetcode-cn.com/problems/sort-list/)
 
