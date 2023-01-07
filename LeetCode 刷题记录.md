@@ -2059,9 +2059,9 @@ ListNode *rotateRight(ListNode *head, int k)
     ListNode *fast = head, *slow = head;
     for (int i = 0; i < k; ++i)
     {
-        if (fast) fast = fast->next;
+        fast = fast->next;
     }
-    if (!fast) return head;
+    if (fast == nullptr) return head;
     while (fast->next)
     {
         fast = fast->next;
@@ -2284,29 +2284,29 @@ public:
         }
         return pre;
     }
-    bool isPail(ListNode* head) {
-        // write code here
-        
-        if (head->next == nullptr || head->next->next == nullptr)
-            return head;
-        ListNode *fast = head;
+    bool isPalindrome(ListNode* head) {
+        if (head == nullptr || head->next == nullptr )
+            return true;
+        if (head->next->next == nullptr)
+            return head->val == head->next->val;
         ListNode *slow = head;
-        // 找到中间结点 slow 中间结点或者是中间结点的前一个
+        ListNode *fast = head;
+
         while(fast->next && fast->next->next)
         {
-            slow = slow->next;
             fast = fast->next->next;
-        }
-        
-        slow->next = reverse(slow->next);
-        
-        slow = slow->next;
-        while (slow != NULL)
-        {
-            if (head->val != slow->val)
-                return false;
-            head = head->next;
             slow = slow->next;
+        }
+        ListNode *mid = reverse(slow->next);
+        slow->next = nullptr;
+        while(mid && head)
+        {
+            if (mid->val != head->val)
+                return false;
+            else{
+                mid = mid->next;
+                head = head->next;
+            }
         }
         return true;
     }
@@ -2315,7 +2315,7 @@ public:
 
 #### 链表排序  
 
-##### [86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)  # todo?
+##### [86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)  # todo
 
 ```c++
  // 将所有小于给定值的节点取出组成一个新的链表，此时原链表中剩余的节点的值都大于或等于给定值，只要将原链表直接接在新链表后
@@ -2386,59 +2386,46 @@ ListNode *insertionSortList(ListNode *head)
 }
 ```
 
-##### [148. Sort List](https://leetcode.com/problems/sort-list/)  对链表使用归并的方式排序
+##### [148. 排序链表](https://leetcode.cn/problems/sort-list/)  对链表使用归并的方式排序
 
 ```c++
-// 合并两个有序链表
-ListNode *merge(ListNode *l1, ListNode *l2)
+ListNode* merge_list(ListNode *l1, ListNode *l2)
 {
-    ListNode *fakeHead = new ListNode(-1);
-    ListNode *p = fakeHead;
+    ListNode *fake_head = new ListNode(-1);
+    ListNode *cur = fake_head;
 
-    while (l1 != nullptr && l2 != nullptr)
+    while(l1 && l2)
     {
         if (l1->val < l2->val)
         {
-            p->next = l1;
+            cur->next = l1;
             l1 = l1->next;
         }
-        else
+        else 
         {
-            p->next = l2;
+            cur->next = l2;
             l2 = l2->next;
         }
-        p = p->next;
+        cur = cur->next;
     }
-    if (l1 != nullptr)
-    {
-        p->next = l1;
-    }
-    if (l2 != nullptr)
-    {
-        p->next = l2;
-    }
-
-    return fakeHead->next;
+    cur->next = l1 ? l1 : l2;
+    return fake_head->next;
 }
 
-//O(nlogn)对链表排序 归并和递归的方式
-ListNode *sortList(ListNode *head)
-{
+ListNode* sortList(ListNode* head) {
+
     if (head == nullptr || head->next == nullptr)
-            return head;
-	
-    // 统一用这种方式寻找中间节点
-    ListNode *fast = head, *slow = head;
+        return head;
+    ListNode *fast = head;
+    ListNode *slow = head;
     while(fast->next && fast->next->next)
     {
-        slow = slow->next;
         fast = fast->next->next;
+        slow = slow->next;
     }
-
     fast = slow->next;
     slow->next = nullptr;
-
-    return merge(sortList(head), sortList(fast));
+    return merge_list(sortList(head), sortList(fast));
 }
 ```
 
