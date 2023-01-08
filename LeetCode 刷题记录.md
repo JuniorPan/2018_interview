@@ -5410,287 +5410,6 @@ double knightProbability(int N, int K, int r, int c)
 
 多数情况下时间复杂度空间复杂度都是O（N+M），N为节点个数，M为边的个数
 
-#### 基于树的BFS
-
-不需要专门一个set来记录访问过的节点
-
-##### [判断一棵二叉树是否完全二叉树](https://www.nowcoder.com/practice/f31fc6d3caf24e7f8b4deb5cd9b5fa97?tpId=191&&tqId=35928&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking) #TODO
-
-```c++
-bool judgeTotal(TreeNode *root)
-{
-    if (root == nullptr)
-        return true;
-
-    queue<TreeNode *> q;
-    q.push(root);
-    while(!q.empty())
-    {
-        root = q.front();
-        q.pop();
-        if (root->left && root->right)
-        {
-            q.push(root->left);
-            q.push(root->right);
-        }
-        else if (root->left == nullptr && root->right)
-            return false;
-      	// 遍历最后一层的节点，如果出现不为空的情况，那么肯定不是完全二叉树
-        else if (root->left && root->right == nullptr)
-        {
-            while(!q.empty())
-            {
-                root = q.front();
-                q.pop();
-                if (root->left || root->right)
-                    return false;
-            }            
-        }
-    }
-    return true;
-}
-
-```
-
-##### [102. 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/)
-
-```c++
-vector<vector<int>> levelOrder(TreeNode *root)
-{
-    vector<vector<int>> ret;
-    if (root == NULL)
-        return ret;
-
-    queue<TreeNode *> q;
-    q.push(root);
-    while (!q.empty())
-    {
-        int size = q.size();
-        vector<int> level;
-        for (int i = 0; i < size; i++)
-        {
-            TreeNode *node = q.front();
-            level.push_back(node->val);
-            q.pop();
-            if (node->left)
-                q.push(node->left);
-            if (node->right)
-                q.push(node->right);
-        }
-        ret.push_back(level);
-    }
-    return ret;
-}
-```
-
-##### [103. 二叉树的锯齿形层序遍历](https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/)
-
-```c++
-//由于每层的结点数是知道的，就是队列的元素个数，所以可以直接初始化数组的大小,使用一个变量 leftToRight 来标记顺序，初始时是 true，当此变量为 true 的时候，每次加入数组的位置就是i本身，若变量为 false 了，则加入到 size-1-i 位置上，这样就直接相当于翻转了数组
-vector<vector<int>> zigzagLevelOrder(TreeNode *root)
-{
-    vector<vector<int>> res;
-    if (root == NULL)
-        return res;
-    queue<TreeNode *> q;
-    q.push(root);
-    bool leftToRight = true;
-    while (!q.empty())
-    {
-        int size = q.size();
-        vector<int> oneLevel(size); // 这个地方注意 要给定数组大小
-        for (int i = 0; i < size; ++i)
-        {
-            TreeNode *t = q.front();
-            q.pop();
-            int idx = leftToRight ? i : (size - 1 - i);
-            oneLevel[idx] = t->val;
-            if (t->left)
-                q.push(t->left);
-            if (t->right)
-                q.push(t->right);
-        }
-        leftToRight = !leftToRight;
-        res.push_back(oneLevel);
-    }
-    return res;
-}
-```
-
-##### [111. 二叉树的最小深度](https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/)
-
-```c++
-int minDepth(TreeNode *root)
-{
-    if (!root)
-        return 0;
-
-    queue<TreeNode *> q;
-    q.push(root);
-    int res = 1;
-    while (!q.empty())
-    {
-        int size = q.size();
-        for (int i = 0; i < size; i++)
-        {
-            root = q.front();
-            q.pop();
-            if (!root->left && !root->right)
-                return res;
-            if (root->left)
-                q.push(root->left);
-
-            if (root->right)
-                q.push(root->right);
-        }
-        res++;
-    }
-    return -1;
-}
-```
-
-##### [116. 填充每个节点的下一个右侧节点指针](https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node/)
-
-```c++
-Node *connect(Node *root)
-{
-    if (!root) return NULL;
-    queue<Node *> q;
-    q.push(root);
-    while (!q.empty())
-    {
-        int size = q.size();
-        for (int i = 0; i < size; ++i)
-        {
-            Node *t = q.front();
-            q.pop();
-            if (i < size - 1)
-                t->next = q.front();
-            if (t->left) q.push(t->left);
-            if (t->right) q.push(t->right);
-        }
-    }
-    return root;
-}
-```
-
-##### [199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
-
-```c++
-vector<int> rightSideView(TreeNode* root)
-{
-    vector<int> res;
-    if (!root)
-        return res;
-
-    queue<TreeNode *> q;
-    TreeNode *last = root;
-    TreeNode *nlast = nullptr;
-    q.push(root);
-    while(!q.empty())
-    {
-        root = q.front();
-        q.pop();
-
-        if (root->left)
-        {
-            q.push(root->left);
-            nlast = root->left;
-        }
-        if (root->right)
-        {
-            q.push(root->right);
-            nlast = root->right;
-        }
-
-        if (root == last)
-        {
-            res.push_back(root->val);
-            last = nlast;
-        }
-
-    }
-    return res;
-}
-```
-
-##### [513. 找树左下角的值](https://leetcode-cn.com/problems/find-bottom-left-tree-value/)
-
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
-class Solution {
-    
-public:
-    int findBottomLeftValue(TreeNode* root)
-    {
-        return levelOrder(root, depth(root));
-    }
-private:
-   
-    int depth(TreeNode *root)
-    {
-        if (root == NULL)
-            return 0;
-        int ldepth = depth(root->left);
-        int rdepth = depth(root->right);
-        return ldepth > rdepth ? ldepth + 1 : rdepth + 1;
-    }
-    
-    int levelOrder(TreeNode *root, int d)
-    {
-        queue<TreeNode *> q;
-        q.push(root);
-        int level = 0;
-        TreeNode *last = root;
-        TreeNode *nlast = nullptr;
-        int res;
-        while(!q.empty())
-        {
-            root = q.front();
-            q.pop();
-            
-            if (level == d-1)
-                return root->val;
-            
-            if (root->left)
-            {
-                q.push(root->left);
-                nlast = root->left;
-            }
-                
-            if (root->right)
-            {
-                q.push(root->right);
-                nlast = root->right;
-            }
-               
-            
-            if(root == last && !q.empty())
-            {
-                level ++;
-                last = nlast;
-            }
-        }
-        
-        return res;
-        
-    }
-};
-```
-
-##### [662. 二叉树最大宽度](https://leetcode.cn/problems/maximum-width-of-binary-tree/)
-
-##### Leetcode 297 Serialize and Deserialize Binary Tree （很好的BFS和双指针结合的题）
-
-##### Leetcode 314 Binary Tree Vertical Order Traversal
 
 #### 基于图的BFS
 
@@ -6144,66 +5863,6 @@ vector<int> postorderTraversal(TreeNode* root)
 }
 ```
 
-#### [98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/) 
-
-```c++
-bool isValidBST(TreeNode* root) {
-    if (root == nullptr)
-        return true;
-    stack<TreeNode *> s;
-    TreeNode *pre = nullptr;
-    TreeNode *cur = root;
-
-    while(!s.empty() || cur) {
-        if (cur) {
-            s.push(cur);
-            cur = cur->left;
-        } else {
-            cur = s.top();s.pop();
-            if (pre && pre->val >= cur->val)
-                return false;
-            pre = cur;
-            cur = cur->right;
-        }
-    }
-    return true;
-}
-```
-
-#### 98_2 判断是否完全二叉树 #todo
-
-```c++
-bool judgeTotal(TreeNode *root)
-{
-    if (root == nullptr)
-        return true;    
-    queue<TreeNode *> q;
-    q.push(root);
-    while(!q.empty())
-    {
-        root = q.front();
-        q.pop();
-        if (root->left && root->right) {
-            q.push(root->left);
-            q.push(root->right);
-        }
-        else if (root->left == nullptr && root->right) {
-            return false;
-        }
-        else {
-            while(!q.empty())
-            {
-                root = q.front();
-                q.pop();
-                if (root->left || root->right)
-                    return false;
-            }            
-        }
-    }
-    return true;
-}
-```
-
 #### [114. 二叉树展开为链表](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)  二叉树前序遍历非递归
 
 ```c++
@@ -6233,6 +5892,285 @@ void flatten(TreeNode* root)
     } 
 }
 ```
+
+#### [判断一棵二叉树是否完全二叉树](https://www.nowcoder.com/practice/f31fc6d3caf24e7f8b4deb5cd9b5fa97?tpId=191&&tqId=35928&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking) #TODO
+
+```c++
+bool judgeTotal(TreeNode *root)
+{
+    if (root == nullptr)
+        return true;
+
+    queue<TreeNode *> q;
+    q.push(root);
+    while(!q.empty())
+    {
+        root = q.front();
+        q.pop();
+        if (root->left && root->right)
+        {
+            q.push(root->left);
+            q.push(root->right);
+        }
+        else if (root->left == nullptr && root->right)
+            return false;
+      	// 遍历最后一层的节点，如果出现不为空的情况，那么肯定不是完全二叉树
+        else if (root->left && root->right == nullptr)
+        {
+            while(!q.empty())
+            {
+                root = q.front();
+                q.pop();
+                if (root->left || root->right)
+                    return false;
+            }            
+        }
+    }
+    return true;
+}
+
+```
+
+#### [102. 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/)
+
+```c++
+vector<vector<int>> levelOrder(TreeNode *root)
+{
+    vector<vector<int>> ret;
+    if (root == NULL)
+        return ret;
+
+    queue<TreeNode *> q;
+    q.push(root);
+    while (!q.empty())
+    {
+        int size = q.size();
+        vector<int> level;
+        for (int i = 0; i < size; i++)
+        {
+            TreeNode *node = q.front();
+            level.push_back(node->val);
+            q.pop();
+            if (node->left)
+                q.push(node->left);
+            if (node->right)
+                q.push(node->right);
+        }
+        ret.push_back(level);
+    }
+    return ret;
+}
+```
+
+#### [103. 二叉树的锯齿形层序遍历](https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/)
+
+```c++
+//由于每层的结点数是知道的，就是队列的元素个数，所以可以直接初始化数组的大小,使用一个变量 leftToRight 来标记顺序，初始时是 true，当此变量为 true 的时候，每次加入数组的位置就是i本身，若变量为 false 了，则加入到 size-1-i 位置上，这样就直接相当于翻转了数组
+vector<vector<int>> zigzagLevelOrder(TreeNode *root)
+{
+    vector<vector<int>> res;
+    if (root == NULL)
+        return res;
+    queue<TreeNode *> q;
+    q.push(root);
+    bool leftToRight = true;
+    while (!q.empty())
+    {
+        int size = q.size();
+        vector<int> oneLevel(size); // 这个地方注意 要给定数组大小
+        for (int i = 0; i < size; ++i)
+        {
+            TreeNode *t = q.front();
+            q.pop();
+            int idx = leftToRight ? i : (size - 1 - i);
+            oneLevel[idx] = t->val;
+            if (t->left)
+                q.push(t->left);
+            if (t->right)
+                q.push(t->right);
+        }
+        leftToRight = !leftToRight;
+        res.push_back(oneLevel);
+    }
+    return res;
+}
+```
+
+#### [111. 二叉树的最小深度](https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/)
+
+```c++
+int minDepth(TreeNode *root)
+{
+    if (!root)
+        return 0;
+
+    queue<TreeNode *> q;
+    q.push(root);
+    int res = 1;
+    while (!q.empty())
+    {
+        int size = q.size();
+        for (int i = 0; i < size; i++)
+        {
+            root = q.front();
+            q.pop();
+            if (!root->left && !root->right)
+                return res;
+            if (root->left)
+                q.push(root->left);
+
+            if (root->right)
+                q.push(root->right);
+        }
+        res++;
+    }
+    return -1;
+}
+```
+
+#### [116. 填充每个节点的下一个右侧节点指针](https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node/)
+
+```c++
+Node *connect(Node *root)
+{
+    if (!root) return NULL;
+    queue<Node *> q;
+    q.push(root);
+    while (!q.empty())
+    {
+        int size = q.size();
+        for (int i = 0; i < size; ++i)
+        {
+            Node *t = q.front();
+            q.pop();
+            if (i < size - 1)
+                t->next = q.front();
+            if (t->left) q.push(t->left);
+            if (t->right) q.push(t->right);
+        }
+    }
+    return root;
+}
+```
+
+#### [199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
+
+```c++
+vector<int> rightSideView(TreeNode* root)
+{
+    vector<int> res;
+    if (!root)
+        return res;
+
+    queue<TreeNode *> q;
+    TreeNode *last = root;
+    TreeNode *nlast = nullptr;
+    q.push(root);
+    while(!q.empty())
+    {
+        root = q.front();
+        q.pop();
+
+        if (root->left)
+        {
+            q.push(root->left);
+            nlast = root->left;
+        }
+        if (root->right)
+        {
+            q.push(root->right);
+            nlast = root->right;
+        }
+
+        if (root == last)
+        {
+            res.push_back(root->val);
+            last = nlast;
+        }
+
+    }
+    return res;
+}
+```
+
+#### [513. 找树左下角的值](https://leetcode-cn.com/problems/find-bottom-left-tree-value/)
+
+```c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    
+public:
+    int findBottomLeftValue(TreeNode* root)
+    {
+        return levelOrder(root, depth(root));
+    }
+private:
+   
+    int depth(TreeNode *root)
+    {
+        if (root == NULL)
+            return 0;
+        int ldepth = depth(root->left);
+        int rdepth = depth(root->right);
+        return ldepth > rdepth ? ldepth + 1 : rdepth + 1;
+    }
+    
+    int levelOrder(TreeNode *root, int d)
+    {
+        queue<TreeNode *> q;
+        q.push(root);
+        int level = 0;
+        TreeNode *last = root;
+        TreeNode *nlast = nullptr;
+        int res;
+        while(!q.empty())
+        {
+            root = q.front();
+            q.pop();
+            
+            if (level == d-1)
+                return root->val;
+            
+            if (root->left)
+            {
+                q.push(root->left);
+                nlast = root->left;
+            }
+                
+            if (root->right)
+            {
+                q.push(root->right);
+                nlast = root->right;
+            }
+               
+            
+            if(root == last && !q.empty())
+            {
+                level ++;
+                last = nlast;
+            }
+        }
+        
+        return res;
+        
+    }
+};
+```
+
+#### [662. 二叉树最大宽度](https://leetcode.cn/problems/maximum-width-of-binary-tree/)
+
+#### Leetcode 297 Serialize and Deserialize Binary Tree （很好的BFS和双指针结合的题）
+
+#### Leetcode 314 Binary Tree Vertical Order Traversal
+
 
 ### 二叉树的DFS 
 
@@ -6708,6 +6646,34 @@ BST特征：中序遍历为单调递增的二叉树，换句话说，根节点�
 #### Leetcode 333 Largest BST Subtree (与98类似)
 
 #### Leetcode 285 Inorder Successor in BST (I, II)
+
+#### [98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/) 
+
+```c++
+bool isValidBST(TreeNode* root) {
+    if (root == nullptr)
+        return true;
+    stack<TreeNode *> s;
+    TreeNode *pre = nullptr;
+    TreeNode *cur = root;
+
+    while(!s.empty() || cur) {
+        if (cur) {
+            s.push(cur);
+            cur = cur->left;
+        } else {
+            cur = s.top();s.pop();
+            if (pre && pre->val >= cur->val)
+                return false;
+            pre = cur;
+            cur = cur->right;
+        }
+    }
+    return true;
+}
+```
+
+#### 
 
 #### [99. 恢复二叉搜索树](https://leetcode.cn/problems/recover-binary-search-tree/) todo
 
