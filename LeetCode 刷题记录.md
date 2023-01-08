@@ -3469,77 +3469,6 @@ int longestCommonSubsequence(string word1, string word2)
 
 **特点: 1). 用值作为DP维度, 2). DP过程就是填写矩阵, 3). 可以滚动数组优化 状态: f\[i][S]前i个物品, 取出一些能否组成和为S; 方程: f\[i][S] = f\[i-1][S-a[i]] or f\[i-1][S]; 初始化: f\[i][0]=true; f\[0][1...target]=false; 答案: 检查所有f\[n][j]**
 
-##### [279. 完全平方数](https://leetcode-cn.com/problems/perfect-squares/)
-
-```c++
-int numSquares(int n) 
-{
-    if (n <= 0)
-        return 0;
-
-    // dp[i] 表示数字i最少有几个平方数的和
-    vector<int> dp(n+1, INT_MAX);
-    dp[0] = 0;
-    for(int i = 1; i <= n; i++)
-    {
-        for(int j = 1; j * j <= i; j++)
-        {
-            dp[i] = min(dp[i], dp[i-j*j]+1); //这里有两种选择，第j个要不要
-        }
-    }
-
-    return dp[n];
-}
-```
-
-##### [322. 零钱兑换](https://leetcode-cn.com/problems/coin-change/)
-
-```c++
-int coinChange(vector<int> &coins, int amount)
-{
-    // int dp[amount+1] = {amount+1};
-    // dp[i] 表示钱数为i时的最小硬币数的找零，注意由于数组是从0开始的，所以要多申请一位，数组大小为 amount+1，这样最终结果就可以保存在 dp[amount] 中了
-    //vector<int> dp(amount + 1, amount + 1);
-    vector<int> dp(amount + 1, INT_MAX-1);//用这种初始化的方式要好理解点
-    int size = coins.size();
-    dp[0] = 0;
-    for (int i = 1; i <= amount; i++)
-    {
-        for (int j = 0; j < size; j++)
-        {
-            if (coins[j] <= i)
-            {
-                dp[i] = min(dp[i], dp[i - coins[j]] + 1); //这里有两种选择，第j个硬币要不要
-            }
-        }
-    }
-    return dp[amount] > amount ? -1 : dp[amount];
-}
-```
-
-##### [518. 零钱兑换 II](https://leetcode-cn.com/problems/coin-change-2/)#todo 空间优化  377
-
-```c++
-int change(int amount, vector<int> &coins)
-{
-    //dp[i][j] 表示用前i个硬币组成钱数为j的不同组合方法
-    vector<vector<int>> dp(coins.size() + 1, vector<int>(amount + 1, 0));
-    dp[0][0] = 1;
-    // 采用的方法是一个硬币一个硬币的增加，每增加一个硬币，都从1遍历到 amount，对于遍历到的当前钱数j，组成方法就是不加上当前硬币的拼法 dp[i-1][j]，还要加上去掉当前硬币值的钱数的组成方法 
-    for (int i = 1; i <= coins.size(); ++i)
-    {
-        for (int j = 0; j <= amount; ++j)
-        {
-            if(j >= coins[i - 1])
-                dp[i][j] = dp[i - 1][j] +  dp[i][j - coins[i - 1]]; // 第i个硬币有 使用和不使用两种情况
-            else
-                dp[i][j] = dp[i - 1][j];
-        }
-    }
-    return dp[coins.size()][amount];
-}
-```
-
 ##### [416. 分割等和子集](https://leetcode-cn.com/problems/partition-equal-subset-sum/)# todo 空间优化 
 
 ```c++
@@ -3605,7 +3534,28 @@ bool canPartition(vector<int> &nums)
 }
 
 /* 计算 nums 中有几个子集的和为 sum */
+bool canPartition(vector<int>& nums) {
+    int sum = 0;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        sum += nums[i];
+    }
+    int target  = sum / 2;
+    if (sum % 2 == 1)
+        return false;
 
+    //dp[i]表⽰ 背包总容量是i，最⼤可以凑成i的⼦集总和为dp[i]。 
+    vector<int> dp(target + 1 , 0);
+
+    for(int i = 0; i < nums.size(); i++)
+    {
+        for(int j = target; j >= nums[i]; j--)
+        {
+            dp[j] = max(dp[j], dp[j-nums[i]] + nums[i]);
+        }
+    }
+    return dp[target] == target;
+}
 
 ```
 
@@ -3719,8 +3669,92 @@ public:
 
 ##### [1049. 最后一块石头的重量 II](https://leetcode.cn/problems/last-stone-weight-ii/)
 
+```c++
+int lastStoneWeightII(vector<int>& stones) {
+    int sum = 0;
+    for (int i = 0; i < stones.size(); i++) 
+        sum += stones[i];
+    vector<int> dp(sum+1, 0);
+
+    int target = sum / 2; 
+    for (int i = 0; i < stones.size(); i++) { // 遍历物品
+        for (int j = target; j >= stones[i]; j--) { // 遍历背包
+            dp[j] = max(dp[j], dp[j - stones[i]] + stones[i]);
+        }
+    } 
+    return sum - dp[target] - dp[target];
+}
 ```
 
+##### [279. 完全平方数](https://leetcode-cn.com/problems/perfect-squares/)
+
+```c++
+int numSquares(int n) 
+{
+    if (n <= 0)
+        return 0;
+
+    // dp[i] 表示数字i最少有几个平方数的和
+    vector<int> dp(n+1, INT_MAX);
+    dp[0] = 0;
+    for(int i = 1; i <= n; i++)
+    {
+        for(int j = 1; j * j <= i; j++)
+        {
+            dp[i] = min(dp[i], dp[i-j*j]+1); //这里有两种选择，第j个要不要
+        }
+    }
+
+    return dp[n];
+}
+```
+
+##### [322. 零钱兑换](https://leetcode-cn.com/problems/coin-change/)
+
+```c++
+int coinChange(vector<int> &coins, int amount)
+{
+    // int dp[amount+1] = {amount+1};
+    // dp[i] 表示钱数为i时的最小硬币数的找零，注意由于数组是从0开始的，所以要多申请一位，数组大小为 amount+1，这样最终结果就可以保存在 dp[amount] 中了
+    //vector<int> dp(amount + 1, amount + 1);
+    vector<int> dp(amount + 1, INT_MAX-1);//用这种初始化的方式要好理解点
+    int size = coins.size();
+    dp[0] = 0;
+    for (int i = 1; i <= amount; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            if (coins[j] <= i)
+            {
+                dp[i] = min(dp[i], dp[i - coins[j]] + 1); //这里有两种选择，第j个硬币要不要
+            }
+        }
+    }
+    return dp[amount] > amount ? -1 : dp[amount];
+}
+```
+
+##### [518. 零钱兑换 II](https://leetcode-cn.com/problems/coin-change-2/)#todo 空间优化  377
+
+```c++
+int change(int amount, vector<int> &coins)
+{
+    //dp[i][j] 表示用前i个硬币组成钱数为j的不同组合方法
+    vector<vector<int>> dp(coins.size() + 1, vector<int>(amount + 1, 0));
+    dp[0][0] = 1;
+    // 采用的方法是一个硬币一个硬币的增加，每增加一个硬币，都从1遍历到 amount，对于遍历到的当前钱数j，组成方法就是不加上当前硬币的拼法 dp[i-1][j]，还要加上去掉当前硬币值的钱数的组成方法 
+    for (int i = 1; i <= coins.size(); ++i)
+    {
+        for (int j = 0; j <= amount; ++j)
+        {
+            if(j >= coins[i - 1])
+                dp[i][j] = dp[i - 1][j] +  dp[i][j - coins[i - 1]]; // 第i个硬币有 使用和不使用两种情况
+            else
+                dp[i][j] = dp[i - 1][j];
+        }
+    }
+    return dp[coins.size()][amount];
+}
 ```
 
 #### 6.区间型动态规划 
