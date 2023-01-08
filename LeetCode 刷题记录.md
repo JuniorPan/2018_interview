@@ -874,9 +874,8 @@ string removeKdigits(string num, int k) {
 #### [503. 下一个更大元素 II](https://leetcode.cn/problems/next-greater-element-ii/)
 
 ```c++
+
 ```
-
-
 
 #### [768. 最多能完成排序的块 II](https://leetcode-cn.com/problems/max-chunks-to-make-sorted-ii/)
 
@@ -996,6 +995,28 @@ int mySqrt(int x)
   return right; // 为啥一定是right???
 }
 ```
+
+#### [367. 有效的完全平方数](https://leetcode.cn/problems/valid-perfect-square/description/) todo
+
+```c++
+https://leetcode.cn/problems/valid-perfect-square/solutions/1082926/gong-shui-san-xie-yi-ti-shuang-jie-er-fe-g5el/
+bool isPerfectSquare(int num) {
+  long left = 1, right = num;
+  while (left <= right)
+  {
+      long mid = left + (right - left) / 2;
+      if(mid * mid  == num)
+          return true;
+      else if (mid * mid < num) 
+          left = mid + 1;
+      else 
+          right = mid - 1;
+  }
+  return false;
+}
+```
+
+
 
 #### [33. 搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/) #todo
 
@@ -1208,44 +1229,21 @@ public:
 ```c++
 int search(vector<int> &nums, int target)
 {
-    int left = 0, right = nums.size();
-    while (left < right)
+    if (nums.empty())
+            return -1;
+    int left = 0, right = nums.size() - 1;
+    while(left <= right)
     {
         int mid = left + (right - left) / 2;
-        if (nums[mid] == target)
+        if (target == nums[mid])
             return mid;
-        else if (nums[mid] < target)
+        else if (target < nums[mid])
+            right = mid - 1;
+        else 
             left = mid + 1;
-        else
-            right = mid;
     }
     return -1;
 }
-```
-
-```c++
-
-// 形成自己的套路，right 初始化为nums.size(), while判断就可以用left < right了
-int find(vector<int>& nums, int target) {
-    int left = 0, right = nums.size();
-    while (left < right) {
-        int mid = left + (right - left) / 2;
-        if (nums[mid] == target) return mid;
-        else if (nums[mid] < target) left = mid + 1;
-        else right = mid;
-    }
-    return -1;
-}
-
-int find(vector<int>& nums, int target) {
-    int left = 0, right = nums.size();
-    while (left < right) {
-        int mid = left + (right - left) / 2;
-        if (nums[mid] < target) left = mid + 1;
-        else right = mid;
-    }
-    return right;
-}Kth Smallest Element in a Sorted Matrix](https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/)
 ```
 
 ### 排序 (11)
