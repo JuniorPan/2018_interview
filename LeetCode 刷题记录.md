@@ -4073,9 +4073,71 @@ int rob(TreeNode* root) {
 
 
 
+#### 9.股票系列
+
+##### [121. 买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
+
+```c++
+// 遍历一次数组，用一个变量记录遍历过数中的最小值，然后每次计算当前值和这个最小值之间的差值最为利润，然后每次选较大的利润来更新
+int maxProfit(vector<int>& prices)
+{
+    int res = INT_MIN;
+    int cur_min = INT_MAX;
+    for(int i = 0; i < prices.size(); i++)
+    {
+        cur_min = min(cur_min, prices[i]);
+        res = max(prices[i]-cur_min, res);
+    }
+    return res;
+}
+```
+
+##### [122. 买卖股票的最佳时机 II](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/)
+
+```c++
+int maxProfit(vector<int>& prices) 
+{
+  // 从第二天开始，如果当前价格比之前价格高，则把差值加入利润中
+  int res = 0, n = prices.size();
+  for (int i = 0; i < n - 1; ++i) {
+      if (prices[i] < prices[i + 1]) {
+          res += prices[i + 1] - prices[i];
+      }
+  }
+  return res;
+}
+```
+
+##### [123. 买卖股票的最佳时机 III](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/)
+
+```
+
+```
 
 
-#### 9.其他
+
+##### [309. 最佳买卖股票时机含冷冻期](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/)
+
+```c++
+int maxProfit(vector<int>& prices) {
+   int buy = INT_MIN, pre_buy = 0, sell = 0, pre_sell = 0;
+  for (int price : prices) {
+      pre_buy = buy;
+      buy = max(pre_sell - price, pre_buy);
+      pre_sell = sell;
+      sell = max(pre_buy + price, pre_sell);
+  }
+  return sell;
+}
+```
+
+
+
+
+
+
+
+#### 10.其他
 
 ##### [221. 最大正方形](https://leetcode-cn.com/problems/maximal-square/)
 
@@ -6631,8 +6693,6 @@ BST特征：中序遍历为单调递增的二叉树，换句话说，根节点�
 
 #### Leetcode 230 Kth Smallest element in a BST
 
-#### Leetcode 98 Validate Binary Search Tree
-
 #### Leetcode 270 Cloest Binary Search Tree Value
 
 #### Leetcode 235 Lowest Common Ancestor of a Binary Search Tree
@@ -6673,8 +6733,6 @@ bool isValidBST(TreeNode* root) {
 }
 ```
 
-#### 
-
 #### [99. 恢复二叉搜索树](https://leetcode.cn/problems/recover-binary-search-tree/) todo
 
 ```c++
@@ -6709,7 +6767,7 @@ void recoverTree(TreeNode* root) {
 }
 ```
 
-#### 99_2[找到搜索二叉树中两个错误的节点](javascript:void(0);)
+#### 99_2[找到搜索二叉树中两个错误的节点](https://www.nowcoder.com/practice/4582efa5ffe949cc80c136eeb78795d6)
 
 ```c++
 class Solution {
@@ -7100,68 +7158,6 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 ```
 
 #### [986. Interval List Intersections](https://leetcode.com/problems/interval-list-intersections/)
-
-
-
-### 股票系列
-
-#### [121. 买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
-
-```c++
-// 遍历一次数组，用一个变量记录遍历过数中的最小值，然后每次计算当前值和这个最小值之间的差值最为利润，然后每次选较大的利润来更新
-int maxProfit(vector<int>& prices)
-{
-    int res = INT_MIN;
-    int cur_min = INT_MAX;
-    for(int i = 0; i < prices.size(); i++)
-    {
-        cur_min = min(cur_min, prices[i]);
-        res = max(prices[i]-cur_min, res);
-    }
-    return res;
-}
-```
-
-#### [122. 买卖股票的最佳时机 II](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/)
-
-```c++
-int maxProfit(vector<int>& prices) 
-{
-  // 从第二天开始，如果当前价格比之前价格高，则把差值加入利润中
-  int res = 0, n = prices.size();
-  for (int i = 0; i < n - 1; ++i) {
-      if (prices[i] < prices[i + 1]) {
-          res += prices[i + 1] - prices[i];
-      }
-  }
-  return res;
-}
-```
-
-#### [123. 买卖股票的最佳时机 III](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/)
-
-```
-
-```
-
-
-
-#### [309. 最佳买卖股票时机含冷冻期](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/)
-
-```c++
-int maxProfit(vector<int>& prices) {
-   int buy = INT_MIN, pre_buy = 0, sell = 0, pre_sell = 0;
-  for (int price : prices) {
-      pre_buy = buy;
-      buy = max(pre_sell - price, pre_buy);
-      pre_sell = sell;
-      sell = max(pre_buy + price, pre_sell);
-  }
-  return sell;
-}
-```
-
-
 
 
 
