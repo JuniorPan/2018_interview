@@ -1574,8 +1574,6 @@ public:
 };
 ```
 
-
-
 #### [493. 翻转对](https://leetcode-cn.com/problems/reverse-pairs/)
 
 ```c++
@@ -4581,9 +4579,9 @@ vector<string> letterCombinations(string digits) {
 }
 ```
 
-##### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/)
+##### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/) todo
 
-<img src="https://pic.leetcode-cn.com/a9944722e9307ade27ab98e36e3f29e4f5acd242007ae46c50e01ead122b9d45-image.png" alt="image.png" style="zoom:67%;" />
+ <img src="https://pic.leetcode-cn.com/a9944722e9307ade27ab98e36e3f29e4f5acd242007ae46c50e01ead122b9d45-image.png" alt="image.png" style="zoom:67%;" />
 
 ```c++
 void dfs(vector<string> &res, string temp, int left, int right, int n)
@@ -4608,7 +4606,9 @@ vector<string> generateParenthesis(int n) {
 
 ##### [39. 组合总和](https://leetcode-cn.com/problems/combination-sum/)
 
-<img src="https://pic.leetcode-cn.com/1598091943-hZjibJ-file_1598091940241" alt="img" style="zoom: 33%;" />
+<img src="https://pic.leetcode-cn.com/1598091943-hZjibJ-file_1598091940241" alt="img" style="zoom:33%;" />
+
+<img src="https://pic.leetcode-cn.com/1598091943-GPoHAJ-file_1598091940246" alt="img" style="zoom: 33%;" />
 
 ```c++
 class Solution 
@@ -4623,7 +4623,8 @@ public:
             res.push_back(temp);
             return ;
         }
-        
+        //遇到这一类相同元素不计算顺序的问题，我们在搜索的时候就需要 按某种顺序搜索。具体的做法是：每一次搜索的时候设置 下一轮搜索的起点 begin，请看下图。
+      	// 对比上面两张图
         for(int i = start; i < candidates.size(); i++)
         {
             if(target - candidates[i] < 0)
