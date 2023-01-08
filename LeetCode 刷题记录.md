@@ -1641,8 +1641,6 @@ public:
 };
 ```
 
-
-
 #### [912. 排序数组](https://leetcode-cn.com/problems/sort-an-array/)
 
 ``` c++
@@ -6041,8 +6039,6 @@ vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
 }
 ```
 
-
-
 ##### Leetcode 444 Sequence Reconstruction
 
 ##### Leetcode 269 Alien Dictionary
@@ -6231,12 +6227,8 @@ void recoverTree(TreeNode* root) {
         }
     }
     swap(first->val, second->val);
-
-
 }
 ```
-
-
 
 #### [114. 二叉树展开为链表](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)  二叉树前序遍历非递归
 
@@ -6485,8 +6477,6 @@ public:
     }
 };
 ```
-
-
 
 #### 99_2[找到搜索二叉树中两个错误的节点](javascript:void(0);)
 
