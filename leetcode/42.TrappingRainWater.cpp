@@ -36,7 +36,6 @@ int trap_1(vector<int> &height)
 int main()
 {
 
-
     vector<int> height = {2,1,0,1,3};
     int res = trap_1(height);
     cout << "res: " << res << endl;
