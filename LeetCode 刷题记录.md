@@ -3633,8 +3633,6 @@ int findMaxForm(vector<string> &strs, int m, int n)
 }
 ```
 
-
-
 ##### [494. 目标和](https://leetcode-cn.com/problems/target-sum/)
 
 ```c++
@@ -3665,10 +3663,6 @@ public:
     }
     return dp[n][target];
 }
-
-
-    
-    
     */
     int findTargetSumWays(vector<int>& nums, int S) {
         
@@ -3691,8 +3685,6 @@ public:
         }
     }
     return dp[nums.size() - 1][target];
-        
-        
     }
 };
 
@@ -3728,9 +3720,8 @@ public:
 ##### [1049. 最后一块石头的重量 II](https://leetcode.cn/problems/last-stone-weight-ii/)
 
 ```
+
 ```
-
-
 
 #### 6.区间型动态规划 
 
