@@ -7549,8 +7549,6 @@ int maxSubArray(vector<int>& nums) {
     }
 ```
 
-
-
 #### [304. 二维区域和检索 - 矩阵不可变](https://leetcode-cn.com/problems/range-sum-query-2d-immutable/)
 
 #### [523. 连续的子数组和](https://leetcode-cn.com/problems/continuous-subarray-sum/)
@@ -7583,13 +7581,7 @@ int subarraySum(vector<int>& nums, int k)
 
 #### [1423. 可获得的最大点数](https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/)
 
-
-
-
-
 ### 数组
-
-
 
 #### [未排序数组中累加和为给定值的最长子数组长度](javascript:void(0);)
 
@@ -7650,8 +7642,6 @@ vector<int> twoSum(vector<int>& nums, int target)
 }
 ```
 
-
-
 #### [53. 最大子序和](https://leetcode-cn.com/problems/maximum-subarray/)
 
 ```c++
@@ -7669,8 +7659,6 @@ int maxSubArray(vector<int>& nums)
     return res;
 }
 ```
-
-
 
 #### [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
 
@@ -7695,8 +7683,6 @@ void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
         nums1[i--] = nums2[b--];
 }
 ```
-
-
 
 #### [15. 三数之和](https://leetcode-cn.com/problems/3sum/) #Todo
 
@@ -7766,8 +7752,6 @@ int removeDuplicates(vector<int>& nums)
     return k;
 }
 ```
-
-
 
 #### [41. 缺失的第一个正数](https://leetcode-cn.com/problems/first-missing-positive/)#todo
 
@@ -7962,8 +7946,6 @@ public
 
 };
 ```
-
-
 
 #### [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
 
@@ -8296,8 +8278,6 @@ void moveZeroes(vector<int>& nums)
 }
 ```
 
-
-
 #### [334. 递增的三元子序列](https://leetcode-cn.com/problems/increasing-triplet-subsequence/)
 
 ```c++
@@ -8375,8 +8355,6 @@ vector<int> intersect(vector<int> &nums1, vector<int> &nums2)
 }
 ```
 
-
-
 #### [384. 打乱数组](https://leetcode-cn.com/problems/shuffle-an-array/)  #Todo: 洗牌算法
 
 ```c++
@@ -8427,8 +8405,6 @@ vector<int> findDisappearedNumbers(vector<int>& nums) {
 }   
 ```
 
-
-
 #### [454. 四数相加 II](https://leetcode-cn.com/problems/4sum-ii/)
 
 ```c++
@@ -8474,8 +8450,6 @@ bool checkSubarraySum(vector<int>& nums, int k) {
 }
 ```
 
-
-
 #### [560. 和为K的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/)
 
 ```c++
@@ -8515,11 +8489,7 @@ int findLength(vector<int>& A, vector<int>& B) {
 }
 ```
 
-
-
 #### [845. 数组中的最长山脉](https://leetcode-cn.com/problems/longest-mountain-in-array/)
-
-难度中等190
 
 ```c++
 int longestMountain(vector<int>& A) {
@@ -8555,8 +8525,6 @@ int partitionDisjoint(vector<int>& A)
     }
 ```
 
-
-
 ### 字符串(6)
 
 #### [7. 整数反转](https://leetcode-cn.com/problems/reverse-integer/)
@@ -8580,8 +8548,6 @@ int reverse(int x)
 }
 ```
 
-
-
 #### [8. 字符串转换整数 (atoi)](https://leetcode-cn.com/problems/string-to-integer-atoi/)
 
 ```c++
@@ -8602,8 +8568,6 @@ int myAtoi(string str)
     return base * sign;
 }
 ```
-
-
 
 #### [14. 最长公共前缀](https://leetcode-cn.com/problems/longest-common-prefix/)
 
@@ -8850,8 +8814,6 @@ string sub(string s1, string s2) {
 }
 ```
 
-
-
 #### [43. 字符串相乘 大数相乘](https://leetcode-cn.com/problems/multiply-strings/) 
 
 ```c++
@@ -8961,8 +8923,6 @@ public:
 };
 ```
 
-
-
 #### [394. 字符串解码](https://leetcode-cn.com/problems/decode-string/)
 
 ```c++
@@ -8991,12 +8951,6 @@ string decodeString(string s)
     return s_str.empty() ? t : s_str.top();
 }
 ```
-
-
-
-
-
-
 
 #### [49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/)
 
@@ -9052,10 +9006,6 @@ bool isPalindrome(string s)
 }
 ```
 
-
-
-
-
 ### 其他
 
 #### [135. 分发糖果](https://leetcode-cn.com/problems/candy/)
@@ -9081,8 +9031,6 @@ int candy(vector<int>& ratings)
     return res;
 }
 ```
-
-
 
 #### [208. 实现 Trie (前缀树)](https://leetcode-cn.com/problems/implement-trie-prefix-tree/)
 
@@ -9247,8 +9195,6 @@ public:
 
 
 
-
-
 #### [470. 用 Rand7() 实现 Rand10()](https://leetcode-cn.com/problems/implement-rand10-using-rand7/)
 
 ```
@@ -9260,8 +9206,6 @@ int rand10()
     }
 }
 ```
-
-
 
 #### 丢旗子
 
@@ -9286,8 +9230,6 @@ public:
 };
 
 ```
-
-
 
 #### 进制转换
 
@@ -9334,8 +9276,6 @@ bool isValid(string s) {
 
 ```
 
-
-
 # 剑指offer 刷题记录
 
 #### [剑指 Offer 03. 数组中重复的数字](https://leetcode-cn.com/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/)
@@ -9355,8 +9295,6 @@ int findRepeatNumber(vector<int>& nums)
     return -1;
 }
 ```
-
-
 
 #### [剑指 Offer 04. 二维数组中的查找](https://leetcode-cn.com/problems/er-wei-shu-zu-zhong-de-cha-zhao-lcof/)
 
@@ -9402,8 +9340,6 @@ string replaceSpace(string s) {
 }
 ```
 
-
-
 #### [剑指 Offer 06. 从尾到头打印链表](https://leetcode-cn.com/problems/cong-wei-dao-tou-da-yin-lian-biao-lcof/)
 
 ```c++
@@ -9428,8 +9364,6 @@ vector<int> reversePrint(ListNode* head)
 }
 ```
 
-
-
 #### [剑指 Offer 07. 重建二叉树](https://leetcode-cn.com/problems/zhong-jian-er-cha-shu-lcof/)
 
 ```c++
@@ -9453,8 +9387,6 @@ TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder)
     return buildTree(preorder, 0, preorder.size() - 1, inorder, 0, inorder.size() - 1);
 }
 ```
-
-
 
 #### [剑指 Offer 09. 用两个栈实现队列](https://leetcode-cn.com/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/)
 
@@ -9513,8 +9445,6 @@ public:
 
 ```
 
-
-
 #### [剑指 Offer 10- I. 斐波那契数列](https://leetcode-cn.com/problems/fei-bo-na-qi-shu-lie-lcof/)
 
 ```c++
@@ -9548,8 +9478,6 @@ int numWays(int n)
     return dp[n - 1];
 }
 ```
-
-
 
 #### [剑指 Offer 11. 旋转数组的最小数字](https://leetcode-cn.com/problems/xuan-zhuan-shu-zu-de-zui-xiao-shu-zi-lcof/)
 
@@ -9613,8 +9541,6 @@ bool exist(vector<vector<char>>& board, string word)
 }
 ```
 
-
-
 #### [剑指 Offer 13. 机器人的运动范围](https://leetcode-cn.com/problems/ji-qi-ren-de-yun-dong-fan-wei-lcof/)
 
 ```
@@ -9648,8 +9574,6 @@ int movingCount(int m, int n, int k)
     return dfs(m, n, k, 0, 0, visted);
 }
 ```
-
-
 
 #### [剑指 Offer 15. 二进制中1的个数](https://leetcode-cn.com/problems/er-jin-zhi-zhong-1de-ge-shu-lcof/)
 
@@ -9734,8 +9658,6 @@ bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
     }
 ```
 
-
-
 #### [剑指 Offer 28. 对称的二叉树](https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/)
 
 ```c++
@@ -9792,8 +9714,6 @@ public:
     }
 };
 ```
-
-
 
 #### [剑指 Offer 30. 包含min函数的栈](https://leetcode-cn.com/problems/bao-han-minhan-shu-de-zhan-lcof/)
 
@@ -9860,8 +9780,6 @@ public:
 };
 ```
 
-
-
 #### [剑指 Offer 51. 数组中的逆序对](https://leetcode-cn.com/problems/shu-zu-zhong-de-ni-xu-dui-lcof/)
 
 ```c++
@@ -9927,8 +9845,6 @@ int reversePairs(vector<int>& nums)
     return mergeSort(nums, 0, nums.size() - 1);
 }
 ```
-
-
 
 # 
 
