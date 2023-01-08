@@ -679,23 +679,25 @@ int trap(vector<int>& height)
 }
 ```
 
-#### [84. 柱状图中最大的矩形](https://leetcode-cn.com/problems/largest-rectangle-in-histogram/)
+#### [84. 柱状图中最大的矩形](https://leetcode-cn.com/problems/largest-rectangle-in-histogram/) TODO
 
 ```c++
 int largestRectangleArea(vector<int> &heights)
 {
+    if (heights.empty())
+            return 0;
     int res = 0;
-    stack<int> st;
+    stack<int> s;
     heights.push_back(0);
-    for (int i = 0; i < heights.size(); ++i)
+    for(int i = 0; i < heights.size(); i++)
     {
-        while (!st.empty() && heights[st.top()] >= heights[i])
+        while(!s.empty() && heights[i] <= heights[s.top()])
         {
-            int cur = st.top();
-            st.pop();
-            res = max(res, heights[cur] * (st.empty() ? i : (i - st.top() - 1)));
+            int res_index = s.top(); s.pop();
+            int left = s.empty() ? -1 : s.top();
+            res = max(res, (i - left - 1) * heights[res_index]);
         }
-        st.push(i);
+        s.push(i);
     }
     return res;
 }
@@ -756,33 +758,28 @@ public:
 };
 ```
 
-#### [162. 寻找峰值](https://leetcode-cn.com/problems/find-peak-element/)
+#### [162. 寻找峰值](https://leetcode-cn.com/problems/find-peak-element/) todo
 
 ```c++
-int findPeakElement(vector<int>& nums) 
-{
+int findPeakElement(vector<int>& nums) {
     if (nums.empty())
-        return 0;
-
-    stack<int> monoStack;
-    for (int i = 0; i < nums.size(); i++)
+        return -1;
+    stack<int> s;
+    int res_index = 0;
+    for(int i = 0; i < nums.size(); i++)
     {
-        if (!monoStack.empty() && nums[i] < nums[monoStack.top()])
+        while(!s.empty()&& nums[i] < nums[s.top()])
         {
-           int temp = monoStack.top();
-           monoStack.pop();
-           return temp;
+            res_index = s.top();
+            s.pop();
+            return res_index;
         }
-        else
-        {
-            monoStack.push(i);
-        }
+        s.push(i);
     }
-
-    if (monoStack.size() == nums.size())
-        return monoStack.top();
-
-    return 0;
+    // 当数组严格单调递增时 
+    if (s.size() == nums.size())
+        return s.top();
+    return res_index;
 }
 ```
 

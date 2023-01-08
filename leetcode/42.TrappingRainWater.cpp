@@ -25,7 +25,7 @@ int trap_1(vector<int> &height)
 
                 int h = min(height[i], height[monoStack.top()]);
 
-                cout << "i: " << i <<  " cur_area: " << (h - height[tmp]) * (i - monoStack.top() - 1) << endl;
+                cout << "i: " << i <<  " cur_area: " << (h - height[tmp]) * (i - monoStack.top() - 1) << " cur_top: " << monoStack.top() << endl;
                 res = res + (h - height[tmp]) * (i - monoStack.top() - 1);
             }
             monoStack.push(i);
