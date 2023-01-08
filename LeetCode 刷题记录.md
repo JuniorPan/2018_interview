@@ -1715,6 +1715,24 @@ temp->next = fake_head->next;
 
 ```
 
+##### 4）环形链表
+
+```c++
+if (head == nullptr || head->next == nullptr || head->next->next == nullptr)
+        return false;
+    
+ListNode *slow =  head->next;
+ListNode *fast = head->next->next;
+
+while(slow != fast)
+{
+    if (fast->next == nullptr || fast->next->next == nullptr)
+        return false;
+    slow = slow->next;
+    fast =  fast->next->next;         
+}
+```
+
 
 
 https://www.nowcoder.com/practice/71cef9f8b5564579bf7ed93fbe0b2024?tpId=117&tqId=37729&companyId=665&rp=1&ru=%2Fcompany%2Fhome%2Fcode%2F665&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey
