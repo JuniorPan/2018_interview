@@ -6046,33 +6046,38 @@ vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
 ##### Leetcode 310 Minimum Height Trees
 
 
-### 二叉树遍历相关
+### 二叉树遍历相关 （深度&层次遍历）
 
 #### [144. 二叉树的前序遍历](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/) 
 
 ```c++
-// 二叉树前序遍历非递归
-vector<int> preorderTraversal(TreeNode* root) 
+// 前序遍历递归版本
+void preorderTraversal(TreeNode* root, vector<int> &res)
 {
-    vector<int> res;
     if (root == nullptr)
-        return res;
+        return;
+    res.push_back(root->val);
+    preorderTraversal(root->left, res);
+    preorderTraversal(root->right, res);
+}
+// 前序遍历非递归版本
+void preorderTraversal_2(TreeNode* root, vector<int> &res)
+{
+    if (root == nullptr)
+        return;
 
     stack<TreeNode *> s;
     s.push(root);
-
     while(!s.empty())
     {
-        root = s.top();
-        s.pop();
+        root = s.top(); s.pop();
         res.push_back(root->val);
 
         if (root->right)
             s.push(root->right);
         if (root->left)
-            s.push(root->left);  
+            s.push(root->left);
     }
-    return res;
 }
 ```
 
@@ -6199,64 +6204,9 @@ bool judgeTotal(TreeNode *root)
 }
 ```
 
-#### [99. 恢复二叉搜索树](https://leetcode.cn/problems/recover-binary-search-tree/)
-
-```c++
-void recoverTree(TreeNode* root) {
-    if (root == nullptr)
-        return;
-
-    stack<TreeNode *> s;
-    TreeNode *pre = nullptr;
-    TreeNode *cur = root;
-    TreeNode *first = nullptr;
-    TreeNode *second = nullptr;
-    while(!s.empty() || cur) {
-        if (cur) {
-            s.push(cur);
-            cur = cur->left;
-        } else {
-            cur = s.top();s.pop();
-            if (pre && pre->val> cur->val)
-                {
-                    if (!first) first = pre;
-                        second = cur;
-                }
-            pre = cur;
-            cur = cur->right;
-        }
-    }
-    swap(first->val, second->val);
-}
-```
-
 #### [114. 二叉树展开为链表](https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/)  二叉树前序遍历非递归
 
 ```c++
-void flatten(TreeNode* root) {
-  if (root == nullptr) {
-      return;
-  }
-  stack<TreeNode*> s;
-  s.push(root);
-  TreeNode *pre = nullptr;
-  while (!s.empty()) {
-      TreeNode *cur = s.top(); s.pop();
-      if (pre != nullptr) {
-          pre->left = nullptr;
-          pre->right = cur;
-      }
-      if (cur->right) {
-          s.push(cur->right);
-      }
-      if (cur->left) {
-          s.push(cur->left);
-      }
-      pre = cur;
-  }
-}
-
-
 void flatten(TreeNode* root) 
 {
     if(root == nullptr)
@@ -6283,258 +6233,6 @@ void flatten(TreeNode* root)
     } 
 }
 ```
-
-#### [230. 二叉搜索树中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/)
-
-```c++
-int kthSmallest(TreeNode* root, int k)
-{
-    if (!root || k < 0)
-        return 0;
-
-    stack<TreeNode *> s;
-    TreeNode *cur = root;
-    while(!s.empty() || cur)
-    {
-        if (cur)
-        {
-            s.push(cur);
-            cur = cur->left;
-        }
-        else
-        {
-            TreeNode *temp = s.top();
-            s.pop();
-            k--;
-            if (k == 0)
-                return temp->val;
-            cur = temp->right;
-        }
-    }
-    return 0;
-}
-```
-
-#### [235. 二叉搜索树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
-
-```c++
-TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
-{
-    //如果跟节点的值 比pq都大,那么最近公共祖先只能在左子树上，否则在右子树上，只有当root->val 在pq之间的话，root才是最近公共祖先
-    while (true)
-    {
-        if (root->val > p->val && root->val > q->val)
-            root = root->left;
-        else if (root->val < p->val && root->val < q->val)
-            root = root->right;
-        else
-            break;
-    }
-    return root;
-}
-
- // 如果根节点的值大于p和q之间的较大值，说明p和q都在左子树中，那么此时我们就进入根节点的左子节点继续递归，如果根节点小于p和q之间的较小值，说明p和q都在右子树中，那么此时我们就进入根节点的右子节点继续递归，如果都不是，则说明当前根节点就是最小共同父节点，直接返回即可 递归版本
-    TreeNode *lowestCommonAncestor_2(TreeNode *root, TreeNode *p, TreeNode *q)
-    {
-        if (!root)
-            return NULL;
-        if (root->val > max(p->val, q->val))
-            return lowestCommonAncestor(root->left, p, q);
-        else if (root->val < min(p->val, q->val))
-            return lowestCommonAncestor(root->right, p, q);
-        else
-            return root;
-    }
-```
-
-#### [236. 二叉树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)
-
-```c++
-TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
-{
-    // 看当前结点是否为空，若为空则直接返回空，若为p或q中的任意一个，也直接返回当前结点。否则的话就对其左右子结点分别调用递归函数，由于这道题限制了p和q一定都在二叉树中存在，那么如果当前结点不等于p或q，p和q要么分别位于左右子树中，要么同时位于左子树，或者同时位于右子树
-    if (root == nullptr)
-            return nullptr;
-    if  (root == p || root == q)
-        return root;
-
-    TreeNode *left = lowestCommonAncestor(root->left, p, q);
-    TreeNode *right = lowestCommonAncestor(root->right,p, q);
-    if (left && right)
-        return root;
-    else
-        return left != nullptr ? left : right;
-}
-```
-
-#### [538. 把二叉搜索树转换为累加树](https://leetcode-cn.com/problems/convert-bst-to-greater-tree/)
-
-```c++
-int sum = 0;
-TreeNode* convertBST_1(TreeNode* root) {
-    if (!root) return NULL;
-    convertBST(root->right);
-    root->val += sum;
-    sum = root->val;
-    convertBST(root->left);
-    return root;
-}
-
-TreeNode* convertBST(TreeNode* root) {
-    if (!root) return NULL;
-    int sum = 0;
-    stack<TreeNode*> st;
-    TreeNode *p = root;
-    while (p || !st.empty()) {
-        while (p) {
-            st.push(p);
-            p = p->right;
-        }
-        p = st.top(); st.pop();
-        p->val += sum;
-        sum = p->val;
-        p = p->left;
-    }
-    return root;
-}
-```
-
-#### [543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/)
-
-```
-int diameterOfBinaryTree(TreeNode* root) 
-{
-    int res = 0;
-    maxDepth(root, res);
-    return res;
-}
-int maxDepth(TreeNode* node, int& res
-{
-    if (!node) return 0;
-    int left = maxDepth(node->left, res);
-    int right = maxDepth(node->right, res);
-    res = max(res, left + right);
-    return max(left, right) + 1;
-}
-```
-
-#### [99. 恢复二叉搜索树](https://leetcode-cn.com/problems/recover-binary-search-tree/)
-
-```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
-class Solution {
-    void inOrderTraverse(TreeNode* &root, TreeNode* &pre,TreeNode* &first,TreeNode* &second)
-    {
-        if (root == nullptr)
-            return;
-
-        stack<TreeNode*> s;
-      
-        while(!s.empty() || root)
-        {
-            if(root)
-            {
-                s.push(root);
-                root = root->left;
-            }
-            else
-            {
-                root = s.top();
-                s.pop();
-                
-                if (pre != nullptr && pre->val > root->val)
-                {
-                    first = first == nullptr ? pre : first;
-                    second = root;
-                }
-                pre = root;
-                root = root->right;
-            }
-        }
-    }
-    
-public:
-    void recoverTree(TreeNode* root)
-    {
-                
-        TreeNode *first = nullptr; 
-        TreeNode *second = nullptr;
-        TreeNode *pre = nullptr;
-        inOrderTraverse(root, pre, first, second);
-        
-        int temp = first->val;
-        first->val = second->val;
-        second->val = temp;
-        
-    }
-};
-```
-
-#### 99_2[找到搜索二叉树中两个错误的节点](javascript:void(0);)
-
-```c++
-class Solution {
-public:
-    /**
-     * 
-     * @param root TreeNode类 the root
-     * @return int整型vector
-     */
-    void inOrderTraverse(TreeNode* &root, TreeNode* &pre, TreeNode* &first,TreeNode* &second)
-    {
-        if (root == nullptr)
-            return;
-
-        stack<TreeNode*> s;
-
-        while(!s.empty() || root)
-        {
-            if(root)
-            {
-                s.push(root);
-                root = root->left;
-            }
-            else
-            {
-                root = s.top();
-                s.pop();
-
-                if (pre != nullptr && pre->val > root->val)
-                {
-                    first = first == nullptr ? pre : first;
-                    second = root;
-                }
-                pre = root;
-                root = root->right;
-            }
-        }
-    }
-    
-    
-    vector<int> findError(TreeNode* root) {
-        // write code here
-        TreeNode* first=nullptr;
-        TreeNode* second=nullptr;
-        TreeNode* pre= nullptr;
-        vector<int> res;
-        inOrderTraverse(root, pre, first, second);
-        res.push_back(first->val);
-        res.push_back(second->val);
-        sort(res.begin(), res.end());
-        return res;
-        
-    }
-```
-
-
 
 ### 二叉树的DFS 
 
@@ -6665,6 +6363,57 @@ bool isBalanced(TreeNode* root)
     if(root == NULL)
         return true;
     else return isBalanced(root->right) && isBalanced(root->left) && abs(height(root->left) - height(root->right)) <= 1;
+}
+```
+
+#### [235. 二叉搜索树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/) todo
+
+```c++
+TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
+{
+    //如果跟节点的值 比pq都大,那么最近公共祖先只能在左子树上，否则在右子树上，只有当root->val 在pq之间的话，root才是最近公共祖先
+    while (true)
+    {
+        if (root->val > p->val && root->val > q->val)
+            root = root->left;
+        else if (root->val < p->val && root->val < q->val)
+            root = root->right;
+        else
+            break;
+    }
+    return root;
+}
+ // 如果根节点的值大于p和q之间的较大值，说明p和q都在左子树中，那么此时我们就进入根节点的左子节点继续递归，如果根节点小于p和q之间的较小值，说明p和q都在右子树中，那么此时我们就进入根节点的右子节点继续递归，如果都不是，则说明当前根节点就是最小共同父节点，直接返回即可 递归版本
+    TreeNode *lowestCommonAncestor_2(TreeNode *root, TreeNode *p, TreeNode *q)
+    {
+        if (!root)
+            return NULL;
+        if (root->val > max(p->val, q->val))
+            return lowestCommonAncestor(root->left, p, q);
+        else if (root->val < min(p->val, q->val))
+            return lowestCommonAncestor(root->right, p, q);
+        else
+            return root;
+    }
+```
+
+#### [236. 二叉树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/) todo
+
+```c++
+TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
+{
+    // 看当前结点是否为空，若为空则直接返回空，若为p或q中的任意一个，也直接返回当前结点。否则的话就对其左右子结点分别调用递归函数，由于这道题限制了p和q一定都在二叉树中存在，那么如果当前结点不等于p或q，p和q要么分别位于左右子树中，要么同时位于左子树，或者同时位于右子树
+    if (root == nullptr)
+            return nullptr;
+    if  (root == p || root == q)
+        return root;
+
+    TreeNode *left = lowestCommonAncestor(root->left, p, q);
+    TreeNode *right = lowestCommonAncestor(root->right,p, q);
+    if (left && right)
+        return root;
+    else
+        return left != nullptr ? left : right;
 }
 ```
 
@@ -6854,7 +6603,24 @@ TreeNode* invertTree(TreeNode* root) {
 }
 ```
 
+#### [543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/)
 
+```
+int diameterOfBinaryTree(TreeNode* root) 
+{
+    int res = 0;
+    maxDepth(root, res);
+    return res;
+}
+int maxDepth(TreeNode* node, int& res
+{
+    if (!node) return 0;
+    int left = maxDepth(node->left, res);
+    int right = maxDepth(node->right, res);
+    res = max(res, left + right);
+    return max(left, right) + 1;
+}
+```
 
 #### [617. 合并二叉树](https://leetcode-cn.com/problems/merge-two-binary-trees/)
 
@@ -6942,6 +6708,166 @@ BST特征：中序遍历为单调递增的二叉树，换句话说，根节点�
 #### Leetcode 333 Largest BST Subtree (与98类似)
 
 #### Leetcode 285 Inorder Successor in BST (I, II)
+
+#### [99. 恢复二叉搜索树](https://leetcode.cn/problems/recover-binary-search-tree/) todo
+
+```c++
+void recoverTree(TreeNode* root) {
+    if (root == nullptr)
+        return;
+
+    stack<TreeNode *> s;
+    TreeNode *pre = nullptr;
+    TreeNode *first = nullptr;
+    TreeNode *second = nullptr;
+    while(!s.empty() || root) {
+        if (root) {
+            s.push(root);
+            root = root->left;
+        } else {
+            root = s.top();s.pop();
+            if (pre && pre->val>root->val)
+            {		
+              	second = root;
+                if (first == nullptr) 
+                    first = pre;
+             		else 
+                  	break;
+                
+            }
+            pre = root;
+            root = root->right;
+        }
+    }
+    swap(first->val, second->val);
+}
+```
+
+#### 99_2[找到搜索二叉树中两个错误的节点](javascript:void(0);)
+
+```c++
+class Solution {
+public:
+    /**
+     * 
+     * @param root TreeNode类 the root
+     * @return int整型vector
+     */
+    void inOrderTraverse(TreeNode* &root, TreeNode* &pre, TreeNode* &first,TreeNode* &second)
+    {
+        if (root == nullptr)
+            return;
+
+        stack<TreeNode*> s;
+
+        while(!s.empty() || root)
+        {
+            if(root)
+            {
+                s.push(root);
+                root = root->left;
+            }
+            else
+            {
+                root = s.top();
+                s.pop();
+
+                if (pre != nullptr && pre->val > root->val)
+                {
+                    first = first == nullptr ? pre : first;
+                    second = root;
+                }
+                pre = root;
+                root = root->right;
+            }
+        }
+    }
+    
+    
+    vector<int> findError(TreeNode* root) {
+        // write code here
+        TreeNode* first=nullptr;
+        TreeNode* second=nullptr;
+        TreeNode* pre= nullptr;
+        vector<int> res;
+        inOrderTraverse(root, pre, first, second);
+        res.push_back(first->val);
+        res.push_back(second->val);
+        sort(res.begin(), res.end());
+        return res;
+        
+    }
+```
+
+#### [230. 二叉搜索树中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/)
+
+```c++
+int kthSmallest(TreeNode* root, int k)
+{
+    if (!root || k < 0)
+        return 0;
+
+    stack<TreeNode *> s;
+    TreeNode *cur = root;
+    while(!s.empty() || cur)
+    {
+        if (cur)
+        {
+            s.push(cur);
+            cur = cur->left;
+        }
+        else
+        {
+            TreeNode *temp = s.top();
+            s.pop();
+            k--;
+            if (k == 0)
+                return temp->val;
+            cur = temp->right;
+        }
+    }
+    return 0;
+}
+```
+
+#### [538. 把二叉搜索树转换为累加树](https://leetcode-cn.com/problems/convert-bst-to-greater-tree/)
+
+```c++
+int sum = 0;
+TreeNode* convertBST_1(TreeNode* root) {
+    if (!root) return NULL;
+    convertBST(root->right);
+    root->val += sum;
+    sum = root->val;
+    convertBST(root->left);
+    return root;
+}
+
+TreeNode* convertBST(TreeNode* root) {
+    if (!root) return NULL;
+    int sum = 0;
+    stack<TreeNode*> st;
+    TreeNode *p = root;
+    while (p || !st.empty()) {
+        while (p) {
+            st.push(p);
+            p = p->right;
+        }
+        p = st.top(); st.pop();
+        p->val += sum;
+        sum = p->val;
+        p = p->left;
+    }
+    return root;
+}
+```
+
+#### [701. 二叉搜索树中的插入操作](https://leetcode.cn/problems/insert-into-a-binary-search-tree/)
+
+```
+```
+
+
 
 
 
