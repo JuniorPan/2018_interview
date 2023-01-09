@@ -4936,6 +4936,8 @@ public:
 
 ##### [93. 复原IP地址](https://leetcode-cn.com/problems/restore-ip-addresses/)
 
+<img src="https://img-blog.csdnimg.cn/20201123203735933.png" alt="93.复原IP地址" style="zoom: 50%;" />
+
 ```c++
 class Solution
 {
