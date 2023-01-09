@@ -1696,6 +1696,14 @@ while(fast->next && fast->next->next)
     slow = slow->next;
     fast = fast->next->next;
 }
+
+
+ListNode *slow = head, *fast = head, *last = slow;
+while (fast->next && fast->next->next) {
+    last = slow;
+    slow = slow->next;
+    fast = fast->next->next;
+}
 ```
 
 ##### 3）链表尾插法和头插
@@ -6699,8 +6707,6 @@ int kthLargest(TreeNode* root, int k) {
 
 BST特征：中序遍历为单调递增的二叉树，换句话说，根节点的值比左子树任意节点值都大，比右子树任意节点值都小，增删查改均为O（h）复杂度，h为树的高度；注意不是所有的BST题目都需要递归，有的题目只需要while循环即可
 
-#### Leetcode 230 Kth Smallest element in a BST
-
 #### Leetcode 270 Cloest Binary Search Tree Value
 
 #### Leetcode 235 Lowest Common Ancestor of a Binary Search Tree
@@ -6708,8 +6714,6 @@ BST特征：中序遍历为单调递增的二叉树，换句话说，根节点�
 #### Leetcode 669 Trim a Binary Search Tree
 
 #### Leetcode 700 Search in a Binary Search Tree
-
-#### Leetcode 108 Convert Sorted Array to Binary Search Tree
 
 #### Leetcode 333 Largest BST Subtree (与98类似)
 
@@ -6850,7 +6854,32 @@ TreeNode* sortedArrayToBST(vector<int>& nums)
 
 
 
+#### [109. 有序链表转换二叉搜索树](https://leetcode-cn.com/problems/convert-sorted-list-to-binary-search-tree/) todo
 
+```c++
+class Solution {
+public:
+    TreeNode *sortedListToBST(ListNode* head) {
+        if (head == nullptr) return nullptr;
+        if (head->next == nullptr) 
+            return new TreeNode(head->val);
+        ListNode *slow = head, *fast = head, *last = slow;
+      	// slow 中间节点, last 是中间节点的上一个
+        while (fast->next && fast->next->next) {
+            last = slow;
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        fast = slow->next;
+        last->next = nullptr;
+        TreeNode *cur = new TreeNode(slow->val);
+        if (head != slow) 
+            cur->left = sortedListToBST(head);
+        cur->right = sortedListToBST(fast);
+        return cur;
+    }
+};
+```
 
 #### [230. 二叉搜索树中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/)
 
@@ -6963,13 +6992,7 @@ public:
 };
 ```
 
-
-
-
-
-### 树和链表结合
-
-##### [剑指 Offer 36. 二叉搜索树与双向链表](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/)  没看懂 感觉非递归方式可能好理解点 424 收费题
+#### [424.剑指 Offer 36. 二叉搜索树与双向链表](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/)  没看懂 感觉非递归方式可能好理解点 424 收费题
 
 ```c++
 class Solution {
@@ -7040,40 +7063,7 @@ Node* treeToDoublyList(Node* root)
 }
 ```
 
-#### [109. 有序链表转换二叉搜索树](https://leetcode-cn.com/problems/convert-sorted-list-to-binary-search-tree/)
 
-```c++
-class Solution
-{
-    TreeNode *sortedListToBST(ListNode *head, ListNode *tail)
-    {
-       if (head == tail) return nullptr;
-       if( head->next == tail )
-        { 
-            TreeNode *root = new TreeNode( head->val );
-            return root;
-        }
-        ListNode *mid = head;
-        ListNode *fast = head;
-        // 寻找中间结点
-        while(fast->next != tail && fast->next->next != tail )
-        {
-            mid = mid->next;
-            fast = fast->next->next;
-        }
-        TreeNode *root = new TreeNode(mid->val);
-        root->left = sortedListToBST(head, mid);
-        root->right = sortedListToBST(mid->next, tail);
-        return root;
-    }
-
-public:
-    TreeNode *sortedListToBST(ListNode *head)
-    {
-        return sortedListToBST(head, nullptr);
-    }
-};
-```
 
 ### 二叉树的重新构建
 
@@ -7229,9 +7219,10 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 }
 ```
 
-#### [986. Interval List Intersections](https://leetcode.com/problems/interval-list-intersections/)
+#### [986. 区间列表的交集](https://leetcode.cn/problems/interval-list-intersections/)
 
-
+```
+```
 
 
 
