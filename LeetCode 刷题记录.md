@@ -6784,8 +6784,7 @@ void recoverTree(TreeNode* root) {
                 if (first == nullptr) 
                     first = pre;
              		else 
-                  	break;
-                
+                  	break;  
             }
             pre = root;
             root = root->right;
@@ -6851,6 +6850,15 @@ public:
     }
 ```
 
+#### [108. 将有序数组转换为二叉搜索树](https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/)
+
+```
+```
+
+
+
+
+
 #### [230. 二叉搜索树中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/)
 
 ```c++
@@ -6914,9 +6922,52 @@ TreeNode* convertBST(TreeNode* root) {
 }
 ```
 
+#### [450. 删除二叉搜索树中的节点](https://leetcode.cn/problems/delete-node-in-a-bst/)
+
+```c++
+```
+
+
+
 #### [701. 二叉搜索树中的插入操作](https://leetcode.cn/problems/insert-into-a-binary-search-tree/)
 
-```
+```c++ 
+TreeNode* insertIntoBST(TreeNode* root, int val) {
+    if (root == NULL) {
+        TreeNode* node = new TreeNode(val);
+        return node;
+    }
+    if (root->val > val) root->left = insertIntoBST(root->left, val);
+    if (root->val < val) root->right = insertIntoBST(root->right, val);
+    return root;
+}
+
+class Solution {
+private:
+    TreeNode* parent;
+    void traversal(TreeNode* cur, int val) {
+        if (cur == NULL) {
+            TreeNode* node = new TreeNode(val);
+            if (val > parent->val) parent->right = node;
+            else parent->left = node;
+            return;
+        }
+        parent = cur;
+        if (cur->val > val) traversal(cur->left, val);
+        if (cur->val < val) traversal(cur->right, val);
+        return;
+    }
+
+public:
+    TreeNode* insertIntoBST(TreeNode* root, int val) {
+        parent = new TreeNode(0);
+        if (root == NULL) {
+            root = new TreeNode(val);
+        }
+        traversal(root, val);
+        return root;
+    }
+};
 ```
 
 
@@ -7066,7 +7117,7 @@ TreeNode *buildTree(vector<int> &inorder, int inStart, int inEnd, vector<int> &p
         return nullptr;
 
     TreeNode *root = new TreeNode(postorder[postEnd]);
-
+		 // 通过根节点下下标，在中序序列中 将左右子树分开
     int i = find(inorder.begin(), inorder.end(), postorder[postEnd]) - inorder.begin();
     // 注意推导一下下标公式就👌
     root->left = buildTree(inorder, inStart, i - 1, postorder, postStart, i+ postStart-inStart-1 ); // 左子树
