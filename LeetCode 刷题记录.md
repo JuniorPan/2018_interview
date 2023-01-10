@@ -4693,12 +4693,65 @@ public:
 };
 ```
 
+##### [77. 组合](https://leetcode-cn.com/problems/combinations/)
+
+<img src="/Users/panqiang/Desktop/图片来自 「代码随想录」回溯算法精讲（v2.0），第 10 页.png" alt="图片来自 「代码随想录」回溯算法精讲（v2.0），第 10 页" style="zoom:67%;" />
+
+```c++
+void dfs(vector<vector<int>> &res, vector<int> path, int index, int n, int k)
+{
+    if (path.size() == k)
+    {
+        res.push_back(path);
+        return;
+    }
+		// todo: 这个地方的n 还是有优化空间的
+    for(int i = index; i <= n; i++)
+    {
+        path.push_back(i);
+        dfs(res, path, i+1, n, k);
+        path.pop_back();
+    }
+}
+vector<vector<int>> combine(int n, int k) {
+    vector<vector<int>> res;
+    vector<int> path;
+    dfs(res, path, 1, n, k);
+    return res;
+}
+```
+
 ##### [216. 组合总和 III](https://leetcode.cn/problems/combination-sum-iii/)
 
 ```
+void dfs(vector<vector<int>> &res, vector<int> path, int index, int n, int k, int cur_sum)
+    {
+        
+        if (cur_sum > n)
+            return;
+        if (path.size() == k && cur_sum == n)
+        {
+            res.push_back(path);
+            return;
+        }
+            // todo: 这个地方的n 还是有优化空间的
+        for(int i = index; i <= 9; i++)
+        {
+            path.push_back(i);
+            cur_sum += i;
+            dfs(res, path, i+1, n, k, cur_sum);
+            path.pop_back();
+            cur_sum -= i;
+        }
+    }
+
+    vector<vector<int>> combinationSum3(int k, int n) {
+        vector<vector<int>> res;
+        vector<int> path;
+        dfs(res, path, 1, n, k, 0);
+        return res;
+    }
 ```
-
-
 
 ##### [31. 下一个排列](https://leetcode-cn.com/problems/next-permutation/)
 
@@ -4815,34 +4868,6 @@ public:
         
     }
 };
-```
-
-##### [77. 组合](https://leetcode-cn.com/problems/combinations/)
-
-<img src="/Users/panqiang/Desktop/图片来自 「代码随想录」回溯算法精讲（v2.0），第 10 页.png" alt="图片来自 「代码随想录」回溯算法精讲（v2.0），第 10 页" style="zoom:67%;" />
-
-```c++
-void dfs(vector<vector<int>> &res, vector<int> path, int index, int n, int k)
-{
-    if (path.size() == k)
-    {
-        res.push_back(path);
-        return;
-    }
-		// todo: 这个地方的n 还是有优化空间的
-    for(int i = index; i <= n; i++)
-    {
-        path.push_back(i);
-        dfs(res, path, i+1, n, k);
-        path.pop_back();
-    }
-}
-vector<vector<int>> combine(int n, int k) {
-    vector<vector<int>> res;
-    vector<int> path;
-    dfs(res, path, 1, n, k);
-    return res;
-}
 ```
 
 ##### [78. 子集](https://leetcode-cn.com/problems/subsets/) todo: 20211202 还不会
