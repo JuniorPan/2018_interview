@@ -3197,7 +3197,7 @@ bool isMatch(string s, string p)
 }
 ```
 
-##### [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)  #todo 增删改对应的到底是哪个
+##### [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)  #todo
 
 ```c++
 int minDistance(string word1, string word2)
@@ -3230,77 +3230,59 @@ int minDistance(string word1, string word2)
 }
 ```
 
-##### [97. 交错字符串](https://leetcode-cn.com/problems/interleaving-string/)
+##### [583. 两个字符串的删除操作](https://leetcode.cn/problems/delete-operation-for-two-strings/description/)
 
 ```c++
-bool isInterleave(string s1, string s2, string s3)
-{
-    int m = s1.size();
-    int n = s2.size();
-    int k = s3.size();
+int minDistance(string word1, string word2) {
+    // dp[i][j]：以i-1为结尾的字符串word1，和以j-1位结尾的字符串word2，想要达到相等，所需要删除元素的最少次数
+    vector<vector<int>> dp(word1.size() + 1, vector<int>(word2.size() + 1));
 
-    if (m + n != k)
-        return false;
-
-    // dp[i][j] 表示s1[0...i-1] 和s2[0...j-1]能否交替表示成s3[0...i+j-1]
-    vector<vector<bool>> dp(m + 1, vector<bool>(n + 1, false));
-    dp[0][0] = true;
-    for (int i = 1; i <= m; i++)
-    {
-        dp[i][0] = dp[i - 1][0] & (s1[i - 1] == s3[i - 1]);
-    }
-
-    for (int j = 1; j <= n; j++)
-    {
-        dp[0][j] = dp[0][j - 1] & (s2[j - 1] == s3[j - 1]);
-    }
-
-    for (int i = 1; i <= m; i++)
-    {
-        for (int j = 1; j <= n; j++)
-        {
-            if ((s1[i - 1] == s3[i + j - 1] && dp[i - 1][j]) || (s2[j - 1] == s3[i + j - 1] && dp[i][j - 1]))
-                dp[i][j] = true;
+    // dp[i][0]：word2为空字符串，以i-1为结尾的字符串word1要删除多少个元素，才能和word2相同呢，很明显dp[i][0] = i。
+    for (int i = 0; i <= word1.size(); i++) dp[i][0] = i;
+    for (int j = 0; j <= word2.size(); j++) dp[0][j] = j;
+    for (int i = 1; i <= word1.size(); i++) {
+        for (int j = 1; j <= word2.size(); j++) {
+            if (word1[i - 1] == word2[j - 1]) { //  当word1[i - 1] 与 word2[j - 1]相同的时候，dp[i][j] = dp[i - 1][j - 1];
+                dp[i][j] = dp[i - 1][j - 1]; 
+            } else {// 当word1[i - 1] 与 word2[j - 1]不相同的时候，有三种情况： 情况一：删word1[i - 1]，最少操作次数为dp[i - 1][j] + 1,
+                    // 情况二：删word2[j - 1]，最少操作次数为dp[i][j - 1] + 1
+                    // 情况三：同时删word1[i - 1]和word2[j - 1]，操作的最少次数为dp[i - 1][j - 1] + 2
+                    //  dp[i][j - 1] + 1 = dp[i - 1][j - 1] + 2，所以递推公式可简化为：dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1);
+                dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1);
+            }
         }
     }
-    return dp[m][n];
+    return dp[word1.size()][word2.size()];
 }
 ```
 
 ##### [115. 不同的子序列](https://leetcode-cn.com/problems/distinct-subsequences/)
 
 ```c++
-int numDistinct(string s, string t)
-{
-    int m = s.size();
-    int n = t.size();
+int numDistinct(string s, string t) {
+        int m = s.size();
+        int n = t.size();
 
-    // dp[i][j]表示S[0...j-1]中的子序列等于T[0..i-1]
-    // 1 如果s[i-1]!=t[j-1] 则s[:i-1]中匹配t[:j-1]子序列个数==s[:i-2]中匹配t[:j-1]子序列个数
-    //     dp[i][j] = dp[i-1][j]
-    // 2 if s[i-1]==t[j-1]:
-    //     dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
-    //     2.1 用s[i-1]     dp[i-1][j-1] 则s[:i-1]中匹配t[:j-2]子序列个数 ==s[:i-1]中匹配t[:j-1]子序列个数
-    //     2.2 不用s[i-1]   dp[i-1][j]   则s[:i-2]中匹配t[:j-1]子序列个数  ==s[:i-1]中匹配t[:j]子序列个数
-  
-  	// dp[i][j]：以i-1为结尾的s子序列中出现以j-1为结尾的t的个数为dp[i][j]
-    vector<vector<long long>> dp(m + 1, vector<long long>(n + 1, 0));
-    for (int j = 0; j <= m; j++)
-    {
-        dp[j][0] = 1;
-    }
-    for (int i = 1; i <= m; i++)
-    {
-        for (int j = 1; j <= n; j++)
+        // 使用 编辑距离的思路来理解，不断在s中删掉某个字符就行
+        // dp[i][j]：以i-1为结尾的s子序列中出现以j-1为结尾的t的个数为dp[i][j], 
+        vector<vector<unsigned long long>> dp(m + 1, vector<unsigned long long>(n + 1, 0));
+        for (int j = 0; j <= m; j++)
         {
-            if (s[i - 1] != t[j - 1])
-                dp[i][j] = dp[i - 1][j];
-            else
-                dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+            dp[j][0] = 1;
         }
+
+        for (int i = 1; i <= m; i++)
+        {
+            for (int j = 1; j <= n; j++)
+            {
+                if (s[i - 1] != t[j - 1])
+                    dp[i][j] = dp[i - 1][j];
+                else
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+            }
+        }
+        return dp[m][n];
     }
-    return dp[m][n];
-}
 ```
 
 ##### [392. 判断子序列](https://leetcode.cn/problems/is-subsequence/)
@@ -3378,6 +3360,43 @@ int minimumDeleteSum(string s1, string s2)
             {
                 dp[i][j] = min(dp[i-1][j] + s1[i-1], dp[i][j-1] + s2[j-1]);
             }
+        }
+    }
+    return dp[m][n];
+}
+```
+
+##### [97. 交错字符串](https://leetcode-cn.com/problems/interleaving-string/)
+
+```c++
+bool isInterleave(string s1, string s2, string s3)
+{
+    int m = s1.size();
+    int n = s2.size();
+    int k = s3.size();
+
+    if (m + n != k)
+        return false;
+
+    // dp[i][j] 表示s1[0...i-1] 和s2[0...j-1]能否交替表示成s3[0...i+j-1]
+    vector<vector<bool>> dp(m + 1, vector<bool>(n + 1, false));
+    dp[0][0] = true;
+    for (int i = 1; i <= m; i++)
+    {
+        dp[i][0] = dp[i - 1][0] & (s1[i - 1] == s3[i - 1]);
+    }
+
+    for (int j = 1; j <= n; j++)
+    {
+        dp[0][j] = dp[0][j - 1] & (s2[j - 1] == s3[j - 1]);
+    }
+
+    for (int i = 1; i <= m; i++)
+    {
+        for (int j = 1; j <= n; j++)
+        {
+            if ((s1[i - 1] == s3[i + j - 1] && dp[i - 1][j]) || (s2[j - 1] == s3[i + j - 1] && dp[i][j - 1]))
+                dp[i][j] = true;
         }
     }
     return dp[m][n];
