@@ -2628,8 +2628,6 @@ int uniquePaths(int m, int n)
 
 ##### [63. 不同路径 II](https://leetcode-cn.com/problems/unique-paths-ii/)
 
-难度中等531
-
 ```c++
 // https://leetcode-cn.com/problems/unique-paths-ii/solution/si-chong-shi-xian-xiang-xi-tu-jie-63-bu-0qyz7/
 int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
@@ -2677,6 +2675,9 @@ int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
         else
             break;
     }
+  
+  	for (int i = 0; i < m && obstacleGrid[i][0] == 0; i++) dp[i][0] = 1;
+    for (int j = 0; j < n && obstacleGrid[0][j] == 0; j++) dp[0][j] = 1;	
 
     // dp[i][j] 表示从[0][0]--->[i][j] 有多少种走法
     for (int i = 1; i < m; i++)
