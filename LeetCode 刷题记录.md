@@ -4265,7 +4265,7 @@ void dfs(vector<string> &res, string temp, int left, int right, int n)
 {
     // 当 right > left 即右括号比左括号多的时候，后续无论插入左括号还是右括号都不是合法的
   	if (right > left || left > n || right > n)
-        return ;
+        return;
     if (left == n && right == n)
         res.push_back(temp);
 
@@ -4956,9 +4956,8 @@ public:
 ##### [491. 递增子序列](https://leetcode.cn/problems/non-decreasing-subsequences/)
 
 ```c++
+
 ```
-
-
 
 ##### [91. 解码方法](https://leetcode-cn.com/problems/decode-ways/)
 
