@@ -4803,13 +4803,9 @@ void nextPermutation(vector<int>& num)
 }   
 ```
 
-
-
 ##### [46. 全排列](https://leetcode-cn.com/problems/permutations/)
 
-难度中等1294
-
-![image.png](https://pic.leetcode-cn.com/0bf18f9b86a2542d1f6aa8db6cc45475fce5aa329a07ca02a9357c2ead81eec1-image.png)
+<img src="https://img-blog.csdnimg.cn/20201209174225145.png" alt="46.全排列" style="zoom:50%;" />
 
 ```c++
 class Solution
@@ -4847,7 +4843,9 @@ public:
 };
 ```
 
-##### [47. 全排列 II](https://leetcode-cn.com/problems/permutations-ii/) 同40
+##### [47. 全排列 II](https://leetcode-cn.com/problems/permutations-ii/) 
+
+<img src="https://img-blog.csdnimg.cn/20201124201331223.png" alt="47.全排列II1" style="zoom:50%;" />
 
 ```c++
 class Solution 
@@ -4892,39 +4890,9 @@ public:
 
 ##### [78. 子集](https://leetcode-cn.com/problems/subsets/) todo: 20211202 还不会
 
-<img src="https://pic.leetcode-cn.com/1600557223-hvNyjD-image.png" alt="image.png" style="zoom:67%;" />
-
-![image.png](https://pic.leetcode-cn.com/1600565878-FTjJsK-image.png)
+<img src="https://img-blog.csdnimg.cn/202011232041348.png" alt="78.子集" style="zoom: 50%;" />
 
 ```c++
-class Solution 
-{   // 解法一： 每个元素，都有两种选择：选入子集，或不选入子集。
-    void dfs(vector<int>& nums, int i, vector<int> &temp, vector<vector<int>> &res )
-    {    
-        if (i == nums.size())
-        {
-            res.push_back(temp);
-            return;
-        }     
-        temp.push_back(nums[i]); 	// 选择这个数
-        dfs(nums, i+1, temp, res);  // 基于该选择，继续往下递归
-        temp.pop_back();   			// 上面的递归结束，撤销该选择
-        dfs(nums, i+1, temp, res);  // 不选这个数，继续往下递归
-    }    
-public:
-    vector<vector<int>> subsets(vector<int>& nums)
-    {
-        vector<vector<int>> res;
-        if (nums.empty())
-            return res;
-        
-        vector<int> temp;
-        dfs(nums,0, temp, res);
-        return res;
-    }
-};
-
-// 解法二：
 //每次看看有几个数能选，然后选一个
 //用 for 枚举出当前可选的数，比如选第一个数：有 1、2、3 可选。
 //选了 1，选第二个数，有 2、3 可选；如果选 2，选第二个数，只有 3 可选，如下图
@@ -4954,23 +4922,23 @@ public:
 
 ##### [90. 子集 II](https://leetcode-cn.com/problems/subsets-ii/)
 
-![90.子集II.png](https://pic.leetcode-cn.com/1604912138-sosMZx-90.%E5%AD%90%E9%9B%86II.png)
+<img src="https://pic.leetcode-cn.com/1604912138-sosMZx-90.%E5%AD%90%E9%9B%86II.png" alt="90.子集II.png" style="zoom:50%;" />
 
 ```c++
 class Solution 
 {
-    void dfs(vector<int>& nums, int start, vector<int>& temp, vector<vector<int>>& res)
+    void dfs(vector<int>& nums, int index, vector<int>& temp, vector<vector<int>>& res)
     {
         res.push_back(temp);
-        for(int i = start; i < nums.size(); i++)
+        for(int i = index; i < nums.size(); i++)
         {
-            if (i == start || nums[i] != nums[i-1])
-            {
+            // // 而我们要对同一树层使用过的元素进行跳过 
+         	 if (i > index &&  nums[i] == nums[i-1])
+                continue;
+            temp.push_back(nums[i]);
+            dfs(nums, i+1, temp, res);
+            temp.pop_back();          
             
-                temp.push_back(nums[i]);
-                dfs(nums, i+1, temp, res);
-                temp.pop_back();          
-            }
         }
     }
 public:
@@ -4984,6 +4952,13 @@ public:
     }
 };
 ```
+
+##### [491. 递增子序列](https://leetcode.cn/problems/non-decreasing-subsequences/)
+
+```c++
+```
+
+
 
 ##### [91. 解码方法](https://leetcode-cn.com/problems/decode-ways/)
 
