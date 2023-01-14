@@ -6175,6 +6175,8 @@ Node *connect(Node *root)
 }
 ```
 
+#### [117. 填充每个节点的下一个右侧节点指针 II](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/description/)
+
 #### [199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
 
 ```c++
@@ -6506,7 +6508,7 @@ bool hasPathSum(TreeNode *root, int sum)
 }
 ```
 
-#### [113. 路径总和 II](https://leetcode-cn.com/problems/path-sum-ii/)（和[剑指 Offer 34. 二叉树中和为某一值的路径](https://leetcode-cn.com/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/)一样）
+#### [113. 路径总和 II](https://leetcode-cn.com/problems/path-sum-ii/)
 
 ```c++
 // **本质上还是回溯**
@@ -6643,7 +6645,7 @@ TreeNode* invertTree(TreeNode* root) {
 }
 ```
 
-#### [543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/)
+#### [543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/) # 其实和124套路一样 
 
 ```c++
 int diameterOfBinaryTree(TreeNode* root) 
@@ -6675,54 +6677,10 @@ TreeNode* mergeTrees(TreeNode* t1, TreeNode* t2) {
 }
 ```
 
-
-
-#### [剑指 Offer 26. 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
-
-```
-bool isSubStructure(TreeNode* A, TreeNode* B) {
-    if(!A || !B) return false;
-    if(issame(A, B)) return true;
-    return isSubStructure(A->left, B) || isSubStructure(A->right, B);
-}
-bool issame(TreeNode* a, TreeNode* b)
-{
-    if(!b) return true;
-    if(!a || a->val != b->val) return false;
-    return issame(a->left, b->left) && issame(a->right, b->right);
-}
-```
-
-
-
-[剑指 Offer 33. 二叉搜索树的后序遍历序列](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/)
-[剑指 Offer 54. 二叉搜索树的第k大节点](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/)(inorder)
+#### [剑指 Offer 33. 二叉搜索树的后序遍历序列](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/)
 
 ```c++
-// 第k大 中序镜像即可
-int kthLargest(TreeNode* root, int k) {
-    if (root == nullptr || k < 0)
-        return 0;
-    stack<TreeNode *> s;
-    while(!s.empty() || root)
-    {
-        if (root)
-        {
-            s.push(root);
-            root = root->right;
-        }
-        else
-        {
-            root = s.top();
-            s.pop();
-            k--;
-            if (k == 0)
-                return root->val;
-            root = root->left;
-        }
-    }
-    return 0;
-}
+
 ```
 
 
@@ -6732,12 +6690,6 @@ int kthLargest(TreeNode* root, int k) {
 BST特征：中序遍历为单调递增的二叉树，换句话说，根节点的值比左子树任意节点值都大，比右子树任意节点值都小，增删查改均为O（h）复杂度，h为树的高度；注意不是所有的BST题目都需要递归，有的题目只需要while循环即可
 
 #### Leetcode 270 Cloest Binary Search Tree Value
-
-#### Leetcode 235 Lowest Common Ancestor of a Binary Search Tree
-
-#### Leetcode 669 Trim a Binary Search Tree
-
-#### Leetcode 700 Search in a Binary Search Tree
 
 #### Leetcode 333 Largest BST Subtree (与98类似)
 
@@ -6966,10 +6918,17 @@ TreeNode* convertBST(TreeNode* root) {
 }
 ```
 
+#### [669. 修剪二叉搜索树](https://leetcode.cn/problems/trim-a-binary-search-tree/)
+
 #### [450. 删除二叉搜索树中的节点](https://leetcode.cn/problems/delete-node-in-a-bst/)
 
 ```c++
 ```
+
+#### [700. 二叉搜索树中的搜索](https://leetcode.cn/problems/search-in-a-binary-search-tree/)
+
+````c++
+````
 
 
 
