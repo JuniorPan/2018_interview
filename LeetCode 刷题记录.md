@@ -1016,8 +1016,6 @@ bool isPerfectSquare(int num) {
 }
 ```
 
-
-
 #### [33. 搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/) #todo
 
 ```c++
@@ -1184,6 +1182,31 @@ int findDuplicate(vector<int>& nums)
     }    
     return left;
 }
+```
+
+#### [74. 搜索二维矩阵](https://leetcode.cn/problems/search-a-2d-matrix/)
+
+```c++
+bool searchMatrix(vector<vector<int>>& matrix, int target) {
+    int m = matrix.size();
+    int n = matrix[0].size();
+
+    if (matrix.empty() || matrix[0].empty()) 
+        return false;
+    int left = m - 1;
+    int right = 0;
+
+    while(left >= 0 && right < n)
+    {
+        if (matrix[left][right] == target)
+            return true;
+        if (matrix[left][right] < target)
+            right++;
+        else
+            left--;
+    }
+    return false;
+  }
 ```
 
 #### [378. 有序矩阵中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-sorted-matrix/)
