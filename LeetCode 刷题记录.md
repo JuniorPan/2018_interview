@@ -6411,7 +6411,7 @@ bool isBalanced(TreeNode* root)
 ```c++
 TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 {
-    //如果跟节点的值 比pq都大,那么最近公共祖先只能在左子树上，否则在右子树上，只有当root->val 在pq之间的话，root才是最近公共祖先
+    //如果根节点的值 比pq都大,那么最近公共祖先只能在左子树上，否则在右子树上，只有当root->val 在pq之间的话，root才是最近公共祖先
     while (true)
     {
         if (root->val > p->val && root->val > q->val)
@@ -6645,14 +6645,14 @@ TreeNode* invertTree(TreeNode* root) {
 
 #### [543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/)
 
-```
+```c++
 int diameterOfBinaryTree(TreeNode* root) 
 {
     int res = 0;
     maxDepth(root, res);
     return res;
 }
-int maxDepth(TreeNode* node, int& res
+int maxDepth(TreeNode* node, int& res)
 {
     if (!node) return 0;
     int left = maxDepth(node->left, res);
