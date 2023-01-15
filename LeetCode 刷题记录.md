@@ -8454,7 +8454,7 @@ int longestMountain(vector<int>& A) {
 
 #### [915. 分割数组](https://leetcode-cn.com/problems/partition-array-into-disjoint-intervals/)
 
-```
+```c++
 int partitionDisjoint(vector<int>& A) 
     {
         // 里使用三个变量，partitionIdx 表示分割点的位置，preMax 表示 left 中的最大值，curMax 表示当前的最大值。思路是遍历每个数字，更新当前最大值 curMax，并且判断若当前数字 A[i] 小于 preMax，说明这个数字也一定是属于 left 数组的，此时整个遍历到的区域应该都是属于 left 的，所以 preMax 要更新为 curMax，并且当前位置也就是潜在的分割点，所以 partitionIdx 更新为i。由于题目中限定了一定会有分割点，所以这种方法是可以得到正确结果的
@@ -8819,8 +8819,6 @@ string solve(string num1, string num2) {
 ```
 
 #### [151. 翻转字符串里的单词](https://leetcode-cn.com/problems/reverse-words-in-a-string/)
-
-难度中等323
 
 ```
 string reverseWords(string s) 
