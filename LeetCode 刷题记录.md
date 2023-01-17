@@ -532,8 +532,6 @@ string findLongestWord(string s, vector<string> &d)
 3.使用单调栈可以找到元素向左遍历第一个比他小的元素，也可以找到元素向左遍历第一个比他大的元素。
 ```
 
-
-
 ```c++
 // 写法一
 int trap(vector<int>& height) 
@@ -7468,8 +7466,6 @@ vector<int> topKFrequent(vector<int>& nums, int k)
 
 前缀和本质上是在一个list当中，用O（N）的时间提前算好从第0个数字到第i个数字之和，在后续使用中可以在O（1）时间内计算出第i到第j个数字之和，一般很少单独作为一道题出现，而是很多题目中的用到的一个小技巧
 
-
-
 #### [53. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/)
 
 ```c++ 
@@ -7511,8 +7507,6 @@ int subarraySum(vector<int>& nums, int k)
     return res;
 }
 ```
-
-
 
 #### [1031. 两个非重叠子数组的最大和](https://leetcode-cn.com/problems/maximum-sum-of-two-non-overlapping-subarrays/)
 
@@ -7811,8 +7805,6 @@ vector<vector<int>> generateMatrix(int n) {
 }
 ```
 
-
-
 #### [66. 加一](https://leetcode-cn.com/problems/plus-one/)
 
 ```c++
@@ -8033,8 +8025,6 @@ int majorityElement(vector<int>& nums)
     return cand;
 }
 ```
-
-
 
 #### [179. 最大数](https://leetcode-cn.com/problems/largest-number/)
 
