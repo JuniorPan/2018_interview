@@ -2617,7 +2617,7 @@ public:
 
 **状态: f(x)表示从起点走到坐标x, f\[x][y]表示我从起点走到坐标x,y; 方程: 研究走到x, y这个点之前的一步; 初始化: 起点; 答案: 终点**
 
-##### [62. 不同路径](https://leetcode-cn.com/problems/unique-paths/)
+##### [62. 不同路径](https://leetcode-cn.com/problems/unique-paths/) #todo 空间优化
 
 ```c++
 // 空间优化: https://leetcode-cn.com/problems/unique-paths/solution/san-chong-shi-xian-xiang-xi-tu-jie-62-bu-4jz1/
@@ -2649,7 +2649,7 @@ int uniquePaths(int m, int n)
 }
 ```
 
-##### [63. 不同路径 II](https://leetcode-cn.com/problems/unique-paths-ii/)
+##### [63. 不同路径 II](https://leetcode-cn.com/problems/unique-paths-ii/) # todo  空间优化
 
 ```c++
 // https://leetcode-cn.com/problems/unique-paths-ii/solution/si-chong-shi-xian-xiang-xi-tu-jie-63-bu-0qyz7/
@@ -2717,7 +2717,7 @@ int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
 }
 ```
 
-##### [64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/)
+##### [64. 最小路径和](https://leetcode-cn.com/problems/minimum-path-sum/) # todo 空间优化
 
 ```c++
 int minPathSum(vector<vector<int>>& grid) {
@@ -2766,7 +2766,7 @@ int minPathSum(vector<vector<int>> &grid)
 }
 ```
 
-##### [70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/)
+##### [70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/) # todo 空间优化
 
 难度简单2096
 
@@ -2797,7 +2797,6 @@ int minimumTotal(vector<vector<int>>& triangle)
     {
         for (int j = 0; j <= i;  j++)
         {
-            
             triangle[i][j] += min(triangle[i+1][j+1], triangle[i+1][j]);
         }
     }
