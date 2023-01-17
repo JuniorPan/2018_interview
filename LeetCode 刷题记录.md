@@ -2915,8 +2915,6 @@ int numDecodings(string s)
 }
 ```
 
-
-
 ##### [132. 分割回文串 II](https://leetcode-cn.com/problems/palindrome-partitioning-ii/)
 
 ```c++
@@ -4025,7 +4023,6 @@ int countSubstrings(string s)
             if (dp[j][i])
                 res++;
         }
-
     }
     return res;
 }
@@ -4142,16 +4139,12 @@ int rob(TreeNode* root) {
 }
 ```
 
-
-
-
-
 #### 9.股票系列
 
 ##### [121. 买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
 
 ```c++
-// 遍历一次数组，用一个变量记录遍历过数中的最小值，然后每次计算当前值和这个最小值之间的差值最为利润，然后每次选较大的利润来更新
+// 遍历一次数组，用一个变量记录遍历过程中的最小值，然后每次计算当前值和这个最小值之间的差值最为利润，然后每次选较大的利润来更新
 int maxProfit(vector<int>& prices)
 {
     int res = INT_MIN;
@@ -4212,7 +4205,7 @@ int maxProfit(vector<int>& prices) {
 
 #### 10.其他
 
-##### [221. 最大正方形](https://leetcode-cn.com/problems/maximal-square/)
+##### [221. 最大正方形](https://leetcode-cn.com/problems/maximal-square/) todo
 
 ```c++
 int maximalSquare(vector<vector<char>>& matrix) 
