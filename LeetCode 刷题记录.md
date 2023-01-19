@@ -4444,12 +4444,6 @@ public:
 };
 ```
 
-##### [131. 分割回文串](https://leetcode.cn/problems/palindrome-partitioning/)
-
-```
-
-```
-
 ##### [200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
 
 ```c++
@@ -7618,42 +7612,34 @@ void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
 #### [15. 三数之和](https://leetcode-cn.com/problems/3sum/) #Todo
 
 ```c++
-vector<vector<int>> threeSum(vector<int>& nums) 
-{
-    vector<vector<int>> res;
+ vector<vector<int>> res;
     sort(nums.begin(), nums.end());
-
-    if (nums.empty() || nums.size() < 3)
-        return res;
-
-    for(int i = 0; i < nums.size()-2; i++)
+    if (nums.empty())
+        return {};
+    for (int i = 0; i < nums.size() - 2 ; ++i)
     {
-        if (i == 0 || nums[i] != nums[i-1])
-        {
-            //twoSum(nums, i, i+1, nums.size()-1, 0 - nums[i], res);
-            int left = i + 1;
-            int right = nums.size() -1;
-            int target = 0 - nums[i];
-            while(left < right)
+
+        // 需要和上一次枚举的数不相同
+        if (i > 0 && nums[i] == nums[i - 1])
+            continue;
+        int target = 0 - nums[i], left = i + 1, right = nums.size() - 1;
+        while (left < right)
+        {   // 用两个指针分别指向 fix 数字之后开始的数组首尾两个数，如果两个数和正好为 target，则将这两个数和 fix 的数一起存入结果中。
+            // 然后就是跳过重复数字的步骤了，两个指针都需要检测重复数字
+            if (nums[left] + nums[right] == target)
             {
-                if (nums[left] + nums[right] < target)
-                {
-                    left++;
-                }
-                else if (nums[left] + nums[right] > target)
-                {
-                    right--; 
-                }
-                else
-                {
-                    if (left == i+1 || nums[left] != nums[left-1])
-                    {
-                        res.push_back({nums[i], nums[left], nums[right]});
-                    }
-                    left++;
-                    right--;
-                }
+                res.push_back({nums[i], nums[left], nums[right]});
+                while (left < right && nums[left] == nums[left + 1])
+                    ++left;
+                while (left < right && nums[right] == nums[right - 1])
+                    --right;
+                ++left;
+                --right;
             }
+            else if (nums[left] + nums[right] < target)
+                ++left;
+            else
+                --right;
         }
     }
     return res;
@@ -8525,6 +8511,27 @@ string longestCommonPrefix(vector<string>& strs)
         }
     }
     return res;
+}
+```
+
+#### [20. 有效的括号](https://leetcode.cn/problems/valid-parentheses/description/?favorite=2cktkvj)
+
+```c++
+bool isValid(string s) {
+    stack<char> parentheses;
+    // 用一个栈，开始遍历输入字符串，如果当前字符为左半边括号时，则将其压入栈中，如果遇到右半边括号时，
+    // 若此时栈为空，则直接返回 false，如不为空，则取出栈顶元素，若为对应的左半边括号，则继续循环，反之返回 false
+    for (int i = 0; i < s.size(); ++i) {
+        if (s[i] == '(' || s[i] == '[' || s[i] == '{') parentheses.push(s[i]);
+        else {
+            if (parentheses.empty()) return false;
+            if (s[i] == ')' && parentheses.top() != '(') return false;
+            if (s[i] == ']' && parentheses.top() != '[') return false;
+            if (s[i] == '}' && parentheses.top() != '{') return false;
+            parentheses.pop();
+        }
+    }
+    return parentheses.empty();
 }
 ```
 
