@@ -4785,7 +4785,7 @@ void dfs(vector<vector<int>> &res, vector<int> path, int index, int n, int k, in
     }
 ```
 
-##### [31. 下一个排列](https://leetcode-cn.com/problems/next-permutation/)
+##### [31. 下一个排列](https://leetcode-cn.com/problems/next-permutation/)  #todo
 
 ```c++
 那么是如何得到的呢，我们通过观察原数组可以发现，如果从末尾往前看，数字逐渐变大，到了2时才减小的，然后再从后往前找第一个比2大的数字，是3，那么我们交换2和3，再把此时3后面的所有数字转置一下即可，步骤如下：
@@ -4799,19 +4799,18 @@ void dfs(vector<vector<int>> &res, vector<int> path, int index, int n, int k, in
 1　　3　　1　　2　　4　　7
 void nextPermutation(vector<int>& num) 
 {
-    int i, j, n = num.size();
-    for (i = n - 2; i >= 0; --i) {
-        if (num[i + 1] > num[i]) {
-            for (j = n - 1; j > i; --j) {
-                if (num[j] > num[i]) break;
-            }
-            swap(num[i], num[j]);
-            reverse(num.begin() + i + 1, num.end());
-            return;
-        }
-        
-    }
-    reverse(num.begin(), num.end());
+     int i, j, n = nums.size();
+      for (i = n - 2; i >= 0; --i) {
+          if (nums[i + 1] > nums[i]) {
+              for (j = n - 1; j > i; --j) {
+                  if (nums[j] > nums[i]) break;
+              }
+              swap(nums[i], nums[j]);
+              reverse(nums.begin() + i + 1, nums.end());
+              return;
+          }
+      }
+      reverse(nums.begin(), nums.end());
 }   
 ```
 
@@ -8884,32 +8883,27 @@ string decodeString(string s)
 }
 ```
 
-#### [49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/)
+#### [49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/) #todo
 
 ```c++
 // 有点巧妙
 vector<vector<string>> groupAnagrams(vector<string>& strs) 
 {
-    unordered_map<string, vector<string>> mp; // 字典 排序
-    // for (string s : strs)
-    // {
-    //     string t = s;
-    //     sort(t.begin(), t.end());
-    //     mp[t].push_back(s);
-    // }
-
-    for(int i = 0; i < strs.size(); i ++)
-    {
-        string t = strs[i];
-        sort(t.begin(), t.end());
-        mp[t].push_back(strs[i]);
-    }
-    vector<vector<string>> res;
-    for (auto p : mp)
-    {
-        res.push_back(p.second);
-    }
-    return res;
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+      unordered_map<string, vector<string>> mp; // 字典 排序
+      for(int i = 0; i < strs.size(); i ++)
+      {
+          string key = strs[i];
+          sort(key.begin(), key.end());
+          mp[key].push_back(strs[i]);
+      }
+      vector<vector<string>> res;
+      for (auto it : mp)
+      {
+          res.push_back(it.second);
+      }
+      return res;
+  }
 }
 ```
 
