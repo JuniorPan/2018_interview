@@ -7697,6 +7697,22 @@ int firstMissingPositive(vector<int> &nums)
 #### [48. 旋转图像](https://leetcode-cn.com/problems/rotate-image/) #todo 需要扣一下边界
 
 ```c++
+void rotate(vector<vector<int>>& matrix) {
+    int n = matrix.size();
+    // 水平翻转
+    for (int i = 0; i < n / 2; ++i) {
+        for (int j = 0; j < n; ++j) {
+            swap(matrix[i][j], matrix[n - i - 1][j]);
+        }
+    }
+    // 主对角线翻转
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < i; ++j) {
+            swap(matrix[i][j], matrix[j][i]);
+        }
+    }
+}
+
 class Solution 
 { 
     void rotateEdge(vector<vector<int>>& matrix, int left_x, int left_y, int right_x, int right_y)
@@ -7730,61 +7746,72 @@ public:
 
 #### [54. 螺旋矩阵](https://leetcode-cn.com/problems/spiral-matrix/)#todo 同48 注意边界
 
+![fig1](https://assets.leetcode-cn.com/solution-static/54/54_fig1.png)
+
 ```c++
 vector<int> spiralOrder(vector<vector<int>>& matrix)
 {
-    if (matrix.empty() || matrix[0].empty()) 
-        return {};
-    int m = matrix.size(), n = matrix[0].size();
-    vector<int> res;
-    int up = 0, down = m - 1, left = 0, right = n - 1;
-    while (true) 
-    {
-        for (int j = left; j <= right; ++j) 
-            res.push_back(matrix[up][j]);
-        if (++up > down) 
-            break;
-        for (int i = up; i <= down; ++i) 
-            res.push_back(matrix[i][right]);
-        if (--right < left)
-            break;
-        for (int j = right; j >= left; --j) 
-            res.push_back(matrix[down][j]);
-        if (--down < up)
-            break;
-        for (int i = down; i >= up; --i) 
-            res.push_back(matrix[i][left]);
-        if (++left > right)
-            break;
-    }
-    return res;
+    if (matrix.empty()) {
+            return {};
+        }
+        int m = matrix.size(), n = matrix[0].size();
+        vector<int> res;
+        int left = 0, right = n - 1, top = 0, bottom = m - 1;
+
+        while (left <= right && top <= bottom) {
+            for (int i = left; i <= right; i++) {  // matrix[top][left] ---> matrix[top][right]
+                res.push_back(matrix[top][i]);
+            }
+            for (int j = top + 1; j <= bottom; j++) {  // matrix[top+1][right] ---> matrix[top][bottom]
+                res.push_back(matrix[j][right]);
+            }
+            if (left < right && top < bottom) {
+                for (int i = right - 1; i > left; i--) {  // matrix[bottom][right-1] ---> matrix[top][left+1]
+                    res.push_back(matrix[bottom][i]);
+                }
+                for (int j = bottom; j > top; j--) {    // matrix[bottom][left] ---> matrix[top+1][left]
+                    res.push_back(matrix[j][left]);
+                }
+            }
+            left++;
+            right--;
+            top++;
+            bottom--;
+        }
+        return res;
 }
 ```
 
 #### [59. 螺旋矩阵 II](https://leetcode-cn.com/problems/spiral-matrix-ii/)
 
-```
+```c++
 vector<vector<int>> generateMatrix(int n) {
+    int num = 1;
     vector<vector<int>> res(n, vector<int>(n));
-    int up = 0, down = n - 1, left = 0, right = n - 1, val = 1;
-    while (true)
-    {
-        for (int j = left; j <= right; ++j)
-            res[up][j] = val++;
-        if (++up > down)
-            break;
-        for (int i = up; i <= down; ++i)
-            res[i][right] = val++;
-        if (--right < left)
-            break;
-        for (int j = right; j >= left; --j)
-            res[down][j] = val++;
-        if (--down < up)
-            break;
-        for (int i = down; i >= up; --i)
-            res[i][left] = val++;
-        if (++left > right)
-            break;
+    int left = 0, right = n - 1, top = 0, bottom = n - 1;
+    while (left <= right && top <= bottom) {
+        for (int i = left; i <= right; i++) {
+            res[top][i] = num;
+            num++;
+        }
+        for (int j = top + 1; j <= bottom; j++) {
+            res[j][right] = num;
+            num++;
+        }
+        if (left < right && top < bottom) {
+            for (int i = right - 1; i > left; i--) {
+                res[bottom][i] = num;
+                num++;
+            }
+            for (int j = bottom; j > top; j--) {
+                res[j][left] = num;
+                num++;
+            }
+        }
+        left++;
+        right--;
+        top++;
+        bottom--;
     }
     return res;
 }
