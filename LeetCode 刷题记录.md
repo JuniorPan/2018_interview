@@ -7920,10 +7920,12 @@ int longestConsecutive(vector<int>& nums)
 {
     int res = 0;
     unordered_set<int> s(nums.begin(), nums.end());
-    for (int val : nums) {
-        if (!s.count(val)) continue;
-        s.erase(val);
-        int pre = val - 1, next = val + 1;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        if (!s.count(nums[i])) 
+            continue;
+        s.erase(nums[i]);
+        int pre = nums[i] - 1, next = nums[i] + 1;
         while (s.count(pre)) s.erase(pre--);
         while (s.count(next)) s.erase(next++);
         res = max(res, next - pre - 1);
