@@ -2235,17 +2235,21 @@ void reorderList(ListNode *head)
 }
 ```
 
-##### [160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/)
+##### [160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/) # todo 双指针
 
 ```c++
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
+ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) 
+{
+    if (headA == nullptr || headB == nullptr) {
+        return nullptr;
+    }
+    ListNode *pA = headA, *pB = headB;
+    while (pA != pB) {
+        pA = pA == nullptr ? headB : pA->next;
+        pB = pB == nullptr ? headA : pB->next;
+    }
+    return pA;
+}
 class Solution {
     int getLen(ListNode *head)
     {
@@ -5823,7 +5827,7 @@ public:
 
 ```c++
 bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-     vector<vector<int>> graph(numCourses, vector<int>(0));
+        vector<vector<int>> graph(numCourses, vector<int>(0));
         vector<int> indegree(numCourses, 0); // 定点入度表
 
         for (int i = 0; i < prerequisites.size(); i++)
@@ -7215,7 +7219,7 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 
 ### 双堆模式
 
-#### [155. 最小栈](https://leetcode-cn.com/problems/min-stack/)
+#### [155. 最小栈](https://leetcode-cn.com/problems/min-stack/) #todo 
 
 ```c++
 class MinStack {
@@ -7940,6 +7944,9 @@ int longestConsecutive(vector<int>& nums)
 int singleNumber(vector<int> &nums)
 {
     // 如果我们把两个相同的数字异或，0与0 '异或' 是0，1与1 '异或' 也是0，那么我们会得到0。根据这个特点，我们把数组中所有的数字都 '异或' 起来，则每对相同的数字都会得0，然后最后剩下来的数字就是那个只有1次的数字
+  	// 任何数和 000 做异或运算，结果仍然是原来的数，即 a⊕0=a。
+		// 任何数和其自身做异或运算，结果是 0，即 a⊕a=0。
+		// 异或运算满足交换律和结合律，即 a⊕b⊕a=b⊕a⊕a=b⊕(a⊕a)=b⊕0=b
     if (nums.empty())
         return 0;
     int first = nums[0];
@@ -7996,7 +8003,6 @@ int maxProduct(vector<int>& nums)
     int curMin, curMax;
     int preMax = nums[0], preMin = nums[0];
     int res = nums[0];
-
     for(int i = 1; i < nums.size(); i++)
     {
         curMin = min(min(preMax * nums[i], preMin * nums[i]) , nums[i]);
@@ -8014,29 +8020,31 @@ int maxProduct(vector<int>& nums)
 ```c++
 int majorityElement(vector<int>& nums)
 {
-    int n = nums.size();
-    if (n <= 0)
-        return 0;
+    // 我们维护一个候选众数 candidate 和它出现的次数 count。初始时 candidate 可以为任意值，count 为 0；
+        // 我们遍历数组 nums 中的所有元素，对于每个元素 x，在判断 x 之前，如果 count 的值为 0，我们先将 x 的值赋予 candidate，随后我们判断 x：
+        // 如果 x 与 candidate 相等，那么计数器 count 的值增加 1；
+        // 如果 x 与 candidate 不等，那么计数器 count 的值减少 1。
+        // 在遍历完成后，candidate 即为整个数组的众数。
 
-    int time = 0;
-    int cand = 0;
-    for(int i = 0; i < n; i++)
-    {
-        if (time == 0)
+        if (nums.empty())
+            return 0;
+        int candidate = -1;
+        int count = 0;
+        for(int i = 0; i < nums.size(); i++)
         {
-            cand = nums[i];
-            time =1;
+            if (count == 0)
+            {
+                candidate = nums[i];
+                count = 1;
+            }
+            else if (nums[i] == candidate)
+                count += 1;
+            else
+            {
+                count --;
+            } 
         }
-        else if (nums[i] == cand)
-        {
-            time++;
-        }
-        else
-        {
-            time--;
-        }
-    }
-    return cand;
+        return candidate;
 }
 ```
 
