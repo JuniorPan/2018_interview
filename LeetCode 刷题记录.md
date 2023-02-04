@@ -3059,23 +3059,21 @@ int numSquares(int n)
 
 ##### [300. 最长递增子序列](https://leetcode-cn.com/problems/longest-increasing-subsequence/) 
 
-难度中等1533
-
 ```c++
 int lengthOfLIS(vector<int>& nums) 
 {
     if (nums.empty())
-        return 0;
-
-    vector<int> dp(nums.size()+1, 1);
-    dp[0] =0;
+            return 0;
+  	// dp[i] 为考虑前 i 个元素，以第 i 个数字结尾的最长上升子序列的长度，注意 nums[i]必须被选取。
+    vector<int> dp(nums.size(), 0);
+    // dp[0] =0;
     int res= INT_MIN;
-    for(int i = 1; i <= nums.size(); i++)
+    for(int i = 0; i < nums.size(); i++)
     {
-        // dp[i] = 1;
-        for(int j = 1; j < i; j++)
+        dp[i] = 1;
+        for(int j = 0; j < i; j++)
         {
-            if(nums[i-1] > nums[j-1])
+            if(nums[i] > nums[j])
             {
                 dp[i] = max(dp[i], dp[j]+1);
             }
@@ -4182,8 +4180,6 @@ int maxProfit(vector<int>& prices)
 
 ```
 
-
-
 ##### [309. 最佳买卖股票时机含冷冻期](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/)
 
 ```c++
@@ -4198,12 +4194,6 @@ int maxProfit(vector<int>& prices) {
   return sell;
 }
 ```
-
-
-
-
-
-
 
 #### 10.其他
 
@@ -4233,7 +4223,7 @@ int maximalSquare(vector<vector<char>>& matrix)
 
 
 
-
+[1277. 统计全为 1 的正方形子矩阵](https://leetcode.cn/problems/count-square-submatrices-with-all-ones/description/)
 
 ###  分治 
 
@@ -8207,7 +8197,7 @@ vector<int> productExceptSelf(vector<int>& nums)
 
 #### [283. 移动零](https://leetcode-cn.com/problems/move-zeroes/)
 
-```
+```c++
 void moveZeroes(vector<int>& nums) 
 {
     if (nums.empty()) 
@@ -8891,7 +8881,7 @@ public:
 };
 ```
 
-#### [394. 字符串解码](https://leetcode-cn.com/problems/decode-string/)
+#### [394. 字符串解码](https://leetcode-cn.com/problems/decode-string/) # todo
 
 ```c++
 string decodeString(string s) 
