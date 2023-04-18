@@ -4686,34 +4686,35 @@ public:
 <img src="https://pic.leetcode-cn.com/1599718525-iXEiiy-image.png" alt="image.png" style="zoom: 50%;" />
 
 ```c++
-class Solution 
-{
+class Solution {
 public:
-    void backtrack(vector<int>& candidates, int target, vector<int> &temp, vector<vector<int>> &res, int start)
+void dfs(vector<vector<int>> &res, vector<int> path, vector<int>& candidates, int index, int target)
     {
-        if (target < 0)
-            return;
-        if (target == 0)
-        {
-            res.push_back(temp);
+        if (target < 0) {
             return ;
         }
-        
-        for(int i = start; i < candidates.size(); i++)
-        {
-            if(candidates[i] > target) return;
-            if(i && candidates[i] == candidates[i-1] && i > start) continue; // check duplicate combination
-            temp.push_back(candidates[i]);
-            backtrack(candidates, target - candidates[i], temp, res, i+1);
-            temp.pop_back();
+        if (target == 0){
+            res.push_back(path);
+            return;
         }
+        // for循环剪枝 
+        for(int i = index; i < candidates.size() && target - candidates[i] >= 0; i++ )
+        {
+            if (i > index && candidates[i] == candidates[i - 1] )
+                continue;
+            path.push_back(candidates[i]);      
+            target -= candidates[i];
+            dfs(res, path, candidates, i+1, target);
+            target += candidates[i];      
+            path.pop_back();
+        }
+    
     }
-public:
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        sort(candidates.begin(), candidates.end());
+        sort(candidates.begin(), candidates.end()); // 减枝
         vector<vector<int>> res;
-        vector<int> tmp;
-        backtrack(candidates, target, tmp, res, 0);
+        vector<int> path; // 用来存放每一次满足条件的结果
+        dfs(res, path, candidates, 0, target);
         return res;
     }
 };
@@ -7581,25 +7582,28 @@ int maxSubArray(vector<int>& nums)
 #### [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
 
 ```c++
-void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
-{
-    int a = m - 1;
-    int b = n - 1;
-    int i = m + n - 1; // calculate the index of the last element of the merged array
-
-    // go from the back by A and B and compare and put to the A element which is larger
-    while (a >= 0 && b >= 0)
-    {
-        if (nums1[a] > nums2[b])
-            nums1[i--] = nums1[a--];
-        else
-            nums1[i--] = nums2[b--];
+void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int i = m - 1;
+        int j = n - 1;
+        int k = m + n - 1;
+        while(i >= 0 && j >= 0){
+            if (nums1[i] > nums2[j]) {
+                nums1[k] = nums1[i];
+                i--;
+                k--;
+            }
+            else {
+                nums1[k] = nums2[j];
+                k--;
+                j--;
+            }
+        }
+        while(j >= 0){
+            nums1[k] = nums2[j];
+            k--;
+            j--;
+        }
     }
-
-    // if B is longer than A just copy the rest of B to A location, otherwise no need to do anything
-    while (b >= 0)
-        nums1[i--] = nums2[b--];
-}
 ```
 
 #### [15. 三数之和](https://leetcode-cn.com/problems/3sum/) #Todo
