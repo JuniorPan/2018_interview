@@ -905,13 +905,11 @@ int searchInsert(vector<int>& nums, int target) {
     if (nums.empty())
         return -1;
     int left = 0, right = nums.size() -1;
-    while(left <= right)
+    while(left <= right) // // 终止循环的时候 left == right+1
     {
         int mid = left + (right - left) / 2;
-
         if (nums[mid] == target)
             return mid;
-
         if (nums[mid] < target)
             left = mid + 1;
         else
@@ -927,21 +925,20 @@ int searchInsert(vector<int>& nums, int target) {
 class Solution
 {
 public:
-    int lower_bound(vector<int> &nums, int target)
+    int lower_bound(vector<int>& nums, int target)
     {
-        int left = 0;
-        int right = nums.size();
-        while (left < right)
+        int left = 0, right = nums.size();
+        while(left < right) // 终止条件是 left = right, 所以当target一直比num[mid]大的时候left 会一直向右移动，直到超出右边界,来的right的位置
         {
             int mid = left + (right - left) / 2;
-            if (target <= nums[mid])
+            if (nums[mid] == target)
                 right = mid;
-            else
-            {
+            else if (nums[mid] < target)
                 left = mid + 1;
-            }
+            else if (nums[mid] > target)
+                right = mid;
         }
-        return right;
+        return left; // 左右都无所谓了
     }
    vector<int> searchRange(vector<int>& nums, int target) {
         if (nums.empty())
@@ -1253,7 +1250,7 @@ int search(vector<int> &nums, int target)
     if (nums.empty())
             return -1;
     int left = 0, right = nums.size() - 1;
-    while(left <= right)
+    while(left <= right) // while(left <= right) 的终止条件是 left == right + 1，写成区间的形式就是 [right + 1, right]，或者带个具体的数字进去 [3, 2]，可见这时候区间为空，因为没有数字既大于等于 3 又小于等于 2 的吧。所以这时候 while 循环终止是正确的，直接返回 -1 即可。
     {
         int mid = left + (right - left) / 2;
         if (target == nums[mid])
@@ -1265,6 +1262,8 @@ int search(vector<int> &nums, int target)
     }
     return -1;
 }
+
+// while(left < right) 的终止条件是 left == right，写成区间的形式就是 [left, right]，或者带个具体的数字进去 [2, 2]，这时候区间非空，还有一个数 2，但此时 while 循环终止了。也就是说这区间 [2, 2] 被漏掉了，索引 2 没有被搜索，如果这时候直接返回 -1 就是错误的。
 ```
 
 ### 排序 (11)
