@@ -1089,7 +1089,7 @@ int findMin(vector<int> &nums)
 {
     int left = 0;
     int right = nums.size()  -1;
-    while(left <= right)
+    while(left <= right) // // 实际上是不会跳出循环，当 left==right 时直接返回
     {
         if (nums[left] <= nums[right])
             return nums[left];
@@ -1115,7 +1115,8 @@ int findMin(vector<int> &nums)
     int left = 0;
     int right = nums.size()  -1;
     while(left <= right)
-    {
+    {		
+      	// <= 换成 <，nums[left]==nums[right] 时无法判断 [left,right] 递增
         if (nums[left] < nums[right] || left == right) // 当区间中只有一个元素时，直接返回 nums[left]
             return nums[left];
         int mid = left + (right - left ) / 2;
