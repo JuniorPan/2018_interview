@@ -1022,7 +1022,7 @@ int search(vector<int>& nums, int target)
         int mid = left + (right - left);
         if (nums[mid] == target)
             return mid;
-        if (nums[left] <= nums[mid])  // [left, mid] 递增序列
+        if (nums[left] <= nums[mid])  // [left, mid] 递增序列  用等号因为需要考虑left和mid相等的情况，此时 [left,mid] 只有一个元素。
         {
             if (nums[left] <= target && target < nums[mid])  // 加等号，因为 left 可能是 target
                 right = mid - 1; // 在左侧 [left,mid) 查找  因为到了这个地方 num[mid] 已经不可能等于target了
@@ -1044,39 +1044,32 @@ int search(vector<int>& nums, int target)
 #### [81. 搜索旋转排序数组 II](https://leetcode-cn.com/problems/search-in-rotated-sorted-array-ii/)  #todo
 
 ```c++
-bool search(vector<int> &nums, int target)
-{
-    if (nums.empty())
-        return false;
-
-    int left = 0;
-    int right = nums.size()-1;
-
-    while(left <= right)
+bool search(vector<int>& nums, int target) {
+    int left = 0, right = nums.size()-1;
+    while (left <= right)
     {
         int mid = left + (right - left) / 2;
         if (nums[mid] == target)
             return true;
-
-        if (nums[mid] < nums[right]) // 说明 [mid...right]是有序的
+        else if (nums[left] < nums[mid])
+        {
+            if (nums[left] <= target && target < nums[mid])
+                right = mid - 1;
+            else 
+                left = mid + 1;
+        }
+        else if (nums[left] > nums[mid])
         {
             if (nums[mid] < target && target <= nums[right])
                 left = mid + 1;
-            else
+            else 
                 right = mid - 1;
         }
-        else if (nums[mid] > nums[right]) // 说明[left...mid]是有序的
+        else if (nums[left] == nums[mid])
         {
-            if(nums[left] <= target && target < nums[mid])
-                right = mid-1;
-            else
-                left = mid + 1;
+            left++;
         }
-        else if (nums[mid] == nums[right])
-        {
-            --right;                
-        }
-    }    
+    }
     return false;
 }
 ```
@@ -1086,6 +1079,7 @@ bool search(vector<int> &nums, int target)
 ![image.png](https://pic.leetcode-cn.com/f4e1d8b0ec3cd903037611666236efb9fd311e3022d12fb7071a995259e564d9-image.png)![image.png](https://pic.leetcode-cn.com/f7a76bf084aa4e3296eacedd0f3845d5a68ee7064a42f2a0affe62054cca1882-image.png)
 
 ```c++
+// https://imageslr.com/2020/03/06/leetcode-33.html
 // 如果数组没有翻转，即 nums[left] <= nums[right]，则 nums[left] 就是最小值，直接返回
 // 若 nums[left] <= nums[mid]，说明区间 [left,mid] 连续递增，则最小元素一定不在这个区间里，可以直接排除。因此，令 left = mid+1，在 [mid+1,right] 继续查找
 //否则，说明区间 [left,mid] 不连续，则最小元素一定在这个区间里。因此，令 right = mid，在 [left,mid] 继续查找
@@ -1122,7 +1116,7 @@ int findMin(vector<int> &nums)
     int right = nums.size()  -1;
     while(left <= right)
     {
-        if (nums[left] < nums[right] || left == right)
+        if (nums[left] < nums[right] || left == right) // 当区间中只有一个元素时，直接返回 nums[left]
             return nums[left];
         int mid = left + (right - left ) / 2;
         if (nums[left] < nums[mid]) //  [left,mid] 连续递增，则在 [mid+1,right] 查找
