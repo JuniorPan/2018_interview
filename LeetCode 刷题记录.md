@@ -1091,7 +1091,7 @@ int findMin(vector<int> &nums)
     int right = nums.size()  -1;
     while(left <= right) // // 实际上是不会跳出循环，当 left==right 时直接返回
     {
-        if (nums[left] <= nums[right])
+        if (nums[left] <= nums[right]) // = 是当区间只有一个元素的时候
             return nums[left];
         int mid = left + (right - left ) / 2;
         if (nums[left] <= nums[mid]) //  [left,mid] 连续递增，则在 [mid+1,right] 查找
