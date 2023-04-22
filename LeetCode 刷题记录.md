@@ -1269,7 +1269,7 @@ int search(vector<int> &nums, int target)
 [912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
 int partition(vector<int> &nums, int left, int right)
 {
-    int small = left; // small 指向小于区域的下一个元素
+    int small = left; // small 指向小于区域的下一个元素  用最后一个元素作为枢轴元素
     for(int i = left; i < right; i++)
     {
         if (nums[i] < nums[right])
@@ -1288,9 +1288,9 @@ void quickSort(vector<int> &nums, int left, int right)
         quickSort(nums, index + 1, right);
     }
 }
-vector<int> sortArray(vector<int>& arr) {
+vector<int> sortArray(vector<int>& nums) {
     // write code here
-    quickSort(arr, 0, arr.size()-1);
+    quickSort(nums, 0, nums.size()-1);
     return arr;
 }
 ```
@@ -1344,6 +1344,26 @@ void merge_sort(vector<int> &nums, int left, int right)
 
 #### [56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/)
 
+```c++
+vector<vector<int>> merge(vector<vector<int>>& intervals) {  
+    vector<vector<int>> res;
+    if (intervals.empty())
+        return res;
+    sort(intervals.begin(), intervals.end());
+    res.push_back(intervals[0]);
+    for(int i = 1; i < intervals.size(); i++)
+    {
+        int left = intervals[i][0];
+        int right = intervals[i][1];
+        if (left <= res.back()[1])
+            res.back()[1] = max(right, res.back()[1]);
+        else 
+            res.push_back(intervals[i]);
+    }
+    return res;
+}
+```
+
 #### [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/)  TOOD
 
 ```c++
@@ -1353,7 +1373,7 @@ void sortColors(vector<int>& nums)
         return;
 
     int small = 0; // 小于区域的下一个元素位置
-    int large = nums.size() - 1; // 大于区域的下一个位置
+    int large = nums.size() - 1; // 大于区域的上一个位置
     int index = 0;
     while(index <= large) // TODO：这个地方需要注意一下
     {
