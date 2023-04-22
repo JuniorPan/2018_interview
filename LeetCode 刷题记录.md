@@ -1342,6 +1342,24 @@ void merge_sort(vector<int> &nums, int left, int right)
 
 #### [27. 移除元素](https://leetcode-cn.com/problems/remove-element/)
 
+```c++
+int removeElement(vector<int>& nums, int val)
+{
+    if (nums.empty())
+        return 0;
+    int len = 0;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        if (nums[i] != val)
+        {
+            nums[len] = nums[i];
+            len++;
+        }
+    }
+    return len;
+}
+```
+
 #### [56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/)
 
 ```c++
@@ -1395,6 +1413,22 @@ void sortColors(vector<int>& nums)
 
 #### [179. 最大数](https://leetcode-cn.com/problems/largest-number/)
 
+```c++
+string largestNumber(vector<int>& nums) 
+{
+    string res;
+    sort(nums.begin(), nums.end(), [](int a, int b) {
+       return to_string(a) + to_string(b) > to_string(b) + to_string(a); 
+    });
+    for (int i = 0; i < nums.size(); ++i) {
+        res += to_string(nums[i]);
+    }
+    return res[0] == '0' ? "0" : res;
+}
+```
+
+
+
 #### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/) todo
 
 ```c++
@@ -1432,69 +1466,37 @@ public:
 ```c++
 class Solution {
 public:
-
-    int partrition(vector<int>& nums,int left,int right)
+    int partition(vector<int> &nums, int left, int right)
     {
-        int i=left,j=right;
-        int pivot=nums[i];//基准值
-        while(i<j){
-            //当尾部元素大于等于基准值时向前移动后面的指针
-            while(i<j&&nums[j]>=pivot)
-                j--;
-            if(i<j){
-                nums[i]=nums[j];
-                i++;
-            }
-            //当前面的元素小于基准值时向后移动前面的指针
-            while(i<j&&nums[i]<pivot)
-                i++;
-            if(i<j){
-                nums[j]=nums[i];
-                j--;
-            }
-        }
-        nums[i]=pivot;
-        return i;
-    }
-    
-    int partrition_2(vector<int>& input, int start, int end)
-    {
-        int small = start - 1; // small 指向小于区域的最后一个元素
-        for(int i = start;i < end; i++)
+        int small = left; // small 指向小于区域的下一个元素  用最后一个元素作为枢轴元素
+        for(int i = left; i < right; i++)
         {
-            if(input[i] < input[end])
-            {
-                small++;
-                if (i != small)
-                    swap(input[small], input[i]);
-            }
+            if (nums[i] < nums[right])
+                swap(nums[i], nums[small++]);
         }
-        small++;
-        swap(input[small],input[end]);
+        swap(nums[small], nums[right]);
         return small;
     }
 
-
     int quickSelect(vector<int> &nums, int begin, int end, int k)
     {
-        int index = partrition_2(nums, begin, end);
+        int index = partition(nums, begin, end);
         
         while(index != k)
         {
             if (index > k)
             {
                 end = index -1;
-                index = partrition_2(nums, begin, end);
+                index = partition(nums, begin, end);
             }
             else
             {
                 begin = index + 1;
-                index = partrition_2(nums, begin, end);
+                index = partition(nums, begin, end);
             }   
         }
         return index;
     }
-
     void wiggleSort(vector<int>& nums) 
     {
         // 先找到中位数,
