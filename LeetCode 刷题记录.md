@@ -1712,7 +1712,7 @@ public:
 
 #### 链表总结
 
-##### 1） i 从零开始 最终fast会停在第n个节点上，n从零开始
+##### 1） i 从零开始 最终fast会停在第n个节点上，n从零开始 头结点开始
 
 ```c++
 ListNode *fast = head;
@@ -1727,7 +1727,7 @@ for(int i = 0; i < n; i++)
 ```c++
 ListNode *fast = head;
 ListNode *slow = head;
-// 如果链表个数为奇数，那么直接找到了中间结点，如果是偶数则是中间结点的前一个
+// 如果链表个数为奇数，那么s直接走到了中间结点，如果是偶数则是中间结点的前一个
 while(fast->next && fast->next->next)
 {
     slow = slow->next;
@@ -1855,25 +1855,28 @@ ListNode* swapPairs(ListNode* head) {
 ##### [82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/) todo
 
 ```c++
-ListNode *deleteDuplicates(ListNode *head)
-{
-    if (!head || !head->next)
+ListNode* deleteDuplicates(ListNode* head) {
+    if (head == nullptr || head->next == nullptr)
         return head;
-    ListNode *dummy = new ListNode(-1), *pre = dummy;
-    dummy->next = head;
-    while (pre->next)
+    // 删掉所有的重复项，由于链表开头可能会有重复项被删掉的话头指针会改变，而最终却还需要返回链表的头指针
+    ListNode *fake_head = new ListNode(-1), *pre = fake_head;
+    // 定义一个pre指针和一个cur指针，每当pre指针指向新的节点，cur指针从下一个位置开始往下遍历，遇到相同的则继续往下，
+    // 直到遇到不同项时，把pre指针的next指向下面那个不同的元素。
+    // 如果cur指针遍历的第一个元素就不相同，则把前驱指针向下移一位
+    fake_head->next = head;
+    while(pre->next)
     {
         ListNode *cur = pre->next;
-        while (cur->next && cur->next->val == cur->val)
+        while(cur->next && cur->next->val == cur->val)
         {
             cur = cur->next;
         }
         if (cur != pre->next)
             pre->next = cur->next;
         else
-            pre = pre->next;
+            pre = cur;
     }
-    return dummy->next;
+    return fake_head->next;
 }
 ```
 
@@ -1881,22 +1884,18 @@ ListNode *deleteDuplicates(ListNode *head)
 
 ```c++
 ListNode* deleteDuplicates(ListNode* head) {
-    if (head == NULL || head->next == NULL)
+    if (head == nullptr || head->next == nullptr)
         return head;
-
-    ListNode *p = head;
-    while(p && p->next)
-    {
-        if (p->val == p->next->val)
-        {
-            p->next = p->next->next; 
-        }
-        else
-        {
-            p = p->next;
+    // 遍历这个链表，每个结点和其后面的结点比较，如果结点值相同了，只要将前面结点的 next 指针跳过紧挨着的相同值的结点，指向后面一个结点
+    ListNode *cur = head;
+    while (cur && cur->next) {
+        if (cur->val == cur->next->val) {
+            cur->next = cur->next->next;
+        } else {
+            cur = cur->next;
         }
     }
-    return head; 
+    return head;
 }
 ```
 
