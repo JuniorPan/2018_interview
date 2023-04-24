@@ -1969,10 +1969,34 @@ ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
 }
 ```
 
-##### [23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/) #Todo 最小堆的做法 需要熟悉STL
+##### [23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/) #todo 最小堆的做法 需要熟悉STL
 
 ```c++
-// 解法一
+
+// 解法一 （https://github.com/grandyang/leetcode/issues/23）
+class Solution {
+public:
+    // 利用了最小堆这种数据结构，首先把k个链表的首元素都加入最小堆中，它们会自动排好序。然后每次取出最小的那个元素加入最终结果的链表中，然后把取出元素的下一个元素再加入堆中，下次仍从堆中取出最小的元素做相同的操作，以此类推，直到堆中没有元素了，此时k个链表也合并为了一个链表，返回首节点即可
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        auto cmp = [](ListNode*& a, ListNode*& b) {
+            return a->val > b->val;
+        };
+        priority_queue<ListNode*, vector<ListNode*>, decltype(cmp) > q(cmp);
+        for (auto node : lists) {
+            if (node) q.push(node);
+        }
+        ListNode *dummy = new ListNode(-1), *cur = dummy;
+        while (!q.empty()) {
+            auto t = q.top(); q.pop();
+            cur->next = t;
+            cur = cur->next;
+            if (cur->next) q.push(cur->next);
+        }
+        return dummy->next;
+    }
+};
+
+// 解法二
 class Solution
 {
 public:
@@ -2014,29 +2038,6 @@ public:
         if (l2)
             cur->next = l2;
         return pHead->next;
-    }
-};
-
-// 解法二 （https://github.com/grandyang/leetcode/issues/23）
-class Solution {
-public:
-    // 利用了最小堆这种数据结构，首先把k个链表的首元素都加入最小堆中，它们会自动排好序。然后每次取出最小的那个元素加入最终结果的链表中，然后把取出元素的下一个元素再加入堆中，下次仍从堆中取出最小的元素做相同的操作，以此类推，直到堆中没有元素了，此时k个链表也合并为了一个链表，返回首节点即可
-    ListNode* mergeKLists(vector<ListNode*>& lists) {
-        auto cmp = [](ListNode*& a, ListNode*& b) {
-            return a->val > b->val;
-        };
-        priority_queue<ListNode*, vector<ListNode*>, decltype(cmp) > q(cmp);
-        for (auto node : lists) {
-            if (node) q.push(node);
-        }
-        ListNode *dummy = new ListNode(-1), *cur = dummy;
-        while (!q.empty()) {
-            auto t = q.top(); q.pop();
-            cur->next = t;
-            cur = cur->next;
-            if (cur->next) q.push(cur->next);
-        }
-        return dummy->next;
     }
 };
 ```
