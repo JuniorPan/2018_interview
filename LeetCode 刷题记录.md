@@ -2075,7 +2075,6 @@ ListNode* removeNthFromEnd(ListNode* head, int n)
 {
     if (head == nullptr)
         return head;
-
     ListNode *fast = head;
     ListNode *slow = head;
     for(int i = 0; i < n; i++)
@@ -2085,7 +2084,7 @@ ListNode* removeNthFromEnd(ListNode* head, int n)
     // todo: 注意细节
     if (fast == nullptr) // 防止n等链表长度 正好删除第一个节点 
         return head->next;
-    while(fast->next)
+    while(fast->next)  驱
     {
         fast = fast->next;
         slow = slow->next;
@@ -2093,36 +2092,59 @@ ListNode* removeNthFromEnd(ListNode* head, int n)
     slow->next= slow->next->next;
     return head;
 }
+
+// 解法二
+ListNode* removeNthFromEnd(ListNode* head, int n) {
+    if (head == nullptr)
+        return head;
+    ListNode *fast = head, *slow = head, *pre = head;
+    for(int i = 0; i < n; i++)
+    {
+        fast = fast->next;
+    }
+    if (fast == nullptr)
+        return head->next;
+  	// 需要替换下 fast fast->next 跳出循环 slow fast所在的位置
+    while(fast) // 这个地方其实可以替换成 fast,那么当跳出循环时， fast = nullptr， slow 正好来到了倒数第n个节点上，可以用一指针pre记录slow前
+    {
+        pre = slow;
+        fast = fast->next;
+        slow = slow->next;
+    }
+    pre->next = slow->next;
+    return head;
+}
 ```
 
 ##### [61. 旋转链表](https://leetcode-cn.com/problems/rotate-list/)  # todo 
 
 ```c++
-ListNode *rotateRight(ListNode *head, int k)
-{
-    if (!head) return NULL;
-    int n = 0;
+ListNode* rotateRight(ListNode* head, int k) {
+    if (head == nullptr)
+        return head;
+    int node_num = 0;
     ListNode *cur = head;
-    while (cur)
+    while(cur)
     {
-        ++n;
         cur = cur->next;
+        node_num++ ;
     }
-    k %= n;
-    ListNode *fast = head, *slow = head;
-    for (int i = 0; i < k; ++i)
+    int last_n = k % node_num;
+    if (last_n == 0)
+        return head;
+    ListNode *fast = head, *slow = head, *pre = head;
+    for(int i =0; i < last_n; i++)
     {
         fast = fast->next;
     }
-    if (fast == nullptr) return head;
-    while (fast->next)
+    while(fast->next)
     {
-        fast = fast->next;
         slow = slow->next;
+        fast = fast->next;
     }
     fast->next = head;
     fast = slow->next;
-    slow->next = NULL;
+    slow->next = nullptr;
     return fast;
 }
 ```
