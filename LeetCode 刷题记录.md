@@ -1828,6 +1828,39 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
 }
 ```
 
+#### [两数相加 II](https://leetcode.cn/problems/add-two-numbers-ii/)
+
+```c++
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        stack<int> s1, s2;
+        while (l1) {
+            s1.push(l1->val);
+            l1 = l1->next;
+        }
+        while (l2) {
+            s2.push(l2->val);
+            l2 = l2->next;
+        }
+        int sum = 0;
+        ListNode *res = new ListNode(0);
+        while (!s1.empty() || !s2.empty()) {
+            if (!s1.empty()) {sum += s1.top(); s1.pop();}
+            if (!s2.empty()) {sum += s2.top(); s2.pop();}
+            res->val = sum % 10;
+            ListNode *head = new ListNode(sum / 10);
+            head->next = res;
+            res = head;
+            sum /= 10;
+        }
+        return res->val == 0 ? res->next : res;
+    }
+};
+```
+
+
+
 ##### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/) todo
 
 ```c++
@@ -6089,7 +6122,6 @@ bool judgeTotal(TreeNode *root)
     }
     return true;
 }
-
 ```
 
 #### [102. 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/)
@@ -6216,119 +6248,98 @@ Node *connect(Node *root)
 
 #### [117. 填充每个节点的下一个右侧节点指针 II](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/description/)
 
+```
+Node* connect(Node* root) {
+    if (!root) return NULL;
+    queue<Node*> q;
+    q.push(root);
+    while (!q.empty()) {
+        int len = q.size();
+        for (int i = 0; i < len; ++i) {
+            Node *t = q.front(); q.pop();
+            if (i < len - 1) t->next = q.front();
+            if (t->left) q.push(t->left);
+            if (t->right) q.push(t->right);
+        }
+    }
+    return root;
+}
+```
+
 #### [199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
 
 ```c++
 vector<int> rightSideView(TreeNode* root)
 {
-    vector<int> res;
-    if (!root)
-        return res;
+     vector<int> res;
+      if (root == NULL)
+          return res;
 
-    queue<TreeNode *> q;
-    TreeNode *last = root;
-    TreeNode *nlast = nullptr;
-    q.push(root);
-    while(!q.empty())
-    {
-        root = q.front();
-        q.pop();
-
-        if (root->left)
-        {
-            q.push(root->left);
-            nlast = root->left;
-        }
-        if (root->right)
-        {
-            q.push(root->right);
-            nlast = root->right;
-        }
-
-        if (root == last)
-        {
-            res.push_back(root->val);
-            last = nlast;
-        }
-
-    }
-    return res;
+      queue<TreeNode *> q;
+      q.push(root);
+      while (!q.empty())
+      {
+          int size = q.size();
+          vector<int> level;
+          for (int i = 0; i < size; i++)
+          {
+              TreeNode *node = q.front();
+              level.push_back(node->val);
+              q.pop();
+              if (node->left)
+                  q.push(node->left);
+              if (node->right)
+                  q.push(node->right);
+          }
+          res.push_back(level.back());
+      }
+      return res;
 }
 ```
 
 #### [513. 找树左下角的值](https://leetcode-cn.com/problems/find-bottom-left-tree-value/)
 
 ```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
-class Solution {
-    
-public:
-    int findBottomLeftValue(TreeNode* root)
+int findBottomLeftValue(TreeNode* root) { 
+    int res = 0;
+    queue<TreeNode *> q;
+    q.push(root);
+    // 使用个小trick，使得其更加的简洁，由于一般的层序是从左往右的，那么如果我们反过来，
+    // 每次从右往左遍历，这样就不用检测每一层的起始位置了，最后一个处理的结点一定是最后一层的最左结点，我们直接返回其结点值即可
+    while(!q.empty())
     {
-        return levelOrder(root, depth(root));
+        root = q.front(); q.pop();
+        if (root->right) q.push(root->right);
+        if (root->left)  q.push(root->left);
     }
-private:
-   
-    int depth(TreeNode *root)
-    {
-        if (root == NULL)
-            return 0;
-        int ldepth = depth(root->left);
-        int rdepth = depth(root->right);
-        return ldepth > rdepth ? ldepth + 1 : rdepth + 1;
-    }
-    
-    int levelOrder(TreeNode *root, int d)
-    {
-        queue<TreeNode *> q;
-        q.push(root);
-        int level = 0;
-        TreeNode *last = root;
-        TreeNode *nlast = nullptr;
-        int res;
-        while(!q.empty())
-        {
-            root = q.front();
-            q.pop();
-            
-            if (level == d-1)
-                return root->val;
-            
-            if (root->left)
-            {
-                q.push(root->left);
-                nlast = root->left;
-            }
-                
-            if (root->right)
-            {
-                q.push(root->right);
-                nlast = root->right;
-            }
-               
-            
-            if(root == last && !q.empty())
-            {
-                level ++;
-                last = nlast;
-            }
-        }
-        
-        return res;
-        
-    }
-};
+    return root->val;
+}
 ```
 
-#### [662. 二叉树最大宽度](https://leetcode.cn/problems/maximum-width-of-binary-tree/)
+#### [662. 二叉树最大宽度](https://leetcode.cn/problems/maximum-width-of-binary-tree/) todo
+
+```c++
+int widthOfBinaryTree(TreeNode* root) {
+    if (!root) return 0;
+    int res = 0;
+    queue<pair<TreeNode*,int>> q;
+    q.push({root, 1});
+    while (!q.empty()) {
+        if (q.size() == 1) q.front().second = 1;
+        int left = q.front().second, right = left, n = q.size();
+        for (int i = 0; i < n; ++i) {
+            auto t = q.front().first; 
+            right = q.front().second; q.pop();
+            if (t->left) q.push({t->left, right * 2});
+            if (t->right) q.push({t->right, right * 2 + 1});
+        }
+        res = max(res, right - left + 1);
+    }
+    return res;
+}
+```
+
+
 
 #### Leetcode 297 Serialize and Deserialize Binary Tree （很好的BFS和双指针结合的题）
 
@@ -6369,9 +6380,6 @@ private:
 
     
 
-    
-
-    #### 
 
 #### [100. 相同的树](https://leetcode-cn.com/problems/same-tree/)
 
@@ -6379,17 +6387,13 @@ private:
 bool isSameTree(TreeNode *p, TreeNode *q)
 {
     if (p == nullptr && q == nullptr)
-        return true;
-
+            return true;
     if ((p == nullptr && q != nullptr) || (p != nullptr && q == nullptr))
         return false;
-
-    if (!p && !q && p->val != q->val)
+    if (p->val != q->val)
         return false;
-    else
-    {
-        return p->val == q->val && isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
-    }
+    else 
+        return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
 }
 ```
 
