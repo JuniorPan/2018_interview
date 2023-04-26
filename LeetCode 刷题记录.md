@@ -149,6 +149,31 @@ int minSubArrayLen(int target, vector<int>& nums) {
 }   
 ```
 
+#### [713.乘积小于 K 的子数组](https://leetcode.cn/problems/subarray-product-less-than-k/)
+
+```
+int numSubarrayProductLessThanK(vector<int>& nums, int k) {
+    if (nums.empty())
+        return 0;
+
+    int res = 0;
+    int prod = 1;
+    int left = 0;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        prod *= nums[i];
+        // 形成窗口
+        while (left <= i && prod >= k) 
+            prod /= nums[left++];
+
+        res += i - left + 1;
+    }
+    return res;
+}
+```
+
+
+
 #### [239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)
 
 ```c++
@@ -177,6 +202,8 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
     return res;
 }
 ```
+
+
 
 #### [424. 替换后的最长重复字符](https://leetcode-cn.com/problems/longest-repeating-character-replacement/) #todo
 
@@ -7375,9 +7402,8 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 #### [986. 区间列表的交集](https://leetcode.cn/problems/interval-list-intersections/)
 
 ```
+
 ```
-
-
 
 ### 双堆模式
 
@@ -7455,16 +7481,13 @@ public:
 
 #### [剑指 Offer 09. 用两个栈实现队列](https://leetcode-cn.com/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/)
 
-
-
 ### hash 相关
 
 #### [220.存在重复元素 III](https://leetcode.cn/problems/contains-duplicate-iii/)
 
 ```
+
 ```
-
-
 
 ### 前K大的数模式HEAP
 
@@ -7652,9 +7675,65 @@ int maxSubArray(vector<int>& nums) {
     }
 ```
 
+#### [303.区域和检索 - 数组不可变](https://leetcode.cn/problems/range-sum-query-immutable/description/)
+
+```
+
+```
+
 #### [304. 二维区域和检索 - 矩阵不可变](https://leetcode-cn.com/problems/range-sum-query-2d-immutable/)
 
+```c++
+class NumMatrix {
+public:
+  	// 建立一个累计区域和的数组，然后根据边界值的加减法来快速求出给定区域之和。这里我们维护一个二维数组dp，其中dp[i][j]表示累计区间(0, 0)到(i, j)这个矩形区间所有的数字之和，那么此时如果我们想要快速求出(r1, c1)到(r2, c2)的矩形区间时，只需dp[r2][c2] - dp[r2][c1 - 1] - dp[r1 - 1][c2] + dp[r1 - 1][c1 - 1]即可，下面的代码中我们由于用了辅助列和辅助行
+    NumMatrix(vector<vector<int> > &matrix) {
+        if (matrix.empty() || matrix[0].empty()) return;
+        dp.resize(matrix.size() + 1, vector<int>(matrix[0].size() + 1, 0));
+        for (int i = 1; i <= matrix.size(); ++i) {
+            for (int j = 1; j <= matrix[0].size(); ++j) {
+                dp[i][j] = dp[i][j - 1] + dp[i - 1][j] - dp[i - 1][j - 1] + matrix[i - 1][j - 1];
+            }
+        }
+    }
+    int sumRegion(int row1, int col1, int row2, int col2) {
+        return dp[row2 + 1][col2 + 1] - dp[row1][col2 + 1] - dp[row2 + 1][col1] + dp[row1][col1];
+    }
+    
+private:
+    vector<vector<int> > dp;
+};
+```
+
 #### [523. 连续的子数组和](https://leetcode-cn.com/problems/continuous-subarray-sum/)
+
+#### [525.连续数组](https://leetcode.cn/problems/contiguous-array/)
+
+```c++
+int findMaxLength(vector<int>& nums) {
+    unordered_map<int, int> m;
+    int res = 0;
+    int cur_sum = 0;
+    // HashMap 初始化一个 0 -> -1 的映射，这是为了当 sum 第一次出现0的时候，即这个子数组是从原数组的起始位置开始，需要计算这个子数组的长度，
+    // 而不是建立当前子数组之和 sum 和其结束位置之间的映射。比如就拿例子1来说，nums = [0, 1]，当遍历0的时候，sum = -1，此时建立 -1 -> 0 的映射，
+    // 当遍历到1的时候，此时 sum = 0 了，若 HashMap 中没有初始化一个 0 -> -1 的映射，此时会建立 0 -> 1 的映射，而不是去更新这个满足题意的子数组的长度
+    m[0] = -1; 
+
+    for(int i = 0; i< nums.size(); i++)
+    {
+        cur_sum += (nums[i] == 1) ? 1 : -1;
+        if (m.count(cur_sum))
+        {
+            res = max(res, i - m[cur_sum]);
+        }
+        else 
+            m[cur_sum] = i;
+    }
+    return res;
+}
+```
+
+
 
 #### [560. 和为 K 的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/)
 
@@ -7663,7 +7742,7 @@ int subarraySum(vector<int>& nums, int k)
 {
     unordered_map<int, int> hasSum; // 记录每个累加和出现的次数
     int cur_cum = 0;
-    hasSum[0] = 1;
+    hasSum[0] = 1; // cur_cum 刚好为k的时候，那么数组从起始到当前位置的这段子数组的和就是k，满足题意，如果 HashMap 中事先没有 m[0] 项的话
     int res = 0;
     for(int i = 0; i < nums.size(); i++)
     {
