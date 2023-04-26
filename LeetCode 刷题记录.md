@@ -119,6 +119,61 @@ string minWindow(string s, string t)
 }
 ```
 
+#### [209.长度最小的子数组](https://leetcode.cn/problems/minimum-size-subarray-sum/description/)
+
+```c++
+int minSubArrayLen(int target, vector<int>& nums) {
+    if (nums.empty())
+        return 0;
+    int left = 0;
+    int cur_sum = 0;
+    int index = 0;
+    int res = INT_MAX;
+    while(index <= nums.size()-1)
+    {
+        // 形成一个窗口 
+        while(cur_sum < target && index <= nums.size()-1)
+        {
+            cur_sum += nums[index];
+            index++;
+        }
+        // 收缩窗口 左边界
+        while(cur_sum >= target)
+        {
+            res = min(res, index - left);
+            cur_sum -= nums[left];
+            left++;
+        }
+    }
+    return res == INT_MAX ? 0 : res;
+}   
+```
+
+#### [713.乘积小于 K 的子数组](https://leetcode.cn/problems/subarray-product-less-than-k/)
+
+```
+int numSubarrayProductLessThanK(vector<int>& nums, int k) {
+    if (nums.empty())
+        return 0;
+
+    int res = 0;
+    int prod = 1;
+    int left = 0;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        prod *= nums[i];
+        // 形成窗口
+        while (left <= i && prod >= k) 
+            prod /= nums[left++];
+
+        res += i - left + 1;
+    }
+    return res;
+}
+```
+
+
+
 #### [239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)
 
 ```c++
@@ -147,6 +202,8 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
     return res;
 }
 ```
+
+
 
 #### [424. 替换后的最长重复字符](https://leetcode-cn.com/problems/longest-repeating-character-replacement/) #todo
 
@@ -1236,6 +1293,13 @@ public:
     }
 };
 ```
+
+#### [540.有序数组中的单一元素](https://leetcode.cn/problems/single-element-in-a-sorted-array/description/) #todo
+
+```
+```
+
+
 
 #### [704. 二分查找](https://leetcode-cn.com/problems/binary-search/)
 
@@ -6122,7 +6186,6 @@ bool judgeTotal(TreeNode *root)
     }
     return true;
 }
-
 ```
 
 #### [102. 二叉树的层序遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/)
@@ -6267,8 +6330,11 @@ Node* connect(Node* root) {
 }
 ```
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> bf9e7e3e8b45537d0779d900f35ba90c7ec6be3c
 #### [199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
 
 ```c++
@@ -6277,6 +6343,28 @@ vector<int> rightSideView(TreeNode* root)
      vector<int> res;
       if (root == NULL)
           return res;
+<<<<<<< HEAD
+
+      queue<TreeNode *> q;
+      q.push(root);
+      while (!q.empty())
+      {
+          int size = q.size();
+          vector<int> level;
+          for (int i = 0; i < size; i++)
+          {
+              TreeNode *node = q.front();
+              level.push_back(node->val);
+              q.pop();
+              if (node->left)
+                  q.push(node->left);
+              if (node->right)
+                  q.push(node->right);
+          }
+          res.push_back(level.back());
+      }
+      return res;
+=======
 
       queue<TreeNode *> q;
       q.push(root);
@@ -6303,76 +6391,47 @@ vector<int> rightSideView(TreeNode* root)
 #### [513. 找树左下角的值](https://leetcode-cn.com/problems/find-bottom-left-tree-value/)
 
 ```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
-class Solution {
-    
-public:
-    int findBottomLeftValue(TreeNode* root)
+int findBottomLeftValue(TreeNode* root) { 
+    int res = 0;
+    queue<TreeNode *> q;
+    q.push(root);
+    // 使用个小trick，使得其更加的简洁，由于一般的层序是从左往右的，那么如果我们反过来，
+    // 每次从右往左遍历，这样就不用检测每一层的起始位置了，最后一个处理的结点一定是最后一层的最左结点，我们直接返回其结点值即可
+    while(!q.empty())
     {
-        return levelOrder(root, depth(root));
+        root = q.front(); q.pop();
+        if (root->right) q.push(root->right);
+        if (root->left)  q.push(root->left);
     }
-private:
-   
-    int depth(TreeNode *root)
-    {
-        if (root == NULL)
-            return 0;
-        int ldepth = depth(root->left);
-        int rdepth = depth(root->right);
-        return ldepth > rdepth ? ldepth + 1 : rdepth + 1;
-    }
-    
-    int levelOrder(TreeNode *root, int d)
-    {
-        queue<TreeNode *> q;
-        q.push(root);
-        int level = 0;
-        TreeNode *last = root;
-        TreeNode *nlast = nullptr;
-        int res;
-        while(!q.empty())
-        {
-            root = q.front();
-            q.pop();
-            
-            if (level == d-1)
-                return root->val;
-            
-            if (root->left)
-            {
-                q.push(root->left);
-                nlast = root->left;
-            }
-                
-            if (root->right)
-            {
-                q.push(root->right);
-                nlast = root->right;
-            }
-               
-            
-            if(root == last && !q.empty())
-            {
-                level ++;
-                last = nlast;
-            }
-        }
-        
-        return res;
-        
-    }
-};
+    return root->val;
+>>>>>>> bf9e7e3e8b45537d0779d900f35ba90c7ec6be3c
+}
 ```
 
-#### [662. 二叉树最大宽度](https://leetcode.cn/problems/maximum-width-of-binary-tree/)
+#### [662. 二叉树最大宽度](https://leetcode.cn/problems/maximum-width-of-binary-tree/) todo
+
+```c++
+int widthOfBinaryTree(TreeNode* root) {
+    if (!root) return 0;
+    int res = 0;
+    queue<pair<TreeNode*,int>> q;
+    q.push({root, 1});
+    while (!q.empty()) {
+        if (q.size() == 1) q.front().second = 1;
+        int left = q.front().second, right = left, n = q.size();
+        for (int i = 0; i < n; ++i) {
+            auto t = q.front().first; 
+            right = q.front().second; q.pop();
+            if (t->left) q.push({t->left, right * 2});
+            if (t->right) q.push({t->right, right * 2 + 1});
+        }
+        res = max(res, right - left + 1);
+    }
+    return res;
+}
+```
+
+
 
 #### Leetcode 297 Serialize and Deserialize Binary Tree （很好的BFS和双指针结合的题）
 
@@ -6413,9 +6472,6 @@ private:
 
     
 
-    
-
-    #### 
 
 #### [100. 相同的树](https://leetcode-cn.com/problems/same-tree/)
 
@@ -6423,40 +6479,32 @@ private:
 bool isSameTree(TreeNode *p, TreeNode *q)
 {
     if (p == nullptr && q == nullptr)
-        return true;
-
+            return true;
     if ((p == nullptr && q != nullptr) || (p != nullptr && q == nullptr))
         return false;
-
-    if (!p && !q && p->val != q->val)
+    if (p->val != q->val)
         return false;
-    else
-    {
-        return p->val == q->val && isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
-    }
+    else 
+        return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
 }
 ```
 
 #### [101. 对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/)
 
 ```c++
-class Solution
-{
+class Solution {
+public:
     bool isSymmetricTree(TreeNode *root1, TreeNode *root2)
     {
-        if (!root1 && !root2)
+        if (root1 == nullptr && root2 == nullptr)
             return true;
-        if (!root1 || !root2)
+        if (root1 == nullptr || root2 == nullptr)
             return false;
-        if (root1 && root2)
-            return root1->val == root2->val && isSymmetricTree(root1->left, root2->right) && isSymmetricTree(root1->right, root2->left);
-        else
-            return false;
+        
+        return root1->val == root2->val && isSymmetricTree(root1->left, root2->right) && isSymmetricTree(root1->right, root2->left);
+       
     }
-
-public:
-    bool isSymmetric(TreeNode *root)
-    {
+    bool isSymmetric(TreeNode* root) {
         if (!root)
             return true;
         return isSymmetricTree(root->left, root->right);
@@ -6496,7 +6544,8 @@ bool isBalanced(TreeNode* root)
 ```c++
 TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 {
-    //如果根节点的值 比pq都大,那么最近公共祖先只能在左子树上，否则在右子树上，只有当root->val 在pq之间的话，root才是最近公共祖先
+    // 如果根节点的值 比pq都大,那么最近公共祖先只能在左子树上，否则在右子树上，
+    // 只有当root->val 在pq之间的话，root才是最近公共祖先
     while (true)
     {
         if (root->val > p->val && root->val > q->val)
@@ -6529,7 +6578,7 @@ TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
 {
     // 看当前结点是否为空，若为空则直接返回空，若为p或q中的任意一个，也直接返回当前结点。否则的话就对其左右子结点分别调用递归函数，由于这道题限制了p和q一定都在二叉树中存在，那么如果当前结点不等于p或q，p和q要么分别位于左右子树中，要么同时位于左子树，或者同时位于右子树
     if (root == nullptr)
-            return nullptr;
+         return nullptr;
     if  (root == p || root == q)
         return root;
 
@@ -6574,8 +6623,6 @@ public:
     }
 };
 ```
-
-
 
 #### [112. 路径总和](https://leetcode-cn.com/problems/path-sum/)
 
@@ -6641,6 +6688,9 @@ void dfs(TreeNode* node, int sum, int curSum, vector<TreeNode*>& temp, int& res)
     curSum += node->val;
     temp.push_back(node);
     if (curSum == sum) ++res;
+  	// 相当于先序遍历二叉树，对于每一个节点都有记录了一条从根节点到当前节点到路径，同时用一个变量 curSum 记录路径节点总和，然后看 curSum 和 sum 是否相等，				相等的话结果 res 加1，
+    // 不等的话继续查看子路径和有没有满足题意的，做法就是每次去掉一个节点，看路径和是否等于给定值，
+    // 注意最后必须留一个节点，不能全去掉了，因为如果全去掉了，路径之和为0，而如果给定值刚好为0的话就会有问题
     int t = curSum;
     for (int i = 0; i < temp.size() - 1; ++i) {
         t -= temp[i]->val;
@@ -6938,6 +6988,13 @@ public:
 };
 ```
 
+#### [173.二叉搜索树迭代器](https://leetcode.cn/problems/binary-search-tree-iterator/)
+
+```
+```
+
+
+
 #### [230. 二叉搜索树中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/)
 
 ```c++
@@ -6966,6 +7023,78 @@ int kthSmallest(TreeNode* root, int k)
         }
     }
     return 0;
+}
+```
+
+#### [285.二叉搜索树中的中序后继](https://leetcode.cn/problems/P5rCT8/description/?envType=study-plan-v2&id=coding-interviews-special) #todo
+
+```c++
+TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) {
+    // 用迭代的中序遍历方法，然后用一个 bool 型的变量b，初始化为 false，
+    // 进行中序遍历，对于遍历到的节点，首先看如果此时b已经为 true，说明之前遍历到了p，那么此时返回当前节点，
+    // 如果b仍为 false，看遍历到的节点和p是否相同，如果相同，此时将b赋为 true，那么下一个遍历到的节点就能返回了
+    stack<TreeNode *> s;
+    bool is_node_p = false;
+    while(!s.empty() || root)
+    {
+        if (root)
+        {
+            s.push(root);
+            root = root->left;
+        }
+        else
+        {
+            root = s.top(); s.pop();
+            if (is_node_p)
+                return root;
+            if (root == p)
+                is_node_p = true;
+            root = root->right;
+        }
+    }
+    return nullptr;
+}
+
+// 解法二
+// 首先看根节点值和p节点值、、的大小，如果根节点值大，说明p节点肯定在左子树中，那么此时先将 res 赋为 root，然后 root 移到其左子节点，循环的条件是 root 存在，再比较此时 root 值和p节点值的大小，如果还是 root 值大，重复上面的操作，如果p节点值，那么将 root 移到其右子节点，这样当 root 为空时，res 指向的就是p的后继节点
+TreeNode* inorderSuccessor(TreeNode* root, TreeNode* p) {
+        TreeNode *res = NULL;
+        while (root) {
+            if (root->val > p->val) {
+                res = root;
+                root = root->left;
+            } else root = root->right;
+        }
+        return res;
+    }
+```
+
+
+
+#### [897.递增顺序搜索树](https://leetcode.cn/problems/increasing-order-search-tree/)
+
+```c++
+TreeNode* increasingBST(TreeNode* root) {
+    TreeNode *head = new TreeNode(-1);
+    TreeNode *pre = head;
+    stack<TreeNode *> s;
+    while(!s.empty() || root)
+    {
+        if (root)
+        {
+            s.push(root);
+            root = root->left;
+        }
+        else 
+        {
+            root = s.top(); s.pop();
+            pre->right = root;
+            pre = pre->right;
+            pre->left = nullptr;
+            root = root->right;
+        }
+    }
+    return head->right;
 }
 ```
 
@@ -7007,6 +7136,23 @@ TreeNode* convertBST(TreeNode* root) {
 
 ```c++
 ```
+
+#### [653.两数之和 IV - 输入二叉搜索树](https://leetcode.cn/problems/two-sum-iv-input-is-a-bst/)
+
+```c++
+bool findTarget(TreeNode* root, int k) {
+    unordered_set<int> st;
+    return helper(root, k, st);
+}
+bool helper(TreeNode* node, int k, unordered_set<int>& st) {
+    if (!node) return false;
+    if (st.count(k - node->val)) return true;
+    st.insert(node->val);
+    return helper(node->left, k, st) || helper(node->right, k, st);
+}
+```
+
+
 
 #### [700. 二叉搜索树中的搜索](https://leetcode.cn/problems/search-in-a-binary-search-tree/)
 
@@ -7183,7 +7329,18 @@ TreeNode *buildTree(vector<int> &inorder, vector<int> &postorder)
 
 ```c++
 class Codec {
-    TreeNode* de(istringstream& iss)
+public:
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        if (root == NULL)
+        {
+            return "null";
+        }
+        else
+            return to_string(root->val) + " " + serialize(root->left) + " " + serialize(root->right);
+    }
+  
+  	TreeNode* de(istringstream& iss)
     {
         TreeNode* root = NULL;
         string word;
@@ -7193,19 +7350,6 @@ class Codec {
             root->right = de(iss);
         }
         return root;
-    }
-public:
-
-    // Encodes a tree to a single string.
-    string serialize(TreeNode* root) {
-        if (root == NULL)
-        {
-            return "null";
-        }
-        else
-            return to_string(root->val) + " " + serialize(root->left) + " " + serialize(root->right);
-        
-        
     }
 
     // Decodes your encoded data to tree.
@@ -7286,9 +7430,8 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 #### [986. 区间列表的交集](https://leetcode.cn/problems/interval-list-intersections/)
 
 ```
+
 ```
-
-
 
 ### 双堆模式
 
@@ -7365,6 +7508,14 @@ public:
 #### [480. Sliding Window Median](https://leetcode.com/problems/sliding-window-median/)
 
 #### [剑指 Offer 09. 用两个栈实现队列](https://leetcode-cn.com/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/)
+
+### hash 相关
+
+#### [220.存在重复元素 III](https://leetcode.cn/problems/contains-duplicate-iii/)
+
+```
+
+```
 
 ### 前K大的数模式HEAP
 
@@ -7552,9 +7703,65 @@ int maxSubArray(vector<int>& nums) {
     }
 ```
 
+#### [303.区域和检索 - 数组不可变](https://leetcode.cn/problems/range-sum-query-immutable/description/)
+
+```
+
+```
+
 #### [304. 二维区域和检索 - 矩阵不可变](https://leetcode-cn.com/problems/range-sum-query-2d-immutable/)
 
+```c++
+class NumMatrix {
+public:
+  	// 建立一个累计区域和的数组，然后根据边界值的加减法来快速求出给定区域之和。这里我们维护一个二维数组dp，其中dp[i][j]表示累计区间(0, 0)到(i, j)这个矩形区间所有的数字之和，那么此时如果我们想要快速求出(r1, c1)到(r2, c2)的矩形区间时，只需dp[r2][c2] - dp[r2][c1 - 1] - dp[r1 - 1][c2] + dp[r1 - 1][c1 - 1]即可，下面的代码中我们由于用了辅助列和辅助行
+    NumMatrix(vector<vector<int> > &matrix) {
+        if (matrix.empty() || matrix[0].empty()) return;
+        dp.resize(matrix.size() + 1, vector<int>(matrix[0].size() + 1, 0));
+        for (int i = 1; i <= matrix.size(); ++i) {
+            for (int j = 1; j <= matrix[0].size(); ++j) {
+                dp[i][j] = dp[i][j - 1] + dp[i - 1][j] - dp[i - 1][j - 1] + matrix[i - 1][j - 1];
+            }
+        }
+    }
+    int sumRegion(int row1, int col1, int row2, int col2) {
+        return dp[row2 + 1][col2 + 1] - dp[row1][col2 + 1] - dp[row2 + 1][col1] + dp[row1][col1];
+    }
+    
+private:
+    vector<vector<int> > dp;
+};
+```
+
 #### [523. 连续的子数组和](https://leetcode-cn.com/problems/continuous-subarray-sum/)
+
+#### [525.连续数组](https://leetcode.cn/problems/contiguous-array/)
+
+```c++
+int findMaxLength(vector<int>& nums) {
+    unordered_map<int, int> m;
+    int res = 0;
+    int cur_sum = 0;
+    // HashMap 初始化一个 0 -> -1 的映射，这是为了当 sum 第一次出现0的时候，即这个子数组是从原数组的起始位置开始，需要计算这个子数组的长度，
+    // 而不是建立当前子数组之和 sum 和其结束位置之间的映射。比如就拿例子1来说，nums = [0, 1]，当遍历0的时候，sum = -1，此时建立 -1 -> 0 的映射，
+    // 当遍历到1的时候，此时 sum = 0 了，若 HashMap 中没有初始化一个 0 -> -1 的映射，此时会建立 0 -> 1 的映射，而不是去更新这个满足题意的子数组的长度
+    m[0] = -1; 
+
+    for(int i = 0; i< nums.size(); i++)
+    {
+        cur_sum += (nums[i] == 1) ? 1 : -1;
+        if (m.count(cur_sum))
+        {
+            res = max(res, i - m[cur_sum]);
+        }
+        else 
+            m[cur_sum] = i;
+    }
+    return res;
+}
+```
+
+
 
 #### [560. 和为 K 的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/)
 
@@ -7563,7 +7770,7 @@ int subarraySum(vector<int>& nums, int k)
 {
     unordered_map<int, int> hasSum; // 记录每个累加和出现的次数
     int cur_cum = 0;
-    hasSum[0] = 1;
+    hasSum[0] = 1; // cur_cum 刚好为k的时候，那么数组从起始到当前位置的这段子数组的和就是k，满足题意，如果 HashMap 中事先没有 m[0] 项的话
     int res = 0;
     for(int i = 0; i < nums.size(); i++)
     {
@@ -7660,6 +7867,13 @@ int maxSubArray(vector<int>& nums)
     return res;
 }
 ```
+
+#### [209.长度最小的子数组](https://leetcode.cn/problems/minimum-size-subarray-sum/description/)
+
+```
+```
+
+
 
 #### [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
 
@@ -9886,4 +10100,23 @@ int reversePairs(vector<int>& nums)
 ```
 
 # 
+
+# 剑指 Offer II  刷题记录
+
+#### [047. 二叉树剪枝](https://leetcode.cn/problems/pOCWxh/description/?envType=study-plan-v2&id=coding-interviews-special)
+
+```c++
+TreeNode* pruneTree(TreeNode* root) {
+    if (!root) {
+        return nullptr;
+    }
+    root->left = pruneTree(root->left);
+    root->right = pruneTree(root->right);
+    if (!root->left && !root->right && !root->val) {
+        return nullptr;
+    }
+    return root;
+}   
+
+```
 
