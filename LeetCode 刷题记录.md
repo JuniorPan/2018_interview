@@ -1828,6 +1828,39 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
 }
 ```
 
+#### [两数相加 II](https://leetcode.cn/problems/add-two-numbers-ii/)
+
+```c++
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        stack<int> s1, s2;
+        while (l1) {
+            s1.push(l1->val);
+            l1 = l1->next;
+        }
+        while (l2) {
+            s2.push(l2->val);
+            l2 = l2->next;
+        }
+        int sum = 0;
+        ListNode *res = new ListNode(0);
+        while (!s1.empty() || !s2.empty()) {
+            if (!s1.empty()) {sum += s1.top(); s1.pop();}
+            if (!s2.empty()) {sum += s2.top(); s2.pop();}
+            res->val = sum % 10;
+            ListNode *head = new ListNode(sum / 10);
+            head->next = res;
+            res = head;
+            sum /= 10;
+        }
+        return res->val == 0 ? res->next : res;
+    }
+};
+```
+
+
+
 ##### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/) todo
 
 ```c++
@@ -6216,43 +6249,54 @@ Node *connect(Node *root)
 
 #### [117. 填充每个节点的下一个右侧节点指针 II](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/description/)
 
+```
+Node* connect(Node* root) {
+    if (!root) return NULL;
+    queue<Node*> q;
+    q.push(root);
+    while (!q.empty()) {
+        int len = q.size();
+        for (int i = 0; i < len; ++i) {
+            Node *t = q.front(); q.pop();
+            if (i < len - 1) t->next = q.front();
+            if (t->left) q.push(t->left);
+            if (t->right) q.push(t->right);
+        }
+    }
+    return root;
+}
+```
+
+
+
 #### [199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
 
 ```c++
 vector<int> rightSideView(TreeNode* root)
 {
-    vector<int> res;
-    if (!root)
-        return res;
+     vector<int> res;
+      if (root == NULL)
+          return res;
 
-    queue<TreeNode *> q;
-    TreeNode *last = root;
-    TreeNode *nlast = nullptr;
-    q.push(root);
-    while(!q.empty())
-    {
-        root = q.front();
-        q.pop();
-
-        if (root->left)
-        {
-            q.push(root->left);
-            nlast = root->left;
-        }
-        if (root->right)
-        {
-            q.push(root->right);
-            nlast = root->right;
-        }
-
-        if (root == last)
-        {
-            res.push_back(root->val);
-            last = nlast;
-        }
-
-    }
-    return res;
+      queue<TreeNode *> q;
+      q.push(root);
+      while (!q.empty())
+      {
+          int size = q.size();
+          vector<int> level;
+          for (int i = 0; i < size; i++)
+          {
+              TreeNode *node = q.front();
+              level.push_back(node->val);
+              q.pop();
+              if (node->left)
+                  q.push(node->left);
+              if (node->right)
+                  q.push(node->right);
+          }
+          res.push_back(level.back());
+      }
+      return res;
 }
 ```
 
