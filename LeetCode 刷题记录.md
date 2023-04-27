@@ -7741,7 +7741,36 @@ vector<int> topKFrequent(vector<int>& nums, int k)
 }
 ```
 
-#### [373. Find K Pairs with Smallest Sums](https://leetcode.com/problems/find-k-pairs-with-smallest-sums/)
+#### [373.  查找和最小的 K 对数字](https://leetcode.com/problems/find-k-pairs-with-smallest-sums/)
+
+```c++
+#todo priority_queue 用法 https://www.cnblogs.com/grandyang/p/5653127.html
+class Solution {
+public:
+    struct cmp {
+        bool operator() (vector<int> &a, vector<int> &b) {
+            return a[0] + a[1] < b[0] + b[1];
+        }
+    };
+    vector<vector<int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
+        vector<vector<int>> res;
+        priority_queue<vector<int>, vector<vector<int>>, cmp> q;
+        for (int i = 0; i < min((int)nums1.size(), k); ++i) {
+            for (int j = 0; j < min((int)nums2.size(), k); ++j) {
+                if (q.size() < k) {
+                    q.push({nums1[i], nums2[j]});
+                } else if (nums1[i] + nums2[j] < q.top()[0] + q.top()[1]) {
+                    q.push({nums1[i], nums2[j]}); q.pop();
+                }
+            }
+        }
+        while (!q.empty()) {
+            res.push_back({q.top()[0], q.top()[1]}); q.pop();
+        }
+        return res;
+    }
+};
+```
 
 ### 前缀和
 
