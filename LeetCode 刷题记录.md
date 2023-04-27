@@ -6390,6 +6390,11 @@ Node* connect(Node* root) {
 }
 ```
 
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> bf9e7e3e8b45537d0779d900f35ba90c7ec6be3c
 #### [199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
 
 ```c++
@@ -6398,6 +6403,28 @@ vector<int> rightSideView(TreeNode* root)
      vector<int> res;
       if (root == NULL)
           return res;
+<<<<<<< HEAD
+
+      queue<TreeNode *> q;
+      q.push(root);
+      while (!q.empty())
+      {
+          int size = q.size();
+          vector<int> level;
+          for (int i = 0; i < size; i++)
+          {
+              TreeNode *node = q.front();
+              level.push_back(node->val);
+              q.pop();
+              if (node->left)
+                  q.push(node->left);
+              if (node->right)
+                  q.push(node->right);
+          }
+          res.push_back(level.back());
+      }
+      return res;
+=======
 
       queue<TreeNode *> q;
       q.push(root);
@@ -6437,6 +6464,7 @@ int findBottomLeftValue(TreeNode* root) {
         if (root->left)  q.push(root->left);
     }
     return root->val;
+>>>>>>> bf9e7e3e8b45537d0779d900f35ba90c7ec6be3c
 }
 ```
 
