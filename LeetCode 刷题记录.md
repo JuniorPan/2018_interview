@@ -203,6 +203,32 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
 }
 ```
 
+#### [346.滑动窗口的平均值](https://leetcode.cn/problems/qIsx9U/?envType=study-plan-v2&id=coding-interviews-special) todo 得熟悉下队列的stl
+
+```c++
+class MovingAverage {
+public:
+    MovingAverage(int size) {
+        this->size = size;
+        sum = 0;
+    }
+    
+    double next(int val) {
+        if (q.size() >= size) {
+            sum -= q.front(); q.pop();
+        }
+        q.push(val);
+        sum += val;
+        return sum / q.size();
+    }
+    
+private:
+    queue<int> q;
+    int size;
+    double sum;
+};
+```
+
 
 
 #### [424. 替换后的最长重复字符](https://leetcode-cn.com/problems/longest-repeating-character-replacement/) #todo
@@ -576,6 +602,40 @@ string findLongestWord(string s, vector<string> &d)
   - Leetcode 1004 Max Consecutive Ones III
 
 
+
+### 栈
+
+#### [150.逆波兰表达式求值](https://leetcode.cn/problems/evaluate-reverse-polish-notation/)
+
+```c++
+int evalRPN(vector<string>& tokens) {
+  // 前往后遍历数组，遇到数字则压入栈中，遇到符号，则把栈顶的两个数字拿出来运算，
+  // 把结果再压入栈中，直到遍历完整个数组，栈顶数字即为最终答案
+  stack<int> st;
+  for(int i = 0; i < tokens.size(); i++)
+  {
+      if (tokens[i] != "+" && tokens[i] != "-" && tokens[i] != "*" && tokens[i] != "/" )
+          st.push(stoi(tokens[i]));
+      else
+      {
+          int val_2 = st.top();st.pop();
+          int val_1 = st.top();st.pop();
+          if (tokens[i] == "+"){  
+              st.push(val_1 + val_2);
+          }
+          if (tokens[i] == "-"){
+              st.push(val_1 - val_2);
+          }
+          if (tokens[i] == "*"){
+              st.push(val_1 * val_2);
+          }if (tokens[i] == "/"){
+              st.push(val_1 / val_2);
+          }
+      }
+  }
+  return st.top();
+}
+```
 
 
 
@@ -8899,6 +8959,62 @@ public:
     }
 };
 ```
+
+#### [125.验证回文串](https://leetcode.cn/problems/valid-palindrome/)
+
+```
+bool isPalindrome(string s) {
+    if (s.empty())
+        return true;
+    int left = 0, right = s.size()-1;
+    while(left < right)
+    {
+        if (!isalnum(s[left])) ++left;
+        else if (!isalnum(s[right])) --right;
+        else if ((s[left] + 32 - 'a') %32 != (s[right] + 32 - 'a') % 32)
+            return false;
+        else
+        {
+            left++;
+            right--;
+        }      
+    }
+    return true;
+}
+```
+
+#### [680.验证回文串 II](https://leetcode.cn/problems/valid-palindrome-ii/)
+
+```c++
+bool isValid(string s, int left, int right)
+{
+    while(left < right)
+    {
+        if (s[left] != s[right])
+            return false;
+        left++;
+        right--;
+    }
+    return true;
+}
+bool validPalindrome(string s) {
+    if (s.empty())
+        return true;
+    int left = 0, right = s.size() - 1;
+    while(left < right)
+    {
+        if (s[left] != s[right])
+        {
+            return isValid(s, left+1, right) || isValid(s, left, right - 1);
+        }
+        left++;
+        right--;
+    }
+    return true;
+}
+```
+
+
 
 #### [224. 基本计算器](https://leetcode-cn.com/problems/basic-calculator/)
 
