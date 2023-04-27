@@ -9361,7 +9361,7 @@ string decodeString(string s)
 // 有点巧妙
 vector<vector<string>> groupAnagrams(vector<string>& strs) 
 {
-    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+   
       unordered_map<string, vector<string>> mp; // 字典 排序
       for(int i = 0; i < strs.size(); i ++)
       {
