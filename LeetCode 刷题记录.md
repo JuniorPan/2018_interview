@@ -3505,11 +3505,14 @@ int numDistinct(string s, string t) {
 <img src="https://img-blog.csdnimg.cn/2021030317364166.jpg" alt="392.判断子序列2" style="zoom:50%;" />
 
 ```c++
-bool isSubsequence(string s, string t) {
+bool isSubsequence(string s, string t) 
+{
     // dp[i][j] 表示以下标i-1为结尾的字符串s，和以下标j-1为结尾的字符串t，相同子序列的长度为dp[i][j]
     vector<vector<int>> dp(s.size() + 1, vector<int>(t.size() + 1, 0));
-    for (int i = 1; i <= s.size(); i++) {
-        for (int j = 1; j <= t.size(); j++) {
+    for (int i = 1; i <= s.size(); i++) 
+    {
+        for (int j = 1; j <= t.size(); j++) 
+        {
             if (s[i - 1] == t[j - 1])  // 因为找到了一个相同的字符，相同子序列长度自然要在dp[i-1][j-1]的基础上加1
                 dp[i][j] = dp[i - 1][j - 1] + 1;
             else  // 此时相当于t要删除元素，t如果把当前元素t[j - 1]删除，那么dp[i][j] 的数值就是 看s[i - 1]与 t[j - 2]的比较结果了
@@ -3531,9 +3534,12 @@ int minDistance(string word1, string word2) {
     // dp[i][0]：word2为空字符串，以i-1为结尾的字符串word1要删除多少个元素，才能和word2相同呢，很明显dp[i][0] = i。
     for (int i = 0; i <= word1.size(); i++) dp[i][0] = i;
     for (int j = 0; j <= word2.size(); j++) dp[0][j] = j;
-    for (int i = 1; i <= word1.size(); i++) {
-        for (int j = 1; j <= word2.size(); j++) {
-            if (word1[i - 1] == word2[j - 1]) { //  当word1[i - 1] 与 word2[j - 1]相同的时候，dp[i][j] = dp[i - 1][j - 1];
+    for (int i = 1; i <= word1.size(); i++) 
+    {
+        for (int j = 1; j <= word2.size(); j++) 
+        {
+            if (word1[i - 1] == word2[j - 1]) 
+            { //  当word1[i - 1] 与 word2[j - 1]相同的时候，dp[i][j] = dp[i - 1][j - 1];
                 dp[i][j] = dp[i - 1][j - 1]; 
             } else {// 当word1[i - 1] 与 word2[j - 1]不相同的时候，有三种情况： 情况一：删word1[i - 1]，最少操作次数为dp[i - 1][j] + 1,
                     // 情况二：删word2[j - 1]，最少操作次数为dp[i][j - 1] + 1
@@ -4064,7 +4070,7 @@ int getLongestPalindrome(string str, int n) {
 
 ##### [131. 分割回文串](https://leetcode-cn.com/problems/palindrome-partitioning/)
 
-```
+```c++
 bool isPalindrome(const string& s, int start, int end) 
 {
     while(start <= end) {
@@ -4415,8 +4421,6 @@ int maximalSquare(vector<vector<char>>& matrix)
     return res * res;
 }
 ```
-
-
 
 [1277. 统计全为 1 的正方形子矩阵](https://leetcode.cn/problems/count-square-submatrices-with-all-ones/description/)
 
