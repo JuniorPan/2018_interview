@@ -7840,6 +7840,22 @@ private:
 
 #### [523. 连续的子数组和](https://leetcode-cn.com/problems/continuous-subarray-sum/)
 
+```c++
+bool checkSubarraySum(vector<int>& nums, int k) {
+    int n = nums.size(), sum = 0;
+    // 余数和当前位置之间的映射
+    unordered_map<int, int> m{{0,-1}};
+    for (int i = 0; i < n; ++i) {
+        sum += nums[i];
+        int t = (k == 0) ? sum : (sum % k);
+        if (m.count(t)) {
+            if (i - m[t] > 1) return true;
+        } else m[t] = i;
+    }
+    return false;
+}
+```
+
 #### [525.连续数组](https://leetcode.cn/problems/contiguous-array/)
 
 ```c++
@@ -7977,38 +7993,41 @@ int maxSubArray(vector<int>& nums)
 
 ```c++
 void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
-        int i = m - 1;
-        int j = n - 1;
-        int k = m + n - 1;
-        while(i >= 0 && j >= 0){
-            if (nums1[i] > nums2[j]) {
-                nums1[k] = nums1[i];
-                i--;
-                k--;
-            }
-            else {
-                nums1[k] = nums2[j];
-                k--;
-                j--;
-            }
-        }
-        while(j >= 0){
-            nums1[k] = nums2[j];
-            k--;
-            j--;
-        }
-    }
+      int i = m - 1;
+      int j = n - 1;
+      int k = m + n - 1;
+      while(i >= 0 && j >= 0){
+          if (nums1[i] > nums2[j]) {
+              nums1[k] = nums1[i];
+              i--;
+              k--;
+          }
+          else {
+              nums1[k] = nums2[j];
+              k--;
+              j--;
+          }
+      }
+      while(j >= 0){
+          nums1[k] = nums2[j];
+          k--;
+          j--;
+      }
+  }
 ```
 
 #### [15. 三数之和](https://leetcode-cn.com/problems/3sum/) #Todo
 
 ```c++
- vector<vector<int>> res;
+ vector<vector<int>> threeSum(vector<int>& nums) {
+    vector<vector<int>> res;
     sort(nums.begin(), nums.end());
-    if (nums.empty())
-        return {};
-    for (int i = 0; i < nums.size() - 2 ; ++i)
+    if (nums.empty() || nums.back() < 0 || nums.front() > 0) return {};
+    for (int i = 0; i < nums.size() ; ++i)
     {
+
+        if (nums[i] > 0)
+            break;
 
         // 需要和上一次枚举的数不相同
         if (i > 0 && nums[i] == nums[i - 1])
@@ -8280,30 +8299,6 @@ public
 };
 ```
 
-#### [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
-
-```c++
-void merge(vector<int> &nums1, int m, vector<int> &nums2, int n)
-{
-    int a = m - 1;
-    int b = n - 1;
-    int i = m + n - 1; // calculate the index of the last element of the merged array
-
-    // go from the back by A and B and compare and put to the A element which is larger
-    while (a >= 0 && b >= 0)
-    {
-        if (nums1[a] > nums2[b])
-            nums1[i--] = nums1[a--];
-        else
-            nums1[i--] = nums2[b--];
-    }
-
-    // if B is longer than A just copy the rest of B to A location, otherwise no need to do anything
-    while (b >= 0)
-        nums1[i--] = nums2[b--];
-}
-```
-
 #### [128. 最长连续序列](https://leetcode-cn.com/problems/longest-consecutive-sequence/) #TODO
 
 ```c++
@@ -8436,7 +8431,7 @@ int majorityElement(vector<int>& nums)
 }
 ```
 
-#### [179. 最大数](https://leetcode-cn.com/problems/largest-number/)
+#### [179. 最大数](https://leetcode-cn.com/problems/largest-number/) #todo
 
 ```c++
 string largestNumber(vector<int>& nums) 
@@ -8764,46 +8759,6 @@ int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D)
             if (hasTwoSum.find(target) != hasTwoSum.end())
                 res += hasTwoSum[target];
         }
-    }
-    return res;
-}
-```
-
-#### [523. 连续的子数组和](https://leetcode-cn.com/problems/continuous-subarray-sum/)
-
-```c++
-bool checkSubarraySum(vector<int>& nums, int k) {
-    int n = nums.size(), sum = 0;
-    // 余数和当前位置之间的映射
-    unordered_map<int, int> m{{0,-1}};
-    for (int i = 0; i < n; ++i) {
-        sum += nums[i];
-        int t = (k == 0) ? sum : (sum % k);
-        if (m.count(t)) {
-            if (i - m[t] > 1) return true;
-        } else m[t] = i;
-    }
-    return false;
-}
-```
-
-#### [560. 和为K的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/)
-
-```c++
-int subarraySum(vector<int>& nums, int k) 
-{
-    unordered_map<int, int> hasSum;
-    int sum = 0;
-    hasSum[0]=1;
-    int res = 0;
-    // 如果能在hasSum中能找到 说明在i 位置至少存在一个位置j 使得[0...j]的累加和为sum-k, 那么从[j+1...i]的累加和就是k了.
-    // 所以有可能不只一个j满足条件,用hasSum记录在i位置之前出现多少j满足条件
-    for(int i = 0; i < nums.size(); i++)
-    {
-        sum += nums[i];
-        if (hasSum.find(sum-k) != hasSum.end())
-            res += hasSum[sum-k];
-        hasSum[sum] += 1;
     }
     return res;
 }
