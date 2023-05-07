@@ -7796,22 +7796,39 @@ public:
 
 ```c++ 
 int maxSubArray(vector<int>& nums) {
-        int res = INT_MIN;
-        int cur_sum = 0;
-        for(int i = 0; i < nums.size(); i++)
-        {
-            cur_sum += nums[i];
-            res = max(cur_sum, res);
-            cur_sum = cur_sum > 0 ? cur_sum : 0;
-        }
-        return res;
+    int res = INT_MIN;
+    int cur_sum = 0;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        cur_sum += nums[i];
+        res = max(cur_sum, res);
+        cur_sum = cur_sum > 0 ? cur_sum : 0;
     }
+    return res;
+}
 ```
 
 #### [303.区域和检索 - 数组不可变](https://leetcode.cn/problems/range-sum-query-immutable/description/)
 
-```
-
+```c++
+class NumArray {
+private:
+    vector<int> dp;
+public:
+    // 建立一个累计和的数组 dp，其中 dp[i] 表示 [0, i] 区间的数字之和，
+    // 那么 [i,j] 就可以表示为 dp[j]-dp[i-1]
+    // 注意一下当 i=0 时，直接返回 dp[j] 即可
+    NumArray(vector<int> &nums) {
+        dp = nums;
+        for (int i = 1; i < nums.size(); ++i) 
+        {
+            dp[i] += dp[i - 1];
+        }
+    }
+    int sumRange(int i, int j) {
+        return i == 0 ? dp[j] : dp[j] - dp[i - 1];
+    }
+};
 ```
 
 #### [304. 二维区域和检索 - 矩阵不可变](https://leetcode-cn.com/problems/range-sum-query-2d-immutable/)
@@ -7842,8 +7859,12 @@ private:
 
 ```c++
 bool checkSubarraySum(vector<int>& nums, int k) {
+    // 遇到这种求子数组或者子矩阵之和的题，应该不难想到要建立累加和数组或者累加和矩阵来做
+    // 当前的累加和除以k得到的余数在 map 中已经存在了，那么说明之前必定有一段子数组和可以整除k
+    // 需要注意的是k为0的情况，由于无法取余，就把当前累加和放入 map 中
     int n = nums.size(), sum = 0;
     // 余数和当前位置之间的映射
+
     unordered_map<int, int> m{{0,-1}};
     for (int i = 0; i < n; ++i) {
         sum += nums[i];
