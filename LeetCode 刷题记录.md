@@ -122,6 +122,18 @@ string minWindow(string s, string t)
 #### [209.长度最小的子数组](https://leetcode.cn/problems/minimum-size-subarray-sum/description/)
 
 ```c++
+int minSubArrayLen(int s, vector<int>& nums) {
+    int res = INT_MAX, left = 0, sum = 0;
+    for (int i = 0; i < nums.size(); ++i) {
+        sum += nums[i];
+        while (left <= i && sum >= s) {
+            res = min(res, i - left + 1);
+            sum -= nums[left++];
+        }
+    }
+    return res == INT_MAX ? 0 : res;
+}
+
 int minSubArrayLen(int target, vector<int>& nums) {
     if (nums.empty())
         return 0;
@@ -7854,8 +7866,6 @@ int findMaxLength(vector<int>& nums) {
 }
 ```
 
-
-
 #### [560. 和为 K 的子数组](https://leetcode-cn.com/problems/subarray-sum-equals-k/)
 
 ```c++
@@ -7891,26 +7901,22 @@ int maxlenEqualK(vector<int>& arr, int k) {
     // write code here
     if(arr.size()==0)
         return 0;
-    vector<int> sum(arr.size(),0);//累积数组
+    vector<int> sum(arr.size(),0);//累加数组
     sum[0]=arr[0];//初始化第一个
-    unordered_map<int,int> mp;//存放前累积和 对应的下标
+    unordered_map<int,int> mp;//存放前累加和 对应的下标
     mp[sum[0]]=0;
     for(int i=1;i<arr.size();i++)
     {
-
-        sum[i]=sum[i-1]+arr[i];  //累积和
-        mp[sum[i]]=i;//该累积和的下标（由于i迭代增加 所以i存放的是最大的i）
-
+        sum[i]=sum[i-1]+arr[i];  //累加和
+        mp[sum[i]]=i;//该累加和的下标（由于i迭代增加 所以i存放的是最大的i）
     }
     int ans=0;
     for(int i=0;i<arr.size()-1;i++)
     {
-        if(mp.find(sum[i]+k)!=mp.end())  //查找当前累积和相差k的值是否存在
+        if(mp.find(sum[i]+k) != mp.end())  //查找当前累加和相差k的值是否存在
         {
-            ans=max(ans,mp[sum[i]+k]-i);
-
+            ans=max(ans, mp[sum[i]+k]-i);
         }
-
     }
     //存在直接从0项开始累积和为k的
     if(mp.find(k)!=mp.end())
@@ -7964,9 +7970,8 @@ int maxSubArray(vector<int>& nums)
 #### [209.长度最小的子数组](https://leetcode.cn/problems/minimum-size-subarray-sum/description/)
 
 ```
+
 ```
-
-
 
 #### [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
 
