@@ -354,6 +354,31 @@ bool checkInclusion(string s1, string s2)
 }
 ```
 
+#### [1423. 可获得的最大点数](https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/)
+
+```c++
+int maxScore(vector<int>& cardPoints, int k) {
+    int n = cardPoints.size();
+    // 滑动窗口大小为 n-k
+    int windowSize = n - k;
+    // 选前 n-k 个作为初始值
+    int sum = accumulate(cardPoints.begin(), cardPoints.begin() + windowSize, 0);
+    int minSum = sum;
+    for (int i = windowSize; i < n; ++i) {
+        // 滑动窗口每向右移动一格，增加从右侧进入窗口的元素值，并减少从左侧离开窗口的元素值
+        sum += cardPoints[i] - cardPoints[i - windowSize];
+        minSum = min(minSum, sum);
+    }
+    return accumulate(cardPoints.begin(), cardPoints.end(), 0) - minSum;
+}
+// 作者：力扣官方题解
+// 链接：https://leetcode.cn/problems/maximum-points-you-can-obtain-from-cards/solutions/514347/ke-huo-de-de-zui-da-dian-shu-by-leetcode-7je9/
+// 来源：力扣（LeetCode）
+// 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+
+
 ### 双指针问题(6)
 
 todo: 11和42的区别
@@ -7834,9 +7859,13 @@ public:
 #### [304. 二维区域和检索 - 矩阵不可变](https://leetcode-cn.com/problems/range-sum-query-2d-immutable/)
 
 ```c++
-class NumMatrix {
+class NumMatrix { 
+private:
+    vector<vector<int> > dp;
 public:
-  	// 建立一个累计区域和的数组，然后根据边界值的加减法来快速求出给定区域之和。这里我们维护一个二维数组dp，其中dp[i][j]表示累计区间(0, 0)到(i, j)这个矩形区间所有的数字之和，那么此时如果我们想要快速求出(r1, c1)到(r2, c2)的矩形区间时，只需dp[r2][c2] - dp[r2][c1 - 1] - dp[r1 - 1][c2] + dp[r1 - 1][c1 - 1]即可，下面的代码中我们由于用了辅助列和辅助行
+  	// 建立一个累计区域和的数组，然后根据边界值的加减法来快速求出给定区域之和。
+    // 维护一个二维数组dp，其中dp[i][j]表示累计区间(0, 0)到(i, j)这个矩形区间所有的数字之和，那么此时如果我们想要快速求出(r1, c1)到(r2, c2)的矩形区间时，
+    // 只需dp[r2][c2] - dp[r2][c1 - 1] - dp[r1 - 1][c2] + dp[r1 - 1][c1 - 1]即可，下面的代码中我们由于用了辅助列和辅助行
     NumMatrix(vector<vector<int> > &matrix) {
         if (matrix.empty() || matrix[0].empty()) return;
         dp.resize(matrix.size() + 1, vector<int>(matrix[0].size() + 1, 0));
@@ -7849,9 +7878,26 @@ public:
     int sumRegion(int row1, int col1, int row2, int col2) {
         return dp[row2 + 1][col2 + 1] - dp[row1][col2 + 1] - dp[row2 + 1][col1] + dp[row1][col1];
     }
-    
-private:
-    vector<vector<int> > dp;
+
+};
+```
+
+#### [325.最大子数组之和为k](https://www.cnblogs.com/grandyang/p/5336668.html)
+
+```c++
+class Solution {
+public:
+    int maxSubArrayLen(vector<int>& nums, int k) {
+        int sum = 0, res = 0;
+        unordered_map<int, int> m;
+        for (int i = 0; i < nums.size(); ++i) {
+            sum += nums[i];
+            if (sum == k) res = i + 1;
+            else if (m.count(sum - k)) res = max(res, i - m[sum - k]);
+            if (!m.count(sum)) m[sum] = i;
+        }
+        return res;
+    }
 };
 ```
 
