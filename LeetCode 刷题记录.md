@@ -1393,10 +1393,26 @@ public:
 
 #### [540.有序数组中的单一元素](https://leetcode.cn/problems/single-element-in-a-sorted-array/description/) #todo
 
+```c++
+int singleNonDuplicate(vector<int>& nums) 
+{
+    // 通过数组的长度跟当前位置的关系，计算出右边和当前数字不同的数字的总个数，
+    // 如果是偶数个，说明落单数左半边，反之则在右半边
+    int left = 0, right = nums.size() - 1, n = nums.size();
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == nums[mid + 1]) {
+            if ((n - 1 - mid) % 2 == 1) right = mid;
+            else left = mid + 1;
+        } else {
+            if (mid == 0 || nums[mid] != nums[mid - 1]) return nums[mid];
+            if ((n - 1 - mid) % 2 == 0) right = mid;
+            else left = mid + 1;
+        }
+    }
+    return nums[left];
+}
 ```
-```
-
-
 
 #### [704. 二分查找](https://leetcode-cn.com/problems/binary-search/)
 
@@ -2701,6 +2717,29 @@ ListNode* sortList(ListNode* head) {
     return merge_list(sortList(head), sortList(fast));
 }
 ```
+
+##### [708.排序的循环链表](https://leetcode.cn/problems/4ueAj6/?envType=study-plan-v2&id=coding-interviews-special)
+
+```c++
+Node* insert(Node* head, int insertVal) {
+    if (!head) {
+        head = new Node(insertVal, NULL);
+        head->next = head;
+        return head;
+    }
+    Node *pre = head, *cur = pre->next;
+    while (cur != head) {
+        if (pre->val <= insertVal && cur->val >= insertVal) break;
+        if (pre->val > cur->val && (pre->val <= insertVal || cur->val >= insertVal)) break;
+        pre = cur;
+        cur = cur->next;
+    }
+    pre->next = new Node(insertVal, cur);
+    return head;
+}
+```
+
+
 
 #### 链表翻转 
 
@@ -4726,7 +4765,7 @@ public:
 
 ##### [547. 省份数量](https://leetcode-cn.com/problems/number-of-provinces/)
 
-```
+```c++
 class Solution {
 public:
     int findCircleNum(vector<vector<int>>& M)
@@ -4754,6 +4793,139 @@ public:
 	}
 };
 ```
+
+##### [695.岛屿的最大面积](https://leetcode.cn/problems/max-area-of-island/)
+
+```c++
+int dfs(vector<vector<int>>& grid, int i, int j)
+{
+    if (i >= grid.size() || i < 0 || j >= grid[0].size() || j < 0 || grid[i][j] != 1)
+        return 0;
+    int res = 0;
+    if (grid[i][j] == 1)
+    {
+        grid[i][j] = 2;
+        res = 1 + dfs(grid, i + 1, j )
+                + dfs(grid, i - 1, j)
+                + dfs(grid, i, j + 1)
+                + dfs(grid, i, j - 1);
+        // grid[i][j] = 1;
+    }
+    return res;
+}
+
+int maxAreaOfIsland(vector<vector<int>>& grid) {
+
+    int res = 0;
+    for(int i = 0; i < grid.size(); i ++)
+    {
+        for(int j = 0; j < grid[0].size(); j++)
+        {
+            if (grid[i][j] != 1)
+                continue;
+            res = max(res, dfs(grid, i, j));
+        }
+    }
+    return res;
+}
+```
+
+##### [785.判断二分图](https://leetcode.cn/problems/is-graph-bipartite/)
+
+```c++
+class Solution {
+public:
+    // 染色法，大体上的思路是要将相连的两个顶点染成不同的颜色，
+    // 一旦在染的过程中发现有两连的两个顶点已经被染成相同的颜色，说明不是二分图
+    // 使用两种颜色，分别用1和 -1 来表示，初始时每个顶点用0表示未染色，然后遍历每一个顶点，如果该顶点未被访问过，则调用递归函数，
+    // 如果返回 false，那么说明不是二分图，则直接返回 false
+    bool dfs(vector<vector<int>> &graph, int color, int cur, vector<int> &colors)
+    {
+        // 如果当前顶点已经染色，如果该顶点的颜色和将要染的颜色相同，则返回 true，否则返回 false
+        if (colors[cur] != 0)
+            return colors[cur] == color;
+        colors[cur] = color; // 给当前节点染色
+
+        // 如果该顶点未被访问过，则调用递归函数
+        for(int i = 0; i < graph[cur].size(); i++)
+        {
+            if (!dfs(graph, -1 * color, graph[cur][i], colors))
+                return false;
+        }
+        return true;
+
+    }
+    // 遍历整个顶点，如果未被染色，则先染色为1，然后使用 BFS 进行遍历，将当前顶点放入队列 queue 中，然后 while 循环 queue 不为空，取出队首元素，遍历其所有相邻的顶点，如果相邻顶点未被染色，则染成和当前顶点相反的颜色，然后把相邻顶点加入 queue 中，否则如果当前顶点和相邻顶点颜色相同，直接返回 false，循环退出后返回 true
+    bool bfs(vector<vector<int>>& graph)
+    {
+        vector<int> colors(graph.size());
+        for(int i = 0; i < graph.size(); i++)
+        {
+            if (colors[i] != 0)
+                continue;
+            
+            colors[i] = 1;
+            queue<int> q;
+            q.push(i);
+            while(!q.empty())
+            {
+                int t = q.front(); q.pop();
+                for(int i = 0; i < graph[t].size(); i++)
+                {
+                    if (colors[graph[t][i]] == colors[t])
+                        return false;
+                    if (colors[graph[t][i]] == 0)
+                    {
+                        colors[graph[t][i]] = -1 * colors[t];
+                        q.push(graph[t][i]);
+                    }        
+                }
+            }
+        }
+        return true;
+    }
+
+    bool isBipartite(vector<vector<int>>& graph) {
+        return bfs(graph);
+        // vector<int> colors(graph.size());
+        // for (int i = 0; i < graph.size(); ++i) {
+        //     if (colors[i] == 0 && !dfs(graph, 1, i, colors)) {
+        //         return false;
+        //     }
+        // }
+        // return true;
+    }
+};
+```
+
+##### [797.所有可能的路径](https://leetcode.cn/problems/all-paths-from-source-to-target/)
+
+```c++
+void dfs(vector<vector<int>> &res, vector<vector<int>> &graph, vector<int> path, int cur)
+{
+    path.push_back(cur);
+    if (cur == graph.size() - 1)
+    {
+        res.push_back(path);
+        return;
+    }
+    for(int i = 0; i < graph[cur].size(); i++)
+    {
+        dfs(res, graph, path, graph[cur][i]);
+    }
+}
+
+vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+    vector<vector<int>> res;
+    vector<int> path;
+    dfs(res, graph, path, 0);
+    return res;
+}
+```
+
+
+
+
 
 ##### [827. 最大人工岛](https://leetcode-cn.com/problems/making-a-large-island/) 类似于回溯
 
@@ -5978,7 +6150,7 @@ public:
 
 ##### [542. 01 矩阵](https://leetcode-cn.com/problems/01-matrix/)
 
-```
+```c++
 class Solution {
 public:
     vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
@@ -6003,12 +6175,9 @@ public:
                 }
             }
         }
-    
         int dirs[4][2]= {-1, 0, 1, 0, 0, -1, 0, 1};
-        
         while(!q.empty())   // 广度优先遍历
         {
-
             int x = q.front().first, y = q.front().second;
             q.pop();
             for(int i = 0; i < 4; i++)  // 遍历4个方向
@@ -6019,13 +6188,10 @@ public:
                 {
                     matrix[nx][ny] = matrix[x][y] + 1;
                     q.push({nx,ny});
-                }
-                
+                }   
             }
         }
- 
         return matrix;
-        
     }
 };
 ```
@@ -6054,37 +6220,41 @@ public:
 
 ```c++
 bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-        vector<vector<int>> graph(numCourses, vector<int>(0));
-        vector<int> indegree(numCourses, 0); // 定点入度表
-
-        for (int i = 0; i < prerequisites.size(); i++)
+    vector<vector<int>> graph(numCourses, vector<int>(0));
+    vector<int> indegree(numCourses, 0); // 定点入度表
+    // 定义二维数组 graph 来表示这个有向图，一维数组 in 来表示每个顶点的入度。
+    // 开始先根据输入来建立这个有向图，并将入度数组也初始化好。
+    // 然后定义一个 queue 变量，将所有入度为0的点放入队列中，然后开始遍历队列，
+    // 从 graph 里遍历其连接的点，每到达一个新节点，将其入度减一，如果此时该点入度为0，则放入队列末尾。
+    // 直到遍历完队列中所有的值，若此时还有节点的入度不为0，则说明环存在，返回 false，反之则返回 true
+    for (int i = 0; i < prerequisites.size(); i++)
+    {
+        graph[prerequisites[i][0]].push_back(prerequisites[i][1]);
+        ++indegree[prerequisites[i][1]];
+    }
+    queue<int> q;
+    for (int i = 0; i < numCourses; i++)
+    {
+        if (indegree[i] == 0)
         {
-            graph[prerequisites[i][0]].push_back(prerequisites[i][1]);
-            ++indegree[prerequisites[i][1]];
+            q.push(i);
         }
-        queue<int> q;
-        for (int i = 0; i < numCourses; i++)
+    }
+    int count = 0;
+    while (!q.empty())
+    {
+        int temp = q.front();
+        q.pop();
+        count++;
+        for (int i = 0; i < graph[temp].size(); i++)
         {
-            if (indegree[i] == 0)
+            if (--indegree[graph[temp][i]] == 0)
             {
-                q.push(i);
+                q.push(graph[temp][i]);
             }
         }
-        int count = 0;
-        while (!q.empty())
-        {
-            int temp = q.front();
-            q.pop();
-            count++;
-            for (int i = 0; i < graph[temp].size(); i++)
-            {
-                if (--indegree[graph[temp][i]] == 0)
-                {
-                    q.push(graph[temp][i]);
-                }
-            }
-        }
-        return count == numCourses;
+    }
+    return count == numCourses;
 }
 ```
 
@@ -8003,6 +8173,17 @@ int subarraySum(vector<int>& nums, int k)
 #### [1031. 两个非重叠子数组的最大和](https://leetcode-cn.com/problems/maximum-sum-of-two-non-overlapping-subarrays/)
 
 #### [1423. 可获得的最大点数](https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/)
+
+
+
+### 前缀树
+
+#### [208.实现 Trie (前缀树)](https://leetcode.cn/problems/implement-trie-prefix-tree/)
+
+```
+```
+
+
 
 ### 数组
 
