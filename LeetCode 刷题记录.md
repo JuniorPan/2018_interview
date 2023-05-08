@@ -7813,6 +7813,35 @@ public:
 };
 ```
 
+#### [703.数据流中的第 K 大元素](https://leetcode.cn/problems/kth-largest-element-in-a-stream/)
+
+```c++
+class KthLargest {
+private:
+    // 使用一个最小堆来保存前K个数字，当再加入新数字后，最小堆会自动排序，
+    // 然后把排序后的最小的那个数字去除，则堆中还是K个数字，返回的时候只需返回堆顶元素即可
+    priority_queue<int, vector<int>, greater<int>> q;
+    int K;
+public:
+    KthLargest(int k, vector<int>& nums) {
+        for (int num : nums)
+        {
+            q.push(num);
+            if (q.size() > k) 
+                q.pop();
+        }
+        K = k;
+    }
+    
+    int add(int val) {
+        q.push(val);
+        if (q.size() > K)
+            q.pop();
+        return q.top();
+    }
+};
+```
+
 ### 前缀和
 
 前缀和本质上是在一个list当中，用O（N）的时间提前算好从第0个数字到第i个数字之和，在后续使用中可以在O（1）时间内计算出第i到第j个数字之和，一般很少单独作为一道题出现，而是很多题目中的用到的一个小技巧
