@@ -4250,7 +4250,7 @@ public:
 
 <img src="https://pic.leetcode-cn.com/1600677121-aGPcPu-file_1600677121456" alt="img" style="zoom:50%;" />
 
-```
+```c++
 int longestPalindromeSubseq(string s)
 {
     int n = s.size();
@@ -4296,7 +4296,7 @@ int countSubstrings(string s)
         // dp[i][i] = true;
         for (int j = 0; j <= i; j++)
         {
-            dp[j][i] = s[i] == s[j] && (i - j < 2 || dp[j + 1][i - 1]);
+            dp[j][i] =   && (i - j < 2 || dp[j + 1][i - 1]);
             if (dp[j][i])
                 res++;
         }
