@@ -3894,6 +3894,7 @@ int findMaxForm(vector<string> &strs, int m, int n)
         int zeros = 0, ones = 0;
         for (char c : str)
             (c == '0') ? ++zeros : ++ones;
+      	// // 遍历背包容量且从后向前遍历！
         for (int i = m; i >= zeros; --i)
         {
             for (int j = n; j >= ones; --j)
@@ -3910,58 +3911,6 @@ int findMaxForm(vector<string> &strs, int m, int n)
 
 ```c++
 class Solution {
-public:
-    /*
-    sum(A) - sum(B) = target
-    sum(A) = target + sum(B)
-    sum(A) + sum(A) = target + sum(B) + sum(A)
-    2 * sum(A) = target + sum(nums)
-    
-    int n = nums.size();
-    vector<vector<bool>>  dp(n + 1, vector<bool>(target + 1, 0));
-    // base case
-    for (int i = 0; i <= n; i++)
-        dp[i][0] = 1;
-
-    for (int i = 1; i <= n; i++) {
-        for (int j = 0; j <= target; j++) {
-            if (j - nums[i - 1] < 0) {
-               // 背包容量不足，不能装入第 i 个物品
-                dp[i][j] = dp[i - 1][j]; 
-            } else {
-                // 装入或不装入背包
-                dp[i][j] = dp[i - 1][j] + dp[i - 1][j-nums[i-1]];
-            }
-        }
-    }
-    return dp[n][target];
-}
-    */
-    int findTargetSumWays(vector<int>& nums, int S) {
-        
-    // dp[i][j] 选前i个数 组成和为j的方法 思路有了 实际代码写不出来
-    // dp[i][j] = dp[i-1][j-num[i]] + dp[ i - 1 ][ j + nums[ i ] ]
-    vector<vector<bool>> dp(nums.size(), vector<bool>(S+1));
-    dp[0][0]=true;
-    if (nums[0] <= S)  // 第一行
-    {
-        dp[0][nums[0]] = 1;
-    }
-    for (int i = 1; i < nums.size(); i++) 
-    {
-        for (int j = 0; j <= S; j++) 
-        {
-            if (j-num[i] > 0 &&  j + nums[i] < S  )
-                dp[i][j] =dp[i-1][j-num[i]] + dp[ i - 1 ][ j + nums[ i ] ]
-            else
-                dp[i][j] = dp[i - 1][j];
-        }
-    }
-    return dp[nums.size() - 1][target];
-    }
-};
-
-class Solution {
 private:
     int targetSum(vector<int> & nums, int sum)
     {
@@ -3977,6 +3926,30 @@ private:
         }
         return dp[sum];
     }
+    int targetSum2(vector<int> &nums, int S)
+    {
+         //滚动数组：组成的种类
+        vector<vector<int>> dp(nums.size(), vector<int>(S + 1, 0));
+        //初始化
+        dp[0][0] = 1;
+        if(nums[0] == 0) dp[0][0] += 1;  //不存放和存放0两种方案！！！
+        
+        for(int j = 1; j <= S; j++) {
+            if(j == nums[0]) dp[0][j] = 1;
+        }
+        
+        //递归思路
+        for(int i = 1; i < nums.size(); i++) 
+        {
+            for(int j = 0; j <= S; j++) 
+            {
+                if(j < nums[i]) dp[i][j] = dp[i - 1][j];
+                else dp[i][j] = dp[i - 1][j] + dp[i - 1][j - nums[i]];
+            }
+        }
+        return dp[nums.size() - 1][S];
+    }
+
 public:
     int findTargetSumWays(vector<int>& nums, int target)
     {
@@ -3985,7 +3958,9 @@ public:
         // sum(A) + sum(A) = target + sum(B) + sum(A)
         // 2 * sum(A) = target + sum(nums)
         int sum = accumulate(nums.begin(), nums.end(), 0);
-        return sum < target || (target + sum) % 2 == 1 ? 0 : targetSum(nums, (target + sum) / 2); 
+        if ((target + sum) / 2 < 0)
+            return 0;
+        return sum < target || (target + sum) % 2 == 1 ? 0 : targetSum2(nums, (target + sum) / 2); 
     }
 };
 ```
@@ -4032,6 +4007,45 @@ int numSquares(int n)
 }
 ```
 
+##### [518. 零钱兑换 II](https://leetcode-cn.com/problems/coin-change-2/)#todo 空间优化  377
+
+```c++
+
+int change(int amount, vector<int>& coins) {
+    vector<int> dp(amount + 1, 0);
+    dp[0] = 1;
+    for (int i = 0; i < coins.size(); i++) { // 遍历物品
+        for (int j = coins[i]; j <= amount; j++) { // 遍历背包
+            dp[j] += dp[j - coins[i]];
+        }
+    }
+    return dp[amount];
+}
+
+int change(int amount, vector<int> &coins)
+{
+    //dp[i][j] 表示用前i个硬币组成钱数为j的不同组合方法
+    vector<vector<int>> dp(coins.size() + 1, vector<int>(amount + 1, 0));
+    dp[0][0] = 1;
+    // 采用的方法是一个硬币一个硬币的增加，每增加一个硬币，都从1遍历到 amount，对于遍历到的当前钱数j，组成方法就是不加上当前硬币的拼法 dp[i-1][j]，还要加上去掉当前硬币值的钱数的组成方法 
+    for (int i = 1; i <= coins.size(); ++i)
+    {
+        for (int j = 0; j <= amount; ++j)
+        {
+            if(j >= coins[i - 1])
+                dp[i][j] = dp[i - 1][j] +  dp[i][j - coins[i - 1]]; // 第i个硬币有 使用和不使用两种情况
+            else
+                dp[i][j] = dp[i - 1][j];
+        }
+    }
+    return dp[coins.size()][amount];
+}
+
+
+```
+
+
+
 ##### [322. 零钱兑换](https://leetcode-cn.com/problems/coin-change/)
 
 ```c++
@@ -4057,28 +4071,7 @@ int coinChange(vector<int> &coins, int amount)
 }
 ```
 
-##### [518. 零钱兑换 II](https://leetcode-cn.com/problems/coin-change-2/)#todo 空间优化  377
-
-```c++
-int change(int amount, vector<int> &coins)
-{
-    //dp[i][j] 表示用前i个硬币组成钱数为j的不同组合方法
-    vector<vector<int>> dp(coins.size() + 1, vector<int>(amount + 1, 0));
-    dp[0][0] = 1;
-    // 采用的方法是一个硬币一个硬币的增加，每增加一个硬币，都从1遍历到 amount，对于遍历到的当前钱数j，组成方法就是不加上当前硬币的拼法 dp[i-1][j]，还要加上去掉当前硬币值的钱数的组成方法 
-    for (int i = 1; i <= coins.size(); ++i)
-    {
-        for (int j = 0; j <= amount; ++j)
-        {
-            if(j >= coins[i - 1])
-                dp[i][j] = dp[i - 1][j] +  dp[i][j - coins[i - 1]]; // 第i个硬币有 使用和不使用两种情况
-            else
-                dp[i][j] = dp[i - 1][j];
-        }
-    }
-    return dp[coins.size()][amount];
-}
-```
+##### 
 
 #### 6.区间型动态规划 
 
