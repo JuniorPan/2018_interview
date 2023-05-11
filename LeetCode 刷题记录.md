@@ -1,6 +1,6 @@
 #  LeetCode 刷题记录
 
-### 滑动窗口问题(7)
+### 滑动窗口问题(11)
 
 核心思想: 我们可以用滑动窗口的思想解决这个问题，在滑动窗口类型的问题中都会有两个指针。一个用于「延伸」现有窗口的 r 指针，和一个用于「收缩」窗口的 l 指针。在任意时刻，只有一个指针运动，而另一个保持静止。我们在 ss上滑动窗口，通过移动 r 指针不断扩张窗口。当窗口包含 t 全部所需的字符后，如果能收缩，我们就收缩窗口直到得到最小窗口。
 <img src="https://assets.leetcode-cn.com/solution-static/76/76_fig1.gif" alt="滑动窗口示意"  />
@@ -159,8 +159,6 @@ int numSubarrayProductLessThanK(vector<int>& nums, int k) {
 }
 ```
 
-
-
 #### [239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)
 
 ```c++
@@ -199,7 +197,6 @@ public:
         this->size = size;
         sum = 0;
     }
-    
     double next(int val) {
         if (q.size() >= size) {
             sum -= q.front(); q.pop();
@@ -216,8 +213,6 @@ private:
 };
 ```
 
-
-
 #### [424. 替换后的最长重复字符](https://leetcode-cn.com/problems/longest-repeating-character-replacement/) #todo
 
 见https://www.cnblogs.com/grandyang/p/5999050.html
@@ -230,11 +225,13 @@ private:
 // 解法一
 int characterReplacement(string s, int k)
 {
-    int res = 0, maxCnt = 0, left = 0;
+    int res = 0;
+    int maxCnt = 0;
+    left = 0;
     vector<int> m(128,0); // 用来记录窗口中每个字符出现的次数
     for (int i = 0; i < s.size(); i++)
     {
-        maxCnt = max(maxCnt, ++m[s[i]]);
+        maxCnt = max(maxCnt, ++m[s[i]]); // 记录当前窗口出现最多字符的个数
         // 判断当前窗口 left...i 是否满足条件
         if (i - left + 1 - maxCnt > k)  // 不满足 从左开始收缩窗口
         {
@@ -242,27 +239,6 @@ int characterReplacement(string s, int k)
             left ++;
         }
         res = max(res, i - left + 1);
-    }
-    return res;
-}
-
-// 解法二
-int characterReplacement(string s, int k)
-{
-    int res = 0, maxCnt = 0;
-    vector<int> counts(26, 0);
-    int right = 0;
-    int left = 0;
-    while(right < s.size())
-    {
-        maxCnt = max(maxCnt, ++counts[s[right] - 'A']);
-        while (right - left + 1 - maxCnt > k) // 缩减窗口直到不满足条件为止
-        {
-            --counts[s[left] - 'A'];
-            ++left;
-        }
-        res = max(res, right - left + 1);
-        right ++;
     }
     return res;
 }
@@ -302,10 +278,10 @@ vector<int> findAnagrams(string s, string p)
 ```c++
 // 解法一 
 // 先来分别统计s1和s2中前n1个字符串中各个字符出现的次数，其中n1为字符串s1的长度，  
-这样如果二者字符出现次数的情况完全相同，说明s1和s2中前n1的字符互为全排列关系，那么符合题意了，
-直接返回true。如果不是的话，那么我们遍历s2之后的字符，对于遍历到的字符，对应的次数加1，
-由于窗口的大小限定为了n1，所以每在窗口右侧加一个新字符的同时就要在窗口左侧去掉一个字符，
-每次都比较一下两个哈希表的情况，如果相等，说明存在
+// 这样如果二者字符出现次数的情况完全相同，说明s1和s2中前n1的字符互为全排列关系，那么符合题意了，
+// 直接返回true。如果不是的话，那么我们遍历s2之后的字符，对于遍历到的字符，对应的次数加1，
+// 由于窗口的大小限定为了n1，所以每在窗口右侧加一个新字符的同时就要在窗口左侧去掉一个字符，
+// 每次都比较一下两个哈希表的情况，如果相等，说明存在
 bool checkInclusion(string s1, string s2)
 {
     if (s1.size() < s2.size())
@@ -352,8 +328,6 @@ int maxScore(vector<int>& cardPoints, int k) {
 // 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
-
-
 ### 双指针问题(6)
 
 todo: 11和42的区别
@@ -376,93 +350,6 @@ int maxArea(vector<int>& height)
             left++;
         else
             right--;
-    }
-    return res;
-}
-```
-
-#### [42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/) #todo
-
-```c++
-// 解法二：还不太懂
-int trap(vector<int>& height) 
- {
-    if (height.empty())
-        return 0;
-    
-    int n = height.size();
-    int res = 0;
-    int left_max = height[0];
-    int right_max = height[n-1];
-    
-    int l = 1;
-    int r = n - 2;
-    while(l <= r)
-    {
-        if (left_max <= right_max)
-        {
-            res += max(0, left_max - height[l]);
-            left_max = max(left_max, height[l]);
-            l++;
-        }
-        else
-        {
-            res += max(0, right_max - height[r]);
-            right_max = max(height[r], right_max);
-            r--;
-        }
-    }
-   return res;
-}
-
-int trap(vector<int> &height)
-{
-    if (height.empty())
-        return 0;
-    int res = 0;
-    int i = 0;
-    stack<int> monoStack; // 因为要求一个数左边比他大和右边比他大,所以应该是一个单调递减的栈,
-    这个栈需要保持严格单调递减
-    while (i < height.size())
-    {
-        // 如果满足入栈条件,则直接入栈 
-        if (monoStack.empty() || height[i] < height[monoStack.top()])
-        {
-            monoStack.push(i++);
-        }
-        else// 如果不满足入栈条件,则弹出栈顶元素,这个时候可以结算当前元素,栈顶元素的下一个元素则为
-        左边界，当前遍历到的height[i]则为右边界
-        {
-            int tmp = monoStack.top();
-            monoStack.pop();
-            if (monoStack.empty())
-                continue;
-            int h = min(height[i], height[monoStack.top()]);
-            res = res + (h - height[tmp]) * (i - monoStack.top() - 1);
-        }
-    }
-    return res;
-}
-
-int trap(vector<int>& height) 
-{
-    if (height.empty())
-        return 0;
-
-    int res = 0; 
-    stack<int> monoStack;
-    for(int i = 0; i < height.size(); i++)
-    {
-        while(!monoStack.empty() && height[i] >= height[monoStack.top()])
-        {
-            int tmp = monoStack.top();
-            monoStack.pop();
-            if (monoStack.empty())
-                continue;
-            int h = min(height[i], height[monoStack.top()]);
-            res = res + (h - height[tmp]) * (i - monoStack.top() - 1);
-        }
-        monoStack.push(i);
     }
     return res;
 }
