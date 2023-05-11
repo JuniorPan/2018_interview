@@ -1,4 +1,4 @@
-# LeetCode 刷题记录
+#  LeetCode 刷题记录
 
 ### 滑动窗口问题(7)
 
@@ -25,14 +25,16 @@ while (right < s.size()) {
 
 ```c++
 int lengthOfLongestSubstring(string s) {
-  vector<int> m(128, -1);
-  int res = 0, left = -1;
-  for (int i = 0; i < s.size(); ++i) {
-      left = max(left, m[s[i]]);
-      m[s[i]] = i;
-      res = max(res, i - left);
-  }
-  return res;
+    vector<int> hash(256, -1); // hash 记录每一个字符出现的位置
+    int res = 0;
+    int pre = -1; // pre 表示前一个字符 向左推多能推几个形成最长无重复子串
+    for(int i = 0; i < s.size(); i++)
+    {
+        pre = max(pre, hash[s[i]]);
+        hash[s[i]] = i;
+        res = max(res, i - pre);
+    }
+    return res;
 }
 
 
@@ -133,32 +135,6 @@ int minSubArrayLen(int s, vector<int>& nums) {
     }
     return res == INT_MAX ? 0 : res;
 }
-
-int minSubArrayLen(int target, vector<int>& nums) {
-    if (nums.empty())
-        return 0;
-    int left = 0;
-    int cur_sum = 0;
-    int index = 0;
-    int res = INT_MAX;
-    while(index <= nums.size()-1)
-    {
-        // 形成一个窗口 
-        while(cur_sum < target && index <= nums.size()-1)
-        {
-            cur_sum += nums[index];
-            index++;
-        }
-        // 收缩窗口 左边界
-        while(cur_sum >= target)
-        {
-            res = min(res, index - left);
-            cur_sum -= nums[left];
-            left++;
-        }
-    }
-    return res == INT_MAX ? 0 : res;
-}   
 ```
 
 #### [713.乘积小于 K 的子数组](https://leetcode.cn/problems/subarray-product-less-than-k/)
@@ -177,7 +153,6 @@ int numSubarrayProductLessThanK(vector<int>& nums, int k) {
         // 形成窗口
         while (left <= i && prod >= k) 
             prod /= nums[left++];
-
         res += i - left + 1;
     }
     return res;
@@ -4041,10 +4016,7 @@ int change(int amount, vector<int> &coins)
     return dp[coins.size()][amount];
 }
 
-
 ```
-
-
 
 ##### [322. 零钱兑换](https://leetcode-cn.com/problems/coin-change/)
 
@@ -4070,8 +4042,6 @@ int coinChange(vector<int> &coins, int amount)
     return dp[amount] > amount ? -1 : dp[amount];
 }
 ```
-
-##### 
 
 #### 6.区间型动态规划 
 
