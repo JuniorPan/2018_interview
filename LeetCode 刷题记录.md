@@ -702,7 +702,7 @@ int largestRectangleArea(vector<int> &heights)
             return 0;
     int res = 0;
     stack<int> s;
-    heights.push_back(0);
+    heights.push_back(0); // 为了使得最后一块板子也被处理，这里用了个小 trick，在高度数组最后面加上一个0
     for(int i = 0; i < heights.size(); i++)
     {
         while(!s.empty() && heights[i] <= heights[s.top()])
@@ -938,35 +938,32 @@ int searchInsert(vector<int>& nums, int target) {
 #### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)  重点看下边界问题
 
 ```c++
-class Solution
+int lower_bound(vector<int>& nums, int target)
 {
-public:
-    int lower_bound(vector<int>& nums, int target)
+    int left = 0, right = nums.size() -1 ;
+    while(left <= right) // 终止条件是 left = right +1 
     {
-        int left = 0, right = nums.size();
-        while(left < right) // 终止条件是 left = right, 所以当target一直比num[mid]大的时候left 会一直向右移动，直到超出右边界,来的right的位置
-        {
-            int mid = left + (right - left) / 2;
-            if (nums[mid] == target)
-                right = mid;
-            else if (nums[mid] < target)
-                left = mid + 1;
-            else if (nums[mid] > target)
-                right = mid;
-        }
-        return left; // 左右都无所谓了
+        int mid = left + (right - left) / 2;
+        if (nums[mid] == target)  // 如果当前位置就是第一个target的时候 那么接下来的判断都会是left=mid+1,终止条件就是left来带right+1位置，所以没有问题
+            right = mid - 1;
+        else if (nums[mid] < target)
+            left = mid + 1;
+        else if (nums[mid] > target)
+            right = mid - 1;
     }
-   vector<int> searchRange(vector<int>& nums, int target) {
-        if (nums.empty())
-            return vector<int>{-1,-1};
-        int low = lower_bound(nums, target);
-        int up = lower_bound(nums, target+1);
+    return left;
+}
+vector<int> searchRange(vector<int>& nums, int target) {
 
-        if (low == nums.size() ||  nums[low] != target)
-            return vector<int>{-1,-1};
-        return vector<int>{low, up-1};
-    }
-};
+    if (nums.empty())
+        return {-1, -1};
+
+    int left = lower_bound(nums, target);
+    int right = lower_bound(nums, target+1);
+    if (left == nums.size() || nums[left] != target)
+        return {-1, -1};
+    return vector<int> {left, right - 1};
+}
 ```
 
 #### [50. Pow(x, n)](https://leetcode-cn.com/problems/powx-n/) todo
@@ -8125,6 +8122,33 @@ public:
 #### [325.最大子数组之和为k](https://www.cnblogs.com/grandyang/p/5336668.html)
 
 ```c++
+int getMaxLen(vector<int> &nums, int k)
+{
+    map<int,int> hashmap;
+    map<int,int>::iterator it;; 
+ 
+    if (nums.empty())
+        return 0;
+    hashmap[0] = -1;
+    int len = 0;
+    int sum = 0;
+
+    for(int i = 0; i < nums.size(); i++)
+    {
+        sum += nums[i];
+        it = hashmap.find(sum - k);
+        if(it != hashmap.end())
+        {
+            len = max(i - hashmap[sum-k], len);
+        }
+        if (it == hashmap.end())
+        {
+            hashmap[sum] = i;
+        }
+    }
+    return len;
+}
+
 class Solution {
 public:
     int maxSubArrayLen(vector<int>& nums, int k) {

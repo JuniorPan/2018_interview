@@ -10,14 +10,9 @@ int getMaxLen(vector<int> &nums, int k)
     map<int,int> hashmap;
     map<int,int>::iterator it;; 
  
-
     if (nums.empty())
         return 0;
-    
     hashmap[0] = -1;
-    
-
-
     int len = 0;
     int sum = 0;
 
@@ -35,7 +30,6 @@ int getMaxLen(vector<int> &nums, int k)
         }
     }
     return len;
-
 }
 
 
