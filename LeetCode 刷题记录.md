@@ -1,4 +1,4 @@
-#  LeetCode 刷题记录
+#  	LeetCode 刷题记录
 
 ### 滑动窗口问题(11)
 
@@ -3643,6 +3643,31 @@ bool canPartition(vector<int>& nums)
     return dp[n][target];
 }
 
+bool canPartition(vector<int>& nums) {
+    int sum = accumulate(nums.begin(), nums.end(), 0);
+    if (sum % 2 == 1)
+        return false;
+    int target = sum / 2;
+    // dp[i][j] 表示在nums[0...i-1]任取数字其元素和为j的 最大容量
+    vector<vector<int>> dp(nums.size()+1 , vector<int>(target+1,0));
+    for (int j = 0; j <= target; j++)
+    {
+        if (j > nums[0])
+            dp[0][j] = nums[0];
+    }
+    for(int i = 1; i <= nums.size(); i++)
+    {
+        for(int j = 0; j <= target; j++)
+        {
+            if (j < nums[i-1])
+                dp[i][j] = dp[i-1][j];
+            else
+                dp[i][j] = max(dp[i-1][j], dp[i-1][j-nums[i-1]] + nums[i-1]);
+        }
+    }
+    return dp[nums.size()-1][target] == target;
+}
+
 bool canPartition(vector<int> &nums)
 {
     int sum = 0;
@@ -4203,6 +4228,16 @@ int rob(vector<int> &nums, int left, int right) {
         dp[i] = max(nums[i] + dp[i - 2], dp[i - 1]);
     }
     return dp.back();
+}
+
+int rob(vector<int> &nums, int left, int right) {
+    int rob = 0, notRob = 0;
+    for (int i = left; i < right; ++i) {
+        int preRob = rob, preNotRob = notRob;
+        rob = preNotRob + nums[i];
+        notRob = max(preRob, preNotRob);
+    }
+    return max(rob, notRob);
 }
 
 int rob(vector<int>& nums) {
