@@ -6875,7 +6875,7 @@ TreeNode* invertTree(TreeNode* root) {
 }
 ```
 
-#### [543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/) # 其实和124套路一样 
+#### [543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/) # todo其实和124套路一样 
 
 ```c++
 int diameterOfBinaryTree(TreeNode* root) 
@@ -9155,20 +9155,22 @@ string longestCommonPrefix(vector<string>& strs)
 
 ```c++
 bool isValid(string s) {
-    stack<char> parentheses;
-    // 用一个栈，开始遍历输入字符串，如果当前字符为左半边括号时，则将其压入栈中，如果遇到右半边括号时，
-    // 若此时栈为空，则直接返回 false，如不为空，则取出栈顶元素，若为对应的左半边括号，则继续循环，反之返回 false
-    for (int i = 0; i < s.size(); ++i) {
-        if (s[i] == '(' || s[i] == '[' || s[i] == '{') parentheses.push(s[i]);
-        else {
-            if (parentheses.empty()) return false;
-            if (s[i] == ')' && parentheses.top() != '(') return false;
-            if (s[i] == ']' && parentheses.top() != '[') return false;
-            if (s[i] == '}' && parentheses.top() != '{') return false;
-            parentheses.pop();
-        }
-    }
-    return parentheses.empty();
+  // 用一个栈，开始遍历输入字符串，如果当前字符为左半边括号时，则将其压入栈中，如果遇到右半边括号时，
+  // 若此时栈为空，则直接返回 false，如不为空，则取出栈顶元素，若为对应的左半边括号，则继续循环，反之返回 false
+  stack<char> st;
+  for(int i = 0; i < s.size(); i++)
+  {
+      if (s[i] == '(' || s[i] == '[' || s[i] == '{') 
+          st.push(s[i]);
+      else{
+          if (st.empty()) return false;
+          if (s[i] == ')' && st.top() != '(') return false;
+          if (s[i] == ']' && st.top() != '[') return false;
+          if (s[i] == '}' && st.top() != '{') return false;
+          st.pop();
+      } 
+  }
+  return st.empty();
 }
 ```
 
