@@ -8827,23 +8827,22 @@ public:
 ```c++
 //由于最终的结果都是要乘到结果 res 中，所以可以不用单独的数组来保存乘积，而是直接累积到结果 res 中，
 //我们先从前面遍历一遍，将乘积的累积存入结果 res 中，然后从后面开始遍历，用到一个临时变量 right，初始化为1，然后每次不断累积，最终得到正确结果，
-vector<int> productExceptSelf(vector<int>& nums)
-{
-    vector<int> res(nums.size());
-    int k = 1;
-    for(int i = 0; i < nums.size(); i++)
-    {
-        res[i] = k;
-        k = k * nums[i]; // 此时数组存储的是除去当前元素左边的元素乘积
-    }
+vector<int> productExceptSelf(vector<int>& nums) {
+  vector<int> res(nums.size());
+  res[0] = 1;
+  for(int i = 1; i < nums.size(); i++)
+  {
+      res[i] = nums[i - 1] * res[i - 1]; // 此时数组存储的是除去当前元素左边的元素乘积
+  }
 
-    k = 1;
-    for(int i = res.size() - 1; i >= 0; i--)
-    {
-        res[i] *= k;// k为该数右边的乘积。
-        k = k * nums[i]; // 此时数组等于左边的 * 该数右边的。
-    }
-    return res;
+  int R = 1;
+  for (int i = res.size() - 1; i >= 0; i--) {
+      // 对于索引 i，左边的乘积为 res[i]，右边的乘积为 R
+      res[i] = res[i] * R;
+      // R 需要包含右边所有的乘积，所以计算下一个结果时需要将当前值乘到 R 上
+      R *= nums[i];
+  }
+  return res;
 }
 ```
 
