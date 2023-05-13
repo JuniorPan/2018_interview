@@ -355,33 +355,7 @@ int maxArea(vector<int>& height)
 }
 ```
 
-#### [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/)
 
-```c++
-class Solution
-{
-public:
-    void sortColors(vector<int> &nums)
-    {
-        if (nums.size() < 0)
-            return;
-        int left = 0; // 小于区域的下一个位置
-        int right = nums.size() -1; // 大于区域的上一个位置
-        int index = 0;
-        while(index <= right)
-        {
-            if(nums[index] < 1)
-                swap(nums[index++], nums[left++]);
-            else if (nums[index] == 1)
-            {
-                index ++;
-            }
-            else 
-                swap(nums[index], nums[right--]);
-       }
-    }
-};
-```
 
 #### [167. 两数之和 II - 输入有序数组](https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/)
 
@@ -1418,7 +1392,7 @@ vector<vector<int>> merge(vector<vector<int>>& intervals) {
 }
 ```
 
-#### [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/)  TOOD
+#### [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/) 
 
 ```c++
 void sortColors(vector<int>& nums) 
@@ -1712,38 +1686,6 @@ public:
 };
 ```
 
-#### [912. 排序数组](https://leetcode-cn.com/problems/sort-an-array/)
-
-``` c++
-class Solution {
-public:
-    vector<int> sortArray(vector<int>& nums) {
-    	mergeSort(nums, 0, (int)nums.size() - 1);
-    	return nums;
-    }
-    void mergeSort(vector<int>& nums, int start, int end) {
-    	if (start >= end) return;
-    	int mid = (start + end) / 2;
-    	mergeSort(nums, start, mid);
-    	mergeSort(nums, mid + 1, end);
-    	merge(nums, start, mid, end);
-    }
-    void merge(vector<int>& nums, int start, int mid, int end) {
-        vector<int> tmp(end - start + 1);
-        int i = start, j = mid + 1, k = 0;
-        while (i <= mid && j <= end) {
-        	if (nums[i] < nums[j]) tmp[k++] = nums[i++];
-        	else tmp[k++] = nums[j++];
-        }
-        while (i <= mid) tmp[k++] = nums[i++];
-        while (j <= end) tmp[k++] = nums[j++];
-        for (int idx = 0; idx < tmp.size(); ++idx) {
-        	nums[idx + start] = tmp[idx];
-        }
-    }
-};
-```
-
 ### 链表 
 
 #### 链表总结
@@ -1864,7 +1806,7 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
 }
 ```
 
-#### [两数相加 II](https://leetcode.cn/problems/add-two-numbers-ii/)
+##### [两数相加 II](https://leetcode.cn/problems/add-two-numbers-ii/)
 
 ```c++
 class Solution {
@@ -1897,7 +1839,7 @@ public:
 
 
 
-##### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/) todo
+##### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)  #todo
 
 ```c++
 ListNode* swapPairs(ListNode* head) {
@@ -2342,9 +2284,10 @@ void reorderList(ListNode *head)
 }
 ```
 
-##### [160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/) # todo 双指针
+##### [160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/) # todo 双指针 虚假的easy
 
 ```c++
+// 让两条链表分别从各自的开头开始往后遍历，当其中一条遍历到末尾时，跳到另一个条链表的开头继续遍历
 ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) 
 {
     if (headA == nullptr || headB == nullptr) {
@@ -2358,46 +2301,42 @@ ListNode *getIntersectionNode(ListNode *headA, ListNode *headB)
     return pA;
 }
 class Solution {
-    int getLen(ListNode *head)
+public:
+    int get_len(ListNode *head)
     {
         int len = 0;
         while(head)
         {
-            len++;
             head = head->next;
-            
+            len++;
         }
         return len;
     }
-public:
-    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB)
-    {
-        if (headA == nullptr || headB == nullptr)
-            return nullptr;
-        
-        int len1 = getLen(headA);
-        int len2 = getLen(headB);
-        
-        ListNode *lon = headA;
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        int len_a = get_len(headA);
+        int len_b = get_len(headB);
+        ListNode *big = headA;
         ListNode *small = headB;
-        
-        if (len1 < len2)
+        if (len_a < len_b)
         {
-            lon = headB;
+            big = headB;
             small = headA;
         }
-        
-        for(int i = 0; i < abs(len1 - len2); i++)
+        for(int i = 0; i < abs(len_b - len_a); i++)
         {
-            lon = lon->next;
+            big = big->next;
         }
-        
-        while(lon && small && lon->val != small->val)
+        while(big && small)
         {
-            lon = lon->next;
-            small = small->next;
+            if (big == small)
+                return big;
+            else
+            {
+                small = small->next;
+                big = big->next;
+            }       
         }
-        return lon;
+        return nullptr;
     }
 };
 ```
@@ -2917,6 +2856,21 @@ int climbStairs(int n)
     return dp[n - 1];
 }
 ```
+
+##### [118. 杨辉三角](https://leetcode.cn/problems/pascals-triangle/)
+
+```
+vector<vector<int>> res(numRows, vector<int>());
+  for (int i = 0; i < numRows; ++i) {
+      res[i].resize(i + 1, 1);
+      for (int j = 1; j < i; ++j) {
+          res[i][j] = res[i - 1][j - 1] + res[i - 1][j];
+      }
+  }
+  return res;
+```
+
+
 
 ##### [120. 三角形最小路径和](https://leetcode-cn.com/problems/triangle/) #todo
 
@@ -4207,12 +4161,31 @@ public:
 // 对当前i来说，有抢和不抢两种互斥的选择，不抢即为 dp[i-1]（等价于去掉 nums[i] 只抢 [0, i-1] 区间最大值），
 // 抢即为 dp[i-2] + nums[i]（等价于去掉 nums[i-1]）
 int rob(vector<int>& nums) {
-    if (nums.size() <= 1) return nums.empty() ? 0 : nums[0];
-    vector<int> dp = {nums[0], max(nums[0], nums[1])};
-    for (int i = 2; i < nums.size(); ++i) {
-        dp.push_back(max(nums[i] + dp[i - 2], dp[i - 1]));
+    if (nums.size() <= 1) 
+        return nums.empty() ? 0 : nums[0];
+    // dp，其中 dp[i] 表示 [0, i] 区间可以抢夺的最大值
+    vector<int> dp(nums.size(), 0);
+
+    dp[0] = nums[0];
+    dp[1] = max(nums[0], nums[1]);
+    // 对当前i来说，有抢和不抢两种互斥的选择，不抢即为 dp[i-1]（等价于去掉 nums[i] 只抢 [0, i-1] 区间最大值），
+    // 抢即为 dp[i-2] + nums[i]（等价于去掉 nums[i-1]）
+    for(int i = 2; i < nums.size(); i++)
+    {
+        dp[i] = max(nums[i] + dp[i-2], dp[i-1]);
     }
-    return dp.back();
+    return dp[nums.size()-1];
+}
+
+// 使用两个变量 rob 和 notRob，其中 rob 表示抢当前的房子，notRob 表示不抢当前的房子，那么在遍历的过程中，先用两个变量 preRob 和 preNotRob 来分别记录更新之前的值，由于 rob 是要抢当前的房子，那么前一个房子一定不能抢，所以使用 preNotRob 加上当前的数字赋给 rob，然后 notRob 表示不能抢当前的房子，那么之前的房子就可以抢也可以不抢，所以将 preRob 和 preNotRob 中的较大值赋给 notRob
+int rob(vector<int>& nums) {
+    int rob = 0, notRob = 0, n = nums.size();
+    for (int i = 0; i < n; ++i) {
+        int preRob = rob, preNotRob = notRob;
+        rob = preNotRob + nums[i];
+        notRob = max(preRob, preNotRob);
+    }
+    return max(rob, notRob);
 }
 ```
 
@@ -4470,19 +4443,19 @@ public static boolean isValid(int[] record, int i, int j) {
 ```c++
 class Solution
 {
-    bool dfs(vector<vector<char>> &board, string &word, int i, int j, int pos)
+    bool dfs(vector<vector<char>> &board, string &word, int i, int j, int step)
     {
-        if (i >= board.size() || j >= board[0].size() || i < 0 || j < 0 || pos >= word.size() || word[pos] != board[i][j])
+        if (i >= board.size() || j >= board[0].size() || i < 0 || j < 0 || step >= word.size() || word[step] != board[i][j])
             return false;
-        if (pos == word.size() - 1 && word[pos] == board[i][j])
+        if (step == word.size() - 1 && word[step] == board[i][j])
             return true;
 		// 这个地方修改临时值和回溯思想不一样，只是为了不重复访问，需要一个和原数组等大小的 visited 数组，是 bool 型的，用来记录当前位置是否已经被访问过，因为题目要求一个 cell 只能被访问一次
         char temp = board[i][j];
         board[i][j] = '0';
-        bool flag = dfs(board, word, i, j + 1, pos + 1) ||
-                    dfs(board, word, i, j - 1, pos + 1) ||
-                    dfs(board, word, i + 1, j, pos + 1) ||
-                    dfs(board, word, i - 1, j, pos + 1);
+        bool flag = dfs(board, word, i, j + 1, step + 1) ||
+                    dfs(board, word, i, j - 1, step + 1) ||
+                    dfs(board, word, i + 1, j, step + 1) ||
+                    dfs(board, word, i - 1, j, step + 1);
         board[i][j] = temp; 
         return flag;
     }
@@ -6448,42 +6421,14 @@ Node* connect(Node* root) {
 }
 ```
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> bf9e7e3e8b45537d0779d900f35ba90c7ec6be3c
 #### [199. 二叉树的右视图](https://leetcode-cn.com/problems/binary-tree-right-side-view/)
 
 ```c++
 vector<int> rightSideView(TreeNode* root)
 {
-     vector<int> res;
+      vector<int> res;
       if (root == NULL)
           return res;
-<<<<<<< HEAD
-
-      queue<TreeNode *> q;
-      q.push(root);
-      while (!q.empty())
-      {
-          int size = q.size();
-          vector<int> level;
-          for (int i = 0; i < size; i++)
-          {
-              TreeNode *node = q.front();
-              level.push_back(node->val);
-              q.pop();
-              if (node->left)
-                  q.push(node->left);
-              if (node->right)
-                  q.push(node->right);
-          }
-          res.push_back(level.back());
-      }
-      return res;
-=======
-
       queue<TreeNode *> q;
       q.push(root);
       while (!q.empty())
@@ -6522,7 +6467,6 @@ int findBottomLeftValue(TreeNode* root) {
         if (root->left)  q.push(root->left);
     }
     return root->val;
->>>>>>> bf9e7e3e8b45537d0779d900f35ba90c7ec6be3c
 }
 ```
 
