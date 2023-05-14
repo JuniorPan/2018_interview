@@ -355,8 +355,6 @@ int maxArea(vector<int>& height)
 }
 ```
 
-
-
 #### [167. 两数之和 II - 输入有序数组](https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/)
 
 ```c++
@@ -509,8 +507,6 @@ int evalRPN(vector<string>& tokens) {
   return st.top();
 }
 ```
-
-
 
 ### 单调栈系列问题 (10)
 
@@ -9798,7 +9794,7 @@ bool isPalindrome(string s)
 
 ### 其他
 
-#### [135. 分发糖果](https://leetcode-cn.com/problems/candy/)
+#### [135. 分发糖果](https://leetcode-cn.com/problems/candy/) # todo
 
 ```c++
 int candy(vector<int>& ratings)
@@ -9820,66 +9816,6 @@ int candy(vector<int>& ratings)
         res += num;
     return res;
 }
-```
-
-#### [208. 实现 Trie (前缀树)](https://leetcode-cn.com/problems/implement-trie-prefix-tree/)
-
-```c++
-class Trie {
-public:
-    
-    struct TrieNode {
-        unordered_map<char, TrieNode*> map;
-        bool endOfWord = false;
-    };
-    
-    TrieNode *root;
-    /** Initialize your data structure here. */
-    Trie() {
-        root = new TrieNode();
-    }
-    
-    /** Inserts a word into the trie. */
-    void insert(string word) {
-        TrieNode *curr = root;
-        for (int i=0; i<word.size(); i++) {
-            if (curr->map.find(word[i]) == curr->map.end()) {
-                TrieNode *newNode = new TrieNode();
-                curr->map[word[i]] = newNode;
-                curr = newNode;
-            } else {
-                curr = curr->map[word[i]];
-            }
-        }
-        curr->endOfWord = true;;
-    }
-    
-    /** Returns if the word is in the trie. */
-    bool search(string word) {
-        TrieNode *curr = root;
-        for (int i=0; i<word.size(); i++) {
-            if (curr->map.find(word[i]) == curr->map.end()) {
-                return false;
-            } else {
-                curr = curr->map[word[i]];
-            }
-        }
-        return curr->endOfWord;
-    }
-    
-    /** Returns if there is any word in the trie that starts with the given prefix. */
-    bool startsWith(string prefix) {
-        TrieNode *curr = root;
-        for (int i=0; i<prefix.size(); i++) {
-            if (curr->map.find(prefix[i]) == curr->map.end()) {
-                return false;
-            } else {
-                curr = curr->map[prefix[i]];
-            }
-        }
-        return true;
-    }
-};
 ```
 
 #### [146. LRU 缓存机制](https://leetcode-cn.com/problems/lru-cache/)
@@ -9913,72 +9849,6 @@ public:
             l.pop_back();
             m.erase(k);
         }
-    }
-};
-class Solution {
-public:
-    /**
-     * lru design
-     * @param operators int整型vector<vector<>> the ops
-     * @param k int整型 the k
-     * @return int整型vector
-     */
-    vector<int>keys;
-    vector<int>values;
-    vector<int>res;
-    void set(int key,int value,int k)
-    {
-        if(keys.size()<k)
-        {
-            keys.push_back(key);
-            values.push_back(value);
-        }
-        else
-        {
-            keys.erase(keys.begin());
-            values.erase(values.begin());
-            keys.push_back(key);
-            values.push_back(value);
-        }
-    }
-    void get(int key)
-    {
-        int i;
-        for(i=0;i<keys.size();i++)
-        {
-            if(keys[i]==key)
-            {
-                break;
-            }
-        }
-        if(i==keys.size())
-        {
-            res.push_back(-1);
-            return ;
-        }
-        int value=values[i];
-        keys.erase(keys.begin()+i);
-        values.erase(values.begin()+i);
-        keys.push_back(key);
-        values.push_back(value);
-        res.push_back(value);
-    }
-    vector<int> LRU(vector<vector<int> >& operators, int k) {
-        // write code here
-        for(int i=0;i<operators.size();i++)
-        {
-            if(operators[i][0]==1)
-            {
-                int key=operators[i][1];
-                int v=operators[i][2];
-                set(key,v,k);
-            }
-            else
-            {
-                get(operators[i][1]);
-            }
-        }
-        return res;
     }
 };
 ```
@@ -10191,8 +10061,6 @@ public:
         while (!stack2.empty()) {
             stack2.pop();
         }
-
-
     }
     
     void appendTail(int value) {
@@ -10223,14 +10091,6 @@ public:
 
     }
 };
-
-/**
- * Your CQueue object will be instantiated and called as such:
- * CQueue* obj = new CQueue();
- * obj->appendTail(value);
- * int param_2 = obj->deleteHead();
- */
-
 ```
 
 #### [剑指 Offer 10- I. 斐波那契数列](https://leetcode-cn.com/problems/fei-bo-na-qi-shu-lie-lcof/)
@@ -10416,9 +10276,7 @@ class Solution
         root->right = temp;
 
         dfs(root->left);
-        dfs(root->right);
-
-        
+        dfs(root->right);   
     }
 public:
     TreeNode* mirrorTree(TreeNode* root) 
@@ -10431,19 +10289,19 @@ public:
 
 #### [剑指 Offer 31. 栈的压入、弹出序列](https://leetcode-cn.com/problems/zhan-de-ya-ru-dan-chu-xu-lie-lcof/)
 
-```
+```c
 bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
-        stack<int> st;
-        int i = 0;
-        for (int num : pushed) {
-        	st.push(num);
-        	while (!st.empty() && st.top() == popped[i]) {
-        		st.pop();
-        		++i;
-        	}
-        }
-        return st.empty();
+    stack<int> st;
+    int i = 0;
+    for (int num : pushed) {
+      st.push(num);
+      while (!st.empty() && st.top() == popped[i]) {
+        st.pop();
+        ++i;
+      }
     }
+    return st.empty();
+}
 ```
 
 #### [剑指 Offer 28. 对称的二叉树](https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/)
@@ -10465,7 +10323,6 @@ class Solution {
         else
             return false;
     }
-
 public:
     bool isSymmetric(TreeNode* root) 
     {
@@ -10519,7 +10376,6 @@ public:
         s1.push(x);
 	    if (s2.empty() || x <= min())  s2.push(x);	
     }
-    
     void pop() {
         if (s1.top() == min())  s2.pop();
 	    s1.pop();
@@ -10633,8 +10489,6 @@ int reversePairs(vector<int>& nums)
     return mergeSort(nums, 0, nums.size() - 1);
 }
 ```
-
-# 
 
 # 剑指 Offer II  刷题记录
 
