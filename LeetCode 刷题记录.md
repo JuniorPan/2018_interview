@@ -2289,6 +2289,7 @@ void reorderList(ListNode *head)
 
 ```c++
 // 让两条链表分别从各自的开头开始往后遍历，当其中一条遍历到末尾时，跳到另一个条链表的开头继续遍历
+// 两条链表分别从各自的开头开始往后遍历，当其中一条遍历到末尾时，跳到另一个条链表的开头继续遍历。两个指针最终会相等，而且只有两种情况，一种情况是在交点处相遇，另一种情况是在各自的末尾的空节点处相等。为什么一定会相等呢，因为两个指针走过的路程相同，是两个链表的长度之和，所以一定会相等
 ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) 
 {
     if (headA == nullptr || headB == nullptr) {
@@ -2537,8 +2538,6 @@ Node* insert(Node* head, int insertVal) {
     return head;
 }
 ```
-
-
 
 #### 链表翻转 
 
@@ -2955,7 +2954,7 @@ int jump(vector<int>& nums)
 ```c++
 bool canJump(vector<int>& nums) 
 {
-	// dp[i] 表示达到i位置时剩余的跳力，若到达某个位置时跳力为负了，说明无法到达该位置
+		// dp[i] 表示达到i位置时剩余的跳力，若到达某个位置时跳力为负了，说明无法到达该位置
     // 所以当前位置的剩余跳力（dp 值）和当前位置新的跳力中的较大那个数决定了当前能到的最远距离，而下一个位置的剩余跳力（dp 值）就等于当前的这个较大值减去1
     vector<int> dp(nums.size(), 0);
     for (int i = 1; i < nums.size(); ++i) 
@@ -4427,8 +4426,40 @@ vector<string> generateParenthesis(int n) {
 
 ##### [51. N 皇后](https://leetcode-cn.com/problems/n-queens/)
 
-```
-
+```c++
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> res;
+        vector<int> queenCol(n, -1);
+        helper(0, queenCol, res);
+        return res;
+    }
+    void helper(int curRow, vector<int>& queenCol, vector<vector<string>>& res) {
+        int n = queenCol.size();
+        if (curRow == n) {
+            vector<string> out(n, string(n, '.'));
+            for (int i = 0; i < n; ++i) {
+                out[i][queenCol[i]] = 'Q';
+            }
+            res.push_back(out);
+            return;
+        }
+        for (int i = 0; i < n; ++i) {
+            if (isValid(queenCol, curRow, i)) {
+                queenCol[curRow] = i;
+                helper(curRow + 1, queenCol, res);
+                queenCol[curRow] = -1;
+            }
+        }
+    }
+    bool isValid(vector<int>& queenCol, int row, int col) {
+        for (int i = 0; i < row; ++i) {
+            if (col == queenCol[i] || abs(row - i) == abs(col - queenCol[i])) return false;
+        }
+        return true;
+    }
+};
 ```
 
 ##### [52. N皇后 II](https://leetcode-cn.com/problems/n-queens-ii/)
@@ -6050,6 +6081,38 @@ public:
 };
 ```
 
+#### [994. 腐烂的橘子](https://leetcode.cn/problems/rotting-oranges/) #todo
+
+```c++
+int orangesRotting(vector<vector<int>>& grid) {
+    int res = 0, m = grid.size(), n = grid[0].size(), freshLeft = 0;
+    queue<vector<int>> q;
+    vector<vector<int>> dirs{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (grid[i][j] == 1) ++freshLeft;
+            else if (grid[i][j] == 2) q.push({i, j});
+        }
+    }
+    while (!q.empty() && freshLeft > 0) {
+        for (int i = q.size(); i > 0; --i) {
+            auto cur = q.front(); q.pop();
+            for (int k = 0; k < 4; ++k) {
+                int x = cur[0] + dirs[k][0], y = cur[1] + dirs[k][1];
+                if (x < 0 || x >= m || y < 0 || y >= n || grid[x][y] != 1) continue;
+                grid[x][y] = 2;
+                q.push({x, y});
+                --freshLeft;
+            }
+        }
+        ++res;
+    }
+    return freshLeft > 0 ? -1 : res;
+}
+```
+
+
+
 
 
 ##### 490. The Maze
@@ -7529,13 +7592,37 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 
 ```
 
-### 双堆模式
+### 栈
+
+#### [20. 有效的括号](https://leetcode.cn/problems/valid-parentheses/)
+
+```c++
+bool isValid(string s) {
+  // 用一个栈，开始遍历输入字符串，如果当前字符为左半边括号时，则将其压入栈中，如果遇到右半边括号时，
+  // 若此时栈为空，则直接返回 false，如不为空，则取出栈顶元素，若为对应的左半边括号，则继续循环，反之返回 false
+  stack<char> st;
+  for(int i = 0; i < s.size(); i++)
+  {
+      if (s[i] == '(' || s[i] == '[' || s[i] == '{') 
+          st.push(s[i]);
+      else{
+          if (st.empty()) return false;
+          if (s[i] == ')' && st.top() != '(') return false;
+          if (s[i] == ']' && st.top() != '[') return false;
+          if (s[i] == '}' && st.top() != '{') return false;
+          st.pop();
+      } 
+  }
+  return st.empty();
+}
+```
 
 #### [155. 最小栈](https://leetcode-cn.com/problems/min-stack/) #todo 
 
 ```c++
 class MinStack {
 public:
+  	// 一个栈来按顺序存储 push 进来的数据，另一个用来存出现过的最小值
     stack<int> s1, s2; // s2 辅助栈 用来保存最小元素
     /** initialize your data structure here. */
     MinStack() {
@@ -7574,11 +7661,14 @@ public:
  */
 ```
 
-#### [295. 数据流的中位数](https://leetcode-cn.com/problems/find-median-from-data-stream/)
+#### [295. 数据流的中位数](https://leetcode-cn.com/problems/find-median-from-data-stream/) # todo
 
 ```c++
 class MedianFinder {
 public:
+  	// 大堆保存右半段较大的数字，小堆保存左半段较小的数组
+  	// 大堆里面的数据是从小到大
+  	// 存到大堆里的数先取反再存，这样由大到小存下来的顺序就是实际上我们想要的从小到大的顺序
     priority_queue<long> small, large;
     /** initialize your data structure here. */
     MedianFinder() {
@@ -8224,6 +8314,78 @@ int subarraySum(vector<int>& nums, int k)
 #### [208.实现 Trie (前缀树)](https://leetcode.cn/problems/implement-trie-prefix-tree/)
 
 ```
+class TrieNode {
+public:
+    TrieNode *child[26];
+    bool isWord;
+    TrieNode(): isWord(false) {
+        for (auto &a : child) a = nullptr;
+    }
+};
+
+class Trie {
+public:
+    Trie() {
+        root = new TrieNode();
+    }
+    void insert(string s) {
+        TrieNode *p = root;
+        for (auto &a : s) {
+            int i = a - 'a';
+            if (!p->child[i]) p->child[i] = new TrieNode();
+            p = p->child[i];
+        }
+        p->isWord = true;
+    }
+    bool search(string key) {
+        TrieNode *p = root;
+        for (auto &a : key) {
+            int i = a - 'a';
+            if (!p->child[i]) return false;
+            p = p->child[i];
+        }
+        return p->isWord;
+    }
+    bool startsWith(string prefix) {
+        TrieNode *p = root;
+        for (auto &a : prefix) {
+            int i = a - 'a';
+            if (!p->child[i]) return false;
+            p = p->child[i];
+        }
+        return true;
+    }
+    
+private:
+    TrieNode* root;
+};
+```
+
+### 贪心
+
+#### [763. 划分字母区间](https://leetcode.cn/problems/partition-labels/) # todo
+
+```
+vector<int> partitionLabels(string S) {
+    // 发现一旦某个字母多次出现了，那么其最后一个出现位置必须要在当前子串中
+    // 可以使用一个 HashMap 来建立字母和其最后出现位置之间的映射
+    // 维护一个 start 变量，是当前子串的起始位置，还有一个 last 变量，是当前子串的结束位置，
+    // 每当我们遍历到一个字母，我们需要在 HashMap 中提取出其最后一个位置，因为一旦当前子串包含了一个字母，其必须包含所有的相同字母，
+    // 所以我们要不停的用当前字母的最后一个位置来更新 last 变量，只有当i和 last 相同了，即当 i = 8 时，
+    // 当前子串包含了所有已出现过的字母的最后一个位置，即之后的字符串里不会有之前出现过的字母了，此时就应该是断开的位置，我们将长度9加入结果 res 中
+    vector<int> res;
+    int n = S.size(), start = 0, last = 0;
+    unordered_map<char, int> m;
+    for (int i = 0; i < n; ++i) m[S[i]] = i;
+    for (int i = 0; i < n; ++i) {
+        last = max(last, m[S[i]]);
+        if (i == last) {
+            res.push_back(i - start + 1);
+            start = i + 1;
+        }
+    }
+    return res;
+  }
 ```
 
 
@@ -9821,8 +9983,6 @@ public:
 };
 ```
 
-
-
 #### [470. 用 Rand7() 实现 Rand10()](https://leetcode-cn.com/problems/implement-rand10-using-rand7/)
 
 ```
@@ -9887,20 +10047,20 @@ string solve(int M, int N) {
 
 ```
 bool isValid(string s) {
-        // write code here
-        stack<char> parentheses;
-        for (int i = 0; i < s.size(); ++i) {
-            if (s[i] == '(' || s[i] == '[' || s[i] == '{') parentheses.push(s[i]);
-            else {
-                if (parentheses.empty()) return false;
-                if (s[i] == ')' && parentheses.top() != '(') return false;
-                if (s[i] == ']' && parentheses.top() != '[') return false;
-                if (s[i] == '}' && parentheses.top() != '{') return false;
-                parentheses.pop();
-            }
+    // write code here
+    stack<char> parentheses;
+    for (int i = 0; i < s.size(); ++i) {
+        if (s[i] == '(' || s[i] == '[' || s[i] == '{') parentheses.push(s[i]);
+        else {
+            if (parentheses.empty()) return false;
+            if (s[i] == ')' && parentheses.top() != '(') return false;
+            if (s[i] == ']' && parentheses.top() != '[') return false;
+            if (s[i] == '}' && parentheses.top() != '{') return false;
+            parentheses.pop();
         }
-        return parentheses.empty();
     }
+    return parentheses.empty();
+}
 
 ```
 
