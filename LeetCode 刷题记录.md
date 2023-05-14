@@ -1418,7 +1418,7 @@ void sortColors(vector<int>& nums)
 }
 ```
 
-#### [179. 最大数](https://leetcode-cn.com/problems/largest-number/)
+#### [179. 最大数](https://leetcode-cn.com/problems/largest-number/) #todo
 
 ```c++
 string largestNumber(vector<int>& nums) 
@@ -1433,8 +1433,6 @@ string largestNumber(vector<int>& nums)
     return res[0] == '0' ? "0" : res;
 }
 ```
-
-
 
 #### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/) todo
 
@@ -1833,8 +1831,6 @@ public:
     }
 };
 ```
-
-
 
 ##### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)  #todo
 
@@ -2442,14 +2438,12 @@ ListNode *insertionSortList(ListNode *head)
         return head;
 
     ListNode *fakeHead = new ListNode(-1);
-
     ListNode *p = nullptr;
     fakeHead->next = nullptr;
     while (head)
     {
         p = head->next;
         ListNode *q = fakeHead;
-
         if (fakeHead->next == nullptr)
         {
             fakeHead->next = head;
@@ -3165,6 +3159,41 @@ int lengthOfLIS(vector<int>& nums)
 
 ```
 
+##### [674. 最长连续递增序列](https://leetcode.cn/problems/longest-continuous-increasing-subsequence/)
+
+```c++
+class Solution {
+public:
+    // 使用一个计数器，如果遇到大的数字，计数器自增1；
+    // 如果是一个小的数字，则计数器重置为1。用一个变量 cur 来表示前一个数字，初始化为整型最大值，
+    // 当前遍历到的数字 num 就和 cur 比较就行了，每次用 cnt 来更新结果 res
+    int findLengthOfLCIS(vector<int>& nums) {
+        int res = 0, cnt = 0, cur = INT_MAX;
+        for (int num : nums) {
+            if (num > cur) ++cnt;
+            else cnt = 1;
+            res = max(res, cnt);
+            cur = num;
+        }
+        return res;
+    }
+    int findLengthOfLCIS1(vector<int>& nums) {
+        if (nums.size() == 0) 
+            return 0;
+        int res = 1;
+        // dp[i]：以下标i为结尾的连续递增的子序列长度为dp[i]
+        vector<int> dp(nums.size() ,1);
+        for (int i = 1; i < nums.size(); i++) {
+            if (nums[i] > nums[i - 1]) { // 连续记录
+                dp[i] = dp[i - 1] + 1;
+            }
+            res = max(res, dp[i]);
+        }
+        return res;
+    }
+};
+```
+
 ##### [312. 戳气球](https://leetcode-cn.com/problems/burst-balloons/)
 
 ```c++
@@ -3188,8 +3217,6 @@ int maxCoins(vector<int>& nums)
     return dp[1][n];
 }
 ```
-
-
 
 ##### [343. 整数拆分](https://leetcode-cn.com/problems/integer-break/) #todo 20210415
 
@@ -4305,7 +4332,18 @@ int maxProfit(vector<int>& prices)
 ##### [123. 买卖股票的最佳时机 III](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/)
 
 ```
-
+int maxProfit(vector<int> &prices) {
+    if (prices.empty()) return 0;
+    int n = prices.size(), g[n][3] = {0}, l[n][3] = {0};
+    for (int i = 1; i < prices.size(); ++i) {
+        int diff = prices[i] - prices[i - 1];
+        for (int j = 1; j <= 2; ++j) {
+            l[i][j] = max(g[i - 1][j - 1] + max(diff, 0), l[i - 1][j] + diff);
+            g[i][j] = max(l[i][j], g[i - 1][j]);
+        }
+    }
+    return g[n - 1][2];
+}
 ```
 
 ##### [309. 最佳买卖股票时机含冷冻期](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/)
@@ -8361,7 +8399,7 @@ private:
 
 #### [763. 划分字母区间](https://leetcode.cn/problems/partition-labels/) # todo
 
-```
+```c++
 vector<int> partitionLabels(string S) {
     // 发现一旦某个字母多次出现了，那么其最后一个出现位置必须要在当前子串中
     // 可以使用一个 HashMap 来建立字母和其最后出现位置之间的映射
