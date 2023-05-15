@@ -4161,7 +4161,7 @@ int countSubstrings(string s)
 
 ##### [486. Predict the Winner](https://leetcode.com/problems/predict-the-winner/)
 
-```
+```c++
 class Solution
 {
     // 作为先发者 在i...j范围上先发获得的收益
@@ -9932,12 +9932,14 @@ string solve(string num1, string num2) {
 }
 ```
 
-#### [151. 翻转字符串里的单词](https://leetcode-cn.com/problems/reverse-words-in-a-string/)
+#### [151. 翻转字符串里的单词](https://leetcode-cn.com/problems/reverse-words-in-a-string/) #todo
 
-```
+```c++
 string reverseWords(string s) 
 {
     // storeIndex表示当前存储到的位置
+  	// 先整个字符串整体翻转一次，然后再分别翻转每一个单词
+    //（或者先分别翻转每一个单词，然后再整个字符串整体翻转一次），此时就能得到我们需要的结果了
     int storeIndex = 0, n = s.size();
     reverse(s.begin(), s.end());
     for (int i = 0; i < n; ++i) {
