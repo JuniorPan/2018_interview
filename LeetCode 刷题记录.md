@@ -8500,7 +8500,115 @@ private:
 
 ### 贪心
 
+#### [56. 合并区间](https://leetcode.cn/problems/merge-intervals/)
+
+```c++
+vector<vector<int>> merge(vector<vector<int>>& intervals) {
+    if (intervals.size() == 0)
+    {
+        return {};
+    }
+    // 首先将列表中的区间按左端点排序, 然后将第一个区间加入到merged数组中
+    // 1: 如果当前区间的左端点在merged数组中最后一个区间的右端点之后,那么他们不会重合,则直接将该区间加入数组merged中
+    // 2: 如果当前区间的左端点在merged数组中最后一个区间的右端点之前, 需要更新当前区间的右端点更新数组中merged中最后一个区间的右端点，取二者的最大值
+    sort(intervals.begin(), intervals.end());
+    vector<vector<int>> merged;
+    for(int i = 0; i < intervals.size(); i++)
+    {
+        int left = intervals[i][0];
+        int right = intervals[i][1];
+        if(!merged.size() || merged.back()[1] < left) // 条件1
+            merged.push_back({left, right});
+        else // 条件2
+            merged.back()[1] = max(merged.back()[1], right);
+    }
+    return merged;
+}
+```
+
+#### [134. 加油站](https://leetcode.cn/problems/gas-station/)
+
+#### [135. 分发糖果](https://leetcode.cn/problems/candy/)
+
+#### [406. 根据身高重建队列](https://leetcode.cn/problems/queue-reconstruction-by-height/)
+
+```c++
+// 身高从大到小排（身高相同k小的站前面）
+    static bool cmp(const vector<int>& a, const vector<int>& b) {
+        if (a[0] == b[0]) return a[1] < b[1];
+        return a[0] > b[0];
+    }	
+	// 队列先排个序，按照身高高的排前面，如果身高相同，则第二个数小的排前面。然后新建一个空的数组，遍历之前排好序的数组，然后根据每个元素的第二个数字，将其插入到 res 数组中对应的位置
+    vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+        sort (people.begin(), people.end(), cmp);
+        list<vector<int>> que; // list底层是链表实现，插入效率比vector高的多
+        for (int i = 0; i < people.size(); i++) {
+            int position = people[i][1]; // 插入到下标为position的位置
+            std::list<vector<int>>::iterator it = que.begin();
+            while (position--) { // 寻找在插入位置
+                it++;
+            }
+            que.insert(it, people[i]);
+        }
+        return vector<vector<int>>(que.begin(), que.end());
+    }
+```
+
+
+
+#### [435. 无重叠区间](https://leetcode.cn/problems/non-overlapping-intervals/)
+
+```
+// 按照区间右边界排序
+  static bool cmp (const vector<int>& a, const vector<int>& b) {
+      return a[1] < b[1];
+  }
+  int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+      if (intervals.size() == 0) return 0;
+      sort(intervals.begin(), intervals.end(), cmp);
+      int count = 1; // 记录非交叉区间的个数
+      int end = intervals[0][1]; // 记录区间分割点
+      for (int i = 1; i < intervals.size(); i++) {
+          if (end <= intervals[i][0]) {
+              end = intervals[i][1];
+              count++;
+          }
+      }
+      return intervals.size() - count;
+  }
+```
+
+
+
+#### [452. 用最少数量的箭引爆气球](https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/)
+
+```c++
+int findMinArrowShots(vector<vector<int>>& points) {
+    if (points.size() == 0) 
+        return 0;
+    auto cmp = [](const vector<int>& a, const vector<int>& b) {
+        return a[0] < b[0];
+    };
+    sort(points.begin(), points.end(), cmp);
+
+    int result = 1; // points 不为空至少需要一支箭
+    for (int i = 1; i < points.size(); i++) {
+        if (points[i][0] > points[i - 1][1]) {  // 气球i和气球i-1不挨着，注意这里不是>=
+            result++; // 需要一支箭
+        }
+        else {  // 气球i和气球i-1挨着
+            points[i][1] = min(points[i - 1][1], points[i][1]); // 更新重叠气球最小右边界
+        }
+    }
+    return result;
+  }
+```
+
+#### [455. 分发饼干](https://leetcode.cn/problems/assign-cookies/)
+
 #### [763. 划分字母区间](https://leetcode.cn/problems/partition-labels/) # todo
+
+<img src="https://code-thinking-1253855093.file.myqcloud.com/pics/20201222191924417.png" alt="763.划分字母区间" style="zoom:50%;" />
 
 ```c++
 vector<int> partitionLabels(string S) {
@@ -8510,22 +8618,46 @@ vector<int> partitionLabels(string S) {
     // 每当我们遍历到一个字母，我们需要在 HashMap 中提取出其最后一个位置，因为一旦当前子串包含了一个字母，其必须包含所有的相同字母，
     // 所以我们要不停的用当前字母的最后一个位置来更新 last 变量，只有当i和 last 相同了，即当 i = 8 时，
     // 当前子串包含了所有已出现过的字母的最后一个位置，即之后的字符串里不会有之前出现过的字母了，此时就应该是断开的位置，我们将长度9加入结果 res 中
-    vector<int> res;
-    int n = S.size(), start = 0, last = 0;
-    unordered_map<char, int> m;
-    for (int i = 0; i < n; ++i) m[S[i]] = i;
-    for (int i = 0; i < n; ++i) {
-        last = max(last, m[S[i]]);
-        if (i == last) {
-            res.push_back(i - start + 1);
-            start = i + 1;
+    int hash[27] = {0}; // i为字符，hash[i]为字符出现的最后位置
+    for (int i = 0; i < S.size(); i++) { // 统计每一个字符最后出现的位置
+        hash[S[i] - 'a'] = i;
+    }
+    vector<int> result;
+    int left = 0;
+    int right = 0;
+    for (int i = 0; i < S.size(); i++) {
+        right = max(right, hash[S[i] - 'a']); // 找到字符出现的最远边界
+        if (i == right) {
+            result.push_back(right - left + 1);
+            left = i + 1;
         }
     }
-    return res;
+    return result;
   }
 ```
 
+#### [738. 单调递增的数字](https://leetcode.cn/problems/monotone-increasing-digits/)
 
+```c++
+int monotoneIncreasingDigits(int N) {
+  string strNum = to_string(N);
+  // flag用来标记赋值9从哪里开始
+  // 设置为这个默认值，为了防止第二个for循环在flag没有被赋值的情况下执行
+  int flag = strNum.size();
+  for (int i = strNum.size() - 1; i > 0; i--) {
+      if (strNum[i - 1] > strNum[i] ) {
+          flag = i;
+          strNum[i - 1]--;
+      }
+  }
+  for (int i = flag; i < strNum.size(); i++) {
+      strNum[i] = '9';
+  }
+  return stoi(strNum);
+}
+```
+
+#### [1005. K 次取反后最大化的数组和](https://leetcode.cn/problems/maximize-sum-of-array-after-k-negations/)
 
 ### 数组
 
