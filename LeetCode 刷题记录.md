@@ -3204,7 +3204,7 @@ int maxCoins(vector<int>& nums)
     nums.push_back(1);
     //  dp，其中 dp[i][j] 表示打爆区间 [i,j] 中的所有气球能得到的最多金币
     // dp[i][j] 的值，这个区间可能比较大，但是如果知道了所有的小区间的 dp 值，然后聚沙成塔，逐步的就能推出大区间的 dp 值了。还是要遍历这个区间内的每个气球，就用k来遍历吧，k在区间 [i, j] 中，假如第k个气球最后被打爆，那么此时区间 [i, j] 被分成了三部分，[i, k-1]，[k]，和 [k+1, j]，只要之前更新过了 [i, k-1] 和 [k+1, j] 这两个子区间的 dp 值，可以直接用 dp[i][k-1] 和 dp[k+1][j]，那么最后被打爆的第k个气球的得分该怎么算呢，你可能会下意识的说，就乘以周围两个气球被 nums[k-1] * nums[k] * nums[k+1]，但其实这样是错误的，为啥呢？dp[i][k-1] 的意义是什么呢，是打爆区间 [i, k-1] 内所有的气球后的最大得分，此时第 k-1 个气球已经不能用了，同理，第 k+1 个气球也不能用了，相当于区间 [i, j] 中除了第k个气球，其他的已经爆了，那么周围的气球只能是第 i-1 个，和第 j+1 个了，所以得分应为 nums[i-1] * nums[k] * nums[j+1]，分析到这里，状态转移方程应该已经跃然纸上了吧，如下所示：
-//dp[i][j] = max(dp[i][j], nums[i - 1] * nums[k] * nums[j + 1] + dp[i][k - 1] + dp[k + 1][j])                 ( i ≤ k ≤ j )
+//dp[i][j] = max(dp[i][j], nums[i - 1] * nums[k] * nums[j + 1] + dp[i][k - 1] + dp[k + 1][j]) ( i ≤ k ≤ j )
     vector<vector<int>> dp(n + 2, vector<int>(n + 2, 0));
     for (int len = 1; len <= n; ++len) {
         for (int i = 1; i <= n - len + 1; ++i) {
@@ -5519,11 +5519,104 @@ vector<string> wordBreak(string s, vector<string>& wordDict)
 
 ##### [332. 重新安排行程](https://leetcode.cn/problems/reconstruct-itinerary/)
 
+##### [473. 火柴拼正方形](https://leetcode.cn/problems/matchsticks-to-square/)
+
+```c++
+bool dfs(vector<int>& nums, vector<int>& sums, int pos, int target) {
+    if (pos >= nums.size()) 
+    {
+        return sums[0] == target && sums[1] == target && sums[2] == target;
+    }
+    for (int i = 0; i < 4; ++i) 
+    {
+        if (sums[i] + nums[pos] > target) 
+            continue;
+        sums[i] += nums[pos];
+        if (dfs(nums, sums, pos + 1, target)) return true;
+        sums[i] -= nums[pos];
+    }
+    return false;
+}
+
+bool makesquare(vector<int>& nums) {
+    if (nums.empty() || nums.size() < 4) return false;
+    int sum = accumulate(nums.begin(), nums.end(), 0);
+    if (sum % 4 != 0) return false;
+    vector<int> sums(4, 0);
+    sort(nums.rbegin(), nums.rend());
+    return dfs(nums, sums, 0, sum / 4);
+}
+```
+
 ##### [491. 递增子序列](https://leetcode.cn/problems/increasing-subsequences/)
+
+```c++
+vector<vector<int>> findSubsequences(vector<int>& nums) {
+    set<vector<int>> res;
+    vector<int> out;
+    helper(nums, 0, out, res);
+    return vector<vector<int>>(res.begin(), res.end());
+}
+void helper(vector<int>& nums, int start, vector<int>& out, set<vector<int>>& res) {
+    if (out.size() >= 2) res.insert(out);
+    for (int i = start; i < nums.size(); ++i) {
+        if (!out.empty() && out.back() > nums[i]) continue;
+        out.push_back(nums[i]);
+        helper(nums, i + 1, out, res);
+        out.pop_back();
+    }
+}
+```
 
 ##### [526. 优美的排列](https://leetcode-cn.com/problems/beautiful-arrangement/)
 
+```c++
+int countArrangement(int N) {
+    int res = 0;
+    vector<int> visited(N + 1, 0);
+    helper(N, visited, 1, res);
+    return res;
+}
+void helper(int N, vector<int>& visited, int pos, int& res) {
+    if (pos > N) {
+        ++res; 
+        return;
+    }
+    for (int i = 1; i <= N; ++i) {
+        if (visited[i] == 0 && (i % pos == 0 || pos % i == 0)) {
+            visited[i] = 1;
+            helper(N, visited, pos + 1, res);
+            visited[i] = 0;
+        }
+    }
+}
+```
+
+
+
 ##### [698. 划分为k个相等的子集](https://leetcode-cn.com/problems/partition-to-k-equal-sum-subsets/)
+
+```
+bool canPartitionKSubsets(vector<int>& nums, int k) {
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        if (sum % k != 0) return false;
+        vector<bool> visited(nums.size());
+        return helper(nums, k, sum / k, 0, 0, visited);
+    }
+    bool helper(vector<int>& nums, int k, int target, int start, int curSum, vector<bool>& visited) {
+        if (k == 1) return true;
+        if (curSum == target) return helper(nums, k - 1, target, 0, 0, visited);
+        for (int i = start; i < nums.size(); ++i) {
+            if (visited[i]) continue;
+            visited[i] = true;
+            if (helper(nums, k, target, i + 1, curSum + nums[i], visited)) return true;
+            visited[i] = false;
+        }
+        return false;
+    }
+```
+
+
 
 
 
@@ -5557,8 +5650,6 @@ int minDistance(string word1, string word2)
     return dfs(word1, 0, word2, 0, dp);
 }
 ```
-
-
 
 ##### [97. 交错字符串](https://leetcode-cn.com/problems/interleaving-string/)
 
