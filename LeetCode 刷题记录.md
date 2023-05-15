@@ -5286,13 +5286,25 @@ public:
 };
 ```
 
-##### [491. 递增子序列](https://leetcode.cn/problems/non-decreasing-subsequences/)
+##### [91. 解码方法](https://leetcode-cn.com/problems/decode-ways/)
 
 ```c++
-
+int numDecodings(string s) {
+  			// 其中 dp[i] 表示s中前i个字符组成的子串的解码方法的个数，长度比输入数组长多多1，并将 dp[0] 初始化为1
+        if (s.empty() || s[0] == '0') return 0;
+        vector<int> dp(s.size() + 1, 0);
+        dp[0] = 1;
+        for (int i = 1; i < dp.size(); ++i) {
+            dp[i] = (s[i - 1] == '0') ? 0 : dp[i - 1];
+            if (i > 1 && (s[i - 2] == '1' || (s[i - 2] == '2' && s[i - 1] <= '6'))) {
+                dp[i] += dp[i - 2];
+            }
+        }
+        return dp.back();
+    }
 ```
 
-##### [91. 解码方法](https://leetcode-cn.com/problems/decode-ways/)
+
 
 ##### [93. 复原IP地址](https://leetcode-cn.com/problems/restore-ip-addresses/)
 
