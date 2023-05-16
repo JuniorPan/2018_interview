@@ -1,3 +1,23 @@
+
+
+## Todolist 2023
+
+#### [581. 最短无序连续子数组](https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/)
+
+#### [402. 移掉 K 位数字](https://leetcode-cn.com/problems/remove-k-digits/)
+
+#### [321. 拼接最大数](https://leetcode.cn/problems/create-maximum-number/)
+
+#### [768. 最多能完成排序的块 II](https://leetcode-cn.com/problems/max-chunks-to-make-sorted-ii/)
+
+
+
+[378. 有序矩阵中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-sorted-matrix/)
+
+[540.有序数组中的单一元素](https://leetcode.cn/problems/single-element-in-a-sorted-array/description/) #todo
+
+
+
 ## [左神的课](https://www.bilibili.com/video/BV13g41157hK?p=5&vd_source=f740ff72b448a270a8990e020d263b59)
 
 ### p1

@@ -27,7 +27,7 @@ while (right < s.size()) {
 int lengthOfLongestSubstring(string s) {
     vector<int> hash(256, -1); // hash 记录每一个字符出现的位置
     int res = 0;
-    int pre = -1; // pre 表示前一个字符 向左推多能推几个形成最长无重复子串
+    int pre = -1; // pre 表示前一个字符 无重复子串左边的起始位置的前一个
     for(int i = 0; i < s.size(); i++)
     {
         pre = max(pre, hash[s[i]]);
@@ -309,6 +309,26 @@ bool checkInclusion(string s1, string s2)
 
 ```c++
 int maxScore(vector<int>& cardPoints, int k) {
+  int cur_sum = 0;
+  int res = INT_MAX;
+  int left = 0;
+  // 求剩下的数 窗口大小为 nums.size() - k 和最小
+  for(int i = 0; i < cardPoints.size(); i++)
+  {
+      cur_sum += cardPoints[i];
+      while (i - left + 1 == cardPoints.size() - k)
+      {
+          res = min(res, cur_sum);
+          cur_sum -= cardPoints[left];
+          left++;
+      }
+  }
+  if (k == cardPoints.size())
+      return accumulate(cardPoints.begin(), cardPoints.end(), 0);
+  return accumulate(cardPoints.begin(), cardPoints.end(), 0) - res;
+}
+
+int maxScore(vector<int>& cardPoints, int k) {
     int n = cardPoints.size();
     // 滑动窗口大小为 n-k
     int windowSize = n - k;
@@ -417,26 +437,27 @@ bool searchMatrix(vector<vector<int>> &matrix, int target)
 #### [524. 通过删除字母匹配到字典里最长单词](https://leetcode-cn.com/problems/longest-word-in-dictionary-through-deleting/)  #todo
 
 ```c++
-string findLongestWord(string s, vector<string> &d)
-{
-    string res = "";
-    for (string str : d)
-    {
-        int i = 0;
-        for (char c : s)
-        {
-            if (i < str.size() && c == str[i])
-                ++i;
-        }
-        if (i == str.size() && str.size() >= res.size())
-        {
-            if (str.size() > res.size() || str < res)
-            {
-                res = str;
-            }
-        }
-    }
-    return res;
+string findLongestWord(string s, vector<string>& dictionary) {
+  string res = "";
+  for(int i = 0; i < dictionary.size(); i++)
+  {   
+      int count = 0;
+      // 遍历每一个单词，用一个变量count来记录单词中的某个字母的位置，我们遍历给定字符串，
+      // 如果遍历到单词中的某个字母来，i自增1，如果没有，就继续往下遍历。这样如果最后i和单词长度相等，说明单词中的所有字母都按顺序出现在了字符串s中
+      string word_i = dictionary[i];
+      for(int j = 0; js < s.ize(); j++)
+      {
+          if (s[j] == word_i[count])
+              count++;
+      }
+
+      if (count == word_i.size() && word_i.size() >= res.size())
+      {
+          if (word_i.size() > res.size() || word_i < res)
+              res = word_i;
+      }   
+  }
+  return res;
 }
 ```
 
@@ -508,7 +529,7 @@ int evalRPN(vector<string>& tokens) {
 }
 ```
 
-### 单调栈系列问题 (10)
+### 单调栈系列问题 (12)
 
 **单调栈的两种写法**   [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
 
@@ -516,6 +537,8 @@ int evalRPN(vector<string>& tokens) {
 1.单调栈里的元素具有单调性
 2.元素加入栈前，会在栈顶端把破坏栈单调性的元素都删除
 3.使用单调栈可以找到元素向左遍历第一个比他小的元素，也可以找到元素向左遍历第一个比他大的元素。
+单调递增栈，利用波谷剔除栈中的波峰，留下波谷；
+单调递减栈，利用波峰剔除栈中的波谷，留下波峰。
 ```
 
 ```c++
@@ -770,6 +793,7 @@ int findPeakElement(vector<int>& nums) {
 #### [581. 最短无序连续子数组](https://leetcode-cn.com/problems/shortest-unsorted-continuous-subarray/) #todo 20210419
 
 ```c++
+// https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/solution/si-lu-qing-xi-ming-liao-kan-bu-dong-bu-cun-zai-de-/
 class Solution {
 public:
     int findUnsortedSubarray(vector<int>& nums) 
@@ -828,37 +852,115 @@ vector<int> dailyTemperatures(vector<int>& T)
 }
 ```
 
-#### [402. 移掉 K 位数字](https://leetcode-cn.com/problems/remove-k-digits/)
+#### [316. 去除重复字母](https://leetcode.cn/problems/remove-duplicate-letters/) todo
 
 ```c++
-// https://www.cnblogs.com/grandyang/p/5883736.html
-string removeKdigits(string num, int k) {
-    string res = "";
-    int n = num.size(), keep = n - k;
-    for (char c : num) {
-        while (k && res.size() && res.back() > c) {
-            res.pop_back();
-            --k;
-        }
-        res.push_back(c);
-    }
-    res.resize(keep);
-    while (!res.empty() && res[0] == '0') res.erase(res.begin());
-    return res.empty() ? "0" : res;
+string removeDuplicateLetters(string s) {
+  vector<int> num(256, 0);//记录字母出现个数
+  for(auto &ch : s)
+  {
+      num[ch]++; //记录每个字母出现的次数；
+  }
+  string ans; //string本身具有栈的属性，所以直接用string作为栈
+  for(auto &ch : s)
+  {          
+      if(ans.find(ch) != -1)//如果该字母已经在栈里面，则不让进栈，同时进不去的字母次数也要-1
+      {
+          --num[ch];
+          continue;
+      }
+      //如果栈内不为空，且即将进栈的元素小于当前栈顶的元素，同时这个元素也不是最后一个元素
+      while(!ans.empty() && ans.back() > ch && num[ans.back()] > 0)
+      {
+              ans.pop_back();                                  
+      }
+      --num[ch];//入栈后的元素个数-1
+      ans.push_back(ch);
+  }
+  return ans;
 }
+```
+
+#### [321. 拼接最大数](https://leetcode.cn/problems/create-maximum-number/)
+
+```
 ```
 
 
 
+#### [402. 移掉 K 位数字](https://leetcode-cn.com/problems/remove-k-digits/)
+
+```c++
+// https://www.cnblogs.com/grandyang/p/5883736.html
+// https://leetcode.cn/problems/remove-k-digits/solution/yi-zhao-chi-bian-li-kou-si-dao-ti-ma-ma-zai-ye-b-5/
+string removeKdigits(string num, int k) {
+    // 从高位开始 保持递增
+    stack<char> s;
+    for (int i = 0; i < num.size(); i++)
+    {
+        while (!s.empty() && s.top() > num[i] && k)
+        {
+            s.pop();
+            k--;
+        }
+        if (s.empty() && num[i] == '0')
+            continue;//跳过前置0
+        s.push(num[i]);
+    }
+    string result;
+    while (!s.empty())
+    {
+        if (k > 0)//当还要再移除数字的时候：从此时单调递增栈的top部删去数字
+            k--;
+        else if (k == 0)//当不用再移除数字的时候：把字符串取出来到result
+            result += s.top();
+
+        s.pop();	
+    }
+    reverse(result.begin(), result.end());//stl中的reverse函数
+    return result == "" ? "0" : result;
+}
+```
+
 #### [496. 下一个更大元素 I](https://leetcode.cn/problems/next-greater-element-i/)
 
 ```c++
+vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+    vector<int> res;
+    stack<int> st;
+    unordered_map<int, int> m;
+    for (int num : nums2) {
+        while (!st.empty() && num > st.top()) {
+            m[st.top()] = num; st.pop();
+        }
+        st.push(num);
+    }
+    for (int num : nums1) {
+        res.push_back(m.count(num) ? m[num] : -1);
+    }        
+    return res;
+}
 ```
 
 #### [503. 下一个更大元素 II](https://leetcode.cn/problems/next-greater-element-ii/)
 
 ```c++
+vector<int> nextGreaterElements(vector<int>& nums) {
+  int n = nums.size();
+  vector<int> res(n, -1);
+  stack<int> st;
 
+  // 遍历两倍的数组，然后还是坐标i对n取余，取出数字
+  for (int i = 0; i < 2 * n; ++i) {
+      int num = nums[i % n];
+      while (!st.empty() && nums[st.top()] < num) {
+          res[st.top()] = num; st.pop();
+      }
+      // res 的长度必须是n，超过n的部分我们只是为了给之前栈中的数字找较大值，所以不能压入栈
+      if (i < n) st.push(i);
+  }
+  return res;
+}
 ```
 
 #### [768. 最多能完成排序的块 II](https://leetcode-cn.com/problems/max-chunks-to-make-sorted-ii/)
@@ -880,7 +982,7 @@ int maxChunksToSorted(vector<int>& arr) {
 }
 ```
 
-### 二分查找  (12)
+### 二分查找  (15)
 
 https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/solution/yi-wen-dai-ni-gao-ding-er-fen-cha-zhao-j-ymwl/
 
@@ -1272,6 +1374,8 @@ int search(vector<int> &nums, int target)
 
 #### 快排模板
 
+#### [912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
+
 ```c++
 [912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
 int partition(vector<int> &nums, int left, int right)
@@ -1341,8 +1445,50 @@ void merge_sort(vector<int> &nums, int left, int right)
 
 #### 堆排序模板
 
-```
+```c++
+class Solution {
+    void buildMaxHeap(vector<int>& nums) {
+        int n = nums.size();
+        for (int i = (n - 1) / 2; i >= 0; --i) {
+            maxHeapify(nums, i, n);
+        }
+    }
 
+    void maxHeapify(vector<int>& nums, int i, int n) {
+        while (i * 2 + 1 < n) {
+            // 代表当前 i 节点的左右儿子；
+            // 超出数组大小则代表当前 i 节点为叶子节点，不需要移位
+            int lSon = 2 * i + 1;
+            int rSon = 2 * i + 2;
+            int large = i;
+            if (lSon < n && nums[lSon] > nums[i]) large = lSon;
+            if (rSon < n && nums[rSon] > nums[large]) large = rSon;
+
+            if (large != i) {
+                swap(nums[i], nums[large]);
+                // 迭代判断对应子节点及其儿子节点的大小关系
+                i = large;
+            } else {
+                break;
+            }
+        }
+    }
+
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        // heapSort 堆排序
+        int n = nums.size();
+        // 将数组整理成大根堆
+        buildMaxHeap(nums);
+        for (int i = n - 1; i >= 1; --i) {
+            // 依次弹出最大元素，放到数组最后，当前排序对应数组大小 - 1
+            swap(nums[0], nums[i]);
+            --n;
+            maxHeapify(nums, 0, n);
+        }
+        return nums;
+    }
+};
 ```
 
 #### [4. 寻找两个正序数组的中位数](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)
@@ -1364,28 +1510,6 @@ int removeElement(vector<int>& nums, int val)
         }
     }
     return len;
-}
-```
-
-#### [56. 合并区间](https://leetcode-cn.com/problems/merge-intervals/)
-
-```c++
-vector<vector<int>> merge(vector<vector<int>>& intervals) {  
-    vector<vector<int>> res;
-    if (intervals.empty())
-        return res;
-    sort(intervals.begin(), intervals.end());
-    res.push_back(intervals[0]);
-    for(int i = 1; i < intervals.size(); i++)
-    {
-        int left = intervals[i][0];
-        int right = intervals[i][1];
-        if (left <= res.back()[1])
-            res.back()[1] = max(right, res.back()[1]);
-        else 
-            res.push_back(intervals[i]);
-    }
-    return res;
 }
 ```
 
