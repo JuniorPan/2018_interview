@@ -495,40 +495,6 @@ string findLongestWord(string s, vector<string>& dictionary) {
 
 
 
-### 栈
-
-#### [150.逆波兰表达式求值](https://leetcode.cn/problems/evaluate-reverse-polish-notation/)
-
-```c++
-int evalRPN(vector<string>& tokens) {
-  // 前往后遍历数组，遇到数字则压入栈中，遇到符号，则把栈顶的两个数字拿出来运算，
-  // 把结果再压入栈中，直到遍历完整个数组，栈顶数字即为最终答案
-  stack<int> st;
-  for(int i = 0; i < tokens.size(); i++)
-  {
-      if (tokens[i] != "+" && tokens[i] != "-" && tokens[i] != "*" && tokens[i] != "/" )
-          st.push(stoi(tokens[i]));
-      else
-      {
-          int val_2 = st.top();st.pop();
-          int val_1 = st.top();st.pop();
-          if (tokens[i] == "+"){  
-              st.push(val_1 + val_2);
-          }
-          if (tokens[i] == "-"){
-              st.push(val_1 - val_2);
-          }
-          if (tokens[i] == "*"){
-              st.push(val_1 * val_2);
-          }if (tokens[i] == "/"){
-              st.push(val_1 / val_2);
-          }
-      }
-  }
-  return st.top();
-}
-```
-
 ### 单调栈系列问题 (12)
 
 **单调栈的两种写法**   [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
@@ -1542,22 +1508,6 @@ void sortColors(vector<int>& nums)
 }
 ```
 
-#### [179. 最大数](https://leetcode-cn.com/problems/largest-number/) #todo
-
-```c++
-string largestNumber(vector<int>& nums) 
-{
-    string res;
-    sort(nums.begin(), nums.end(), [](int a, int b) {
-       return to_string(a) + to_string(b) > to_string(b) + to_string(a); 
-    });
-    for (int i = 0; i < nums.size(); ++i) {
-        res += to_string(nums[i]);
-    }
-    return res[0] == '0' ? "0" : res;
-}
-```
-
 #### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/) todo
 
 ```c++
@@ -2221,27 +2171,6 @@ ListNode* removeNthFromEnd(ListNode* head, int n)
     return head;
 }
 
-// 解法二
-ListNode* removeNthFromEnd(ListNode* head, int n) {
-    if (head == nullptr)
-        return head;
-    ListNode *fast = head, *slow = head, *pre = head;
-    for(int i = 0; i < n; i++)
-    {
-        fast = fast->next;
-    }
-    if (fast == nullptr)
-        return head->next;
-  	// 需要替换下 fast fast->next 跳出循环 slow fast所在的位置
-    while(fast) // 这个地方其实可以替换成 fast,那么当跳出循环时， fast = nullptr， slow 正好来到了倒数第n个节点上，可以用一指针pre记录slow前
-    {
-        pre = slow;
-        fast = fast->next;
-        slow = slow->next;
-    }
-    pre->next = slow->next;
-    return head;
-}
 ```
 
 ##### [61. 旋转链表](https://leetcode-cn.com/problems/rotate-list/)  # todo 
@@ -2953,9 +2882,16 @@ int minPathSum(vector<vector<int>> &grid)
 
 ##### [70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/) # todo 空间优化
 
-难度简单2096
-
 ```c++
+int climbStairs(int n) {
+    int pre = 1, preOfPre = 1, cur = 1;
+    for(int i = 2; i <= n; i++) {
+        cur = pre + preOfPre;
+        preOfPre = pre;
+        pre = cur;
+    }
+    return cur;
+}
 int climbStairs(int n)
 {
     if (n <= 1)
@@ -2973,18 +2909,21 @@ int climbStairs(int n)
 
 ##### [118. 杨辉三角](https://leetcode.cn/problems/pascals-triangle/)
 
+```c++
+vector<vector<int>> generate(int numRows) 
+{
+    vector<vector<int>> res(numRows, vector<int>());
+    for(int i = 0; i < numRows; i++)
+    {
+        res[i].resize(i+1, 1);
+        for(int j = 1; j < i; j++)
+        {
+            res[i][j] = res[i-1][j-1] + res[i-1][j];
+        }
+    }
+    return res;
+}
 ```
-vector<vector<int>> res(numRows, vector<int>());
-  for (int i = 0; i < numRows; ++i) {
-      res[i].resize(i + 1, 1);
-      for (int j = 1; j < i; ++j) {
-          res[i][j] = res[i - 1][j - 1] + res[i - 1][j];
-      }
-  }
-  return res;
-```
-
-
 
 ##### [120. 三角形最小路径和](https://leetcode-cn.com/problems/triangle/) #todo
 
@@ -3037,32 +2976,6 @@ int longestValidParentheses(string s)
 }
 ```
 
-##### [45. 跳跃游戏 II](https://leetcode-cn.com/problems/jump-game-ii/)好像不是dp #todo 20210415
-
-```
-int jump(vector<int>& nums) 
-{
-    int level = 0;
-    int cur_begin = 0;
-    int cur_end = 0;
-    int next_end = 0;    
-    
-    while(cur_end < nums.size() -1)
-    {
-        for(int i = cur_begin; i <= cur_end; i++)
-        {
-            next_end = max(next_end, i + nums[i]);
-        }
-        
-        ++level;
-        cur_begin = cur_end + 1;
-        cur_end = next_end;
-    }
-    
-    return level;
-}
-```
-
 ##### [55. 跳跃游戏](https://leetcode-cn.com/problems/jump-game/) todo
 
 ```c++
@@ -3079,39 +2992,49 @@ bool canJump(vector<int>& nums)
     }
     return true;
 }
+
+bool canJump(vector<int>& nums) {
+        int n = nums.size(), reach = 0;
+        for (int i = 0; i < n; ++i) {
+            if (i > reach || reach >= n - 1) break;
+            reach = max(reach, i + nums[i]);
+        }
+        return reach >= n - 1;
+    }
 ```
 
 ##### [91. 解码方法](https://leetcode-cn.com/problems/decode-ways/) #todo 20210415 
 
 ```c++
-int numDecodings(string s) 
-{
-    int n = s.size();
-    if (n <= 0  || s[0] == '0')
-        return 0;
-    // dp[i] 表示前i个数字的组合数目
-    int dp[n+1] = {0};
-    dp[0] = 1;
-    dp[1] = s[0] != '0' ? 1 : 0;
-    for(int i = 2; i <= n; i++)
-    {
-        int d1 = s[i-1] - '0';
-        int d2 = s[i-2] - '0';
-        int num = d2*10 + d1;
-        if(!(d1 >= 1 && d1 <= 9) && (num >= 10 && num <= 26))
-        {
-           dp[i] = dp[i-2];  
-        }      
-        if (!(num >= 10 && num <= 26) && (d1 >= 1 && d1 <= 9))
-        {
-            dp[i] = dp[i-1];
-        }
-        if((d1 >= 1 && d1 <= 9) && (num >= 10 && num <= 26)) 
-        {
-            dp[i] = dp[i-1] + dp[i-2];
-        }
-    }
-    return dp[n];
+int numDecodings(string s) {
+  int n = s.size();
+  if (n <= 0  || s[0] == '0')
+      return 0;
+
+  // dp[i] 表示 s[0...i-1]数字的组合数目
+  vector<int> dp(n+1, 0);
+
+  dp[0] = 1;
+  dp[1] = s[0] != '0' ? 1 : 0;
+
+  for(int i = 2; i <= n; i++)
+  {
+      int d1 = s[i-1] - '0';
+      int d2 = s[i-2] - '0';
+      int num = d2*10 + d1;
+      // 前两个可以构成数字 前一个不行
+      if ((num >= 10 && num <= 26) && (d1 < 1 ||  d1 >9))
+          dp[i] = dp[i-2];
+
+      // 前两个不可以可以构成数字 前一个可以
+      if ((num < 10 || num > 26) && (d1 >= 1 && d1 <= 9))
+          dp[i] = dp[i-1];
+
+      // 都可以
+      if ((num >= 10 && num <= 26) && (d1 >= 1 && d1 <= 9))
+          dp[i] = dp[i-1] + dp[i-2];
+  }
+  return dp[n];
 }
 ```
 
@@ -3205,35 +3128,6 @@ bool wordBreak(string s, vector<string> &wordDict)
 }
 ```
 
-##### [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)  
-
-难度中等1395
-
-```
-int rob(vector<int> &nums)
-{
-    int n = nums.size();
-    if (n <= 0)
-        return 0;
-    if (n == 1)
-    {
-        return nums[0];
-    }
-    if (n == 2)
-    {
-        return max(nums[0], nums[1]);
-    }
-    int dp[n] = {0};
-    dp[0] = nums[0];
-    dp[1] = max(nums[0], nums[1]);
-    for (int i = 2; i < n; i++)
-    {
-        dp[i] = max(dp[i - 2] + nums[i], dp[i - 1]);
-    }
-    return dp[n - 1];
-}
-```
-
 ##### [279. 完全平方数](https://leetcode-cn.com/problems/perfect-squares/)
 
 ```c++
@@ -3308,9 +3202,10 @@ public:
         // dp[i]：以下标i为结尾的连续递增的子序列长度为dp[i]
         vector<int> dp(nums.size() ,1);
         for (int i = 1; i < nums.size(); i++) {
-            if (nums[i] > nums[i - 1]) { // 连续记录
+            if (nums[i] > nums[i - 1]) // 连续记录
                 dp[i] = dp[i - 1] + 1;
-            }
+            else 
+                dp[i] = 1;
             res = max(res, dp[i]);
         }
         return res;
@@ -3324,21 +3219,24 @@ public:
 int maxCoins(vector<int>& nums) 
 {
     int n = nums.size();
-    nums.insert(nums.begin(), 1);
-    nums.push_back(1);
-    //  dp，其中 dp[i][j] 表示打爆区间 [i,j] 中的所有气球能得到的最多金币
-    // dp[i][j] 的值，这个区间可能比较大，但是如果知道了所有的小区间的 dp 值，然后聚沙成塔，逐步的就能推出大区间的 dp 值了。还是要遍历这个区间内的每个气球，就用k来遍历吧，k在区间 [i, j] 中，假如第k个气球最后被打爆，那么此时区间 [i, j] 被分成了三部分，[i, k-1]，[k]，和 [k+1, j]，只要之前更新过了 [i, k-1] 和 [k+1, j] 这两个子区间的 dp 值，可以直接用 dp[i][k-1] 和 dp[k+1][j]，那么最后被打爆的第k个气球的得分该怎么算呢，你可能会下意识的说，就乘以周围两个气球被 nums[k-1] * nums[k] * nums[k+1]，但其实这样是错误的，为啥呢？dp[i][k-1] 的意义是什么呢，是打爆区间 [i, k-1] 内所有的气球后的最大得分，此时第 k-1 个气球已经不能用了，同理，第 k+1 个气球也不能用了，相当于区间 [i, j] 中除了第k个气球，其他的已经爆了，那么周围的气球只能是第 i-1 个，和第 j+1 个了，所以得分应为 nums[i-1] * nums[k] * nums[j+1]，分析到这里，状态转移方程应该已经跃然纸上了吧，如下所示：
-//dp[i][j] = max(dp[i][j], nums[i - 1] * nums[k] * nums[j + 1] + dp[i][k - 1] + dp[k + 1][j]) ( i ≤ k ≤ j )
-    vector<vector<int>> dp(n + 2, vector<int>(n + 2, 0));
-    for (int len = 1; len <= n; ++len) {
-        for (int i = 1; i <= n - len + 1; ++i) {
-            int j = i + len - 1;
-            for (int k = i; k <= j; ++k) {
-                dp[i][j] = max(dp[i][j], nums[i - 1] * nums[k] * nums[j + 1] + dp[i][k - 1] + dp[k + 1][j]);
+        nums.insert(nums.begin(), 1);
+        nums.push_back(1);
+        // dp，其中 dp[i][j] 表示打爆区间 [i,j] 中的所有气球能得到的最多金币
+        // 用k来遍历吧，k在区间 [i, j] 中，假如第k个气球最后被打爆，那么此时区间 [i, j] 被分成了三部分，[i, k-1]，[k]，和 [k+1, j]，
+        // 只要之前更新过了 [i, k-1] 和 [k+1, j] 这两个子区间的 dp 值，可以直接用 dp[i][k-1] 和 dp[k+1][j]，
+        // dp[i][k-1] 的意义是什么呢，是打爆区间 [i, k-1] 内所有的气球后的最大得分，此时第 k-1 个气球已经不能用了，
+        // 同理，第 k+1 个气球也不能用了，相当于区间 [i, j] 中除了第k个气球，其他的已经爆了，那么周围的气球只能是第 i-1 个，和第 j+1 个了，所以得分应为 nums[i-1] * nums[k] * nums[j+1]，分析到这里，状态转移方程应该已经跃然纸上了吧，如下所示：
+        //dp[i][j] = max(dp[i][j], nums[i - 1] * nums[k] * nums[j + 1] + dp[i][k - 1] + dp[k + 1][j])                 ( i ≤ k ≤ j )
+        vector<vector<int>> dp(n + 2, vector<int>(n + 2, 0));
+        for (int len = 1; len <= n; ++len) {
+            for (int i = 1; i <= n - len + 1; ++i) {
+                int j = i + len - 1;
+                for (int k = i; k <= j; ++k) {
+                    dp[i][j] = max(dp[i][j], nums[i - 1] * nums[k] * nums[j + 1] + dp[i][k - 1] + dp[k + 1][j]);
+                }
             }
         }
-    }
-    return dp[1][n];
+        return dp[1][n];
 }
 ```
 
@@ -3352,7 +3250,8 @@ int cuttingRope(int n)
 
     // dp[i] 表示分拆数字i能得到的最大乘积
     vector<int> dp(n+1, 0);
-
+		// 对于每个i，需要遍历所有小于i的数字，因为这些都是潜在的拆分情况，对于任意小于i的数字j，首先计算拆分为两个数字的乘积，即j乘以 i-j
+   // 拆分为多个数字的情况，这里就要用到 dp[i-j] 了，这个值表示数字 i-j 任意拆分可得到的最大乘积，再乘以j就是数字i可拆分得到的乘积，取二者的较大值来更新 dp[i]
     for(int i = 3; i <= n; i++)
     {
         for (int j = 0; j < i; j++)
@@ -7876,7 +7775,44 @@ bool isValid(string s) {
   }
   return st.empty();
 }
+
+
 ```
+
+#### [150.逆波兰表达式求值](https://leetcode.cn/problems/evaluate-reverse-polish-notation/)
+
+```
+
+int evalRPN(vector<string>& tokens) {
+  // 前往后遍历数组，遇到数字则压入栈中，遇到符号，则把栈顶的两个数字拿出来运算，
+  // 把结果再压入栈中，直到遍历完整个数组，栈顶数字即为最终答案
+  stack<int> st;
+  for(int i = 0; i < tokens.size(); i++)
+  {
+      if (tokens[i] != "+" && tokens[i] != "-" && tokens[i] != "*" && tokens[i] != "/" )
+          st.push(stoi(tokens[i]));
+      else
+      {
+          int val_2 = st.top();st.pop();
+          int val_1 = st.top();st.pop();
+          if (tokens[i] == "+"){  
+              st.push(val_1 + val_2);
+          }
+          if (tokens[i] == "-"){
+              st.push(val_1 - val_2);
+          }
+          if (tokens[i] == "*"){
+              st.push(val_1 * val_2);
+          }if (tokens[i] == "/"){
+              st.push(val_1 / val_2);
+          }
+      }
+  }
+  return st.top();
+}
+```
+
+
 
 #### [155. 最小栈](https://leetcode-cn.com/problems/min-stack/) #todo 
 
@@ -8624,6 +8560,48 @@ private:
 
 ### 贪心
 
+#### [45. 跳跃游戏 II](https://leetcode-cn.com/problems/jump-game-ii/)好像不是dp #todo 20210415
+
+```c++
+int jump(vector<int>& nums) {
+    // 贪的是一个能到达的最远范围，遍历当前跳跃能到的所有位置，然后根据该位置上的跳力来预测下一步能跳到的最远距离，贪出一个最远的范围，一旦当这个范围到达末尾时，当前所用的步数一定是最小步数
+    // 两个变量 cur 和 pre 分别来保存当前的能到达的最远位置和之前能到达的最远位置，只要 cur 未达到最后一个位置则循环继续，pre 先赋值为 cur 的值，表示上一次循环后能到达的最远位置，如果当前位置i小于等于 pre，说明还是在上一跳能到达的范围内，根据当前位置加跳力来更新 cur，更新 cur 的方法是比较当前的 cur 和 i + A[i] 之中的较大值
+    int res = 0, n = nums.size(), i = 0, cur = 0;
+    while (cur < n - 1) {
+        ++res;
+        int pre = cur;
+        for (; i <= pre; ++i) {
+            cur = max(cur, i + nums[i]);
+        }
+        if (pre == cur) return -1; // May not need this
+    }
+    return res;
+}
+```
+
+#### [55. 跳跃游戏](https://leetcode-cn.com/problems/jump-game/) todo
+
+```c++
+bool canJump(vector<int>& nums) {
+  // 只对最远能到达的位置感兴趣，所以维护一个变量 reach，表示最远能到达的位置，初始化为0。
+  // 而所有小于等于 reach 的位置都可以通过连续跳跃到达的，则只要 reach 大于等于最后一位置，就说明可以跳到最后一个位置
+  // 一次遍历数组中的每个位置，若这个位置小于等于 reach，说明是在可以到达的范围内，而从该位置可以到达的最大范围就是 i + nums[i]，用这个最大范围来更新 reach
+
+  // 
+  int n = nums.size(), reach = 0;
+  for (int i = 0; i < n; ++i) {
+      if (i > reach)
+          return false;
+      if (reach >= n - 1) 
+          return true;;
+      reach = max(reach, i + nums[i]);
+  }
+  return false;
+}
+```
+
+
+
 #### [56. 合并区间](https://leetcode.cn/problems/merge-intervals/)
 
 ```c++
@@ -8653,6 +8631,22 @@ vector<vector<int>> merge(vector<vector<int>>& intervals) {
 #### [134. 加油站](https://leetcode.cn/problems/gas-station/)
 
 #### [135. 分发糖果](https://leetcode.cn/problems/candy/)
+
+#### [179. 最大数](https://leetcode-cn.com/problems/largest-number/) #todo
+
+```c++
+string largestNumber(vector<int>& nums) 
+{
+    string res;
+    sort(nums.begin(), nums.end(), [](int a, int b) {
+       return to_string(a) + to_string(b) > to_string(b) + to_string(a); 
+    });
+    for (int i = 0; i < nums.size(); ++i) {
+        res += to_string(nums[i]);
+    }
+    return res[0] == '0' ? "0" : res;
+}
+```
 
 #### [406. 根据身高重建队列](https://leetcode.cn/problems/queue-reconstruction-by-height/)
 

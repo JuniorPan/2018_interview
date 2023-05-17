@@ -16,6 +16,8 @@
 
 [540.有序数组中的单一元素](https://leetcode.cn/problems/single-element-in-a-sorted-array/description/) #todo
 
+[315. 计算右侧小于当前元素的个数](https://leetcode-cn.com/problems/count-of-smaller-numbers-after-self/)  todo
+
 
 
 ## [左神的课](https://www.bilibili.com/video/BV13g41157hK?p=5&vd_source=f740ff72b448a270a8990e020d263b59)
