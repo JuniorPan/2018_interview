@@ -3410,29 +3410,29 @@ int minDistance(string word1, string word2) {
 
 ```c++
 int numDistinct(string s, string t) {
-        int m = s.size();
-        int n = t.size();
+    int m = s.size();
+    int n = t.size();
 
-        // 使用 编辑距离的思路来理解，不断在s中删掉某个字符就行
-        // dp[i][j]：以i-1为结尾的s子序列中出现以j-1为结尾的t的个数为dp[i][j], 
-        vector<vector<unsigned long long>> dp(m + 1, vector<unsigned long long>(n + 1, 0));
-        for (int j = 0; j <= m; j++)
-        {
-            dp[j][0] = 1;
-        }
-
-        for (int i = 1; i <= m; i++)
-        {
-            for (int j = 1; j <= n; j++)
-            {
-                if (s[i - 1] != t[j - 1])
-                    dp[i][j] = dp[i - 1][j];
-                else
-                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
-            }
-        }
-        return dp[m][n];
+    // 使用 编辑距离的思路来理解，不断在s中删掉某个字符就行
+    // dp[i][j]：以i-1为结尾的s子序列中出现以j-1为结尾的t的个数为dp[i][j], 
+    vector<vector<unsigned long long>> dp(m + 1, vector<unsigned long long>(n + 1, 0));
+    for (int j = 0; j <= m; j++)
+    {
+        dp[j][0] = 1;
     }
+
+    for (int i = 1; i <= m; i++)
+    {
+        for (int j = 1; j <= n; j++)
+        {
+            if (s[i - 1] != t[j - 1])
+                dp[i][j] = dp[i - 1][j];
+            else
+                dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+        }
+    }
+    return dp[m][n];
+}
 ```
 
 ##### [392. 判断子序列](https://leetcode.cn/problems/is-subsequence/)
@@ -3714,6 +3714,30 @@ bool canPartition(vector<int>& nums) {
     return dp[nums.size()-1][target] == target;
 }
 
+/* 计算 nums 中有几个子集的和为 sum */
+bool canPartition(vector<int>& nums) {
+    int sum = 0;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        sum += nums[i];
+    }
+    int target  = sum / 2;
+    if (sum % 2 == 1)
+        return false;
+
+    //dp[i]表⽰ 背包总容量是i，最⼤可以凑成i的⼦集总和为dp[i]。 
+    vector<int> dp(target + 1 , 0);
+
+    for(int i = 0; i < nums.size(); i++)
+    {
+        for(int j = target; j >= nums[i]; j--)
+        {
+            dp[j] = max(dp[j], dp[j-nums[i]] + nums[i]);
+        }
+    }
+    return dp[target] == target;
+}
+
 bool canPartition(vector<int> &nums)
 {
     int sum = 0;
@@ -3740,29 +3764,7 @@ bool canPartition(vector<int> &nums)
     return dp[targetSum];
 }
 
-/* 计算 nums 中有几个子集的和为 sum */
-bool canPartition(vector<int>& nums) {
-    int sum = 0;
-    for(int i = 0; i < nums.size(); i++)
-    {
-        sum += nums[i];
-    }
-    int target  = sum / 2;
-    if (sum % 2 == 1)
-        return false;
 
-    //dp[i]表⽰ 背包总容量是i，最⼤可以凑成i的⼦集总和为dp[i]。 
-    vector<int> dp(target + 1 , 0);
-
-    for(int i = 0; i < nums.size(); i++)
-    {
-        for(int j = target; j >= nums[i]; j--)
-        {
-            dp[j] = max(dp[j], dp[j-nums[i]] + nums[i]);
-        }
-    }
-    return dp[target] == target;
-}
 
 ```
 
@@ -5631,24 +5633,24 @@ void helper(int N, vector<int>& visited, int pos, int& res) {
 
 ##### [698. 划分为k个相等的子集](https://leetcode-cn.com/problems/partition-to-k-equal-sum-subsets/)
 
-```
+```c++
 bool canPartitionKSubsets(vector<int>& nums, int k) {
-        int sum = accumulate(nums.begin(), nums.end(), 0);
-        if (sum % k != 0) return false;
-        vector<bool> visited(nums.size());
-        return helper(nums, k, sum / k, 0, 0, visited);
+    int sum = accumulate(nums.begin(), nums.end(), 0);
+    if (sum % k != 0) return false;
+    vector<bool> visited(nums.size());
+    return helper(nums, k, sum / k, 0, 0, visited);
+}
+bool helper(vector<int>& nums, int k, int target, int start, int curSum, vector<bool>& visited) {
+    if (k == 1) return true;
+    if (curSum == target) return helper(nums, k - 1, target, 0, 0, visited);
+    for (int i = start; i < nums.size(); ++i) {
+        if (visited[i]) continue;
+        visited[i] = true;
+        if (helper(nums, k, target, i + 1, curSum + nums[i], visited)) return true;
+        visited[i] = false;
     }
-    bool helper(vector<int>& nums, int k, int target, int start, int curSum, vector<bool>& visited) {
-        if (k == 1) return true;
-        if (curSum == target) return helper(nums, k - 1, target, 0, 0, visited);
-        for (int i = start; i < nums.size(); ++i) {
-            if (visited[i]) continue;
-            visited[i] = true;
-            if (helper(nums, k, target, i + 1, curSum + nums[i], visited)) return true;
-            visited[i] = false;
-        }
-        return false;
-    }
+    return false;
+}
 ```
 
 
@@ -7454,6 +7456,86 @@ TreeNode* convertBST(TreeNode* root) {
 #### [450. 删除二叉搜索树中的节点](https://leetcode.cn/problems/delete-node-in-a-bst/)
 
 ```c++
+class Solution {
+private:
+    // 将目标节点（删除节点）的左子树放到 目标节点的右子树的最左面节点的左孩子位置上
+    // 并返回目标节点右孩子为新的根节点
+    // 是动画里模拟的过程
+    TreeNode* deleteOneNode(TreeNode* target) {
+        if (target == nullptr) return target;
+        if (target->right == nullptr) return target->left;
+        TreeNode* cur = target->right;
+        while (cur->left) {
+            cur = cur->left;
+        }
+        cur->left = target->left;
+        return target->right;
+    }
+public:
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        if (root == nullptr) return root;
+        TreeNode* cur = root;
+        TreeNode* pre = nullptr; // 记录cur的父节点，用来删除cur
+        while (cur) {
+            if (cur->val == key) break;
+            pre = cur;
+            if (cur->val > key) cur = cur->left;
+            else cur = cur->right;
+        }
+        if (pre == nullptr) { // 如果搜索树只有头结点
+            return deleteOneNode(cur);
+        }
+        // pre 要知道是删左孩子还是右孩子
+        if (pre->left && pre->left->val == key) {
+            pre->left = deleteOneNode(cur);
+        }
+        if (pre->right && pre->right->val == key) {
+            pre->right = deleteOneNode(cur);
+        }
+        return root;
+    }
+};
+TreeNode* deleteNode(TreeNode* root, int key) {
+    if (root == nullptr) return root; // 第一种情况：没找到删除的节点，遍历到空节点直接返回了
+    if (root->val == key) {
+        // 第二种情况：左右孩子都为空（叶子节点），直接删除节点， 返回NULL为根节点
+        if (root->left == nullptr && root->right == nullptr) {
+            ///! 内存释放
+            delete root;
+            return nullptr;
+        }
+        // 第三种情况：其左孩子为空，右孩子不为空，删除节点，右孩子补位 ，返回右孩子为根节点
+        else if (root->left == nullptr) {
+            auto retNode = root->right;
+            ///! 内存释放
+            delete root;
+            return retNode;
+        }
+        // 第四种情况：其右孩子为空，左孩子不为空，删除节点，左孩子补位，返回左孩子为根节点
+        else if (root->right == nullptr) {
+            auto retNode = root->left;
+            ///! 内存释放
+            delete root;
+            return retNode;
+        }
+        // 第五种情况：左右孩子节点都不为空，则将删除节点的左子树放到删除节点的右子树的最左面节点的左孩子的位置
+        // 并返回删除节点右孩子为新的根节点。
+        else {
+            TreeNode* cur = root->right; // 找右子树最左面的节点
+            while(cur->left != nullptr) {
+                cur = cur->left;
+            }
+            cur->left = root->left; // 把要删除的节点（root）左子树放在cur的左孩子的位置
+            TreeNode* tmp = root;   // 把root节点保存一下，下面来删除
+            root = root->right;     // 返回旧root的右孩子作为新root
+            delete tmp;             // 释放节点内存（这里不写也可以，但C++最好手动释放一下吧）
+            return root;
+        }
+    }
+    if (root->val > key) root->left = deleteNode(root->left, key);
+    if (root->val < key) root->right = deleteNode(root->right, key);
+    return root;
+}
 ```
 
 #### [653.两数之和 IV - 输入二叉搜索树](https://leetcode.cn/problems/two-sum-iv-input-is-a-bst/)
@@ -7591,8 +7673,6 @@ Node* treeToDoublyList(Node* root)
     return head;
 }
 ```
-
-
 
 ### 二叉树的重新构建
 
@@ -8810,6 +8890,12 @@ int maxlenEqualK(vector<int>& arr, int k) {
 }
 ```
 
+#### [16. 最接近的三数之和](https://leetcode.cn/problems/3sum-closest/)
+
+```
+
+```
+
 
 
 #### [53. 最大子序和](https://leetcode-cn.com/problems/maximum-subarray/)
@@ -8832,8 +8918,40 @@ int maxSubArray(vector<int>& nums)
 
 #### [209.长度最小的子数组](https://leetcode.cn/problems/minimum-size-subarray-sum/description/)
 
-```
+```c++
+int threeSumClosest(vector<int>& nums, int target)
+{
+    if (nums.size() < 3)
+        return 0;
+    int res = nums[0] + nums[1] + nums[2];
+    sort(nums.begin(), nums.end());
 
+    for(int start = 0; start < nums.size() - 2; start++)
+    {
+        if (start > 0 && nums[start] == nums[start-1] )
+            continue;
+
+        int left = start+1;
+        int right = nums.size()-1;
+
+        while(left < right)
+        {
+            int curSum = nums[start] + nums[left] + nums[right];
+            if (curSum == target)  // 如果当前和正好等于target,直接返回, 
+                return curSum;
+
+            if (abs(target-curSum) < abs(target-res)) // 若不等于则进行范围缩小，每一次都要记录一下
+                res = curSum;  
+
+            if (curSum > target)
+                --right;
+            else 
+                ++left;
+
+        }
+    }
+    return res;
+}
 ```
 
 #### [88. 合并两个有序数组](https://leetcode-cn.com/problems/merge-sorted-array/)
@@ -10217,7 +10335,8 @@ int candy(vector<int>& ratings)
 class LRUCache{
 private:
     int cap;
-    list<pair<int, int>> l;
+    list<pair<int, int>> l
+    // HashMap 的建立的是关键值 key 和缓存列表中的迭代器之间的映射
     unordered_map<int, list<pair<int, int>>::iterator> m;
 public:
     LRUCache(int capacity) {
