@@ -3562,22 +3562,7 @@ bool isInterleave(string s1, string s2, string s3)
 ##### [718. 最长重复子数组](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/) todo 滚动数组
 
 ```c++
-// 二维数组
-int findLength_1(vector<int>& nums1, vector<int>& nums2) {
-    // dp[i][j] 表示 nums1[0...i-1] 和nums2[0...j-1]上的最长重复子数组长度
-    vector<vector<int>> dp(nums1.size() + 1, vector<int>(nums2.size() + 1 , 0));
-    int res = 0;
-    for(int i = 1; i <= nums1.size(); i++)
-    {
-        for(int j = 1; j <= nums2.size(); j++)
-        {
-            if (nums1[i-1] == nums2[j-1])
-                dp[i][j] = dp[i-1][j-1] + 1;
-            res = max(dp[i][j], res);
-        }
-    }
-    return res;
-}
+
 // 利用滚动数组优化成一维
 int findLength(vector<int>& nums1, vector<int>& nums2) {
     // dp[i][j] 表示 nums1[0...i-1] 和nums2[0...j-1]上的最长重复子数组长度
@@ -3594,6 +3579,24 @@ int findLength(vector<int>& nums1, vector<int>& nums2) {
     }
     return res;
 }
+
+// 二维数组
+int findLength_1(vector<int>& nums1, vector<int>& nums2) {
+    // dp[i][j] 表示 nums1[0...i-1] 和nums2[0...j-1]上的最长重复子数组长度
+    vector<vector<int>> dp(nums1.size() + 1, vector<int>(nums2.size() + 1 , 0));
+    int res = 0;
+    for(int i = 1; i <= nums1.size(); i++)
+    {
+        for(int j = 1; j <= nums2.size(); j++)
+        {
+            if (nums1[i-1] == nums2[j-1])
+                dp[i][j] = dp[i-1][j-1] + 1;
+            res = max(dp[i][j], res);
+        }
+    }
+    return res;
+}
+
 ```
 
 ##### [1035. 不相交的线](https://leetcode.cn/problems/uncrossed-lines/)
@@ -8756,7 +8759,7 @@ string largestNumber(vector<int>& nums)
 
 #### [435. 无重叠区间](https://leetcode.cn/problems/non-overlapping-intervals/)
 
-```
+```c++
 // 按照区间右边界排序
   static bool cmp (const vector<int>& a, const vector<int>& b) {
       return a[1] < b[1];
@@ -8892,11 +8895,41 @@ int maxlenEqualK(vector<int>& arr, int k) {
 
 #### [16. 最接近的三数之和](https://leetcode.cn/problems/3sum-closest/)
 
+```c++
+int threeSumClosest(vector<int>& nums, int target)
+{
+    if (nums.size() < 3)
+        return 0;
+    int res = nums[0] + nums[1] + nums[2];
+    sort(nums.begin(), nums.end());
+
+    for(int start = 0; start < nums.size() - 2; start++)
+    {
+        if (start > 0 && nums[start] == nums[start-1] )
+            continue;
+
+        int left = start+1;
+        int right = nums.size()-1;
+
+        while(left < right)
+        {
+            int curSum = nums[start] + nums[left] + nums[right];
+            if (curSum == target)  // 如果当前和正好等于target,直接返回, 
+                return curSum;
+
+            if (abs(target-curSum) < abs(target-res)) // 若不等于则进行范围缩小，每一次都要记录一下
+                res = curSum;  
+
+            if (curSum > target)
+                --right;
+            else 
+                ++left;
+
+        }
+    }
+    return res;
+}
 ```
-
-```
-
-
 
 #### [53. 最大子序和](https://leetcode-cn.com/problems/maximum-subarray/)
 
@@ -9392,102 +9425,6 @@ public:
 };
 ```
 
-#### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/) 
-
-```c++
-class Solution 
-{
-private:
-    void heapInsert(vector<int> &arr, int index, int value)
-    {
-        arr[index] = value;
-        while(index != 0)
-        {
-            int parent = (index-1) / 2; // 获取父节点
-
-            if(arr[parent] > arr[index])
-            {
-                int temp = arr[parent];
-                arr[parent] = arr[index];
-                arr[index] = temp;
-            
-                index = parent;
-            }
-            else
-            {
-                break;
-            }
-        }
-    }
-
-void heapify(vector<int> &arr, int index, int size)
-{
-    int left = 2 * index + 1;
-    while(left < size)
-    {
-        int smallest = left + 1 < size && arr[left+1] < arr[left] ? left +1: left ; // smallest记录左右子树中较小的那个
-        if (arr[smallest] > arr[index])
-            break;
-        
-        int temp = arr[smallest];
-        arr[smallest] = arr[index];
-        arr[index] = temp;
-
-        index = smallest;
-        left = 2 * index + 1;
-    }
-}
-public:
-    int findKthLargest(vector<int>& nums, int k) {
-        if (nums.empty() || nums.size() < k)
-            return 0;
-        
-        // int *heap = (int *)malloc(sizeof(int) * k);
-        vector<int> heap(k , 0);
-        
-        for(int i = 0; i < k; i++)
-        {
-            heapInsert(heap, i, nums[i]);
-        }
-        
-        for(int j = k; j < nums.size(); j++)
-        {
-            if (nums[j] > heap[0])
-            {
-                heap[0] = nums[j];
-                heapify(heap, 0, k);
-            }
-        }
-        return heap[0];
-    }
-};
-
-class Solution {
-public:
-    int findKthLargest(vector<int>& nums, int k) {
-        int left = 0, right = nums.size() - 1;
-        while (true) {
-            int pos = partition(nums, left, right);
-            if (pos == k - 1) return nums[pos];
-            if (pos > k - 1) right = pos - 1;
-            else left = pos + 1;
-        }
-    }
-    int partition(vector<int>& nums, int left, int right) {
-        int pivot = nums[left], l = left + 1, r = right;
-        while (l <= r) {
-            if (nums[l] < pivot && nums[r] > pivot) {
-                swap(nums[l++], nums[r--]);
-            }
-            if (nums[l] >= pivot) ++l;
-            if (nums[r] <= pivot) --r;
-        }
-        swap(nums[left], nums[r]);
-        return r;
-    }
-};
-```
-
 #### [238. 除自身以外数组的乘积](https://leetcode-cn.com/problems/product-of-array-except-self/) #todo
 
 ```c++
@@ -9688,22 +9625,7 @@ int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D)
 }
 ```
 
-#### [718. 最长重复子数组](https://leetcode-cn.com/problems/maximum-length-of-repeated-subarray/)
 
-```c++
-int findLength(vector<int>& A, vector<int>& B) {
-    int res = 0, m = A.size(), n = B.size();
-    // dp[i][j] 表示数组A的前i个数字和数组B的前j个数字的最长子数组的长度
-    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
-    for (int i = 1; i <= m; ++i) {
-        for (int j = 1; j <= n; ++j) {
-            dp[i][j] = (A[i - 1] == B[j - 1]) ? dp[i - 1][j - 1] + 1 : 0;
-            res = max(res, dp[i][j]);
-        }
-    }
-    return res;
-}
-```
 
 #### [845. 数组中的最长山脉](https://leetcode-cn.com/problems/longest-mountain-in-array/)
 
@@ -9728,8 +9650,8 @@ int longestMountain(vector<int>& A) {
 ```c++
 int partitionDisjoint(vector<int>& A) 
     {
-        // 里使用三个变量，partitionIdx 表示分割点的位置，preMax 表示 left 中的最大值，curMax 表示当前的最大值。思路是遍历每个数字，更新当前最大值 curMax，并且判断若当前数字 A[i] 小于 preMax，说明这个数字也一定是属于 left 数组的，此时整个遍历到的区域应该都是属于 left 的，所以 preMax 要更新为 curMax，并且当前位置也就是潜在的分割点，所以 partitionIdx 更新为i。由于题目中限定了一定会有分割点，所以这种方法是可以得到正确结果的
-        int partitionIdx = 0, preMax = A[0], curMax = preMax;
+      // 里使用三个变量，partitionIdx 表示分割点的位置，preMax 表示 left 中的最大值，curMax 表示当前的最大值。思路是遍历每个数字，更新当前最大值 curMax，并且判断若当前数字 A[i] 小于 preMax，说明这个数字也一定是属于 left 数组的，此时整个遍历到的区域应该都是属于 left 的，所以 preMax 要更新为 curMax，并且当前位置也就是潜在的分割点，所以 partitionIdx 更新为i。由于题目中限定了一定会有分割点，所以这种方法是可以得到正确结果的
+     int partitionIdx = 0, preMax = A[0], curMax = preMax;
 		for (int i = 1; i < A.size(); ++i) {
             curMax = max(curMax, A[i]);
 			if (A[i] < preMax) {
@@ -10367,10 +10289,11 @@ public:
 
 #### [470. 用 Rand7() 实现 Rand10()](https://leetcode-cn.com/problems/implement-rand10-using-rand7/)
 
-```
+```c++
 int rand10() 
 {
-    while (true) {
+  // 前面的讲解，我们转化也必须要保持等概率，那么就可以变化为 (rand7() - 1) * 7 + rand7()，就转为了 rand49()。但是 49 不是 10 的倍数，不过 49 包括好几个 10 的倍数，比如 40，30，20，10 等。这里，我们需要把 rand49() 转为 rand40()  
+  while (true) {
         int num = (rand7() - 1) * 7 + rand7();
         if (num <= 40) return num % 10 + 1;
     }
