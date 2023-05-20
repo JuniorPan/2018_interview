@@ -188,6 +188,43 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
 }
 ```
 
+#### [316. 去除重复字母](https://leetcode.cn/problems/remove-duplicate-letters/)
+
+```c++
+// https://leetcode.cn/problems/remove-duplicate-letters/solution/yi-zhao-chi-bian-li-kou-si-dao-ti-ma-ma-zai-ye-b-4/
+string removeDuplicateLetters(string s) {
+    vector<int> num(256, 0);//记录字母出现个数
+
+    for(int i = 0; i < s.size(); i++)
+    {
+        num[s[i]] ++;//记录每个字母出现的次数；
+    }
+    string res; //string本身具有栈的属性，所以直接用string作为栈
+    for(int i = 0; i < s.size(); i++)
+    {          
+        char ch = s[i];
+        if(res.find(ch) != -1)//如果当前字母已经在栈里面，则不让进栈，同时进不去的字母次数也要-1
+        {
+            --num[ch];
+            continue;
+        }
+        // 如果没访问过，我们和结果中最后一个字母比较，
+        // 如果该字母的ASCII码小并且结果中的最后一个字母在哈希表中的值不为0(说明后面还会出现这个字母)，
+        // 那么我们此时就要在结果中删去最后一个字母且将其标记为未访问，然后加上当前遍历到的字母，并且将其标记为已访问
+        //如果栈内不为空，且即将进栈的元素小于当前栈顶的元素，同时这个元素也不是最后一个元素
+        while(!res.empty() &&res. back() > ch && num[res.back()] > 0)
+        {
+            res.pop_back();                                  
+        }
+        --num[ch];//入栈后的元素个数-1
+        res.push_back(ch);
+    }
+    return res;
+  }
+```
+
+
+
 #### [346.滑动窗口的平均值](https://leetcode.cn/problems/qIsx9U/?envType=study-plan-v2&id=coding-interviews-special) todo 得熟悉下队列的stl
 
 ```c++
@@ -6246,7 +6283,7 @@ public:
 };
 ```
 
-#### [994. 腐烂的橘子](https://leetcode.cn/problems/rotting-oranges/) #todo
+##### [994. 腐烂的橘子](https://leetcode.cn/problems/rotting-oranges/) #todo
 
 ```c++
 int orangesRotting(vector<vector<int>>& grid) {
