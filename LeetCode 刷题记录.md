@@ -62,6 +62,33 @@ int lengthOfLongestSubstring(string s)
 
 参考 https://www.cnblogs.com/grandyang/p/4480780.html
 
+#### [30. 串联所有单词的子串](https://leetcode.cn/problems/substring-with-concatenation-of-all-words/)
+
+```c++
+vector<int> findSubstring(string s, vector<string>& words) {
+ 	遍历s中所有长度为 nxlen 的子串，当剩余子串的长度小于 nxlen 时，就不用再判断了。所以i从0开始，到 (int)s.size() - nxlen 结束就可以了，注意这里一定要将 s.size() 先转为整型数，再进行解法。一定要形成这样的习惯，一旦 size() 后面要减去数字时，先转为 int 型，因为 size() 的返回值是无符号型，一旦减去一个比自己大的数字，则会出错。对于每个遍历到的长度为 nxlen 的子串，需要验证其是否刚好由 words 中所有的单词构成，检查方法就是每次取长度为 len 的子串，看其是否是 words 中的单词。为了方便比较，建立另一个 HashMap，当取出的单词不在 words 中，直接 break 掉，否则就将其在新的 HashMap 中的映射值加1，还要检测若其映射值超过原 HashMap 中的映射值，也 break 掉，因为就算当前单词在 words 中，但若其出现的次数超过 words 中的次数，还是不合题意的。在 for 循环外面，若j正好等于n，说明检测的n个长度为 len 的子串都是 words 中的单词，并且刚好构成了 words，则将当前位置i加入结果 res 即可	
+  if (s.empty() || words.empty()) return {};
+        vector<int> res;
+        int n = words.size(), len = words[0].size();
+        unordered_map<string, int> wordCnt;
+        for (auto &word : words) ++wordCnt[word];
+        for (int i = 0; i <= (int)s.size() - n * len; ++i) {
+            unordered_map<string, int> strCnt;
+            int j = 0; 
+            for (j = 0; j < n; ++j) {
+                string t = s.substr(i + j * len, len);
+                if (!wordCnt.count(t)) break;
+                ++strCnt[t];
+                if (strCnt[t] > wordCnt[t]) break;
+            }
+            if (j == n) res.push_back(i);
+        }
+        return res;
+}
+```
+
+
+
 #### [53. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/)
 
 ```c++
@@ -382,6 +409,46 @@ int maxArea(vector<int>& height)
     return res;
 }
 ```
+
+#### [16. 最接近的三数之和](https://leetcode.cn/problems/3sum-closest/)
+
+```c++
+int threeSumClosest(vector<int>& nums, int target)
+{
+    if (nums.size() < 3)
+        return 0;
+    int res = nums[0] + nums[1] + nums[2];
+    sort(nums.begin(), nums.end());
+
+    for(int start = 0; start < nums.size() - 2; start++)
+    {
+        if (start > 0 && nums[start] == nums[start-1] )
+            continue;
+
+        int left = start+1;
+        int right = nums.size()-1;
+
+        while(left < right)
+        {
+            int curSum = nums[start] + nums[left] + nums[right];
+            if (curSum == target)  // 如果当前和正好等于target,直接返回, 
+                return curSum;
+
+            if (abs(target-curSum) < abs(target-res)) // 若不等于则进行范围缩小，每一次都要记录一下
+                res = curSum;  
+
+            if (curSum > target)
+                --right;
+            else 
+                ++left;
+
+        }
+    }
+    return res;
+}
+```
+
+
 
 #### [167. 两数之和 II - 输入有序数组](https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/)
 
@@ -1810,6 +1877,40 @@ public:
 };
 ```
 
+#### [969. 煎饼排序](https://leetcode.cn/problems/pancake-sorting/)
+
+```c++
+vector<int> pancakeSort(vector<int>& arr) {
+  vector<int> ret;
+  for (int n = arr.size(); n > 1; n--) {
+      int index = max_element(arr.begin(), arr.begin() + n) - arr.begin();
+      if (index == n - 1) {
+          continue;
+      }
+      reverse(arr.begin(), arr.begin() + index + 1);
+      reverse(arr.begin(), arr.begin() + n);
+      ret.push_back(index + 1);
+      ret.push_back(n);
+  }
+  return ret;
+}
+
+// 每次先将数组中最大数字找出来，然后将最大数字翻转到首位置，然后翻转整个数组，这样最大数字就跑到最后去了
+vector<int> pancakeSort(vector<int>& arr) {
+    vector<int> res;
+    for (int i = arr.size(), j; i > 0; --i) {
+        for (j = 0; arr[j] != i; ++j);
+        reverse(arr.begin(), arr.begin() + j + 1);
+        res.push_back(j + 1);
+        reverse(arr.begin(), arr.begin() + i);
+        res.push_back(i);
+    }
+    return res;
+}
+```
+
+
+
 ### 链表 
 
 #### 链表总结
@@ -1855,6 +1956,13 @@ cur = cur->next;
 // 头插法
 ListNode *temp = new ListNode(-1)
 temp->next = fake_head->next;
+
+
+// 把cur后面的一个节点temp摘下来，然后用头插法插入到pre后面
+  ListNode *temp = cur->next;
+  cur->next = temp->next;
+  temp->next = pre->next;
+  pre->next = temp;
 
 ```
 
@@ -7996,6 +8104,33 @@ public:
  */
 ```
 
+#### [165. 比较版本号](https://leetcode.cn/problems/compare-version-numbers/)
+
+```c++
+int compareVersion(string version1, string version2) {
+    int n1 = version1.size(), n2 = version2.size();
+    int i = 0, j = 0, d1 = 0, d2 = 0;
+    string v1, v2;
+    while (i < n1 || j < n2) {
+        while (i < n1 && version1[i] != '.') {
+            v1.push_back(version1[i++]);
+        }
+        d1 = atoi(v1.c_str());
+        while (j < n2 && version2[j] != '.') {
+            v2.push_back(version2[j++]);
+        }
+        d2 = atoi(v2.c_str());
+        if (d1 > d2) return 1;
+        else if (d1 < d2) return -1;
+        v1.clear(); v2.clear();
+        ++i; ++j;
+    }
+    return 0;
+  }
+```
+
+
+
 #### [295. 数据流的中位数](https://leetcode-cn.com/problems/find-median-from-data-stream/) # todo
 
 ```c++
@@ -8253,9 +8388,10 @@ public:
     bool remove(int val) {
         if (!m.count(val)) 
             return false;
-        int last_index = nums.back();
-        m[last_index] = m[val];
-        nums[m[val]] = last_index;
+        int last = nums.back();
+        m[last] = m[val];
+        nums[m[val]] = last;
+      
         nums.pop_back();
         m.erase(val);
         return true;
@@ -9543,6 +9679,31 @@ vector<int> productExceptSelf(vector<int>& nums) {
 }
 ```
 
+#### [264. 丑数 II](https://leetcode.cn/problems/ugly-number-ii/)
+
+```c++
+// (1) 1x2,  2x2, 2x2, 3x2, 3x2, 4x2, 5x2...
+// (2) 1x3,  1x3, 2x3, 2x3, 2x3, 3x3, 3x3...
+// (3) 1x5,  1x5, 1x5, 1x5, 2x5, 2x5, 2x5...
+// 仔细观察上述三个列表，可以发现每个子列表都是一个丑陋数分别乘以 2，3，5，
+// 而要求的丑陋数就是从已经生成的序列中取出来的，每次都从三个列表中取出当前最小的那个加入序列
+int nthUglyNumber(int n) {
+    vector<int> res(1, 1);
+    int i2 = 0, i3 = 0, i5 = 0;
+    while (res.size() < n) {
+        int m2 = res[i2] * 2, m3 = res[i3] * 3, m5 = res[i5] * 5;
+        int mn = min(m2, min(m3, m5));
+        if (mn == m2) ++i2;
+        if (mn == m3) ++i3;
+        if (mn == m5) ++i5;
+        res.push_back(mn);
+    }
+    return res.back();
+}
+```
+
+
+
 #### [283. 移动零](https://leetcode-cn.com/problems/move-zeroes/)
 
 ```c++
@@ -9714,6 +9875,27 @@ int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D)
             if (hasTwoSum.find(target) != hasTwoSum.end())
                 res += hasTwoSum[target];
         }
+    }
+    return res;
+}
+```
+
+#### [498. 对角线遍历](https://leetcode.cn/problems/diagonal-traverse/)
+
+```c++
+vector<int> findDiagonalOrder(vector<vector<int>>& matrix) {
+    if (matrix.empty() || matrix[0].empty()) return {};
+    int m = matrix.size(), n = matrix[0].size(), r = 0, c = 0, k = 0;
+    vector<int> res(m * n);
+    vector<vector<int>> dirs{{-1,1}, {1,-1}};
+    for (int i = 0; i < m * n; ++i) {
+        res[i] = matrix[r][c];
+        r += dirs[k][0];
+        c += dirs[k][1];
+        if (r >= m) {r = m - 1; c += 2; k = 1 - k;}
+        if (c >= n) {c = n - 1; r += 2; k = 1 - k;}
+        if (r < 0) {r = 0; k = 1 - k;}
+        if (c < 0) {c = 0; k = 1 - k;}
     }
     return res;
 }
