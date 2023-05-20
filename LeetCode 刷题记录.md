@@ -8945,6 +8945,31 @@ vector<vector<int>> merge(vector<vector<int>>& intervals) {
 
 #### [135. 分发糖果](https://leetcode.cn/problems/candy/)
 
+```c++
+int candy(vector<int>& ratings)
+{
+    // 先来看看两遍遍历的解法，首先初始化每个人一个糖果，然后这个算法需要遍历两遍，第一遍从左向右遍历，如果右边的小盆友的等级高，等加一个糖果，
+    // 这样保证了一个方向上高等级的糖果多。然后再从右向左遍历一遍，如果相邻两个左边的等级高，而左边的糖果又少的话，则左边糖果数为右边糖果数加一。最后再把所有小盆友的糖果数都加起来返回即可。
+    int res = 0, n = ratings.size();
+    vector<int> nums(n, 1);
+    for (int i = 0; i < n - 1; ++i) 
+    {
+        if (ratings[i + 1] > ratings[i])
+            nums[i + 1] = nums[i] + 1;
+    }
+    for (int i = n - 1; i > 0; --i) 
+    {
+        if (ratings[i - 1] > ratings[i]) 
+            nums[i - 1] = max(nums[i - 1], nums[i] + 1);
+    }
+    for (int num : nums) 
+        res += num;
+    return res;
+}
+```
+
+
+
 #### [179. 最大数](https://leetcode-cn.com/problems/largest-number/) #todo
 
 ```c++
