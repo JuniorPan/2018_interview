@@ -191,36 +191,7 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
 #### [316. 去除重复字母](https://leetcode.cn/problems/remove-duplicate-letters/)
 
 ```c++
-// https://leetcode.cn/problems/remove-duplicate-letters/solution/yi-zhao-chi-bian-li-kou-si-dao-ti-ma-ma-zai-ye-b-4/
-string removeDuplicateLetters(string s) {
-    vector<int> num(256, 0);//记录字母出现个数
 
-    for(int i = 0; i < s.size(); i++)
-    {
-        num[s[i]] ++;//记录每个字母出现的次数；
-    }
-    string res; //string本身具有栈的属性，所以直接用string作为栈
-    for(int i = 0; i < s.size(); i++)
-    {          
-        char ch = s[i];
-        if(res.find(ch) != -1)//如果当前字母已经在栈里面，则不让进栈，同时进不去的字母次数也要-1
-        {
-            --num[ch];
-            continue;
-        }
-        // 如果没访问过，我们和结果中最后一个字母比较，
-        // 如果该字母的ASCII码小并且结果中的最后一个字母在哈希表中的值不为0(说明后面还会出现这个字母)，
-        // 那么我们此时就要在结果中删去最后一个字母且将其标记为未访问，然后加上当前遍历到的字母，并且将其标记为已访问
-        //如果栈内不为空，且即将进栈的元素小于当前栈顶的元素，同时这个元素也不是最后一个元素
-        while(!res.empty() &&res. back() > ch && num[res.back()] > 0)
-        {
-            res.pop_back();                                  
-        }
-        --num[ch];//入栈后的元素个数-1
-        res.push_back(ch);
-    }
-    return res;
-  }
 ```
 
 
@@ -886,16 +857,63 @@ string removeDuplicateLetters(string s) {
 
 #### [321. 拼接最大数](https://leetcode.cn/problems/create-maximum-number/)
 
+```c++
+class Solution {
+public:
+    vector<int> maxNumber(vector<int>& nums1, vector<int>& nums2, int k) {
+        int n1 = nums1.size(), n2 = nums2.size();
+        vector<int> res;
+        for (int i = max(0, k - n2); i <= min(k, n1); ++i) {
+            res = max(res, mergeVector(maxVector(nums1, i), maxVector(nums2, k - i)));
+        }
+        return res;
+    }
+    vector<int> maxVector(vector<int>& nums, int k) {
+        int drop = (int)nums.size() - k;
+        vector<int> res;
+        for (int num : nums) {
+            while (drop > 0 && !res.empty() && res.back() < num) {
+                res.pop_back();
+                --drop;
+            }
+            res.push_back(num);
+        }
+        res.resize(k);
+        return res;
+    }
+    vector<int> mergeVector(vector<int> nums1, vector<int> nums2) {
+        vector<int> res;
+        while (!nums1.empty() || !nums2.empty()) {
+            vector<int> &tmp = (nums1 > nums2) ? nums1 : nums2;
+            res.push_back(tmp[0]);
+            tmp.erase(tmp.begin());
+        }
+        return res;
+    }
+};
 ```
-```
-
-
 
 #### [402. 移掉 K 位数字](https://leetcode-cn.com/problems/remove-k-digits/)
 
 ```c++
 // https://www.cnblogs.com/grandyang/p/5883736.html
 // https://leetcode.cn/problems/remove-k-digits/solution/yi-zhao-chi-bian-li-kou-si-dao-ti-ma-ma-zai-ye-b-5/
+string removeKdigits(string num, int k) {
+    string res = "";
+    int n = num.size(), keep = n - k;
+    for (char c : num) {
+        while (k && res.size() && res.back() > c) {
+            res.pop_back();
+            --k;
+        }
+        res.push_back(c);
+    }
+    res.resize(keep);
+    while (!res.empty() && res[0] == '0') res.erase(res.begin());
+    return res.empty() ? "0" : res;
+}
+
+
 string removeKdigits(string num, int k) {
     // 从高位开始 保持递增
     stack<char> s;
@@ -8207,6 +8225,45 @@ vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
     }
     return res;
 }
+```
+
+#### [380. O(1) 时间插入、删除和获取随机元素](https://leetcode.cn/problems/insert-delete-getrandom-o1/)
+
+```c++
+class RandomizedSet {
+private:
+    // 用一维数组和一个 HashMap，其中数组用来保存数字，
+    // HashMap 用来建立每个数字和其在数组中的位置之间的映射
+    vector<int> nums;
+    unordered_map<int, int> m;
+public:
+    RandomizedSet() {}
+    // 先看这个数字是否已经在 HashMap 中存在，
+    // 如果存在的话直接返回 false，不存在的话，将其插入到数组的末尾，然后建立数字和其位置的映射
+    bool insert(int val) {
+        if (m.count(val)) 
+            return false;
+        nums.push_back(val);
+        m[val] = nums.size() - 1;
+        return true;
+    }
+    // 先判断其是否在 HashMap 里，如果没有，直接返回 false
+    // 数组并不是，为了使数组删除也能常数级，
+    // 实际上将要删除的数字和数组的最后一个数字调换个位置，然后修改对应的 HashMap 中的值，这样只需要删除数组的最后一个元素即可，保证了常数时间内的删除
+    bool remove(int val) {
+        if (!m.count(val)) 
+            return false;
+        int last_index = nums.back();
+        m[last_index] = m[val];
+        nums[m[val]] = last_index;
+        nums.pop_back();
+        m.erase(val);
+        return true;
+    }
+    int getRandom() {
+        return nums[rand() % nums.size()];
+    }
+};
 ```
 
 
