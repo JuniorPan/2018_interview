@@ -6669,6 +6669,60 @@ vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
 }
 ```
 
+##### [310. 最小高度树](https://leetcode.cn/problems/minimum-height-trees/)
+
+```c++
+vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges)
+    {
+        vector<int> res;
+        if (n == 1)
+        {
+            res.push_back(0);
+            return res;
+        }
+        vector<vector<int>> graph(n);
+        vector<int> degree(n, 0);
+        for (int i = 0; i < edges.size(); i++)
+        {
+            graph[edges[i][0]].push_back(edges[i][1]);
+            graph[edges[i][1]].push_back(edges[i][0]);
+            degree[edges[i][0]]++;
+            degree[edges[i][1]]++;
+        }
+        int count = n;
+        while (count > 2)
+        {
+            vector<int>records;
+            for (int i = 0; i < n; i++)  //记录所有度为1的结点
+            {
+                if (degree[i] == 1) 
+                {
+                    records.push_back(i);
+                    degree[i] = -1;   // 相当于删掉度为1的结点
+                    count--;
+                }
+            }
+            for (int i = 0; i < records.size(); i++) //删掉度为1的结点之后 重新调整每个结点的度
+            {
+                for(int j = 0; j < graph[records[i]].size(); j++)
+                {
+                    degree[graph[records[i]][j]]--;
+                }
+            }
+        }
+        for (int i = 0; i < n; i++) 
+        {
+            if (degree[i] == 1 || degree[i] == 0)
+            {
+                res.push_back(i);
+            }
+        }
+        return res;
+    }
+```
+
+
+
 ##### Leetcode 444 Sequence Reconstruction
 
 ##### Leetcode 269 Alien Dictionary
