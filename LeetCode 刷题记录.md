@@ -8298,6 +8298,44 @@ public:
 };
 ```
 
+#### [394. 字符串解码](https://leetcode-cn.com/problems/decode-string/) # todo
+
+```c++
+string decodeString(string s) 
+{
+    // 需要用 stack 来辅助运算，用两个 stack，一个用来保存个数，一个用来保存字符串，
+    // 遍历输入字符串，如果遇到数字，我们更新计数变量 cnt；
+    // 如果遇到左括号，我们把当前 cnt 压入数字栈中，把当前t压入字符串栈中；
+    // 如果遇到右括号时，我们取出数字栈中顶元素，存入变量k，然后给字符串栈的顶元素循环加上k个t字符串，然后取出顶元素存入字符串t中；
+    // 如果遇到字母，我们直接加入字符串t中即可，参见代码如下：
+    string t = "";
+    stack<int> s_num;
+    stack<string> s_str;
+    int cnt = 0;
+    for (int i = 0; i < s.size(); ++i) {
+        if (s[i] >= '0' && s[i] <= '9') { // 如果遇到数字，我们更新计数变量 cnt；
+            cnt = 10 * cnt + s[i] - '0';
+        } else if (s[i] == '[') {  // 遇到左括号，我们把当前 cnt 压入数字栈中，把当前t压入字符串栈中；
+            s_num.push(cnt);
+            s_str.push(t);
+            cnt = 0; t.clear();
+        } else if (s[i] == ']') {  // 取出数字栈中顶元素，存入变量k，然后给字符串栈的顶元素循环加上k个t字符串，然后取出顶元素存入字符串t中；
+            int k = s_num.top(); 
+            s_num.pop();
+            for (int j = 0; j < k; ++j) 
+                s_str.top() += t;
+            t = s_str.top(); 
+            s_str.pop();
+        } else {  // 遇到字母，我们直接加入字符串t中即可
+            t += s[i];
+        }
+    }
+    return s_str.empty() ? t : s_str.top();
+}
+```
+
+
+
 #### [480. Sliding Window Median](https://leetcode.com/problems/sliding-window-median/)
 
 #### [剑指 Offer 09. 用两个栈实现队列](https://leetcode-cn.com/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/)
@@ -10473,6 +10511,8 @@ string reverseWords(string s)
 ```c++
 class Solution {
 public:
+    // 从低位往高位求，每进一位，则把原数缩小26倍，再对26取余，之后减去余数，再缩小26倍，
+    // 以此类推，可以求出各个位置上的字母。最后只需将整个字符串翻转一下即可
     string convertToTitle(int n) {
         string res = "";
         while (n) {
@@ -10491,41 +10531,7 @@ public:
 };
 ```
 
-#### [394. 字符串解码](https://leetcode-cn.com/problems/decode-string/) # todo
 
-```c++
-string decodeString(string s) 
-{
-    // 需要用 stack 来辅助运算，用两个 stack，一个用来保存个数，一个用来保存字符串，
-    // 遍历输入字符串，如果遇到数字，我们更新计数变量 cnt；
-    // 如果遇到左括号，我们把当前 cnt 压入数字栈中，把当前t压入字符串栈中；
-    // 如果遇到右括号时，我们取出数字栈中顶元素，存入变量k，然后给字符串栈的顶元素循环加上k个t字符串，然后取出顶元素存入字符串t中；
-    // 如果遇到字母，我们直接加入字符串t中即可，参见代码如下：
-    string t = "";
-    stack<int> s_num;
-    stack<string> s_str;
-    int cnt = 0;
-    for (int i = 0; i < s.size(); ++i) {
-        if (s[i] >= '0' && s[i] <= '9') { // 如果遇到数字，我们更新计数变量 cnt；
-            cnt = 10 * cnt + s[i] - '0';
-        } else if (s[i] == '[') {  // 遇到左括号，我们把当前 cnt 压入数字栈中，把当前t压入字符串栈中；
-            s_num.push(cnt);
-            s_str.push(t);
-            cnt = 0; t.clear();
-        } else if (s[i] == ']') {  // 取出数字栈中顶元素，存入变量k，然后给字符串栈的顶元素循环加上k个t字符串，然后取出顶元素存入字符串t中；
-            int k = s_num.top(); 
-            s_num.pop();
-            for (int j = 0; j < k; ++j) 
-                s_str.top() += t;
-            t = s_str.top(); 
-            s_str.pop();
-        } else {  // 遇到字母，我们直接加入字符串t中即可
-            t += s[i];
-        }
-    }
-    return s_str.empty() ? t : s_str.top();
-}
-```
 
 #### [49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/) #todo
 
@@ -10674,8 +10680,6 @@ string solve(int M, int N) {
     return res;
 }
 ```
-
-#### 
 
 # 剑指offer 刷题记录
 
