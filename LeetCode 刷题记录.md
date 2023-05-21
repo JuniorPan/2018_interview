@@ -9235,94 +9235,9 @@ int monotoneIncreasingDigits(int N) {
 
 ### 数组
 
-#### [未排序数组中累加和为给定值的最长子数组长度](javascript:void(0);)
 
-```c++
-int maxlenEqualK(vector<int>& arr, int k) {
-    // write code here
-    if(arr.size()==0)
-        return 0;
-    vector<int> sum(arr.size(),0);//累加数组
-    sum[0]=arr[0];//初始化第一个
-    unordered_map<int,int> mp;//存放前累加和 对应的下标
-    mp[sum[0]]=0;
-    for(int i=1;i<arr.size();i++)
-    {
-        sum[i]=sum[i-1]+arr[i];  //累加和
-        mp[sum[i]]=i;//该累加和的下标（由于i迭代增加 所以i存放的是最大的i）
-    }
-    int ans=0;
-    for(int i=0;i<arr.size()-1;i++)
-    {
-        if(mp.find(sum[i]+k) != mp.end())  //查找当前累加和相差k的值是否存在
-        {
-            ans=max(ans, mp[sum[i]+k]-i);
-        }
-    }
-    //存在直接从0项开始累积和为k的
-    if(mp.find(k)!=mp.end())
-        ans=max(ans,mp[k]+1);
-    return ans;
-}
-```
 
 #### [16. 最接近的三数之和](https://leetcode.cn/problems/3sum-closest/)
-
-```c++
-int threeSumClosest(vector<int>& nums, int target)
-{
-    if (nums.size() < 3)
-        return 0;
-    int res = nums[0] + nums[1] + nums[2];
-    sort(nums.begin(), nums.end());
-
-    for(int start = 0; start < nums.size() - 2; start++)
-    {
-        if (start > 0 && nums[start] == nums[start-1] )
-            continue;
-
-        int left = start+1;
-        int right = nums.size()-1;
-
-        while(left < right)
-        {
-            int curSum = nums[start] + nums[left] + nums[right];
-            if (curSum == target)  // 如果当前和正好等于target,直接返回, 
-                return curSum;
-
-            if (abs(target-curSum) < abs(target-res)) // 若不等于则进行范围缩小，每一次都要记录一下
-                res = curSum;  
-
-            if (curSum > target)
-                --right;
-            else 
-                ++left;
-
-        }
-    }
-    return res;
-}
-```
-
-#### [53. 最大子序和](https://leetcode-cn.com/problems/maximum-subarray/)
-
-```c++
-int maxSubArray(vector<int>& nums) 
-{
-    int res = INT_MIN;
-    int cur_sum = 0;
-    for(int i = 0; i < nums.size(); i++)
-    {
-        cur_sum += nums[i];
-        res = max(res, cur_sum);
-        cur_sum = cur_sum > 0 ? cur_sum:0;
-    }
-
-    return res;
-}
-```
-
-#### [209.长度最小的子数组](https://leetcode.cn/problems/minimum-size-subarray-sum/description/)
 
 ```c++
 int threeSumClosest(vector<int>& nums, int target)
@@ -9411,6 +9326,8 @@ int removeDuplicates(vector<int>& nums)
 }
 ```
 
+
+
 #### [41. 缺失的第一个正数](https://leetcode-cn.com/problems/first-missing-positive/)#todo
 
 ```c++
@@ -9436,7 +9353,30 @@ int firstMissingPositive(vector<int> &nums)
 }
 ```
 
-#### [48. 旋转图像](https://leetcode-cn.com/problems/rotate-image/) #todo 需要扣一下边界
+#### [448. 找到所有数组中消失的数字](https://leetcode-cn.com/problems/find-all-numbers-disappeared-in-an-array/)
+
+```c++
+//第二种方法是将nums[i]置换到其对应的位置nums[nums[i]-1]上去，比如对于没有缺失项的正确的顺序应该是[1, 2, 3, 4, 5, 6, 7, 8]，而我们现在却是[4,3,2,7,8,2,3,1]，我们需要把数字移动到正确的位置上去，比如第一个4就应该和7先交换个位置，以此类推，最后得到的顺序应该是[1, 2, 3, 4, 3, 2, 7, 8]，我们最后在对应位置检验，如果nums[i]和i+1不等，那么我们将i+1存入结果res中即可，
+vector<int> findDisappearedNumbers(vector<int>& nums) {
+    vector<int> res;
+    for (int i = 0; i < nums.size(); ++i) {
+        if (nums[i] != nums[nums[i] - 1]) {
+            swap(nums[i], nums[nums[i] - 1]);
+            --i;
+        }
+    }
+    for (int i = 0; i < nums.size(); ++i) {
+        if (nums[i] != i + 1) {
+            res.push_back(i + 1);
+        }
+    }
+    return res;
+}   
+```
+
+#### [48. 旋转图像](https://leetcode-cn.com/problems/rotate-image/) #todo 
+
+#### 需要扣一下边界
 
 ```c++
 void rotate(vector<vector<int>>& matrix) {
@@ -9672,41 +9612,6 @@ int singleNumber(vector<int> &nums)
 }
 ```
 
-#### [150. 逆波兰表达式求值](https://leetcode-cn.com/problems/evaluate-reverse-polish-notation/)#Todo 需要敲一遍
-
-```c++
-// 逆波兰表达式
-int evalRPN(vector<string> &tokens)
-{
-    if (tokens.size() == 1)
-        return stoi(tokens[0]);
-    stack<int> st;
-    for (int i = 0; i < tokens.size(); ++i)
-    {
-        if (tokens[i] != "+" && tokens[i] != "-" && tokens[i] != "*" && tokens[i] != "/")
-        {
-            st.push(stoi(tokens[i]));
-        }
-        else
-        {
-            int num1 = st.top();
-            st.pop();
-            int num2 = st.top();
-            st.pop();
-            if (tokens[i] == "+")
-                st.push(num2 + num1);
-            if (tokens[i] == "-")
-                st.push(num2 - num1);
-            if (tokens[i] == "*")
-                st.push(num2 * num1);
-            if (tokens[i] == "/")
-                st.push(num2 / num1);
-        }
-    }
-    return st.top();
-}
-```
-
 #### [152. 乘积最大子数组](https://leetcode-cn.com/problems/maximum-product-subarray/)
 
 ```c++
@@ -9845,8 +9750,6 @@ int nthUglyNumber(int n) {
 }
 ```
 
-
-
 #### [283. 移动零](https://leetcode-cn.com/problems/move-zeroes/)
 
 ```c++
@@ -9975,53 +9878,7 @@ private:
 };
 ```
 
-#### [448. 找到所有数组中消失的数字](https://leetcode-cn.com/problems/find-all-numbers-disappeared-in-an-array/)
 
-```c++
-//第二种方法是将nums[i]置换到其对应的位置nums[nums[i]-1]上去，比如对于没有缺失项的正确的顺序应该是[1, 2, 3, 4, 5, 6, 7, 8]，而我们现在却是[4,3,2,7,8,2,3,1]，我们需要把数字移动到正确的位置上去，比如第一个4就应该和7先交换个位置，以此类推，最后得到的顺序应该是[1, 2, 3, 4, 3, 2, 7, 8]，我们最后在对应位置检验，如果nums[i]和i+1不等，那么我们将i+1存入结果res中即可，
-vector<int> findDisappearedNumbers(vector<int>& nums) {
-    vector<int> res;
-    for (int i = 0; i < nums.size(); ++i) {
-        if (nums[i] != nums[nums[i] - 1]) {
-            swap(nums[i], nums[nums[i] - 1]);
-            --i;
-        }
-    }
-    for (int i = 0; i < nums.size(); ++i) {
-        if (nums[i] != i + 1) {
-            res.push_back(i + 1);
-        }
-    }
-    return res;
-}   
-```
-
-#### [454. 四数相加 II](https://leetcode-cn.com/problems/4sum-ii/)
-
-```c++
-int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D)
-{
-    // 把A和B的两两之和都求出来，在 HashMap 中建立两数之和跟其出现次数之间的映射
-    // 再遍历C和D中任意两个数之和，只要看哈希表存不存在这两数之和的相反数就行了
-    int res = 0;
-    unordered_map<int, int> hasTwoSum;
-    for (int i = 0; i < A.size(); ++i) 
-    {
-        for (int j = 0; j < B.size(); ++j)
-            hasTwoSum[A[i] + B[j]] ++;
-    }
-    for (int i = 0; i < C.size(); ++i) 
-    {
-        for (int j = 0; j < D.size(); ++j) 
-        {
-            int target = -1 * (C[i] + D[j]);
-            if (hasTwoSum.find(target) != hasTwoSum.end())
-                res += hasTwoSum[target];
-        }
-    }
-    return res;
-}
-```
 
 #### [498. 对角线遍历](https://leetcode.cn/problems/diagonal-traverse/)
 
@@ -10183,7 +10040,7 @@ bool isValid(string s) {
 
 #### [28. 实现 strStr()](https://leetcode-cn.com/problems/implement-strstr/)  KMP
 
-```
+```c++
 class Solution {
     vector<int> getNext(string s)
     {
@@ -10302,8 +10159,6 @@ bool validPalindrome(string s) {
 }
 ```
 
-
-
 #### [224. 基本计算器](https://leetcode-cn.com/problems/basic-calculator/)
 
 ```c++
@@ -10339,8 +10194,9 @@ int calculate(string s) {
 
 #### [227. 基本计算器 II](https://leetcode-cn.com/problems/basic-calculator-ii/)
 
-```
+```c++
 int calculate(string s) {
+  	// 使用一个栈保存数字，如果该数字之前的符号是加或减，那么把当前数字压入栈中，注意如果是减号，则加入当前数字的相反数，因为减法相当于加上一个相反数。如果之前的符号是乘或除，那么从栈顶取出一个数字和当前数字进行乘或除的运算，再把结果压入栈中，那么完成一遍遍历后，所有的乘或除都运算完了
     long res = 0, num = 0, n = s.size();
     char op = '+';
     stack<int> st;
@@ -10368,29 +10224,27 @@ int calculate(string s) {
 }
 ```
 
-
-
 #### [415. 字符串相加 大数加法](https://leetcode-cn.com/problems/add-strings/) 
 
 ```c++
 string addStrings(string num1, string num2) 
 {
     string res = "";
-        int add=0, i=num1.size()-1, j=num2.size()-1;
-        while(i>=0 || j>=0 || add>0)
-        {
-            int cur = add;
-            cur += (i >= 0 ? num1[i--] - '0' : 0);
-            cur += (j >= 0 ? num2[j--] - '0' : 0);
+    int add=0, i=num1.size()-1, j=num2.size()-1;
+    while(i>=0 || j>=0 || add>0)
+    {
+        int cur = add;
+        cur += (i >= 0 ? num1[i--] - '0' : 0);
+        cur += (j >= 0 ? num2[j--] - '0' : 0);
 
-            add = cur / 10;//用来判断是否有进位
+        add = cur / 10;//用来判断是否有进位
 
-            cur %= 10;
+        cur %= 10;
 
-            res += (cur + '0');
-        }
-        reverse(res.begin(), res.end());//翻转字符串
-        return res;
+        res += (cur + '0');
+    }
+    reverse(res.begin(), res.end());//翻转字符串
+    return res;
 }
 
 string addStrings(string num1, string num2) {
@@ -10453,59 +10307,30 @@ string sub(string s1, string s2) {
 #### [43. 字符串相乘 大数相乘](https://leetcode-cn.com/problems/multiply-strings/) 
 
 ```c++
-string multiply(string num1, string num2) 
-{
-    vector<int> res(num1.size()+num2.size(), 0);
-    string      ans;
-
-    for (int i = num1.size()-1; i >= 0; --i) 
-    {
-        for (int j = num2.size()-1; j >= 0; --j)
-        {
-            res[i+j+1] += ((num1[i] - '0') * (num2[j] - '0'));
-            res[i+j] += res[i+j+1]/10;
-            res[i+j+1] %= 10;
-        }
-    }
-
-    bool zero = false;
-    for (auto n : res)
-    {
-        if (n || zero) 
-        {
-            zero = true;
-            ans += to_string(n);
-        }
-    }
-    ans = (ans == "") ? "0" : ans;
-    return ans;
-}
-
 string solve(string num1, string num2) {
-    // write code here
-    if (num1 == "0" || num2 == "0")
-                return "0";
+  // write code here
+  if (num1 == "0" || num2 == "0")
+              return "0";
 
-    vector<int> temp(num1.size() + num2.size());
-    string res;
-    for(int i = num1.size()-1; i >= 0; i--)
-    {
-        for(int j = num2.size()-1; j >= 0; j--)
-        {
-            temp[i+j+1] += ((num1[i] - '0') * (num2[j] - '0'));
-            temp[i+j] += temp[i+j+1]/10;
-            temp[i+j+1] %= 10;
-        }
-    }
-    for(int i = 0; i < temp.size(); i++)
-    {
-        if (i == 0 && temp[0] == 0)
-            continue;
-        else
-            res += to_string(temp[i]);
-    }
-
-    return res == "" ? "0" :res;
+  vector<int> temp(num1.size() + num2.size());
+  string res;
+  for(int i = num1.size()-1; i >= 0; i--)
+  {
+      for(int j = num2.size()-1; j >= 0; j--)
+      {
+          temp[i+j+1] += ((num1[i] - '0') * (num2[j] - '0'));
+          temp[i+j] += temp[i+j+1]/10;
+          temp[i+j+1] %= 10;
+      }
+  }
+  for(int i = 0; i < temp.size(); i++)
+  {
+      if (i == 0 && temp[0] == 0)
+          continue;
+      else
+          res += to_string(temp[i]);
+  }
+  return res == "" ? "0" :res;
 }
 ```
 
