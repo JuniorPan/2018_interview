@@ -8129,6 +8129,36 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
 }
 ```
 
+#### [632. 最小区间](https://leetcode.cn/problems/smallest-range-covering-elements-from-k-lists/)
+
+```c++
+vector<int> smallestRange(vector<vector<int>>& nums) {
+    // curMax 表示当前遇到的最大数字，用一个 idx 数组表示每个 list 中遍历到的位置，然后优先队列里面放一个pair，是数字和其所属list组成的对儿。遍历所有的list，将每个 list 的首元素和该 list 序号组成 pair 放入队列中，然后 idx 数组中每个位置都赋值为1，因为0的位置已经放入队列了，所以指针向后移一个位置，还要更新当前最大值 curMax。此时 queue 中是每个 list 各有一个数字，由于是最小堆，所以最小的数字就在队首，再加上最大值 curMax，就可以初始化结果 res 了。然后进行循环，注意这里循环的条件不是队列不为空，而是当某个 list 的数字遍历完了就结束循环，因为范围要 cover 每个 list 至少一个数字
+    int curMax = INT_MIN, n = nums.size();
+    vector<int> idx(n, 0);
+    auto cmp = [](pair<int, int>& a, pair<int, int>& b) {return a.first > b.first;};
+    priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(cmp) > q(cmp);
+    for (int i = 0; i < n; ++i) {
+        q.push({nums[i][0], i});
+        idx[i] = 1;
+        curMax = max(curMax, nums[i][0]);
+    }
+    vector<int> res{q.top().first, curMax};
+    while (idx[q.top().second] < nums[q.top().second].size()) {
+        int t = q.top().second; q.pop();
+        q.push({nums[t][idx[t]], t});
+        curMax = max(curMax, nums[t][idx[t]]);
+        ++idx[t];
+        if (res[1] - res[0] > curMax - q.top().first) {
+            res = {q.top().first, curMax};
+        }
+    }
+    return res;
+}
+```
+
+
+
 #### [986. 区间列表的交集](https://leetcode.cn/problems/interval-list-intersections/)
 
 ```
