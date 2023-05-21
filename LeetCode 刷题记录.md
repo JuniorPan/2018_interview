@@ -10578,30 +10578,6 @@ bool isPalindrome(string s)
 
 ### 其他
 
-#### [135. 分发糖果](https://leetcode-cn.com/problems/candy/) # todo
-
-```c++
-int candy(vector<int>& ratings)
-{
-    // 先来看看两遍遍历的解法，首先初始化每个人一个糖果，然后这个算法需要遍历两遍，第一遍从左向右遍历，如果右边的小盆友的等级高，等加一个糖果，这样保证了一个方向上高等级的糖果多。然后再从右向左遍历一遍，如果相邻两个左边的等级高，而左边的糖果又少的话，则左边糖果数为右边糖果数加一。最后再把所有小盆友的糖果数都加起来返回即可。
-    int res = 0, n = ratings.size();
-    vector<int> nums(n, 1);
-    for (int i = 0; i < n - 1; ++i) 
-    {
-        if (ratings[i + 1] > ratings[i])
-            nums[i + 1] = nums[i] + 1;
-    }
-    for (int i = n - 1; i > 0; --i) 
-    {
-        if (ratings[i - 1] > ratings[i]) 
-            nums[i - 1] = max(nums[i - 1], nums[i] + 1);
-    }
-    for (int num : nums) 
-        res += num;
-    return res;
-}
-```
-
 #### [146. LRU 缓存机制](https://leetcode-cn.com/problems/lru-cache/)
 
 ```c++
@@ -10699,26 +10675,7 @@ string solve(int M, int N) {
 }
 ```
 
-#### **括号序列**
-
-```
-bool isValid(string s) {
-    // write code here
-    stack<char> parentheses;
-    for (int i = 0; i < s.size(); ++i) {
-        if (s[i] == '(' || s[i] == '[' || s[i] == '{') parentheses.push(s[i]);
-        else {
-            if (parentheses.empty()) return false;
-            if (s[i] == ')' && parentheses.top() != '(') return false;
-            if (s[i] == ']' && parentheses.top() != '[') return false;
-            if (s[i] == '}' && parentheses.top() != '{') return false;
-            parentheses.pop();
-        }
-    }
-    return parentheses.empty();
-}
-
-```
+#### 
 
 # 剑指offer 刷题记录
 
