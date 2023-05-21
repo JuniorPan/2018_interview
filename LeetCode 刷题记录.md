@@ -408,7 +408,50 @@ int maxArea(vector<int>& height)
     }
     return res;
 }
+
+
 ```
+
+#### [15. 三数之和](https://leetcode.cn/problems/3sum/)
+
+```
+vector<vector<int>> threeSum(vector<int>& nums) {
+    vector<vector<int>> res;
+    sort(nums.begin(), nums.end());
+    if (nums.empty() || nums.back() < 0 || nums.front() > 0) return {};
+    for (int i = 0; i < nums.size() ; ++i)
+    {
+
+        if (nums[i] > 0)
+            break;
+        // 需要和上一次枚举的数不相同
+        if (i > 0 && nums[i] == nums[i - 1])
+            continue;
+        int target = 0 - nums[i], left = i + 1, right = nums.size() - 1;
+        while (left < right)
+        {   // 用两个指针分别指向 fix 数字之后开始的数组首尾两个数，如果两个数和正好为 target，则将这两个数和 fix 的数一起存入结果中。
+            // 然后就是跳过重复数字的步骤了，两个指针都需要检测重复数字
+            if (nums[left] + nums[right] == target)
+            {
+                res.push_back({nums[i], nums[left], nums[right]});
+                while (left < right && nums[left] == nums[left + 1])
+                    ++left;
+                while (left < right && nums[right] == nums[right - 1])
+                    --right;
+                ++left;
+                --right;
+            }
+            else if (nums[left] + nums[right] < target)
+                ++left;
+            else
+                --right;
+        }
+    }
+    return res;
+}
+```
+
+
 
 #### [16. 最接近的三数之和](https://leetcode.cn/problems/3sum-closest/)
 
@@ -448,7 +491,79 @@ int threeSumClosest(vector<int>& nums, int target)
 }
 ```
 
+#### [18.四数之和](https://leetcode.cn/problems/4sum/)
 
+```c++
+vector<vector<int>> fourSum(vector<int>& nums, int target) {
+    vector<vector<int>> result;
+    sort(nums.begin(), nums.end());
+    for (int k = 0; k < nums.size(); k++) {
+        // 剪枝处理
+        if (nums[k] > target && nums[k] >= 0) {
+          break; // 这里使用break，统一通过最后的return返回
+        }
+        // 对nums[k]去重
+        if (k > 0 && nums[k] == nums[k - 1]) {
+            continue;
+        }
+        for (int i = k + 1; i < nums.size(); i++) {
+            // 2级剪枝处理
+            if (nums[k] + nums[i] > target && nums[k] + nums[i] >= 0) {
+                break;
+            }
+
+            // 对nums[i]去重
+            if (i > k + 1 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            int left = i + 1;
+            int right = nums.size() - 1;
+            while (right > left) {
+                // nums[k] + nums[i] + nums[left] + nums[right] > target 会溢出
+                if ((long) nums[k] + nums[i] + nums[left] + nums[right] > target) {
+                    right--;
+                // nums[k] + nums[i] + nums[left] + nums[right] < target 会溢出
+                } else if ((long) nums[k] + nums[i] + nums[left] + nums[right]  < target) {
+                    left++;
+                } else {
+                    result.push_back(vector<int>{nums[k], nums[i], nums[left], nums[right]});
+                    // 对nums[left]和nums[right]去重
+                    while (right > left && nums[right] == nums[right - 1]) right--;
+                    while (right > left && nums[left] == nums[left + 1]) left++;
+                    // 找到答案时，双指针同时收缩
+                    right--;
+                    left++;
+                }
+            }
+
+        }
+    }
+    return result;
+}
+```
+
+#### [454.四数相加 II](https://leetcode.cn/problems/4sum-ii/)
+
+```c++
+int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vector<int>& nums4) {
+    unordered_map<int, int> hash;
+    int res = 0;
+    for(int i = 0; i < nums1.size(); i++)
+    {
+        for(int j = 0; j < nums2.size(); j++)
+            hash[nums1[i] + nums2[j]] ++;
+    }
+    for(int i = 0; i < nums3.size(); i++)
+    {
+        for(int j = 0; j < nums4.size(); j++)
+        {
+            if (hash.find(0 - nums3[i] - nums4[j]) != hash.end())
+                res += hash[0 - nums3[i] - nums4[j]];
+        }
+    }
+    return res;
+}
+```
 
 #### [167. 两数之和 II - 输入有序数组](https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/)
 
@@ -4579,7 +4694,7 @@ int maximalSquare(vector<vector<char>>& matrix)
 }
 ```
 
-#### [1277. 统计全为 1 的正方形子矩阵](https://leetcode.cn/problems/count-square-submatrices-with-all-ones/description/)
+##### [1277. 统计全为 1 的正方形子矩阵](https://leetcode.cn/problems/count-square-submatrices-with-all-ones/description/)
 
 ```c++
 int countSquares(vector<vector<int>>& matrix) {
@@ -5118,7 +5233,7 @@ int largestIsland(vector<vector<int>>& grid)
 
 
 
-### 回溯 （基于排列组合的DFS）
+### 回溯 （21）
  其实与图类DFS方法一致，但是排列组合的特征更明显
 
 ##### [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
@@ -8209,118 +8324,7 @@ vector<int> twoSum(vector<int>& nums, int target) {
 }
 ```
 
-#### [15.三数之和](https://leetcode.cn/problems/3sum/)
 
-```c++
-vector<vector<int>> threeSum(vector<int>& nums) {
-    vector<vector<int>> res;
-    sort(nums.begin(), nums.end());
-    if (nums.empty() || nums.back() < 0 || nums.front() > 0) return {};
-    for (int i = 0; i < nums.size() ; ++i)
-    {
-
-        if (nums[i] > 0)
-            break;
-        // 需要和上一次枚举的数不相同
-        if (i > 0 && nums[i] == nums[i - 1])
-            continue;
-        int target = 0 - nums[i], left = i + 1, right = nums.size() - 1;
-        while (left < right)
-        {   // 用两个指针分别指向 fix 数字之后开始的数组首尾两个数，如果两个数和正好为 target，则将这两个数和 fix 的数一起存入结果中。
-            // 然后就是跳过重复数字的步骤了，两个指针都需要检测重复数字
-            if (nums[left] + nums[right] == target)
-            {
-                res.push_back({nums[i], nums[left], nums[right]});
-                while (left < right && nums[left] == nums[left + 1])
-                    ++left;
-                while (left < right && nums[right] == nums[right - 1])
-                    --right;
-                ++left;
-                --right;
-            }
-            else if (nums[left] + nums[right] < target)
-                ++left;
-            else
-                --right;
-        }
-    }
-    return res;
-}
-```
-
-#### [18.四数之和](https://leetcode.cn/problems/4sum/)
-
-```c++
-vector<vector<int>> fourSum(vector<int>& nums, int target) {
-    vector<vector<int>> result;
-    sort(nums.begin(), nums.end());
-    for (int k = 0; k < nums.size(); k++) {
-        // 剪枝处理
-        if (nums[k] > target && nums[k] >= 0) {
-          break; // 这里使用break，统一通过最后的return返回
-        }
-        // 对nums[k]去重
-        if (k > 0 && nums[k] == nums[k - 1]) {
-            continue;
-        }
-        for (int i = k + 1; i < nums.size(); i++) {
-            // 2级剪枝处理
-            if (nums[k] + nums[i] > target && nums[k] + nums[i] >= 0) {
-                break;
-            }
-
-            // 对nums[i]去重
-            if (i > k + 1 && nums[i] == nums[i - 1]) {
-                continue;
-            }
-            int left = i + 1;
-            int right = nums.size() - 1;
-            while (right > left) {
-                // nums[k] + nums[i] + nums[left] + nums[right] > target 会溢出
-                if ((long) nums[k] + nums[i] + nums[left] + nums[right] > target) {
-                    right--;
-                // nums[k] + nums[i] + nums[left] + nums[right] < target 会溢出
-                } else if ((long) nums[k] + nums[i] + nums[left] + nums[right]  < target) {
-                    left++;
-                } else {
-                    result.push_back(vector<int>{nums[k], nums[i], nums[left], nums[right]});
-                    // 对nums[left]和nums[right]去重
-                    while (right > left && nums[right] == nums[right - 1]) right--;
-                    while (right > left && nums[left] == nums[left + 1]) left++;
-                    // 找到答案时，双指针同时收缩
-                    right--;
-                    left++;
-                }
-            }
-
-        }
-    }
-    return result;
-}
-```
-
-#### [454.四数相加 II](https://leetcode.cn/problems/4sum-ii/)
-
-```c++
-int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vector<int>& nums4) {
-    unordered_map<int, int> hash;
-    int res = 0;
-    for(int i = 0; i < nums1.size(); i++)
-    {
-        for(int j = 0; j < nums2.size(); j++)
-            hash[nums1[i] + nums2[j]] ++;
-    }
-    for(int i = 0; i < nums3.size(); i++)
-    {
-        for(int j = 0; j < nums4.size(); j++)
-        {
-            if (hash.find(0 - nums3[i] - nums4[j]) != hash.end())
-                res += hash[0 - nums3[i] - nums4[j]];
-        }
-    }
-    return res;
-}
-```
 
 
 
