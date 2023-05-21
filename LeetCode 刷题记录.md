@@ -383,7 +383,7 @@ int maxScore(vector<int>& cardPoints, int k) {
 // 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
-### 双指针问题(6)
+### 双指针问题(8)
 
 todo: 11和42的区别
 
@@ -8699,6 +8699,10 @@ public:
 
 #### [304. 二维区域和检索 - 矩阵不可变](https://leetcode-cn.com/problems/range-sum-query-2d-immutable/)
 
+<img src="https://pic.leetcode-cn.com/1614646585-JOesrN-304.002.jpeg" alt="304.002.jpeg" style="zoom:50%;" />
+
+*S*(*A*,*D*)=*S*(*O*,*D*)−*S*(*O*,*E*)−*S*(*O*,*F*)+*S*(*O*,*G*)
+
 ```c++
 class NumMatrix { 
 private:
@@ -8840,6 +8844,26 @@ int subarraySum(vector<int>& nums, int k)
 ```
 
 #### [1031. 两个非重叠子数组的最大和](https://leetcode-cn.com/problems/maximum-sum-of-two-non-overlapping-subarrays/)
+
+```c++
+int maxSumTwoNoOverlap(vector<int>& nums, int L, int M) {
+  // 建立累加和数组，这里可以直接覆盖A数组，然后定义 Lmax 为在最后M个数字之前的长度为L的子数组的最大数字之和，同理，Mmax 表示在最后L个数字之前的长度为M的子数组的最大数字之和。结果 res 初始化为前 L+M 个数字之和，然后遍历数组，从 L+M 开始遍历，先更新 Lmax 和 Mmax，其中 Lmax 用 A[i - M] - A[i - M - L] 来更新，Mmax 用 A[i - L] - A[i - M - L] 来更新。然后取 Lmax + A[i] - A[i - M] 和 Mmax + A[i] - A[i - L] 之间的较大值来更新结果 res 即可
+
+
+  for (int i = 1; i < nums.size(); ++i) {
+      nums[i] += nums[i - 1];
+  }
+  int res = nums[L + M - 1], Lmax = nums[L - 1], Mmax = nums[M - 1];
+  for (int i = L + M; i < nums.size(); ++i) {
+      Lmax = max(Lmax, nums[i - M] - nums[i - M - L]);
+      Mmax = max(Mmax, nums[i - L] - nums[i - M - L]);
+      res = max(res, max(Lmax + nums[i] - nums[i - M], Mmax + nums[i] - nums[i - L]));
+  }
+  return res;
+}
+```
+
+
 
 #### [1423. 可获得的最大点数](https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/)
 
