@@ -10561,8 +10561,6 @@ public:
 };
 ```
 
-
-
 #### [49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/) #todo
 
 ```c++
@@ -10584,31 +10582,6 @@ vector<vector<string>> groupAnagrams(vector<string>& strs)
       }
       return res;
   }
-}
-```
-
-#### [125. 验证回文串](https://leetcode-cn.com/problems/valid-palindrome/)
-
-``` c++
-bool isPalindrome(string s) 
-{
-    int n = s.size();
-    int left = 0, right = n - 1;
-    while (left < right)
-    {
-        while (left < right && !isalnum(s[left]))
-            ++left;
-        while (left < right && !isalnum(s[right]))
-            --right;
-        if (left < right) 
-        {
-            if (tolower(s[left]) != tolower(s[right]))
-                return false;
-            ++left;
-            --right;
-        }
-    }
-    return true;
 }
 ```
 
