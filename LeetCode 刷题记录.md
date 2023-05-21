@@ -831,7 +831,7 @@ int findPeakElement(vector<int>& nums) {
 }
 ```
 
-#### [581. 最短无序连续子数组](https://leetcode-cn.com/problems/shortest-unsorted-continuous-subarray/) #todo 20210419
+#### [581. 最短无序连续子数组](https://leetcode-cn.com/problems/shortest-unsorted-continuous-subarray/) #todo 20210419 双指针
 
 ```c++
 // https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/solution/si-lu-qing-xi-ming-liao-kan-bu-dong-bu-cun-zai-de-/
@@ -4130,57 +4130,28 @@ int coinChange(vector<int> &coins, int amount)
 
 ```c++
 string longestPalindrome(string s) 
-    {
-        if (s.empty())
-            return "";
+{
+    if (s.empty())
+        return "";
 
-        // dp[i][j] 表示 s[i...j]上是否为回文子串
-        vector<vector<bool>> dp(s.size(), vector<bool>(s.size(), false));
-        int len = 0;
-        int left = 0;
+    // dp[i][j] 表示 s[i...j]上是否为回文子串
+    vector<vector<bool>> dp(s.size(), vector<bool>(s.size(), false));
+    int len = 0;
+    int left = 0;
 
-        for(int i = 0; i < s.size(); i++)
-        {
-            for(int j = 0; j <= i; j++)
-            {
-                dp[j][i] = s[i] == s[j] && (i - j < 2 || dp[j+1][i-1]);
-                if (dp[j][i] && i - j + 1 > len)
-                {
-                    len = i - j + 1;
-                    left = j;
-                }
-            }
-        }
-        return s.substr(left, len);
-    }
-
-int getLongestPalindrome(string str, int n) {
-    // write code here
-    if (str.empty() || n <= 0)
-        return 0;
-
-
-    // dp[i][j]表示区间[i...j]上是否是回文子串
-    vector<vector<bool>> dp(str.size(), vector<bool>(str.size(), false));
-    int max_len = 0;
-    int max_left = 0;
-    int max_right = 0;
-
-    for(int i = 0; i < n; i++)
+    for(int i = 0; i < s.size(); i++)
     {
         for(int j = 0; j <= i; j++)
         {
-            dp[j][i] = str[i] == str[j] && ( i - j < 2 || dp[j+1][i-1]);
-            if (dp[j][i] && i-j+1 > max_len)
+            dp[j][i] = s[i] == s[j] && (i - j < 2 || dp[j+1][i-1]);
+            if (dp[j][i] && i - j + 1 > len)
             {
-                max_len = i - j +1;
+                len = i - j + 1;
+                left = j;
             }
-
         }
     }
-
-    return max_len;
-
+    return s.substr(left, len);
 }
 ```
 
@@ -4344,6 +4315,36 @@ int countSubstrings(string s)
     return res;
 }
 ```
+
+##### [1312. 让字符串成为回文串的最少插入次数](https://leetcode.cn/problems/minimum-insertion-steps-to-make-a-string-palindrome/)
+
+```c++
+int minInsertions(string s) {
+  int n = s.size();
+  // dp[i][j]表示[i,j]区间内的字符串的最长回文子序列
+  vector<vector<int>> dp(n, vector<int>(n));
+
+  //如果s[i]==s[j]，那么i和j就可以增加2个回文串的长度，我们知道中间dp[i + 1][j - 1]的值，那么其加上2就是dp[i][j]的值。如果s[i] != s[j]，那么我们可以去掉i或j其中的一个字符，然后比较两种情况下所剩的字符串谁dp值大，就赋给dp[i][j]
+
+  for (int i = 0; i < n; i++)
+  {
+      dp[i][i] = 1;
+      for (int j = i-1; j >= 0; j--)
+      {
+          if (s[i] == s[j])
+          {
+              dp[j][i] = dp[j+1][i-1] + 2;
+          }
+          else
+          {
+              dp[j][i] = max(dp[j][i-1], dp[j+1][i]);
+          }
+      }
+  }
+  return s.size() - dp[0][n-1];
+}
+```
+
 
 
 ####  7.博弈型动态规划状态 
@@ -4578,7 +4579,28 @@ int maximalSquare(vector<vector<char>>& matrix)
 }
 ```
 
-[1277. 统计全为 1 的正方形子矩阵](https://leetcode.cn/problems/count-square-submatrices-with-all-ones/description/)
+#### [1277. 统计全为 1 的正方形子矩阵](https://leetcode.cn/problems/count-square-submatrices-with-all-ones/description/)
+
+```c++
+int countSquares(vector<vector<int>>& matrix) {
+  int m = matrix.size(), n = matrix[0].size(), res = 0;
+  // 定义一个二维 dp 数组，其中 dp[i][j] 表示以 (i, j) 为右下顶点的最大的正方形子数组的边长，
+  // 同时正好也是以 (i, j) 为右下顶点的正方形子数组的个数
+  // dp 数组可以直接就初始化为 matrix，因为每个为1的点，正好也是一个边长为1的正方形子数组，满足 dp 的定义
+  vector<vector<int>> dp = matrix;
+  for (int i = 0; i < m; ++i) {
+      for (int j = 0; j < n; ++j) {
+          if (dp[i][j] > 0 && i > 0 && j > 0) {
+              dp[i][j] = min({dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]}) + 1;
+          }
+          res += dp[i][j];
+      }
+  }
+  return res;
+}
+```
+
+
 
 ###  分治 
 
