@@ -6706,13 +6706,130 @@ int orangesRotting(vector<vector<int>>& grid) {
 
 ##### [752. 打开转盘锁](https://leetcode-cn.com/problems/open-the-lock/)
 
-##### 815. Bus Routes
+```c++
+int openLock(vector<string>& deadends, string target) {
+    if (target == "0000") return 0;
+    unordered_set<string> deadlock(deadends.begin(), deadends.end());
+    if (deadlock.count("0000")) return -1;
+    int res = 0;
+    unordered_set<string> visited{{"0000"}};
+    queue<string> q{{"0000"}};
+    while (!q.empty()) {
+        ++res;
+        for (int k = q.size(); k > 0; --k) {
+            auto t = q.front(); q.pop();
+            for (int i = 0; i < t.size(); ++i) {
+                char c = t[i];
+                string str1 = t.substr(0, i) + to_string(c == '9' ? 0 : c - '0' + 1) + t.substr(i + 1);
+                string str2 = t.substr(0, i) + to_string(c == '0' ? 9 : c - '0' - 1) + t.substr(i + 1);
+                if (str1 == target || str2 == target) return res;
+                if (!visited.count(str1) && !deadlock.count(str1)) q.push(str1);
+                if (!visited.count(str2) && !deadlock.count(str2)) q.push(str2);
+                visited.insert(str1);
+                visited.insert(str2);
+            }
+        }
+    }
+    return -1;
+}
+```
 
-##### 1091. Shortest Path in Binary Matrix
 
-##### 542. 01 Matrix
 
-##### 1293. Shortest Path in a Grid with Obstacles Elimination
+#### [815. 公交路线](https://leetcode.cn/problems/bus-routes/)
+
+```c++
+int numBusesToDestination(vector<vector<int>>& routes, int S, int T) {
+  if (S == T) return 0;
+  int res = 0;
+  unordered_map<int, vector<int>> stop2bus;
+  queue<int> q{{S}};
+  unordered_set<int> visited;
+  for (int i = 0; i < routes.size(); ++i) {
+      for (int j : routes[i]) {
+          stop2bus[j].push_back(i);
+      }
+  }
+  while (!q.empty()) {
+      ++res;
+      for (int i = q.size(); i > 0; --i) {
+          int t = q.front(); q.pop();
+          for (int bus : stop2bus[t]) {
+              if (visited.count(bus)) continue;
+              visited.insert(bus);
+              for (int stop : routes[bus]) {
+                  if (stop == T) return res;
+                  q.push(stop);
+              }
+          }
+      }
+  }
+  return -1;
+}
+```
+
+
+
+#### [1091. 二进制矩阵中的最短路径](https://leetcode.cn/problems/shortest-path-in-binary-matrix/)
+
+```c++
+int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+    if (grid[0][0] == 1) return -1;
+    int res = 0, n = grid.size();
+    set<vector<int>> visited;
+    visited.insert({0, 0});
+    queue<vector<int>> q;
+    q.push({0, 0});
+    vector<vector<int>> dirs{{-1, 0}, {-1, 1}, {0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}};
+    while (!q.empty()) {
+        ++res;
+        for (int i = q.size(); i > 0; --i) {
+            auto t = q.front(); q.pop();
+            if (t[0] == n - 1 && t[1] == n - 1) return res;
+            for (auto dir : dirs) {
+                int x = t[0] + dir[0], y = t[1] + dir[1];
+                if (x < 0 || x >= n || y < 0 || y >= n || grid[x][y] == 1 || visited.count({x, y})) continue;
+                visited.insert({x, y});
+                q.push({x, y});
+            }
+        }
+    }
+    return -1;
+}
+```
+
+#### [1293. 网格中的最短路径](https://leetcode.cn/problems/shortest-path-in-a-grid-with-obstacles-elimination/)
+
+```c++
+int shortestPath(vector<vector<int>>& grid, int k) {
+  int res = 0, m = grid.size(), n = grid[0].size();
+  vector<vector<int>> dirs{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+  vector<vector<int>> visited(m, vector<int>(n, -1)); // The number of obstacles that we can still remove after walking through that cell
+  visited[0][0] = k;
+  queue<vector<int>> q;
+  q.push({0, 0, k});
+  while (!q.empty()) {
+      for (int i = q.size(); i > 0; --i) {
+          auto t = q.front(); q.pop();
+          if (t[0] == m - 1 && t[1] == n - 1) return res;
+          for (auto dir : dirs) {
+              int x = t[0] + dir[0], y = t[1] + dir[1];
+              if (x < 0 || x >= m || y < 0 || y >= n) continue;
+              int newK = t[2] - grid[x][y];
+              if (newK < 0 || newK <= visited[x][y]) continue;
+              visited[x][y] = newK;
+              q.push({x, y, newK});
+          }
+      }
+      ++res;
+  }
+  return -1;
+}
+```
+
+
+
+
 
 
 
