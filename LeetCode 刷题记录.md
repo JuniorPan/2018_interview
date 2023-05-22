@@ -4779,33 +4779,82 @@ void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, 
 }
 
 ```
-##### [22. 括号生成](https://leetcode.cn/problems/generate-parentheses/)
+
+
+##### [36. 有效的数独](https://leetcode.cn/problems/valid-sudoku/)
 
 ```c++
-void dfs(vector<string> &res, string temp, int left, int right, int n)
+bool isValidSudoku(vector<vector<char>>& board) 
 {
-    // 当 right > left 即右括号比左括号多的时候，后续无论插入左括号还是右括号都不是合法的
-  	if (right > left || left > n || right > n)
-        return;
-    if (left == n && right == n)
-        res.push_back(temp);
-
-    dfs(res, temp + '(' , left + 1, right, n);
-    dfs(res, temp + ')', left, right + 1, n);
-}
-
-vector<string> generateParenthesis(int n) {
-    vector<string> res;
-    string temp = "";
-    dfs(res, temp, 0, 0, n);
-    return res;
+    //那么根据数独矩阵的定义，在遍历每个数字的时候，就看看包含当前位置的行和列以及 3x3 小方阵中是否已经出现该数字，
+    // 这里需要三个 boolean 型矩阵，大小跟原数组相同，
+    // 分别记录各行，各列，各小方阵是否出现某个数字，其中行和列标志下标很好对应，就是小方阵的下标需要稍稍转换一下，
+    vector<vector<bool>> rowFlag(9, vector<bool>(9));
+    vector<vector<bool>> colFlag(9, vector<bool>(9));
+    vector<vector<bool>> cellFlag(9, vector<bool>(9));
+    for (int i = 0; i < 9; ++i) 
+    {
+        for (int j = 0; j < 9; ++j) 
+        {
+            if (board[i][j] == '.') 
+                continue;
+            int c = board[i][j] - '1';
+            if (rowFlag[i][c] || colFlag[c][j] || cellFlag[3 * (i / 3) + j / 3][c]) 
+                return false;
+            rowFlag[i][c] = true;
+            colFlag[c][j] = true;
+            cellFlag[3 * (i / 3) + j / 3][c] = true;
+        }
+    }
+    return true;
 }
 ```
 
 ##### [37. 解数独](https://leetcode.cn/problems/sudoku-solver/)
 
-```
-
+```c++
+class Solution {
+    bool isValid(vector<vector<char>>& board, int row, int col, char c){
+        for(int i = 0; i < 9; i++) {
+            if(board[i][col] != '.' && board[i][col] == c) return false; //check row
+            if(board[row][i] != '.' && board[row][i] == c) return false; //check column
+            if(board[3 * (row / 3) + i / 3][ 3 * (col / 3) + i % 3] != '.' && 
+                board[3 * (row / 3) + i / 3][3 * (col / 3) + i % 3] == c) return false; //check 3*3 block
+        }
+        return true;
+    }
+    
+    bool dfs(vector<vector<char>>& board)
+    {
+        for(int i = 0; i < board.size(); i++)
+        {
+            for(int j = 0; j < board[0].size(); j++)
+            {
+                if(board[i][j] == '.')
+                {
+                    for(char c = '1'; c <= '9'; c++)
+                    {
+                        if (isValid(board, i, j, c))
+                        {
+                            // 暴力递归
+                            board[i][j] = c;
+                            if (dfs(board))
+                                return true;
+                            else
+                                board[i][j] = '.';
+                        }
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+public:
+    void solveSudoku(vector<vector<char>>& board) {
+        dfs(board);
+    }
+};
 ```
 
 ##### [51. N 皇后](https://leetcode-cn.com/problems/n-queens/)
@@ -4815,31 +4864,33 @@ class Solution {
 public:
     vector<vector<string>> solveNQueens(int n) {
         vector<vector<string>> res;
-        vector<int> queenCol(n, -1);
-        helper(0, queenCol, res);
+        vector<string> queens(n, string(n, '.'));
+        helper(0, queens, res);
         return res;
     }
-    void helper(int curRow, vector<int>& queenCol, vector<vector<string>>& res) {
-        int n = queenCol.size();
+    void helper(int curRow, vector<string>& queens, vector<vector<string>>& res) {
+        int n = queens.size();
         if (curRow == n) {
-            vector<string> out(n, string(n, '.'));
-            for (int i = 0; i < n; ++i) {
-                out[i][queenCol[i]] = 'Q';
-            }
-            res.push_back(out);
+            res.push_back(queens);
             return;
         }
         for (int i = 0; i < n; ++i) {
-            if (isValid(queenCol, curRow, i)) {
-                queenCol[curRow] = i;
-                helper(curRow + 1, queenCol, res);
-                queenCol[curRow] = -1;
+            if (isValid(queens, curRow, i)) {
+                queens[curRow][i] = 'Q';
+                helper(curRow + 1, queens, res);
+                queens[curRow][i] = '.';
             }
         }
     }
-    bool isValid(vector<int>& queenCol, int row, int col) {
+    bool isValid(vector<string>& queens, int row, int col) {
         for (int i = 0; i < row; ++i) {
-            if (col == queenCol[i] || abs(row - i) == abs(col - queenCol[i])) return false;
+            if (queens[i][col] == 'Q') return false;
+        }
+        for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; --i, --j) {
+            if (queens[i][j] == 'Q') return false;
+        }
+        for (int i = row - 1, j = col + 1; i >= 0 && j < queens.size(); --i, ++j) {
+            if (queens[i][j] == 'Q') return false;
         }
         return true;
     }
@@ -4848,45 +4899,39 @@ public:
 
 ##### [52. N皇后 II](https://leetcode-cn.com/problems/n-queens-ii/)
 
-```java
-public static int num1(int n) {
-    	if(n<1){
-        	return 0;
-    	}
-    // record[0] ? record[1] ? record[2]
-    int[] record = new int[n]; // record[i] -> i行的早，收在I
-    return process1(0， record, n);
+```c++
+class Solution { 
+    bool isValid(vector<int> &record, int i, int j)
+    {
+        for(int k = 0; k < i; k++) {
+            if (j == record[k] ||  abs(k - i) == abs(record[k] - j))
+                return false;
+        }  
+        return true;
     }
-    //潜台训: record[0..i-1]的皇后。 任何两个皇后一定都不共行、不共列。
-    // 目前前来到了第i行
-    // record[0..i-1]表示之前的行， 放了皇后的位置
-    // n代表整体共有名少行
-    //返回值为。摆定所有的皇后。合理的摆法有多少种
-    public static int process1(int i, int[] record, int n) {
-    	if(i==n){//终止行
-    		return 1;
-    	}
-    int res = 0;
-    for (int j = 0; j < n; j++) { //“前行在i行。类试i行断有的列
-    //当前行i行的皇后。放在j列。会不会和之前(0..i-1)的皇后 满足要求
-    //如果是。认为有效
-    //如果不是，认为无效
-    if (isValid(record, i, j)) {
-        record[i] = j;
-        res += process1(i + 1，record, n);
+    int dfs(int i, vector<int> &record, int n)
+    {
+        if (i == n) {
+            return 1;
+        }
+        int res = 0;
+        for(int j = 0; j < n; j++){
+            if (isValid(record, i, j)) {
+                record[i] = j;
+                res += dfs(i+1, record, n);
+            }     
+        }
+        return res;
     }
-    return res;
- }
-// record[0..i-1]需要看。 record[i...]不需要看
-//返回i行皇后，放在了j列，是否有效
-public static boolean isValid(int[] record, int i, int j) {
-    for(intk=e;k<i;k++){//之前的某个k行的里后
-  	  if (j == record[k] | Math. abs(record[k] - j) == Math. abs(i . k)) {
-	    	return false;
-		}
-  }
-	return true ;
-}
+public:
+    int totalNQueens(int n)
+    {
+        vector<int> record(n, 0);
+        if (n < 1)
+            return 0;
+        return dfs(0, record, n);
+    }
+};
 ```
 
 ##### [79. 单词搜索](https://leetcode-cn.com/problems/word-search/)
@@ -4929,16 +4974,7 @@ public:
 };
 ```
 
-##### [93. 复原 IP 地址](https://leetcode.cn/problems/restore-ip-addresses/)
 
-```
-```
-
-##### [126. 单词接龙 II](https://leetcode.cn/problems/word-ladder-ii/)
-
-```
-
-```
 
 ##### [130. 被围绕的区域](https://leetcode-cn.com/problems/surrounded-regions/)
 
@@ -5026,43 +5062,68 @@ public:
 
 ##### [212. 单词搜索 II](https://leetcode.cn/problems/word-search-ii/)
 
-##### [301. 删除无效的括号](https://leetcode-cn.com/problems/remove-invalid-parentheses/)
-
 ##### [341. 扁平化嵌套列表迭代器](https://leetcode-cn.com/problems/flatten-nested-list-iterator/)
 
-##### [394. 字符串解码](https://leetcode-cn.com/problems/decode-string/)
+```c++
+class NestedIterator {
+private:
+    stack<NestedInteger> s;
+public:
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        for (int i = nestedList.size() - 1; i >= 0; --i) {
+            s.push(nestedList[i]);
+        }
+    }
+    int next() {
+        NestedInteger t = s.top(); s.pop();
+        return t.getInteger();
+    }
+
+    bool hasNext() {
+        while (!s.empty()) {
+            NestedInteger t = s.top(); 
+            if (t.isInteger()) return true;
+            s.pop();
+            for (int i = t.getList().size() - 1; i >= 0; --i) {
+                s.push(t.getList()[i]);
+            }
+        }
+        return false;
+    }
+};
+```
 
 ##### [399. 除法求值](https://leetcode-cn.com/problems/evaluate-division/)
 
 ##### [547. 省份数量](https://leetcode-cn.com/problems/number-of-provinces/)
 
 ```c++
-class Solution {
-public:
-    int findCircleNum(vector<vector<int>>& M)
-	{
-		int sum = 0;
-		int m = M.size();
-		vector<bool> visited(m, false);
-		for (int i = 0; i < m; i++)
-		{
-			if (visited[i]) continue;
-			dfs(M, i, visited);
-			++sum;
-		}
-		return sum;
-	}
+// isConnected 邻接矩阵 
+void dfs(vector<vector<int>>& isConnected, int i, vector<bool> &visited)
+{
+    visited[i] = true;
+    for(int j = 0; j < isConnected.size();j++)
+    {
+        if (isConnected[i][j] == 0 || visited[j])
+            continue;
+        dfs(isConnected, j, visited);
+    }
+}
 
-	void dfs(vector<vector<int>>& M, int i, vector<bool>& visited)
-	{
-		visited[i] = true;
-		for (int j = 0; j < M.size(); j++)
-		{
-			if (M[i][j] == 0 || visited[j]) continue;
-			dfs(M, j, visited);
-		}
-	}
-};
+int findCircleNum(vector<vector<int>>& isConnected) {
+
+    int res = 0;
+    int n =isConnected.size();
+    vector<bool> visited(n, false);
+    for(int i = 0; i < n; i++)
+    {
+        if (visited[i])
+            continue;
+        dfs(isConnected, i, visited);
+        res++;
+    }
+    return res;
+}
 ```
 
 ##### [695.岛屿的最大面积](https://leetcode.cn/problems/max-area-of-island/)
@@ -5194,10 +5255,6 @@ vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
 }
 ```
 
-
-
-
-
 ##### [827. 最大人工岛](https://leetcode-cn.com/problems/making-a-large-island/) 类似于回溯
 
 ```c++
@@ -5316,6 +5373,13 @@ vector<string> generateParenthesis(int n) {
     return res;
 }
 ```
+
+##### [301. 删除无效的括号](https://leetcode-cn.com/problems/remove-invalid-parentheses/)
+
+```
+```
+
+
 
 ##### [39. 组合总和](https://leetcode-cn.com/problems/combination-sum/)
 
@@ -6317,6 +6381,57 @@ double knightProbability(int N, int K, int r, int c)
 #### 基于图的BFS
 
 （一般需要一个set来记录访问过的节点）
+
+##### [126. 单词接龙 II](https://leetcode.cn/problems/word-ladder-ii/)
+
+```c++
+vector<vector<string>> findLadders(string beginWord, string endWord, vector<string> &wordList)
+  {
+      vector<vector<string>> res;
+      unordered_set<string> dict(wordList.begin(), wordList.end());
+      vector<string> p{beginWord};
+      queue<vector<string>> paths;
+      paths.push(p);
+      int level = 1, minLevel = INT_MAX;
+      unordered_set<string> words;
+      while (!paths.empty())
+      {
+          auto t = paths.front();
+          paths.pop();
+          if (t.size() > level)
+          {
+              for (string w : words)
+                  dict.erase(w);
+              words.clear();
+              level = t.size();
+              if (level > minLevel)
+                  break;
+          }
+          string last = t.back();
+          for (int i = 0; i < last.size(); ++i)
+          {
+              string newLast = last;
+              for (char ch = 'a'; ch <= 'z'; ++ch)
+              {
+                  newLast[i] = ch;
+                  if (!dict.count(newLast))
+                      continue;
+                  words.insert(newLast);
+                  vector<string> nextPath = t;
+                  nextPath.push_back(newLast);
+                  if (newLast == endWord)
+                  {
+                      res.push_back(nextPath);
+                      minLevel = level;
+                  }
+                  else
+                      paths.push(nextPath);
+              }
+          }
+      }
+      return res;
+  }
+```
 
 ##### [127. 单词接龙](https://leetcode-cn.com/problems/word-ladder/)
 
