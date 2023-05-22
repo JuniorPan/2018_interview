@@ -3455,6 +3455,28 @@ int lengthOfLIS(vector<int>& nums)
 
 ```
 
+##### [343. 整数拆分](https://leetcode.cn/problems/integer-break/)
+
+```c++
+int integerBreak(int n) {
+    if (n <= 2)
+    return 1;
+
+    // dp[i] 表示分拆数字i能得到的最大乘积
+    vector<int> dp(n+1, 0);
+        // 对于每个i，需要遍历所有小于i的数字，因为这些都是潜在的拆分情况，对于任意小于i的数字j，首先计算拆分为两个数字的乘积，即j乘以 i-j
+  // 拆分为多个数字的情况，这里就要用到 dp[i-j] 了，这个值表示数字 i-j 任意拆分可得到的最大乘积，再乘以j就是数字i可拆分得到的乘积，取二者的较大值来更新 dp[i]
+    for(int i = 3; i <= n; i++)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            dp[i] = max(max(dp[i], j*dp[i-j]), j*(i-j)); //dp[i] = max(dp[i], j*dp[i-j],j*(i-j) )
+        }
+    }
+    return dp[n];
+  }
+```
+
 ##### [674. 最长连续递增序列](https://leetcode.cn/problems/longest-continuous-increasing-subsequence/)
 
 ```c++
@@ -6365,7 +6387,6 @@ void solve(vector<vector<char>>& board)
                         board[x][y] = '$';
                         q.push({x,y});
                     }
-
                 }
             }
         }
@@ -6455,8 +6476,6 @@ int numIslands(vector<vector<char>> &grid)
 }
 ```
 
-
-
 ##### [301. 删除无效的括号](https://leetcode-cn.com/problems/remove-invalid-parentheses/)
 
 ```c++
@@ -6545,6 +6564,13 @@ public:
     }
 };
 ```
+
+##### [934. 最短的桥](https://leetcode.cn/problems/shortest-bridge/)
+
+```
+```
+
+
 
 ##### [994. 腐烂的橘子](https://leetcode.cn/problems/rotting-oranges/) #todo
 
