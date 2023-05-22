@@ -6517,13 +6517,53 @@ public:
 };
 ```
 
+[317. 建筑物的最短距离](https://www.cnblogs.com/grandyang/p/5297683.html)
+
+```c++
+int shortestDistance(vector<vector<int>>& grid) {
+  对于每一个建筑的位置都进行一次全图的BFS遍历，每次都建立一个dist的距离场，由于我们BFS遍历需要标记应经访问过的位置，而我们并不想建立一个visit的二维矩阵，那么怎么办呢，这里用一个小trick，我们第一遍历的时候，都是找0的位置，遍历完后，我们将其赋为-1，这样下一轮遍历我们就找-1的位置，然后将其都赋为-2，以此类推直至遍历完所有的建筑物，然后在遍历的过程中更新dist和sum的值，注意我们的dist算是个局部变量，每次都初始化为grid，真正的距离场累加在sum中，由于建筑的位置在grid中是1，所以dist中初始化也是1，累加到sum中就需要减1，我们用sum中的值来更新结果res的值，最后根据res的值看是否要返回-1
+    int res = INT_MAX, val = 0, m = grid.size(), n = grid[0].size();
+    vector<vector<int>> sum = grid;
+    vector<vector<int>> dirs{{0,-1},{-1,0},{0,1},{1,0}};
+    for (int i = 0; i < grid.size(); ++i) {
+        for (int j = 0; j < grid[i].size(); ++j) {
+            if (grid[i][j] == 1) {
+                res = INT_MAX;
+                vector<vector<int>> dist = grid;
+                queue<pair<int, int>> q;
+                q.push({i, j});
+                while (!q.empty()) {
+                    int a = q.front().first, b = q.front().second; q.pop();
+                    for (int k = 0; k < dirs.size(); ++k) {
+                        int x = a + dirs[k][0], y = b + dirs[k][1];
+                        if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == val) {
+                            --grid[x][y];
+                            dist[x][y] = dist[a][b] + 1;
+                            sum[x][y] += dist[x][y] - 1;
+                            q.push({x, y});
+                            res = min(res, sum[x][y]);
+                        }
+                    }
+                }
+                --val;                    
+            }
+        }
+    }
+    return res == INT_MAX ? -1 : res;
+}
+```
+
+
+
 ##### [542. 01 矩阵](https://leetcode-cn.com/problems/01-matrix/)
 
 ```c++
 class Solution {
 public:
     vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
-        
+        // 遍历一次矩阵，将值为0的点都存入 queue，将值为1的点改为 INT_MAX
+        // 从 queue 中取出一个数字，遍历其周围四个点，如果越界或者周围点的值小于等于当前值加1，则直接跳过。
+        // 因为周围点的距离更小的话，就没有更新的必要，否则将周围点的值更新为当前值加1，然后把周围点的坐标加入 queue
         if(matrix.empty() || matrix[0].empty())
             return matrix;
         queue<pair<int,int>> q;
@@ -6567,16 +6607,54 @@ public:
 
 ##### [934. 最短的桥](https://leetcode.cn/problems/shortest-bridge/)
 
+```c++
+int shortestBridge(vector<vector<int>>& A) {
+    //使用 BFS 来找出所有相邻的1，再加上后面的层序遍历的 BFS，总共需要两个 BFS，注意这里第一个 BFS 不需要是层序遍历的，而第二个 BFS 是必须层序遍历
+    int res = 0, n = A.size();
+    queue<int> q, que;
+    vector<int> dirX{-1, 0, 1, 0}, dirY = {0, 1, 0, -1};
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (A[i][j] == 0) continue;
+            A[i][j] = 2;
+            que.push(i * n + j);
+            break;
+        }
+        if (!que.empty()) break;
+    }
+    while (!que.empty()) {
+        int t = que.front(); que.pop();
+        q.push(t);
+        for (int k = 0; k < 4; ++k) {
+            int x = t / n + dirX[k], y = t % n + dirY[k];
+            if (x < 0 || x >= n || y < 0 || y >= n || A[x][y] == 0 || A[x][y] == 2) continue;
+            A[x][y] = 2;
+            que.push(x * n + y);
+        }
+    }
+    while (!q.empty()) {
+        for (int i = q.size(); i > 0; --i) {
+            int t = q.front(); q.pop();
+            for (int k = 0; k < 4; ++k) {
+                int x = t / n + dirX[k], y = t % n + dirY[k];
+                if (x < 0 || x >= n || y < 0 || y >= n || A[x][y] == 2) continue;
+                if (A[x][y] == 1) return res;
+                A[x][y] = 2;
+                q.push(x * n + y);
+            }
+        }
+        ++res;
+    }
+    return res;
+}
 ```
-```
-
-
 
 ##### [994. 腐烂的橘子](https://leetcode.cn/problems/rotting-oranges/) #todo
 
 ```c++
 int orangesRotting(vector<vector<int>>& grid) {
-    int res = 0, m = grid.size(), n = grid[0].size(), freshLeft = 0;
+  	// 先遍历一遍整个二维数组，统计出所有新鲜橘子的个数，并把腐烂的橘子坐标放入一个队列 queue，之后进行 while 循环，循环条件是队列不会空，且 freshLeft 大于0，使用层序遍历的方法，用个 for 循环在内部。每次取出队首元素，遍历其周围四个位置，越界或者不是新鲜橘子都跳过，否则将新鲜橘子标记为腐烂，加入队列中，并且 freshLeft 自减1。每层遍历完成之后，结果 res 自增1，最后返回的时候，若还有新鲜橘子，即 freshLeft 大于0时，返回 -1，否则返回 res 即可  
+  	int res = 0, m = grid.size(), n = grid[0].size(), freshLeft = 0;
     queue<vector<int>> q;
     vector<vector<int>> dirs{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     for (int i = 0; i < m; ++i) {
