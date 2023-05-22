@@ -6653,30 +6653,46 @@ int shortestBridge(vector<vector<int>>& A) {
 
 ```c++
 int orangesRotting(vector<vector<int>>& grid) {
-  	// 先遍历一遍整个二维数组，统计出所有新鲜橘子的个数，并把腐烂的橘子坐标放入一个队列 queue，之后进行 while 循环，循环条件是队列不会空，且 freshLeft 大于0，使用层序遍历的方法，用个 for 循环在内部。每次取出队首元素，遍历其周围四个位置，越界或者不是新鲜橘子都跳过，否则将新鲜橘子标记为腐烂，加入队列中，并且 freshLeft 自减1。每层遍历完成之后，结果 res 自增1，最后返回的时候，若还有新鲜橘子，即 freshLeft 大于0时，返回 -1，否则返回 res 即可  
-  	int res = 0, m = grid.size(), n = grid[0].size(), freshLeft = 0;
-    queue<vector<int>> q;
-    vector<vector<int>> dirs{{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
-    for (int i = 0; i < m; ++i) {
-        for (int j = 0; j < n; ++j) {
-            if (grid[i][j] == 1) ++freshLeft;
-            else if (grid[i][j] == 2) q.push({i, j});
-        }
-    }
-    while (!q.empty() && freshLeft > 0) {
-        for (int i = q.size(); i > 0; --i) {
-            auto cur = q.front(); q.pop();
-            for (int k = 0; k < 4; ++k) {
-                int x = cur[0] + dirs[k][0], y = cur[1] + dirs[k][1];
-                if (x < 0 || x >= m || y < 0 || y >= n || grid[x][y] != 1) continue;
-                grid[x][y] = 2;
-                q.push({x, y});
-                --freshLeft;
+  	// 先遍历一遍整个二维数组，统计出所有新鲜橘子的个数，并把腐烂的橘子坐标放入一个队列 queue，
+        // 之后进行 while 循环，循环条件是队列不会空，且 freshLeft 大于0，使用层序遍历的方法，用个 for 循环在内部。
+        // 每次取出队首元素，遍历其周围四个位置，越界或者不是新鲜橘子都跳过，否则将新鲜橘子标记为腐烂，加入队列中，并且 freshLeft 自减1。
+        // 每层遍历完成之后，结果 res 自增1，最后返回的时候，若还有新鲜橘子，即 freshLeft 大于0时，返回 -1，否则返回 res 即可
+        int res = 0;
+        int m = grid.size();
+        int n = grid[0].size();
+        int fresh_count = 0;
+
+        queue<vector<int>> q;
+        int dirs[4][2] = {0, 1, 0, -1, 1, 0, -1, 0};
+        for(int i = 0; i < m; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                if (grid[i][j] == 1)
+                    fresh_count++;
+                else if (grid[i][j] == 2)
+                    q.push({i,j});
             }
         }
-        ++res;
+        while(!q.empty() && fresh_count > 0)
+        {
+            int size_q = q.size();
+            for(int i = 0; i < size_q; i++)
+            {
+                auto cur = q.front(); q.pop();
+                for(int k = 0; k < 4; k++)
+                {
+                    int x = cur[0] + dirs[k][0], y = cur[1] + dirs[k][1];
+                    if (x < 0 || x >= m || y < 0 || y >= n || grid[x][y] != 1) continue;
+                    grid[x][y] = 2;
+                    q.push({x, y});
+                    --fresh_count;
+                }
+            }
+            res++;
+        }
+        return fresh_count > 0 ? -1 : res;
     }
-    return freshLeft > 0 ? -1 : res;
 }
 ```
 
