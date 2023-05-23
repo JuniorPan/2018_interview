@@ -4807,6 +4807,10 @@ return dp[K][N];
 
 
 
+
+
+https://leetcode.cn/problems/pile-box-lcci/solution/ti-mu-zong-jie-zui-chang-shang-sheng-zi-7jfd3/
+
 ###  分治 
 
 #### [395. Longest Substring with At Least K Repeating Characters](https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/)
