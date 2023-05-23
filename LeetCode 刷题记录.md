@@ -4424,6 +4424,24 @@ int longestPalindromeSubseq(string s)
     }
     return dp[0][n-1];
 }
+
+
+int longestPalindromeSubseq(string s) {
+    int n = s.length();
+        int[] dp = new int[n];
+        for (int i = 0; i < n; ++i)
+            dp[i] = 1;
+        for (int i = n - 1; i >= 0; --i) {
+            int pre = 0;
+            for (int j = i + 1; j < n; ++j) {
+                int temp = dp[j];
+                if (s.charAt(i) == s.charAt(j)) dp[j] = pre + 2;
+                else dp[j] = Math.max(dp[j], dp[j - 1]);
+                pre = temp;
+            }
+        }
+        return dp[n - 1];
+}
 ```
 
 ##### [647. 回文子串](https://leetcode-cn.com/problems/palindromic-substrings/) todo: 空间优化
@@ -4444,13 +4462,37 @@ int countSubstrings(string s)
         // dp[i][i] = true;
         for (int j = 0; j <= i; j++)
         {
-            dp[j][i] =   && (i - j < 2 || dp[j + 1][i - 1]);
+            dp[j][i] = s[i] == s[j]  && (i - j < 2 || dp[j + 1][i - 1]);
             if (dp[j][i])
                 res++;
         }
     }
     return res;
 }
+
+// 空间优化
+int countSubstrings(string s) {
+    int n = s.size();
+    if (n <= 0)
+        return 0;
+    int res = 0;
+    // dp[i][j] 表示区间s[i...j]上是否为回文子串
+    vector<bool> dp(n, false);
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j <= i; j++)
+        {
+            dp[j] = s[i] == s[j]  && (i - j < 2 || dp[j + 1]);
+            if (dp[j])
+            {
+                res++;
+            }
+        }
+    }
+    return res;
+}
+
 ```
 
 ##### [1312. 让字符串成为回文串的最少插入次数](https://leetcode.cn/problems/minimum-insertion-steps-to-make-a-string-palindrome/)
@@ -4734,6 +4776,32 @@ int countSquares(vector<vector<int>>& matrix) {
       }
   }
   return res;
+}
+```
+
+##### [887. 鸡蛋掉落](https://leetcode.cn/problems/super-egg-drop/)
+
+```c++
+int superEggDrop(int K, int N) {
+    // DP，其中 dp[i][j] 表示有i个鸡蛋，j层楼要测需要的最小操作数
+    // 鸡蛋碎掉：接下来就要用 i-1 个鸡蛋来测 k-1 层，所以需要 dp[i-1][k-1] 次操作。
+    // 鸡蛋没碎：接下来还可以用i个鸡蛋来测 j-k 层，所以需要 dp[i][j-k] 次操作。
+    // 面对最坏的情况，所以在第j层扔，需要 max(dp[i-1][k-1], dp[i][j-k])+1 步，状态转移方程为：
+    vector<vector<int>> dp(K + 1, vector<int>(N + 1));
+for (int j = 1; j <= N; ++j) dp[1][j] = j;
+for (int i = 2; i <= K; ++i) {
+  for (int j = 1; j <= N; ++j) {
+    dp[i][j] = j;
+    int left = 1, right = j;
+    while (left < right) {
+      int mid = left + (right - left) / 2;
+      if (dp[i - 1][mid - 1] < dp[i][j - mid]) left = mid + 1;
+      else right = mid;
+    }
+    dp[i][j] = min(dp[i][j], max(dp[i - 1][right - 1], dp[i][j - right]) + 1);
+  }
+}
+return dp[K][N];
 }
 ```
 
@@ -5877,8 +5945,6 @@ public:
 };
 ```
 
-##### 
-
 ##### [140. 单词拆分 II](https://leetcode.cn/problems/word-break-ii/)
 
 <img src="https://pic.leetcode-cn.com/1604197605-MUoIgt-image.png" alt="image.png" style="zoom:50%;" />
@@ -6019,6 +6085,44 @@ void helper(int N, vector<int>& visited, int pos, int& res) {
     }
 }
 ```
+
+##### [679. 24 点游戏](https://leetcode.cn/problems/24-game/)
+
+````c++
+bool dfs(vector<double>& nums){
+    if(nums.size()==1)return abs(nums[0]-24)<=1e-6; //如果只有一个数，判断跟24的差值
+
+    for(int i=0;i<nums.size();i++){
+        for(int j=0;j<nums.size();j++){
+            if(i==j)continue; //不能重复取数
+            double a=nums[i]; //第一步，取出两个数
+            double b=nums[j];
+            vector<double>shengyu;
+            for(int k=0;k<nums.size();k++){
+                if(k==i||k==j)continue;
+                shengyu.push_back(nums[k]);//第二步，存储下剩余的元素，等待第一步取出的两个数在四则运算之后的结果存入当前容器，再次进行dfs运算
+            }
+            double sum=a+b;  //四则运算
+            double sub=a-b;
+            double mul=a*b;
+            double div=a/b;
+            double yunsuan[4]={sum,sub,mul,div}; 
+            for(int w=0;w<4;w++){
+                shengyu.push_back(yunsuan[w]);
+                if(dfs(shengyu))return true;
+                shengyu.pop_back(); //回溯
+            }
+
+        }
+    }
+    return false;
+}
+bool judgePoint24(vector<int>& cards) {
+    vector<double> nums; //转化为double，为了便于除法运算（会产生小数）
+    for(int card:cards){nums.push_back(double(card));}
+    return dfs(nums);
+}
+````
 
 
 
@@ -9313,6 +9417,51 @@ int subarraySum(vector<int>& nums, int k)
 }
 ```
 
+#### [862. 和至少为 K 的最短子数组](https://leetcode.cn/problems/shortest-subarray-with-sum-at-least-k/)
+
+```c++
+int shortestSubarray(vector<int>& nums, int k) {
+    int n = nums.size(), res = INT_MAX;
+    long sum = 0;
+  	//最小堆，里面放一个数对儿，由区间和跟其结束位置组成。遍历数组中所有的数字，累加到 sum，表示区间 [0, i] 内数字和，判断一下若 sum 大于等于K，则用 i+1 更新结果 res。然后用一个 while 循环，看 sum 和堆顶元素的差值，若大于等于K，移除堆顶元素并更新结果 res。循环退出后将当前 sum 和i组成数对儿加入最小堆，最后看若结果 res 还是整型最大值，返回 -1，否则返回结果 res
+    priority_queue<pair<long, int>, vector<pair<long, int>>, greater<pair<long, int>>> pq;
+    for (int i = 0; i < n; ++i) {
+        sum += nums[i];
+        if (sum >= k) res = min(res, i + 1);
+        while (!pq.empty() && sum - pq.top().first >= k) {
+            res = min(res, i - pq.top().second);
+            pq.pop();
+        }
+        pq.push({sum, i});
+    }
+    return res == INT_MAX ? -1 : res;
+}
+
+
+class Solution {
+public:
+    int shortestSubarray(vector<int>& A, int K) {
+        int n = A.size(), res = INT_MAX;
+        deque<int> dq;
+        vector<long> sums(n + 1);
+        for (int i = 1; i <= n; ++i) sums[i] = sums[i - 1] + A[i - 1];
+        for (int i = 0; i <= n; ++i) {
+            while (!dq.empty() && sums[i] - sums[dq.front()] >= K) {
+                res = min(res, i - dq.front());
+                dq.pop_front();
+            }
+            while (!dq.empty() && sums[i] <= sums[dq.back()]) {
+                dq.pop_back();
+            }
+            dq.push_back(i);
+        }
+        return res == INT_MAX ? -1 : res;
+    }
+};
+```
+
+
+
 #### [1031. 两个非重叠子数组的最大和](https://leetcode-cn.com/problems/maximum-sum-of-two-non-overlapping-subarrays/)
 
 ```c++
@@ -9462,6 +9611,27 @@ vector<vector<int>> merge(vector<vector<int>>& intervals) {
 ```
 
 #### [134. 加油站](https://leetcode.cn/problems/gas-station/)
+
+```c++
+int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+    // 能走完整个环的前提是gas的总量要大于cost的总量，这样才会有起点的存在
+    // 假设开始设置起点start = 0, 并从这里出发，如果当前的gas值大于cost值，就可以继续前进，此时到下一个站点，剩余的gas加上当前的gas再减去cost，
+    // 看是否大于0，若大于0，则继续前进。当到达某一站点时，若这个值小于0了，
+    // 则说明从起点到这个点中间的任何一个点都不能作为起点，则把起点设为下一个点，继续遍历
+    int total = 0, sum = 0, start = 0;
+    for (int i = 0; i < gas.size(); ++i) {
+        total += gas[i] - cost[i];
+        sum += gas[i] - cost[i];
+        if (sum < 0) {
+            start = i + 1;
+            sum = 0;
+        }
+    }
+    return (total < 0) ? -1 : start;
+}
+```
+
+
 
 #### [135. 分发糖果](https://leetcode.cn/problems/candy/)
 
@@ -10849,6 +11019,39 @@ public:
     }
 };
 ```
+
+#### [440. 字典序的第K小数字](https://leetcode.cn/problems/k-th-smallest-in-lexicographical-order/)
+
+![IMG_20220323_222643.jpg](https://pic.leetcode-cn.com/1648046063-nabBMN-IMG_20220323_222643.jpg)
+
+
+
+```
+int findKthNumber(int n, int k) {
+        int cur = 1;
+        --k;
+        while (k > 0) {
+            long long step = 0, first = cur, last = cur + 1;
+            // 计算本级该层目录下囊括多少结点，级别越小，所囊括的结点越多
+            while (first <= n) {
+                step += min((long long)n + 1, last) - first;
+                first *= 10;
+                last *= 10;
+            }
+            // 当前级别目录所有的个数与k比
+            if (step <= k) {
+                ++cur;
+                k -= step;
+            } else {
+                cur *= 10;
+                --k; 
+            }
+        }
+        return cur;
+    }
+```
+
+
 
 #### [470. 用 Rand7() 实现 Rand10()](https://leetcode-cn.com/problems/implement-rand10-using-rand7/)
 
