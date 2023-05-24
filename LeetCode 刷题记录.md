@@ -1676,7 +1676,6 @@ class Solution {
             }
         }
     }
-
 public:
     vector<int> sortArray(vector<int>& nums) {
         // heapSort 堆排序
@@ -1694,7 +1693,103 @@ public:
 };
 ```
 
+#### 冒泡
+
+```c++
+ vector<int> sortArray(vector<int>& nums) {
+  // bubbleSort
+  int n = nums.size();
+  for (int i = 0; i < n - 1; ++i) {
+      bool flag = false;
+      for (int j = 0; j < n - 1 - i; ++j) {
+          if (nums[j] > nums[j + 1]) {
+              swap(nums[j], nums[j + 1]);
+              flag = true;
+          }                 
+      }
+      if (flag == false) break; //无交换，代表当前序列已经最优 
+  }
+  return nums;
+}
+
+```
+
+#### 选择排序
+
+```c++
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        // selectSort 选择排序
+        int minIndex;
+        int n = nums.size();
+        for (int i = 0; i < n - 1; ++i) {
+            minIndex = i;
+            for (int j = i + 1; j < n; ++j) {
+                if (nums[j] < nums[minIndex]) {
+                    minIndex = j;
+                }
+            }
+            swap(nums[i], nums[minIndex]);
+        }
+        return nums;
+    }
+};
+```
+
+#### 插入排序
+
+```c++
+vector<int> sortArray(vector<int>& nums) {
+    int n = nums.size();
+    for(int i=1; i<n; i++){
+        for(int j=i; j>0 && nums[j]<nums[j-1]; j--){
+            swap(nums[j], nums[j-1]);
+        }
+    }
+    return nums;
+}
+```
+
 #### [4. 寻找两个正序数组的中位数](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)
+
+```c++
+class Solution
+{
+public:
+    double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2)
+    {
+        // 使用一个小 trick，分别找第 (m+n+1) / 2 个，和 (m+n+2) / 2 个，然后求其平均值即可，这对奇偶数均适用
+        int m = nums1.size(), n = nums2.size(), left = (m + n + 1) / 2, right = (m + n + 2) / 2;
+        return (findKth(nums1, 0, nums2, 0, left) + findKth(nums1, 0, nums2, 0, right)) / 2.0;
+    }
+
+    // 两个有序数组中找到第K个元素
+    // i和j分别来标记数组 nums1 和 nums2 的起始位置
+    int findKth(vector<int> &nums1, int i, vector<int> &nums2, int j, int k)
+    {   
+        // 某一个数组的起始位置大于等于其数组长度时，说明其所有数字均已经被淘汰了，相当于一个空数组了
+        if (i >= nums1.size())
+            return nums2[j + k - 1];
+        if (j >= nums2.size())
+            return nums1[i + k - 1];
+        //  K=1 的话，只要比较 nums1 和 nums2 的起始位置i和j上的数字就可以了
+        if (k == 1)
+            return min(nums1[i], nums2[j]);
+        int midVal1 = (i + k / 2 - 1 < nums1.size()) ? nums1[i + k / 2 - 1] : INT_MAX;
+        int midVal2 = (j + k / 2 - 1 < nums2.size()) ? nums2[j + k / 2 - 1] : INT_MAX;
+        // 如果第一个数组的第 K/2 个数字小的话，那么说明要找的数字肯定不在 nums1 中的前 K/2 个数字，可以将其淘汰，将 nums1 的起始位置向后移动 K/2 个，并且此时的K也自减去 K/2
+        if (midVal1 < midVal2)
+        {
+            return findKth(nums1, i + k / 2, nums2, j, k - k / 2);
+        }
+        else
+        {
+            return findKth(nums1, i, nums2, j + k / 2, k - k / 2);
+        }
+    }
+};
+```
 
 #### [27. 移除元素](https://leetcode-cn.com/problems/remove-element/)
 
@@ -7871,6 +7966,63 @@ public:
 };
 ```
 
+#### [543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/) # todo其实和124套路一样 
+
+```c++
+int dfs(TreeNode* node, int& res)
+{
+    if (!node) return 0;
+    int left = dfs(node->left, res);
+    int right = dfs(node->right, res);
+    res = max(res, left + right);
+    return max(left, right) + 1;
+}
+int diameterOfBinaryTree(TreeNode* root) 
+{
+    int res = 0;
+    dfs(root, res);
+    return res;
+}
+```
+
+
+
+#### [1339. 分裂二叉树的最大乘积](https://leetcode.cn/problems/maximum-product-of-splitted-binary-tree/)
+
+```c++
+typedef long long LL;
+class Solution {
+public:
+    // 计算整棵树的总和
+    LL dfs_sum(TreeNode* root) {
+        if (root == NULL) {
+            return 0;
+        }
+        return root->val + dfs_sum(root->left) + dfs_sum(root->right);
+    }
+    // 后序遍历的同时，求出子树和
+    LL dfs_sub_sum(TreeNode* root, LL root_sum, LL& res) {
+        if (root == NULL) {
+            return 0;
+        }
+        LL left_sum = dfs_sub_sum(root->left, root_sum, res);
+        LL right_sum = dfs_sub_sum(root->right, root_sum, res);
+        LL sub_sum = root->val + left_sum + right_sum;
+        // 对结果取最大
+        res = max(res, (root_sum - sub_sum) * sub_sum);
+        return sub_sum;
+    }
+    int maxProduct(TreeNode* root) {
+        LL root_sum = dfs_sum(root);
+        LL res = 0;
+        dfs_sub_sum(root, root_sum, res);
+        return res % LL(1e9 + 7);
+    }
+};
+```
+
+
+
 #### [129. 求根节点到叶节点数字之和](https://leetcode-cn.com/problems/sum-root-to-leaf-numbers/)
 
 ```c++
@@ -7909,25 +8061,6 @@ TreeNode* invertTree(TreeNode* root) {
 
     return root;
 
-}
-```
-
-#### [543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/) # todo其实和124套路一样 
-
-```c++
-int diameterOfBinaryTree(TreeNode* root) 
-{
-    int res = 0;
-    maxDepth(root, res);
-    return res;
-}
-int maxDepth(TreeNode* node, int& res)
-{
-    if (!node) return 0;
-    int left = maxDepth(node->left, res);
-    int right = maxDepth(node->right, res);
-    res = max(res, left + right);
-    return max(left, right) + 1;
 }
 ```
 
@@ -10703,6 +10836,40 @@ bool isPalindrome(string s) {
     return true;
 }
 ```
+
+#### [165. 比较版本号](https://leetcode.cn/problems/compare-version-numbers/)
+
+```c++
+int compareVersion(string version1, string version2)
+{
+    // 算法就是每次对应取出相同位置的小数点之前所有的字符，把他们转为数字比较，若不同则可直接得到答案，若相同，再对应往下取。
+    // 如果一个数字已经没有小数点了，则默认取出为0，和另一个比较，这样也解决了末尾无效0的情况
+    int n1 = version1.size(), n2 = version2.size();
+    int i = 0, j = 0, d1 = 0, d2 = 0;
+    string v1, v2;
+    while (i < n1 || j < n2) 
+    {
+        while (i < n1 && version1[i] != '.') {
+            v1.push_back(version1[i++]);
+        }
+        d1 = atoi(v1.c_str());
+        while (j < n2 && version2[j] != '.') {
+            v2.push_back(version2[j++]);
+        }
+        d2 = atoi(v2.c_str());
+        if (d1 > d2) 
+            return 1;
+        else if (d1 < d2) 
+            return -1;
+        v1.clear(); 
+        v2.clear();
+        ++i; ++j;
+    }
+    return 0;
+}
+```
+
+
 
 #### [680.验证回文串 II](https://leetcode.cn/problems/valid-palindrome-ii/)
 
