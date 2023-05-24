@@ -37,7 +37,8 @@
  * 
  * 
  */
-
+#include <iostream>
+#include <vctor>
 // @lc code=start
 class Solution
 {
