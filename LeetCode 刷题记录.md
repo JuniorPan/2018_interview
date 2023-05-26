@@ -340,6 +340,22 @@ bool checkInclusion(string s1, string s2)
 }
 ```
 
+#### [1004. 最大连续1的个数 III](https://leetcode.cn/problems/max-consecutive-ones-iii/)
+
+```c++
+int longestOnes(vector<int>& nums, int k) {
+    int res = 0, zeros = 0, left = 0;
+    for (int right = 0; right < nums.size(); ++right) {
+        if (nums[right] == 0) ++zeros;
+        while (zeros > k) {
+            if (nums[left++] == 0) --zeros;
+        }
+        res = max(res, right - left + 1);
+    }
+    return res;
+}
+```
+
 #### [1423. 可获得的最大点数](https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/)
 
 ```c++
@@ -455,7 +471,7 @@ vector<vector<int>> threeSum(vector<int>& nums) {
 
 #### [16. 最接近的三数之和](https://leetcode.cn/problems/3sum-closest/)
 
-```c++
+```c+
 int threeSumClosest(vector<int>& nums, int target)
 {
     if (nums.size() < 3)
@@ -485,6 +501,29 @@ int threeSumClosest(vector<int>& nums, int target)
             else 
                 ++left;
 
+        }
+    }
+    return res;
+}
+```
+
+#### [259. 3Sum Smaller 三数之和较小值](https://www.cnblogs.com/grandyang/p/5235086.html)
+
+```c++
+int threeSumSmaller(vector<int>& nums, int target) {
+  	// 双指针来做，这里面有个 trick 就是当判断三个数之和小于目标值时，此时结果应该加上 right-left，因为数组排序了以后，如果加上 num[right] 小于目标值的话，那么加上一个更小的数必定也会小于目标值，然后将左指针右移一位，否则将右指针左移一位
+    if (nums.size() < 3) return 0;
+    int res = 0, n = nums.size();
+    sort(nums.begin(), nums.end());
+    for (int i = 0; i < n - 2; ++i) {
+        int left = i + 1, right = n - 1;
+        while (left < right) {
+            if (nums[i] + nums[left] + nums[right] < target) {
+                res += right - left;
+                ++left;
+            } else {
+                --right;
+            }
         }
     }
     return res;
@@ -811,6 +850,7 @@ int trap(vector<int> &height)
 }
 
 // 解法二：还不太懂
+
 int trap(vector<int>& height) 
  {
     if (height.empty())
@@ -823,6 +863,8 @@ int trap(vector<int>& height)
     
     int l = 1;
     int r = n - 2;
+  
+  	// 哪边小 就先结算谁，因为小的真实最大值已经确定了
     while(l <= r)
     {
         if (left_max <= right_max)
@@ -1548,6 +1590,32 @@ int singleNonDuplicate(vector<int>& nums)
     return nums[left];
 }
 ```
+
+#### [611. 有效三角形的个数](https://leetcode.cn/problems/valid-triangle-number/)
+
+```c++
+int triangleNumber(vector<int>& nums) {
+    int res = 0, n = nums.size();
+    // 三个数字中如果较小的两个数字之和大于第三个数字，那么任意两个数字之和都大于第三个数字，
+    // 这很好证明，因为第三个数字是最大的，所以它加上任意一个数肯定大于另一个数
+    // 先确定前两个数，将这两个数之和sum作为目标值，然后用二分查找法来快速确定第一个小于目标值的数
+    sort(nums.begin(), nums.end());
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            int sum = nums[i] + nums[j], left = j + 1, right = n;
+            while (left < right) {
+                int mid = left + (right - left) / 2;
+                if (nums[mid] < sum) left = mid + 1;
+                else right = mid;
+            }
+            res += right - 1 - j;
+        }
+    }
+    return res;
+}   
+```
+
+
 
 #### [704. 二分查找](https://leetcode-cn.com/problems/binary-search/)
 
@@ -8866,6 +8934,48 @@ int evalRPN(vector<string>& tokens) {
   }
   return st.top();
 }
+```
+
+#### [232. 用栈实现队列](https://leetcode.cn/problems/implement-queue-using-stacks/)
+
+```c++
+class MyQueue {
+private:
+    stack<int> st;
+public:
+    /** Initialize your data structure here. */
+    MyQueue() {}
+    
+    /** Push element x to the back of queue. *///
+    // 只要我们在插入元素的时候每次都都从前面插入即可，比如如果一个队列是1,2,3,4，那么我们在栈中保存为4,3,2,1，那么返回栈顶元素1，也就是队列的首元素，则问题迎刃而解。
+    // 所以此题的难度是push函数，我们需要一个辅助栈tmp，把s的元素也逆着顺序存入tmp中，此时加入新元素x，再把tmp中的元素存回来，这样就是我们要的顺序了，其他三个操作也就直接调用栈的操作即可
+    void push(int x) {
+        stack<int> tmp;
+        while (!st.empty()) {
+            tmp.push(st.top()); st.pop();
+        }
+        st.push(x);
+        while (!tmp.empty()) {
+            st.push(tmp.top()); tmp.pop();
+        }
+    }
+    
+    /** Removes the element from in front of queue and returns that element. */
+    int pop() {
+        int val = st.top(); st.pop();
+        return val;
+    }
+    
+    /** Get the front element. */
+    int peek() {
+        return st.top();
+    }
+    
+    /** Returns whether the queue is empty. */
+    bool empty() {
+        return st.empty();
+    }
+};
 ```
 
 
