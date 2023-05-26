@@ -10743,6 +10743,31 @@ private:
 };
 ```
 
+#### [386. 字典序排数](https://leetcode.cn/problems/lexicographical-numbers/)
+
+```c++
+class Solution {
+public:
+    //按个位数遍历，在遍历下一个个位数之前，先遍历十位数，十位数的高位为之前的个位数，只要这个多位数并没有超过n，就可以一直往后遍历，如果超过了，我们除以10，然后再加1，如果加1后末尾形成了很多0
+    vector<int> lexicalOrder(int n) {
+        vector<int> res;
+        for (int i = 1; i <= 9; ++i) {
+            helper(i, n, res);
+        }
+        return res;
+    }
+    void helper(int cur, int n, vector<int>& res) {
+        if (cur > n) return;
+        res.push_back(cur);
+        for (int i = 0; i <= 9; ++i) {
+            if (cur * 10 + i <= n) {
+                helper(cur * 10 + i, n, res);
+            }
+        }
+    }
+};
+```
+
 
 
 #### [498. 对角线遍历](https://leetcode.cn/problems/diagonal-traverse/)
