@@ -344,6 +344,7 @@ bool checkInclusion(string s1, string s2)
 
 ```c++
 int longestOnes(vector<int>& nums, int k) {
+  	// 窗口内最多有 K 个 0。
     int res = 0, zeros = 0, left = 0;
     for (int right = 0; right < nums.size(); ++right) {
         if (nums[right] == 0) ++zeros;
@@ -10764,6 +10765,24 @@ vector<int> findDiagonalOrder(vector<vector<int>>& matrix) {
     return res;
 }
 ```
+
+#### [594. 最长和谐子序列](https://leetcode.cn/problems/longest-harmonious-subsequence/)
+
+```c++
+int findLHS(vector<int>& nums) {
+    int res = 0;
+    unordered_map<int, int> m;
+    for (int num : nums) ++m[num];
+    for (auto a : m) {
+        if (m.count(a.first + 1)) {
+            res = max(res, m[a.first] + m[a.first + 1]);
+        }
+    }
+    return res;
+}
+```
+
+
 
 #### [628. 三个数的最大乘积](https://leetcode.cn/problems/maximum-product-of-three-numbers/)
 
