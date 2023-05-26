@@ -1571,23 +1571,29 @@ public:
 #### [540.有序数组中的单一元素](https://leetcode.cn/problems/single-element-in-a-sorted-array/description/) #todo
 
 ```c++
-int singleNonDuplicate(vector<int>& nums) 
-{
+int singleNonDuplicate(vector<int>& nums) {
     // 通过数组的长度跟当前位置的关系，计算出右边和当前数字不同的数字的总个数，
     // 如果是偶数个，说明落单数左半边，反之则在右半边
-    int left = 0, right = nums.size() - 1, n = nums.size();
+
+    // 由于给定数组有序 且 常规元素总是两两出现，因此如果不考虑“特殊”的单一元素的话，我们有结论：成对元素中的第一个所对应的下标必然是偶数，成对元素中的第二个所对应的下标必然是奇数。
+    // 然后再考虑存在单一元素的情况，假如单一元素所在的下标为x，那么下标 x 之前（左边）的位置仍满足上述结论，而下标 x 之后（右边）的位置由于 x 的插入，导致结论翻转
+
+    int left = 0, right = nums.size() - 1;
     while (left < right) {
         int mid = left + (right - left) / 2;
-        if (nums[mid] == nums[mid + 1]) {
-            if ((n - 1 - mid) % 2 == 1) right = mid;
-            else left = mid + 1;
+        if (mid % 2 == 0) {
+            if (mid + 1 < nums.size() && nums[mid] == nums[mid + 1]) 
+                left = mid + 1;
+            else 
+                right = mid;
         } else {
-            if (mid == 0 || nums[mid] != nums[mid - 1]) return nums[mid];
-            if ((n - 1 - mid) % 2 == 0) right = mid;
-            else left = mid + 1;
+            if (mid - 1 >= 0 && nums[mid - 1] == nums[mid]) 
+                left = mid + 1;
+            else 
+                right = mid;
         }
     }
-    return nums[left];
+    return nums[right];
 }
 ```
 
@@ -11115,6 +11121,28 @@ int calculate(string s) {
     return res;
 }
 ```
+
+#### [409. 最长回文串](https://leetcode.cn/problems/longest-palindrome/)
+
+```c++
+int longestPalindrome(string s) {
+    // 字符串能被构造成回文串的充要条件为：除了一种字符出现奇数次外，其余所有字符出现偶数次
+    int res = 0;
+    bool mid = false;
+    unordered_map<char, int> m;
+    for (char c : s) ++m[c];
+    for (auto it = m.begin(); it != m.end(); ++it) {
+        res += it->second;
+        if (it->second % 2 == 1) {
+            res -= 1;
+            mid = true;
+        } 
+    }
+    return mid ? res + 1 : res;
+}
+```
+
+
 
 #### [415. 字符串相加 大数加法](https://leetcode-cn.com/problems/add-strings/) 
 
