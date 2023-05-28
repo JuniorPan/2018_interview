@@ -426,12 +426,11 @@ int maxArea(vector<int>& height)
     return res;
 }
 
-
 ```
 
 #### [15. 三数之和](https://leetcode.cn/problems/3sum/)
 
-```
+```c++
 vector<vector<int>> threeSum(vector<int>& nums) {
     vector<vector<int>> res;
     sort(nums.begin(), nums.end());
@@ -468,11 +467,9 @@ vector<vector<int>> threeSum(vector<int>& nums) {
 }
 ```
 
-
-
 #### [16. 最接近的三数之和](https://leetcode.cn/problems/3sum-closest/)
 
-```c+
+```c++
 int threeSumClosest(vector<int>& nums, int target)
 {
     if (nums.size() < 3)
