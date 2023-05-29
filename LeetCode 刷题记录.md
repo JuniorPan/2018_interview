@@ -11426,29 +11426,29 @@ public:
 
 
 
-```
+```c++
 int findKthNumber(int n, int k) {
-        int cur = 1;
-        --k;
-        while (k > 0) {
-            long long step = 0, first = cur, last = cur + 1;
-            // 计算本级该层目录下囊括多少结点，级别越小，所囊括的结点越多
-            while (first <= n) {
-                step += min((long long)n + 1, last) - first;
-                first *= 10;
-                last *= 10;
-            }
-            // 当前级别目录所有的个数与k比
-            if (step <= k) {
-                ++cur;
-                k -= step;
-            } else {
-                cur *= 10;
-                --k; 
-            }
+    int cur = 1;
+    --k;
+    while (k > 0) {
+        long long step = 0, first = cur, last = cur + 1;
+        // 计算本级该层目录下囊括多少结点，级别越小，所囊括的结点越多
+        while (first <= n) {
+            step += min((long long)n + 1, last) - first;
+            first *= 10;
+            last *= 10;
         }
-        return cur;
+        // 当前级别目录所有的个数与k比
+        if (step <= k) {
+            ++cur;
+            k -= step;
+        } else {
+            cur *= 10;
+            --k; 
+        }
     }
+    return cur;
+}
 ```
 
 
