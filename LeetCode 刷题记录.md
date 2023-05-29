@@ -1085,6 +1085,7 @@ public:
     vector<int> maxNumber(vector<int>& nums1, vector<int>& nums2, int k) {
         int n1 = nums1.size(), n2 = nums2.size();
         vector<int> res;
+      	// 假设有i个元素来自nums1, k-i个元素来着s2
         for (int i = max(0, k - n2); i <= min(k, n1); ++i) {
             res = max(res, mergeVector(maxVector(nums1, i), maxVector(nums2, k - i)));
         }
@@ -1121,47 +1122,22 @@ public:
 // https://www.cnblogs.com/grandyang/p/5883736.html
 // https://leetcode.cn/problems/remove-k-digits/solution/yi-zhao-chi-bian-li-kou-si-dao-ti-ma-ma-zai-ye-b-5/
 string removeKdigits(string num, int k) {
-    string res = "";
-    int n = num.size(), keep = n - k;
-    for (char c : num) {
-        while (k && res.size() && res.back() > c) {
+    string res;
+    int keep = num.size() - k;
+
+    for(int i = 0; i < num.size(); i++)
+    {
+        while(k && !res.empty() && num[i] < res.back())
+        {
             res.pop_back();
             --k;
         }
-        res.push_back(c);
+        res.push_back(num[i]);
     }
     res.resize(keep);
-    while (!res.empty() && res[0] == '0') res.erase(res.begin());
+    while(!res.empty() && res[0] == '0')
+        res.erase(res.begin());
     return res.empty() ? "0" : res;
-}
-
-
-string removeKdigits(string num, int k) {
-    // 从高位开始 保持递增
-    stack<char> s;
-    for (int i = 0; i < num.size(); i++)
-    {
-        while (!s.empty() && s.top() > num[i] && k)
-        {
-            s.pop();
-            k--;
-        }
-        if (s.empty() && num[i] == '0')
-            continue;//跳过前置0
-        s.push(num[i]);
-    }
-    string result;
-    while (!s.empty())
-    {
-        if (k > 0)//当还要再移除数字的时候：从此时单调递增栈的top部删去数字
-            k--;
-        else if (k == 0)//当不用再移除数字的时候：把字符串取出来到result
-            result += s.top();
-
-        s.pop();	
-    }
-    reverse(result.begin(), result.end());//stl中的reverse函数
-    return result == "" ? "0" : result;
 }
 ```
 
@@ -1211,6 +1187,8 @@ vector<int> nextGreaterElements(vector<int>& nums) {
 ```c++
 // <https://www.cnblogs.com/grandyang/p/8850299.html>
 int maxChunksToSorted(vector<int>& arr) {
+  // 维护一个单调递增的栈，遇到大于等于栈顶元素的数字就压入栈，
+  // 当遇到小于栈顶元素的数字后，处理的方法很是巧妙啊：首先取出栈顶元素，这个是当前最大值，因为我们维护的就是单调递增栈啊，然后我们再进行循环，如果栈不为空，且新的栈顶元素大于当前数字，则移除栈顶元素。
   stack<int> st;
   for (int i = 0; i < arr.size(); ++i) {
       if (st.empty() || st.top() <= arr[i]) {
