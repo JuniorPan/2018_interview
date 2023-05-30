@@ -688,6 +688,31 @@ string findLongestWord(string s, vector<string>& dictionary) {
 }
 ```
 
+#### [977. 有序数组的平方](https://leetcode.cn/problems/squares-of-a-sorted-array/)
+
+```c++
+vector<int> sortedSquares(vector<int>& nums) {
+  // 双指针来做，用两个变量分别指向开头和结尾，
+  // 然后比较，每次将绝对值较大的那个数的平方值先加入数组的末尾，然后依次往前更新，最后得到的就是所求的顺序
+  int left = 0, right = nums.size() - 1;
+  vector<int> res(nums.size());
+  for (int i = nums.size() - 1; i >= 0; --i) 
+  {
+      if (abs(nums[left]) > abs(nums[right])) 
+      {
+          res[i] = nums[left] * nums[left];
+          ++left;
+      } else {
+          res[i] = nums[right] *nums[right];
+          --right;
+      }
+  }
+  return res;
+}
+```
+
+
+
 #### **双指针（2 Pointer）：**
 
 - 基础知识：常见双指针算法分为三类，同向（即两个指针都相同一个方向移动），背向（两个指针从相同或者相邻的位置出发，背向移动直到其中一根指针到达边界为止），相向（两个指针从两边出发一起向中间移动直到两个指针相遇）
