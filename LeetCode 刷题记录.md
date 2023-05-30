@@ -661,6 +661,33 @@ bool searchMatrix(vector<vector<int>> &matrix, int target)
 }
 ```
 
+#### [443. 压缩字符串](https://leetcode.cn/problems/string-compression/)
+
+```c++
+int compress(vector<char>& chars) {
+    int n = chars.size();
+    // 双指针，一个代表当前字符出现的第一个位置，一个表示修改后当前长度
+    int left = 0, len = 0;
+    for(int i = 0; i < n; i ++) {
+        // 遇到临界点（最后一个位置，或者两字符分界处）
+        if(i == n - 1 || chars[i] != chars[i + 1]) {
+            chars[len++] = chars[i];
+            int nums = i - left + 1;
+            if(nums > 1) {
+                // 把数字加到末尾
+                for(char num : to_string(nums)) {
+                    chars[len ++] = num;
+                }
+            }
+            left = i + 1;
+        }
+    }
+    return len;
+}
+```
+
+
+
 #### [524. 通过删除字母匹配到字典里最长单词](https://leetcode-cn.com/problems/longest-word-in-dictionary-through-deleting/)  #todo
 
 ```c++
