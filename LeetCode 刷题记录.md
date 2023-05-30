@@ -4065,7 +4065,30 @@ int maxUncrossedLines(vector<int>& nums1, vector<int>& nums2) {
 
 ##### [1143. 最长公共子序列](https://leetcode-cn.com/problems/longest-common-subsequence/) todo 滚动数组
 
+<img src="/Users/panqiang/Library/Application Support/typora-user-images/image-20230530103756204.png" alt="image-20230530103756204" style="zoom:50%;" />
+
 ```c++
+// 空间优化
+int longestCommonSubsequence(string text1, string text2) {
+    if (text1.empty() || text2.empty())
+        return 0;
+    int n = text1.size();
+    int m = text2.size();
+    vector<int> dp(m + 1, 0);
+    for (int i = 1; i <= n; i++) {
+        int upLeft = dp[0]; // 每行开始的时候需要更新下upleft, 这里其实每次都是0
+        for (int j = 1; j <= m; j++) {
+            int tmp = dp[j]; // 记录未被覆盖之前的dp[j], 它会在计算 j+1的时候作为upLeft用到
+            if (text1[i - 1] == text2[j - 1])
+                dp[j] = upLeft + 1;
+            else
+                dp[j] = max(dp[j - 1], dp[j]);
+            upLeft = tmp; // 更新upLeft
+        }
+    }
+    return dp[m];
+}
+
 int longestCommonSubsequence(string word1, string word2)
 {
     int m = word1.size();
