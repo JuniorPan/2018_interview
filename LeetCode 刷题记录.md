@@ -10931,6 +10931,30 @@ int findLHS(vector<int>& nums) {
 }
 ```
 
+#### [611. 有效三角形的个数](https://leetcode.cn/problems/valid-triangle-number/)
+
+```c++
+int triangleNumber(vector<int>& nums) {
+  int res = 0, n = nums.size();
+  // 三个数字中如果较小的两个数字之和大于第三个数字，那么任意两个数字之和都大于第三个数字，
+  // 这很好证明，因为第三个数字是最大的，所以它加上任意一个数肯定大于另一个数
+  // 先确定前两个数，将这两个数之和sum作为目标值，然后用二分查找法来快速确定第一个小于目标值的数
+  sort(nums.begin(), nums.end());
+  for (int i = 0; i < n; ++i) {
+      for (int j = i + 1; j < n; ++j) {
+          int sum = nums[i] + nums[j], left = j + 1, right = n;
+          while (left < right) {
+              int mid = left + (right - left) / 2;
+              if (nums[mid] < sum) left = mid + 1;
+              else right = mid;
+          }
+          res += right - 1 - j;
+      }
+  }
+  return res;
+}   
+```
+
 
 
 #### [628. 三个数的最大乘积](https://leetcode.cn/problems/maximum-product-of-three-numbers/)
