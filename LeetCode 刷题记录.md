@@ -5800,6 +5800,32 @@ void nextPermutation(vector<int>& nums) {
 }
 ```
 
+##### [556. 下一个更大元素 III](https://leetcode.cn/problems/next-greater-element-iii/)
+
+```c++
+int nextGreaterElement(int n) {
+    string str = to_string(n);
+    for(int i = str.size()-2; i >= 0; i--){
+        //从后往前找到第一个不满足递减的数
+        if(str[i] < str[i+1]){
+            //将该数后面的数字排序以保证更小
+            sort(str.begin() + i + 1, str.end());
+            //找到第一个大于该数的数字下标
+            auto it = upper_bound(str.begin()+i+1, str.end(), str[i]);
+            //交换两数
+            swap(str[i], str[distance(str.begin(), it)]);
+            long long ans = stoll(str);
+            return ans > INT_MAX ? -1 : ans;
+        }
+    }
+    return -1;
+}
+```
+
+
+
+
+
 ##### [46. 全排列](https://leetcode-cn.com/problems/permutations/)
 
 <img src="https://img-blog.csdnimg.cn/20201209174225145.png" alt="46.全排列" style="zoom:50%;" />
@@ -7492,38 +7518,35 @@ void flatten(TreeNode* root)
 }
 ```
 
-#### [判断一棵二叉树是否完全二叉树](https://www.nowcoder.com/practice/f31fc6d3caf24e7f8b4deb5cd9b5fa97?tpId=191&&tqId=35928&rp=1&ru=/activity/oj&qru=/ta/job-code-high-algorithm/question-ranking) #TODO
+#### [958. 二叉树的完全性检验](https://leetcode.cn/problems/check-completeness-of-a-binary-tree/) #TODO
 
 ```c++
-bool judgeTotal(TreeNode *root)
-{
-    if (root == nullptr)
+bool isCompleteTree(TreeNode* root) {
+    if (root == NULL)
         return true;
 
-    queue<TreeNode *> q;
+    queue<TreeNode*> q;
     q.push(root);
-    while(!q.empty())
-    {
-        root = q.front();
+    // 1. 找到第一个空结点
+    while (!q.empty()) 
+    { 
+        TreeNode* front = q.front();
         q.pop();
-        if (root->left && root->right)
+        if (front == NULL) 
+            break;
+        else 
         {
-            q.push(root->left);
-            q.push(root->right);
+            q.push(front->left);
+            q.push(front->right);
         }
-        else if (root->left == nullptr && root->right)
+    }
+    // 2. 检查队列中剩余结点是否有非空结点
+    while (!q.empty()) 
+    {
+        TreeNode* front = q.front();
+        q.pop();
+        if (front) 
             return false;
-      	// 遍历最后一层的节点，如果出现不为空的情况，那么肯定不是完全二叉树
-        else if (root->left && root->right == nullptr)
-        {
-            while(!q.empty())
-            {
-                root = q.front();
-                q.pop();
-                if (root->left || root->right)
-                    return false;
-            }            
-        }
     }
     return true;
 }
@@ -11389,6 +11412,39 @@ public:
     }
 };
 ```
+
+#### [468. 验证IP地址](https://leetcode.cn/problems/validate-ip-address/)
+
+```c++
+string validIPAddress(string IP) {
+    istringstream is(IP);
+    string t = "";
+    int cnt = 0;
+    if (IP.find(':') == string::npos) { // Check IPv4
+        while (getline(is, t, '.')) {
+            ++cnt;
+            if (cnt > 4 || t.empty() || (t.size() > 1 && t[0] == '0') || t.size() > 3) return "Neither";
+            for (char c : t) {
+                if (c < '0' || c > '9') return "Neither";
+            }
+            int val = stoi(t);
+            if (val < 0 || val > 255) return "Neither";
+        }
+        return (cnt == 4 && IP.back() != '.') ? "IPv4" : "Neither";
+    } else { // Check IPv6
+        while (getline(is, t, ':')) {
+            ++cnt;
+            if (cnt > 8 || t.empty() || t.size() > 4) return "Neither";
+            for (char c : t) {
+                if (!(c >= '0' && c <= '9') && !(c >= 'a' && c <= 'f') && !(c >= 'A' && c <= 'F')) return "Neither";
+            }
+        }
+        return (cnt == 8 && IP.back() != ':') ? "IPv6" : "Neither";
+    }
+}
+```
+
+
 
 #### [49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/) #todo
 
