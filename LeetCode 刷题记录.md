@@ -148,6 +148,47 @@ string minWindow(string s, string t)
 }
 ```
 
+#### [159. 最多有两个不同字符的最长子串](https://www.cnblogs.com/grandyang/p/5185561.html)
+
+```c++
+int lengthOfLongestSubstringTwoDistinct(string s) {
+  	// HashMap 记录每个字符的出现次数，然后如果 HashMap 中的映射数量超过两个的时候，这里需要删掉一个映射，比如此时 HashMap 中e有2个，c有1个，此时把b也存入了 HashMap，那么就有三对映射了，这时 left 是0，先从e开始，映射值减1，此时e还有1个，不删除，left 自增1。这时 HashMap 里还有三对映射，此时 left 是1，那么到c了，映射值减1，此时e映射为0，将e从 HashMap 中删除，left 自增1，然后更新结果为 i - left + 1
+    int res = 0, left = 0;
+    unordered_map<char, int> m;
+    for (int i = 0; i < s.size(); ++i) {
+        ++m[s[i]];
+        while (m.size() > 2) {
+            if (--m[s[left]] == 0) m.erase(s[left]);
+            ++left;
+        }
+        res = max(res, i - left + 1);
+    }
+    return res;
+}
+```
+
+
+
+#### [340. 最多有K个不同字符的最长子串](https://www.cnblogs.com/grandyang/p/5351347.html)
+
+```c++
+int lengthOfLongestSubstringKDistinct(string s, int k) {
+    int res = 0, left = 0;
+    unordered_map<char, int> m;
+    for (int i = 0; i < s.size(); ++i) {
+        ++m[s[i]];
+        while (m.size() > k) {
+            if (--m[s[left]] == 0) m.erase(s[left]);
+            ++left;
+        }
+        res = max(res, i - left + 1);
+    }
+    return res;
+}
+```
+
+
+
 #### [209.长度最小的子数组](https://leetcode.cn/problems/minimum-size-subarray-sum/description/)
 
 ```c++
