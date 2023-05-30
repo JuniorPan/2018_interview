@@ -5765,29 +5765,39 @@ void dfs(vector<vector<int>> &res, vector<int> path, int index, int n, int k, in
 
 ##### [31. 下一个排列](https://leetcode-cn.com/problems/next-permutation/)  #todo
 
+![image-20230530110054338](/Users/panqiang/Library/Application Support/typora-user-images/image-20230530110054338.png)
+
 ```c++
 // 给定若干个数字，将其组合为一个整数。如何将这些数字重新排列，以得到下一个更大的整数。如 123 下一个更大的数为 132
-// 从后往前找到第一个【相邻升序对】，即A[i]<A[i+1]。此时A[i+1,end)为降序。
-// 在区间[i+1,end)中，从后往前找到第一个大于A[i]的元素A[j]
-// 交换A[i]和A[j]，此时A[i+1,end)一定还是降序，因为A[j]是从右侧起第一个大于A[i]的值
-// 反转A[i+1,end)，变成升序
-void nextPermutation(vector<int>& num) 
-{
-  int i=0;
-  for (i=nums.size()-2; i >= 0; -- i) { // 从后往前找到第一个相邻升序对
-      if (nums[i] < nums[i+1]) break;
-  }
-  if (i == -1) reverse(nums.begin(),nums.end()); // 无相邻升序对，必定为非递减序列
-  else {
-      for (int j=nums.size()-1; j >= i+1; -- j) { // 从后往前[i+1,end)找第一个大于a[i+1]的值
-          if (nums[i] < nums[j]) {
-              swap(nums[i],nums[j]); // 交换二者
-              reverse(nums.begin()+i+1,nums.end()); // 反转[i+1,end)，变成升序
-              break;
-          }
-      }
-  }
-}   
+// 从后往前找到第一个【相邻升序对】，即A[cur]<A[cur+1]。此时A[cur+1,end)为降序。
+// 在区间[cur+1,end)中，从后往前找到第一个大于A[cur]的元素A[j]
+// 交换A[cur]和A[j]，此时A[cur+1,end)一定还是降序，因为A[j]是从右侧起第一个大于A[i]的值
+// 反转A[cur+1,end)，变成升序
+void nextPermutation(vector<int>& nums) {
+    int cur = 0;
+    // // 从后往前找到第一个相邻升序对
+    for(cur = nums.size()-2; cur >= 0; cur--)
+    {
+        if (nums[cur] < nums[cur+1])
+            break;
+    }
+
+    if (cur == -1) // 无相邻升序对，必定为非递减序列
+        reverse(nums.begin(), nums.end());
+    else
+    {   
+        // 从后往前[i+1,end)找第一个大于a[i+1]的值
+        for(int j = nums.size() - 1; j >= cur+1; j--)
+        {
+            if (nums[cur] < nums[j])
+            {
+                swap(nums[cur], nums[j]); // 交换二者
+                reverse(nums.begin()+cur+1, nums.end());  // 反转[i+1,end)，变成升序
+                break;
+            }
+        }
+    }
+}
 ```
 
 ##### [46. 全排列](https://leetcode-cn.com/problems/permutations/)
