@@ -259,7 +259,32 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
 #### [316. 去除重复字母](https://leetcode.cn/problems/remove-duplicate-letters/)
 
 ```c++
+string removeDuplicateLetters(string s) {
+    vector<int> num(255, 0);
 
+    for(int i = 0; i < s.size(); i++)
+    {
+        num[s[i]] ++;
+    }
+    string res;
+    for(int i = 0; i < s.size(); i++)
+    {
+        if (res.find(s[i]) != -1)
+        {
+            --num[s[i]];
+            continue;
+        }
+
+        while(!res.empty() && s[i] < res.back() && num[res.back()] > 0)
+        {
+            res.pop_back();
+        }      
+        --num[s[i]];
+        res.push_back(s[i]);
+    }
+    return res;
+
+}
 ```
 
 
@@ -5826,34 +5851,34 @@ vector<vector<int>> combine(int n, int k) {
 
 ##### [216. 组合总和 III](https://leetcode.cn/problems/combination-sum-iii/)
 
-```
+```c++
 void dfs(vector<vector<int>> &res, vector<int> path, int index, int n, int k, int cur_sum)
-    {
-        
-        if (cur_sum > n)
-            return;
-        if (path.size() == k && cur_sum == n)
-        {
-            res.push_back(path);
-            return;
-        }
-            // todo: 这个地方的n 还是有优化空间的
-        for(int i = index; i <= 9; i++)
-        {
-            path.push_back(i);
-            cur_sum += i;
-            dfs(res, path, i+1, n, k, cur_sum);
-            path.pop_back();
-            cur_sum -= i;
-        }
-    }
+{
 
-    vector<vector<int>> combinationSum3(int k, int n) {
-        vector<vector<int>> res;
-        vector<int> path;
-        dfs(res, path, 1, n, k, 0);
-        return res;
+    if (cur_sum > n)
+        return;
+    if (path.size() == k && cur_sum == n)
+    {
+        res.push_back(path);
+        return;
     }
+        // todo: 这个地方的n 还是有优化空间的
+    for(int i = index; i <= 9; i++)
+    {
+        path.push_back(i);
+        cur_sum += i;
+        dfs(res, path, i+1, n, k, cur_sum);
+        path.pop_back();
+        cur_sum -= i;
+    }
+}
+
+vector<vector<int>> combinationSum3(int k, int n) {
+    vector<vector<int>> res;
+    vector<int> path;
+    dfs(res, path, 1, n, k, 0);
+    return res;
+}
 ```
 
 ##### [31. 下一个排列](https://leetcode-cn.com/problems/next-permutation/)  #todo
