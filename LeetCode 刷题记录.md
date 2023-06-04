@@ -5668,8 +5668,6 @@ int largestIsland(vector<vector<int>>& grid)
 
 ##### [1376. 通知所有员工所需的时间](https://leetcode-cn.com/problems/time-needed-to-inform-all-employees/)
 
-
-
 ### 回溯 （21）
  其实与图类DFS方法一致，但是排列组合的特征更明显
 
@@ -5939,10 +5937,6 @@ int nextGreaterElement(int n) {
     return -1;
 }
 ```
-
-
-
-
 
 ##### [46. 全排列](https://leetcode-cn.com/problems/permutations/)
 
@@ -10366,6 +10360,29 @@ int firstMissingPositive(vector<int> &nums)
     return n + 1;
 }
 ```
+
+#### [442. 数组中重复的数据](https://leetcode.cn/problems/find-all-duplicates-in-an-array/)
+
+```c++
+vector<int> findDuplicates(vector<int>& nums) {
+    // 将nums[i]置换到其对应的位置nums[nums[i]-1]上去，比如对于没有重复项的正确的顺序应该是[1, 2, 3, 4, 5, 6, 7, 8]，
+    // 而我们现在却是[4,3,2,7,8,2,3,1]，我们需要把数字移动到正确的位置上去，比如第一个4就应该和7先交换个位置，以此类推，
+    // 最后得到的顺序应该是[1, 2, 3, 4, 3, 2, 7, 8]，我们最后在对应位置检验，如果nums[i]和i+1不等，那么我们将nums[i]存入结果res中即可
+    vector<int> res;
+    for (int i = 0; i < nums.size(); ++i) {
+        if (nums[i] != nums[nums[i] - 1]) {
+            swap(nums[i], nums[nums[i] - 1]);
+            --i;
+        }
+    }
+    for (int i = 0; i < nums.size(); ++i) {
+        if (nums[i] != i + 1) res.push_back(nums[i]);
+    }
+    return res;
+}
+```
+
+
 
 #### [448. 找到所有数组中消失的数字](https://leetcode-cn.com/problems/find-all-numbers-disappeared-in-an-array/)
 
