@@ -1332,7 +1332,7 @@ int searchInsert(vector<int>& nums, int target) {
     if (nums.empty())
         return -1;
     int left = 0, right = nums.size() -1;
-    while(left <= right) // // 终止循环的时候 left == right+1
+    while(left <= right) // 终止循环的时候 left == right+1
     {
         int mid = left + (right - left) / 2;
         if (nums[mid] == target)
@@ -1342,6 +1342,7 @@ int searchInsert(vector<int>& nums, int target) {
         else
             right = mid -1;
     }
+  	// 返回的是插入位置 跳出循环了 说明没有找到target，这个地方返回left或者right+1 都可以
     return left; // todo: 这个地方为什么是返回left
 }
 ```
@@ -1349,6 +1350,7 @@ int searchInsert(vector<int>& nums, int target) {
 #### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)  重点看下边界问题
 
 ```c++
+// 实际上返回的还是 插入的位置(在没有找到target的情况下)
 int lower_bound(vector<int>& nums, int target)
 {
     int left = 0, right = nums.size() -1 ;
