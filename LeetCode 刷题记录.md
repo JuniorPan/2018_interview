@@ -1357,7 +1357,7 @@ int lower_bound(vector<int>& nums, int target)
     while(left <= right) // 终止条件是 left = right +1 
     {
         int mid = left + (right - left) / 2;
-        if (nums[mid] == target)  // 如果当前位置就是第一个target的时候 那么接下来的判断都会是left=mid+1,终止条件就是left来带right+1位置，所以没有问题
+        if (nums[mid] == target)  // 如果当前位置就是第一个target的时候 那么接下来的判断都会是left=mid+1,终止条件就是left来带right+1位置，所以没有问题, 如果当前位置 不是第一个target的时候， right 一直往左边缩，知道right 来到 第一个位置的前一个，那么这个时候 [left...right]区间的上的数都会小于 target，那么left 就会一直+1, 直到跳出循环
             right = mid - 1;
         else if (nums[mid] < target)
             left = mid + 1;
