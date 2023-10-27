@@ -2659,7 +2659,7 @@ ListNode* removeNthFromEnd(ListNode* head, int n)
     // todo: 注意细节
     if (fast == nullptr) // 防止n等链表长度 正好删除第一个节点 
         return head->next;
-    while(fast->next)  驱
+    while(fast->next) // 这样用来控制slow 找到倒数第n个节点的前一个
     {
         fast = fast->next;
         slow = slow->next;
@@ -2670,7 +2670,7 @@ ListNode* removeNthFromEnd(ListNode* head, int n)
 
 ```
 
-##### [61. 旋转链表](https://leetcode-cn.com/problems/rotate-list/)  # todo 
+##### [61. 旋转链表](https://leetcode-cn.com/problems/rotate-list/) 
 
 ```c++
 ListNode* rotateRight(ListNode* head, int k) {
@@ -2704,6 +2704,14 @@ ListNode* rotateRight(ListNode* head, int k) {
 ```
 
 ##### [141. 环形链表](https://leetcode.cn/problems/linked-list-cycle/)
+
+假设链表中的非环部分的长度为L1，环的长度为L2，环的入口到相遇点的距离为D，相遇点到环的入口的距离为R。快指针每次走两步，慢指针每次走一步。在相遇时，快指针走过的距离是慢指针的两倍，因此可以得到以下关系
+
+2(L1 + D) = L1 + D + n(L2 + D) 进一步整理
+
+L1 + D = n(L2 + D)
+
+这意味着在相遇点时，如果从链表头部开始走L1的距离，慢指针也刚好会到达环的入口，而从相遇点继续走n(L2 + D)的距离也会到达环的入口。
 
 ```c++
 bool hasCycle(ListNode *head) 
@@ -2739,11 +2747,9 @@ bool hasCycle(ListNode *head)
     while(slow != fast)
     {
         if (fast->next == nullptr || fast->next->next == nullptr)
-            return nullptr;
-        
+            return nullptr; 
         slow = slow->next;
-        fast = fast->next->next;
-           
+        fast = fast->next->next;    
     }
     fast = head;
     while(slow != fast)
@@ -2831,58 +2837,32 @@ void reorderList(ListNode *head)
 
 ```c++
 // 让两条链表分别从各自的开头开始往后遍历，当其中一条遍历到末尾时，跳到另一个条链表的开头继续遍历
-// 两条链表分别从各自的开头开始往后遍历，当其中一条遍历到末尾时，跳到另一个条链表的开头继续遍历。两个指针最终会相等，而且只有两种情况，一种情况是在交点处相遇，另一种情况是在各自的末尾的空节点处相等。为什么一定会相等呢，因为两个指针走过的路程相同，是两个链表的长度之和，所以一定会相等
+// 两条链表分别从各自的开头开始往后遍历，当其中一条遍历到末尾时，跳到另一个条链表的开头继续遍历。两个指针最终会相等，而且只有两种情况，一种情况是在交点处相遇，另一种情况是在各自的末尾的空节点处相等。为什么一定会相等呢，因为两个指针走过的路程相同，是两个链表的长度之和，所以一定会相等、
+// 创建两个指针 ptrA 和 ptrB，分别初始化为链表 A 的头节点和链表 B 的头节点。
+// 同时遍历链表 A 和链表 B，如果某个指针到达链表末尾，则将其重新指向另一个链表的头节点。
+// 当两个指针相遇时，它们在相交点相遇，如果没有相交点，它们最终都会指向nullptr。
+// 这个代码的核心思想是让两个指针同时遍历链表A和链表B，如果没有相交点，它们最终都会指向nullptr。
+// 如果有相交点，它们会在相交点相遇
 ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) 
 {
-    if (headA == nullptr || headB == nullptr) {
-        return nullptr;
-    }
-    ListNode *pA = headA, *pB = headB;
-    while (pA != pB) {
-        pA = pA == nullptr ? headB : pA->next;
-        pB = pB == nullptr ? headA : pB->next;
-    }
-    return pA;
+    	ListNode* ptrA = headA;
+      ListNode* ptrB = headB;
+        while (ptrA != ptrB) {
+            // 如果ptrA到达链表末尾，将其重新指向链表B的头节点
+            if (ptrA == nullptr) {
+                ptrA = headB;
+            } else {
+                ptrA = ptrA->next;
+            }
+            // 如果ptrB到达链表末尾，将其重新指向链表A的头节点
+            if (ptrB == nullptr) {
+                ptrB = headA;
+            } else {
+                ptrB = ptrB->next;
+            }
+        }
+        return ptrA; // 返回相交的起始节点或nullptr
 }
-class Solution {
-public:
-    int get_len(ListNode *head)
-    {
-        int len = 0;
-        while(head)
-        {
-            head = head->next;
-            len++;
-        }
-        return len;
-    }
-    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        int len_a = get_len(headA);
-        int len_b = get_len(headB);
-        ListNode *big = headA;
-        ListNode *small = headB;
-        if (len_a < len_b)
-        {
-            big = headB;
-            small = headA;
-        }
-        for(int i = 0; i < abs(len_b - len_a); i++)
-        {
-            big = big->next;
-        }
-        while(big && small)
-        {
-            if (big == small)
-                return big;
-            else
-            {
-                small = small->next;
-                big = big->next;
-            }       
-        }
-        return nullptr;
-    }
-};
 ```
 
 ##### [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
