@@ -2566,7 +2566,7 @@ Node* copyRandomList(Node* head)
 
 #### K路归并
 
-##### [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
+##### [21. 合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/description/)
 
 ```C++
 ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
@@ -2590,7 +2590,7 @@ ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
 }
 ```
 
-##### [23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/) #todo 最小堆的做法 需要熟悉STL
+##### [23. 合并K个升序链表](https://leetcode.cn/problems/merge-k-sorted-lists/description/) #todo 最小堆的做法 需要熟悉STL
 
 ```c++
 
@@ -2602,18 +2602,19 @@ public:
         auto cmp = [](ListNode*& a, ListNode*& b) {
             return a->val > b->val;
         };
+      	// 小根堆
         priority_queue<ListNode*, vector<ListNode*>, decltype(cmp) > q(cmp);
         for (auto node : lists) {
             if (node) q.push(node);
         }
-        ListNode *dummy = new ListNode(-1), *cur = dummy;
+        ListNode *fake_head = new ListNode(-1), *cur = fake_head;
         while (!q.empty()) {
             auto t = q.top(); q.pop();
             cur->next = t;
             cur = cur->next;
             if (cur->next) q.push(cur->next);
         }
-        return dummy->next;
+        return fake_head->next;
     }
 };
 
