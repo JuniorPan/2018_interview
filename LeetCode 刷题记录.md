@@ -3317,9 +3317,12 @@ int minPathSum(vector<vector<int>>& grid) {
     // dp[i][j] 表示从[0][0]-->[i][j]的最短路径和
     vector<int> dp(n, 0);
     dp[0] = grid[0][0];
+  	// 先遍历第一行 
     for (int j = 1; j < n; j++) {
         dp[j] = dp[j - 1] + grid[0][j];
     }
+  
+  	// 从第二行开始遍历
     for (int i = 1; i < m; i++) {
         dp[0] += grid[i][0];
         for (int j = 1; j < n; j++) {
@@ -3328,7 +3331,6 @@ int minPathSum(vector<vector<int>>& grid) {
     }
     return dp[n - 1];
 }
-
 int minPathSum(vector<vector<int>> &grid)
 {
     int m = grid.size();
@@ -3360,14 +3362,19 @@ int minPathSum(vector<vector<int>> &grid)
 ##### [70. 爬楼梯](https://leetcode-cn.com/problems/climbing-stairs/) # todo 空间优化
 
 ```c++
+// 两个变量prev1和prev2来追踪前两个阶段的方法数，初始时prev1表示到达第1阶的方法数，prev2表示到达第2阶的方法数。然后，我们从第3阶开始，计算当前阶段的方法数，然后更新prev1和prev2为前两个阶段的值。最终，prev2中存储的就是到达第n阶楼梯的方法数，而prev1中存储的是到达第n-1阶楼梯的方法数
 int climbStairs(int n) {
-    int pre = 1, preOfPre = 1, cur = 1;
-    for(int i = 2; i <= n; i++) {
-        cur = pre + preOfPre;
-        preOfPre = pre;
-        pre = cur;
+    if (n <= 2) {
+        return n;
     }
-    return cur;
+    int prev1 = 1; // prev1表示到达第1阶的方法数
+    int prev2 = 2; // prev2表示到达第2阶的方法数
+    for (int i = 3; i <= n; i++) {
+        int current = prev1 + prev2;
+        prev1 = prev2;
+        prev2 = current;
+    }
+    return prev2;
 }
 int climbStairs(int n)
 {
@@ -3387,6 +3394,26 @@ int climbStairs(int n)
 ##### [118. 杨辉三角](https://leetcode.cn/problems/pascals-triangle/)
 
 ```c++
+vector<vector<int>> generate(int numRows) {
+    vector<vector<int>> result;
+    if (numRows <= 0) {
+        return result;
+    }
+    result.push_back({1}); // 第一行的特殊情况
+    for (int i = 1; i < numRows; i++) {
+        vector<int> newRow(i + 1, 0); // 创建一个新行，初始化为0
+        newRow[0] = 1; // 每行的第一个元素为1
+        newRow[i] = 1; // 每行的最后一个元素为1
+        for (int j = 1; j < i; j++) {
+            newRow[j] = result[i - 1][j - 1] + result[i - 1][j];
+        }
+        result.push_back(newRow);
+    }
+    return result;
+}
+
+
+
 vector<vector<int>> generate(int numRows) 
 {
     vector<vector<int>> res(numRows, vector<int>());
@@ -3402,10 +3429,9 @@ vector<vector<int>> generate(int numRows)
 }
 ```
 
-##### [120. 三角形最小路径和](https://leetcode-cn.com/problems/triangle/) #todo
+##### [120. 三角形最小路径和](https://leetcode-cn.com/problems/triangle/) #todo 2023 1027
 
 ```c++
-
 int minimumTotal(vector<vector<int>>& triangle) 
 {
     int n = triangle.size();
