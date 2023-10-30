@@ -2,7 +2,7 @@
 
 ### 滑动窗口问题(14)
 
-核心思想: 我们可以用滑动窗口的思想解决这个问题，在滑动窗口类型的问题中都会有两个指针。一个用于「延伸」现有窗口的 r 指针，和一个用于「收缩」窗口的 l 指针。在任意时刻，只有一个指针运动，而另一个保持静止。我们在 ss上滑动窗口，通过移动 r 指针不断扩张窗口。当窗口包含 t 全部所需的字符后，如果能收缩，我们就收缩窗口直到得到最小窗口。
+核心思想: 我们可以用滑动窗口的思想解决这个问题，在滑动窗口类型的问题中都会有两个指针。一个用于「延伸」现有窗口的 r 指针，和一个用于「收缩」窗口的 l 指针。**在任意时刻，只有一个指针运动，而另一个保持静止。**我们在 ss上滑动窗口，通过移动 r 指针不断扩张窗口。当窗口包含 t 全部所需的字符后，如果能收缩，我们就收缩窗口直到得到最小窗口。
 <img src="https://assets.leetcode-cn.com/solution-static/76/76_fig1.gif" alt="滑动窗口示意"  />
 
 ```c++
@@ -37,6 +37,23 @@ int lengthOfLongestSubstring(string s) {
     return res;
 }
 
+int lengthOfLongestSubstring(string s) {
+    int n = s.length();
+    int maxLength = 0;
+    int left = 0;
+    vector<int> charIndex(256, -1);  // 初始化一个大小为256的数组，用于存储字符的最后一次出现的位置
+
+    for (int right = 0; right < n; right++) {
+        if (charIndex[s[right]] != -1 && charIndex[s[right]] + 1 > left) {
+            // 如果字符已经在当前窗口中出现过，将左边界移动到上次出现的位置的右边
+            // 当发现一个重复字符时，我们希望将 left 移动到该重复字符上一次出现的位置的右边，以确保窗口中的字符都是唯一的
+            left =  charIndex[s[right]] + 1;
+        }
+        charIndex[s[right]] = right; // 更新字符的最新位置
+        maxLength = max(maxLength, right - left + 1);
+    }
+    return maxLength;
+}
 
 // 维护了一个滑动窗口，窗口内的都是没有重复的字符，需要尽可能的扩大窗口的大小。由于窗口在不停向右滑动，所以只关心每个字符最后出现的位置，并建立映射。窗口的右边界就是当前遍历到的字符的位置，为了求出窗口的大小，需要一个变量 left 来指向滑动窗口的左边界，这样，如果当前遍历到的字符从未出现过，那么直接扩大右边界，如果之前出现过，那么就分两种情况，在或不在滑动窗口内，如果不在滑动窗口内，那么就没事，当前字符可以加进来，如果在的话，就需要先在滑动窗口内去掉这个已经出现过的字符了，去掉的方法并不需要将左边界 left 一位一位向右遍历查找，由于 HashMap 已经保存了该重复字符最后出现的位置，所以直接移动 left 指针就可以了。维护一个结果 res，每次用出现过的窗口大小来更新结果 res，就可以得到最终结果
 int lengthOfLongestSubstring(string s) 
@@ -66,7 +83,7 @@ int lengthOfLongestSubstring(string s)
 
 ```c++
 vector<int> findSubstring(string s, vector<string>& words) {
- 	遍历s中所有长度为 nxlen 的子串，当剩余子串的长度小于 nxlen 时，就不用再判断了。所以i从0开始，到 (int)s.size() - nxlen 结束就可以了，注意这里一定要将 s.size() 先转为整型数，再进行解法。一定要形成这样的习惯，一旦 size() 后面要减去数字时，先转为 int 型，因为 size() 的返回值是无符号型，一旦减去一个比自己大的数字，则会出错。对于每个遍历到的长度为 nxlen 的子串，需要验证其是否刚好由 words 中所有的单词构成，检查方法就是每次取长度为 len 的子串，看其是否是 words 中的单词。为了方便比较，建立另一个 HashMap，当取出的单词不在 words 中，直接 break 掉，否则就将其在新的 HashMap 中的映射值加1，还要检测若其映射值超过原 HashMap 中的映射值，也 break 掉，因为就算当前单词在 words 中，但若其出现的次数超过 words 中的次数，还是不合题意的。在 for 循环外面，若j正好等于n，说明检测的n个长度为 len 的子串都是 words 中的单词，并且刚好构成了 words，则将当前位置i加入结果 res 即可	
+ 	// 遍历s中所有长度为 nxlen 的子串，当剩余子串的长度小于 nxlen 时，就不用再判断了。所以i从0开始，到 (int)s.size() - nxlen 结束就可以了，注意这里一定要将 s.size() 先转为整型数，再进行解法。一定要形成这样的习惯，一旦 size() 后面要减去数字时，先转为 int 型，因为 size() 的返回值是无符号型，一旦减去一个比自己大的数字，则会出错。对于每个遍历到的长度为 nxlen 的子串，需要验证其是否刚好由 words 中所有的单词构成，检查方法就是每次取长度为 len 的子串，看其是否是 words 中的单词。为了方便比较，建立另一个 HashMap，当取出的单词不在 words 中，直接 break 掉，否则就将其在新的 HashMap 中的映射值加1，还要检测若其映射值超过原 HashMap 中的映射值，也 break 掉，因为就算当前单词在 words 中，但若其出现的次数超过 words 中的次数，还是不合题意的。在 for 循环外面，若j正好等于n，说明检测的n个长度为 len 的子串都是 words 中的单词，并且刚好构成了 words，则将当前位置i加入结果 res 即可	
   if (s.empty() || words.empty()) return {};
         vector<int> res;
         int n = words.size(), len = words[0].size();
@@ -1775,7 +1792,7 @@ void quickSort(vector<int> &nums, int left, int right)
 vector<int> sortArray(vector<int>& nums) {
     // write code here
     quickSort(nums, 0, nums.size()-1);
-    return arr;
+    return nums;
 }
 ```
 
@@ -2930,68 +2947,80 @@ public:
 
 ```c++
  // 将所有小于给定值的节点取出组成一个新的链表，此时原链表中剩余的节点的值都大于或等于给定值，只要将原链表直接接在新链表后
-class Solution 
-{
-public:
-    ListNode *partition(ListNode *head, int x) 
-    {
-        if (!head) return head;
-        ListNode *large_head = new ListNode(-1);
-        ListNode *small_head = new ListNode(-1);
+ListNode* partition(ListNode* head, int x) {
+        // 如果链表为空，直接返回原始链表
+        if (head == nullptr)
+            return head;
+        // 创建两个新的头节点，用于构建小分区和大分区
+        ListNode* large_head = new ListNode(-1);
+        ListNode* small_head = new ListNode(-1);
+        // 将大分区的头节点指向原始链表的头
         large_head->next = head;
-        ListNode *cur = large_head, *p = small_head;
-        while (cur->next)
-        {
-            if (cur->next->val < x)
-            {
+        // 创建两个指针，cur 用于遍历原始链表，p 用于构建小分区
+        ListNode* cur = large_head;
+        ListNode* p = small_head;
+        // 遍历原始链表
+        while (cur->next) {
+            if (cur->next->val < x) {
+                // 如果当前节点的值小于 x，将其添加到小分区
                 p->next = cur->next;
                 p = p->next;
-                cur->next = cur->next->next;
-            } 
-            else
-            {
+                cur->next = cur->next->next; // 当前节点从原始链表中移除，并将它的下一个节点链接到当前节点的下一个节点
+            } else {
+                // 如果当前节点的值大于等于 x，继续遍历
                 cur = cur->next;
             }
         }
+        // 连接两个分区，将小分区连接到大分区的后面
         p->next = large_head->next;
+
+        // 返回小分区的头节点，它是分隔后的链表
         return small_head->next;
     }
-};
 ```
 
 ##### [147. 对链表进行插入排序](https://leetcode.cn/problems/insertion-sort-list/) todo 
 
 ```c++
-ListNode *insertionSortList(ListNode *head)
-{
-    if (head == nullptr)
+ListNode* insertionSortList(ListNode* head) {
+    // 如果链表为空或只有一个节点，直接返回原始链表
+    if (!head || !head->next) {
         return head;
+    }
 
-    ListNode *fakeHead = new ListNode(-1);
-    ListNode *p = nullptr;
-    fakeHead->next = nullptr;
-    while (head)
-    {
-        p = head->next;
-        ListNode *q = fakeHead;
-        if (fakeHead->next == nullptr)
-        {
-            fakeHead->next = head;
-            head->next = nullptr;
-            head = p;
-        }
-        else
-        {
-            while (q->next && q->next->val < head->val)
-            {
-                q = q->next;
+    // 创建一个虚拟头节点，简化插入操作
+    ListNode* dummy = new ListNode(0);
+    dummy->next = head;
+
+    // 初始化两个指针，current指向已排序部分的尾部，pre指向未排序部分的头部
+    ListNode* current = head;
+    ListNode* pre = head->next;
+
+    while (pre) {
+        // 如果当前节点的值小于已排序部分的尾部节点值，需要将其插入到合适的位置
+        if (pre->val < current->val) {
+            // 从头开始查找插入位置
+            ListNode* temp = dummy;
+            while (temp->next->val < pre->val) {
+                temp = temp->next;
             }
-            head->next = q->next;
-            q->next = head;
-            head = p;
+            // 将pre节点插入到合适的位置
+            current->next = pre->next;
+            pre->next = temp->next;
+            temp->next = pre;
+
+            // 更新pre指针，继续下一个未排序节点的处理
+            pre = current->next;
+        } else {
+            // 如果当前节点的值不小于已排序部分的尾部节点值，直接更新current和pre指针
+            current = pre;
+            pre = pre->next;
         }
     }
-    return fakeHead->next;
+    // 释放虚拟头节点，返回排序后的链表头部
+    ListNode* sortedHead = dummy->next;
+    delete dummy;
+    return sortedHead;
 }
 ```
 
@@ -3038,25 +3067,111 @@ ListNode* sortList(ListNode* head) {
 }
 ```
 
+##### [148. 排序链表](https://leetcode.cn/problems/sort-list/)  对链表使用快排 
+
+```c++
+class Solution {
+public:
+    ListNode* quickSortList(ListNode* head) {
+        // 基准情况：如果链表为空或只有一个节点，返回链表本身
+        if (!head || !head->next) {
+            return head;
+        }
+
+        // 选择基准节点
+        ListNode* pivot = head;
+
+        // 分割链表为小于基准值、等于基准值和大于基准值的三部分
+        ListNode* less_head = nullptr;
+        ListNode* less_tail = nullptr;
+        ListNode* equal_head = nullptr;
+        ListNode* equal_tail = nullptr;
+        ListNode* greater_head = nullptr;
+        ListNode* greater_tail = nullptr;
+
+        ListNode* current = head;
+
+        while (current) {
+            if (current->val < pivot->val) {
+                // 当前节点小于基准值，放入小于基准值的链表中
+                if (less_head == nullptr) {
+                    less_head = current;
+                    less_tail = current;
+                } else {
+                    less_tail->next = current;
+                    less_tail = current;
+                }
+            } else if (current->val == pivot->val) {
+                // 当前节点等于基准值，放入等于基准值的链表中
+                if (equal_head == nullptr) {
+                    equal_head = current;
+                    equal_tail = current;
+                } else {
+                    equal_tail->next = current;
+                    equal_tail = current;
+                }
+            } else {
+                // 当前节点大于基准值，放入大于基准值的链表中
+                if (greater_head == nullptr) {
+                    greater_head = current;
+                    greater_tail = current;
+                } else {
+                    greater_tail->next = current;
+                    greater_tail = current;
+                }
+            }
+            current = current->next;
+        }
+
+        // 递归对小于和大于基准值的两部分进行快速排序
+        less_tail = equal_tail = greater_tail = nullptr; // 清空尾节点
+        less_head = quickSortList(less_head);
+        greater_head = quickSortList(greater_head);
+
+        // 拼接排好序的链表
+        if (less_tail) {
+            less_tail->next = equal_head;
+            equal_tail = (equal_tail) ? equal_tail : less_tail;
+        }
+        equal_tail->next = greater_head;
+
+        return (less_head) ? less_head : equal_head;
+    }
+
+    ListNode* sortList(ListNode* head) {
+        return quickSortList(head);
+    }
+};
+
+```
+
 ##### [708.排序的循环链表](https://leetcode.cn/problems/4ueAj6/?envType=study-plan-v2&id=coding-interviews-special)
 
 ```c++
-Node* insert(Node* head, int insertVal) {
-    if (!head) {
-        head = new Node(insertVal, NULL);
-        head->next = head;
+class Solution {
+public:
+    Node* insert(Node* head, int insertVal) {
+        if (!head) {
+            // 如果链表为空，创建新节点并返回
+            head = new Node(insertVal, NULL);
+            head->next = head; // 新节点指向自身，形成循环
+            return head;
+        }
+        Node *pre = head; // 前一个节点指针
+        Node *cur = pre->next; // 当前节点指针
+        while (cur != head) {
+            // 找到插入位置
+            if (pre->val <= insertVal && cur->val >= insertVal) break;
+            // 考虑插入值小于最小节点值或大于最大节点值的情况
+            if (pre->val > cur->val && (pre->val <= insertVal || cur->val >= insertVal)) break;
+            pre = cur; // 移动指针
+            cur = cur->next;
+        }
+        // 插入新节点
+        pre->next = new Node(insertVal, cur);
         return head;
     }
-    Node *pre = head, *cur = pre->next;
-    while (cur != head) {
-        if (pre->val <= insertVal && cur->val >= insertVal) break;
-        if (pre->val > cur->val && (pre->val <= insertVal || cur->val >= insertVal)) break;
-        pre = cur;
-        cur = cur->next;
-    }
-    pre->next = new Node(insertVal, cur);
-    return head;
-}
+};
 ```
 
 #### 链表翻转 

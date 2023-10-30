@@ -54,22 +54,41 @@
  */
 
 // @lc code=start
-class Solution
-{
-public:
-    int lengthOfLongestSubstring(string s)
-    {
-        int left = -1, res = 0;
-        vector<int> m(128, -1);
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
 
-        for (int i = 0; i < s.size(); i++)
-        {
-            left = max(left, m[s[i]]);
-            m[s[i]] = i;
-            res = max(res, i - left);
+int lengthOfLongestSubstring(string s) {
+    int n = s.length();
+    int maxLength = 0;
+    int left = 0;
+    vector<int> charIndex(256, -1);
+
+    for (int right = 0; right < n; right++) {
+        if (charIndex[s[right]] != -1) {
+            cout << "Found a repeat character '" << s[right] << "' at index " << right << endl;
+            // 如果字符已经在窗口中出现过，将左边界移动到上次出现的位置的右边
+
+            cout << "left " << left << " charIndex[s[right]] + 1: " << charIndex[s[right]] + 1 << endl;
+            left = max(left, charIndex[s[right]] + 1);
+            
+            cout << "Updated left to " << left << endl;
         }
 
-        return res;
+        charIndex[s[right]] = right; // 更新字符的最新位置
+        maxLength = max(maxLength, right - left + 1);
+        cout << "Current substring: '" << s.substr(left, right - left + 1) << "' with length " << right - left + 1 << endl;
     }
-};
+
+    return maxLength;
+}
+
+int main() {
+    string s = "abcabcbb";
+    int result = lengthOfLongestSubstring(s);
+    cout << "Length of the longest substring: " << result << endl;
+    return 0;
+}
+
 // @lc code=end
