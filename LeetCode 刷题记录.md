@@ -2055,6 +2055,28 @@ public:
 
     }
 };
+
+
+int findKthLargest(vector<int>& nums, int k) {
+    // 使用最小堆来维护前k个最大的元素
+    priority_queue<int, vector<int>, greater<int>> min_heap;
+
+    // 遍历数组并将前k个元素加入最小堆
+    for (int i = 0; i < k; i++) {
+        min_heap.push(nums[i]);
+    }
+
+    // 继续遍历数组，将大于堆顶元素的元素加入堆，并弹出堆顶元素
+    for (int i = k; i < nums.size(); i++) {
+        if (nums[i] > min_heap.top()) {
+            min_heap.pop();
+            min_heap.push(nums[i]);
+        }
+    }
+
+    // 最终堆顶元素就是第k个最大的元素
+    return min_heap.top();
+}
 ```
 #### [324. 摆动排序 II](https://leetcode-cn.com/problems/wiggle-sort-ii/)  #todo
 
