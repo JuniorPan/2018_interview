@@ -1839,30 +1839,40 @@ void merge_sort(vector<int> &nums, int left, int right)
 class Solution {
     void buildMaxHeap(vector<int>& nums) {
         int n = nums.size();
+      // 从最后一个非叶子节点开始，向前遍历
         for (int i = (n - 1) / 2; i >= 0; --i) {
             maxHeapify(nums, i, n);
         }
     }
+	  // 通过不断比较父节点与其左右子节点的值，确保最大堆性质被维护，并在需要时交换元素位置以满足性质
+    void heapify(vector<int>& nums, int n, int i) {
+    int largest = i;
 
-    void maxHeapify(vector<int>& nums, int i, int n) {
-        while(i * 2 + 1 < n)
-        {
-            int left = 2 * i + 1;  // 左孩子
-            int right = 2 * i + 2; // 又孩子
-            int large = i;
-            if (left < n && nums[left] > nums[i])
-                large = left;
-            if (right <n && nums[right] > nums[large])
-                large = right;
-            if (large != i) {
-                swap(nums[i], nums[large]);
-                i = large;
-            }
-            else {
-                break;
-            }
+    while (true) {
+        int left = 2 * i + 1;  // 左子节点的索引
+        int right = 2 * i + 2; // 右子节点的索引
+
+        // 如果左子节点存在且比当前节点大，则更新最大值索引
+        if (left < n && nums[left] > nums[largest]) {
+            largest = left;
         }
+
+        // 如果右子节点存在且比当前节点大，则更新最大值索引
+        if (right < n && nums[right] > nums[largest]) {
+            largest = right;
+        }
+
+        // 如果最大值索引没有改变，说明当前节点满足最大堆性质，退出循环
+        if (largest == i) {
+            break;
+        }
+
+        // 否则，交换当前节点和最大值节点的值
+        swap(nums[i], nums[largest]);
+        i = largest; // 更新当前节点索引，继续向下迭代
     }
+}
+
 public:
     vector<int> sortArray(vector<int>& nums) {
         // heapSort 堆排序
@@ -9151,6 +9161,50 @@ bool isValid(string s) {
 
 
 ```
+
+#### [32. 最长有效括号](https://leetcode.cn/problems/longest-valid-parentheses/)
+
+```c++
+#include <stack>
+
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+        stack<int> st;      // 用于跟踪左括号的索引
+        int maxLen = 0;     // 用于记录最长有效括号子串的长度
+        st.push(-1);        // 将虚拟起始位置 -1 推入栈中
+
+        for (int i = 0; i < s.length(); i++) {
+            if (s[i] == '(') {
+                st.push(i); // 如果当前字符是左括号，将其索引推入栈中
+            } else {
+                st.pop();   // 如果当前字符是右括号，尝试与栈顶元素匹配
+                if (st.empty()) {
+                    st.push(i); // 如果栈为空，说明当前右括号无法匹配，将当前位置作为新的起始点
+                } else {
+                    maxLen = max(maxLen, i - st.top()); // 计算有效括号子串的长度并更新最大长度
+                }
+            }
+        }
+
+        return maxLen;
+    }
+};
+
+```
+
+这个算法的主要思想是使用栈来跟踪左括号的索引位置，如果遇到右括号，则尝试与栈顶元素匹配。如果栈不为空，说明有匹配的括号，计算当前位置与栈顶位置之间的距离，更新最大长度。如果栈为空，说明当前右括号无法与前面的括号匹配，将当前位置作为新的起始点。
+
+举例来说，对于字符串 "(()())"，栈在处理字符 ')' 时的状态变化如下：
+
+- 遇到 '(' 时，将索引 0 推入栈中：栈内容为 [-1, 0]
+- 遇到 '(' 时，将索引 1 推入栈中：栈内容为 [-1, 0, 1]
+- 遇到 ')' 时，弹出栈顶元素，计算有效括号子串的长度：当前子串的长度为 2，更新 maxLen 为 2
+- 遇到 '(' 时，将索引 4 推入栈中：栈内容为 [-1, 0, 4]
+- 遇到 ')' 时，弹出栈顶元素，计算有效括号子串的长度：当前子串的长度为 4，更新 maxLen 为 4
+- 最终返回 maxLen = 4，表示最长有效括号子串的长度为 4。
+
+这个算法的时间复杂度为 O(n)，其中 n 是字符串的长度，因为它只需要遍历一次字符串。希望这个详细的解释和注释有助于理解算法的工作原理。
 
 #### [150.逆波兰表达式求值](https://leetcode.cn/problems/evaluate-reverse-polish-notation/)
 
