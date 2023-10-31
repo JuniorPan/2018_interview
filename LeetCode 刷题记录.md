@@ -3626,7 +3626,7 @@ int longestValidParentheses(string s)
 }
 ```
 
-##### [55. 跳跃游戏](https://leetcode-cn.com/problems/jump-game/) todo
+##### [55. 跳跃游戏](https://leetcode-cn.com/problems/jump-game/) todo 贪心
 
 ```c++
 bool canJump(vector<int>& nums) 
