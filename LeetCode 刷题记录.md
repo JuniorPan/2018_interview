@@ -798,6 +798,13 @@ string findLongestWord(string s, vector<string>& dictionary) {
 }
 ```
 
+[581. 最短无序连续子数组](https://leetcode-cn.com/problems/shortest-unsorted-continuous-subarray/) #todo 20210419 双指针
+
+```
+```
+
+
+
 #### [977. 有序数组的平方](https://leetcode.cn/problems/squares-of-a-sorted-array/)
 
 ```c++
@@ -861,12 +868,12 @@ vector<int> sortedSquares(vector<int>& nums) {
 
 **单调栈的两种写法**   [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
 
-```
+```txt
 1.单调栈里的元素具有单调性
 2.元素加入栈前，会在栈顶端把破坏栈单调性的元素都删除
 3.使用单调栈可以找到元素向左遍历第一个比他小的元素，也可以找到元素向左遍历第一个比他大的元素。
-单调递增栈，利用波谷剔除栈中的波峰，留下波谷；
-单调递减栈，利用波峰剔除栈中的波谷，留下波峰。
+单调递增栈，利用波谷剔除栈中的波峰，留下波谷； 单调递增 结算波峰
+单调递减栈，利用波峰剔除栈中的波谷，留下波峰。 单调递减，结算波谷
 ```
 
 ```c++
@@ -1025,6 +1032,7 @@ int largestRectangleArea(vector<int> &heights)
     if (heights.empty())
             return 0;
     int res = 0;
+  	// 需要找到每根柱子的左右边界 所以要单调递增
     stack<int> s;
     heights.push_back(0); // 为了使得最后一块板子也被处理，这里用了个小 trick，在高度数组最后面加上一个0
     for(int i = 0; i < heights.size(); i++)
@@ -1125,40 +1133,49 @@ int findPeakElement(vector<int>& nums) {
 
 ```c++
 // https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/solution/si-lu-qing-xi-ming-liao-kan-bu-dong-bu-cun-zai-de-/
+
 class Solution {
 public:
-    int findUnsortedSubarray(vector<int>& nums) 
-    {
-        stack<int> stack;
-        int left = nums.size()-1;
-        int right = 0;
-        for(int i = 0; i < nums.size(); i++)
-        {
-            while(!stack.empty() && nums[i] < nums[stack.top()])
-            {
-                int temp = stack.top();
-                stack.pop();
-                left = min(left, temp);
+    int findUnsortedSubarray(std::vector<int>& nums) {
+        int n = nums.size();
+        std::stack<int> st;
+        int left = n, right = 0;
+
+        // 找到未排序子数组的左边界
+        for (int i = 0; i < n; i++) {
+            while (!st.empty() && nums[i] < nums[st.top()]) {
+                // 栈顶元素对应的数组元素是当前已经遍历的最大元素。
+                // 如果遇到一个元素小于栈顶元素对应的数组元素，这意味着它是无序的，
+                // 我们需要找到未排序子数组的左边界
+                // 因为当前的left 只是num[i]可以往左插入的最左边位置，后面可能还有比nums[i]更小的数字
+                left = std::min(left, st.top());
+                st.pop();
             }
-            stack.push(i);
+            st.push(i);
         }
 
-        while(!stack.empty())
-            stack.pop();
-
-        for(int i = nums.size() - 1; i >= 0; i--)
-        {
-            while(!stack.empty() && nums[i] > nums[stack.top()])
-            {
-                int temp = stack.top();
-                stack.pop();
-                right = max(right, temp);
-            }
-            stack.push(i);
+        // 清空栈
+        while (!st.empty()) {
+            st.pop();
         }
-        return right - left > 0 ? right - left + 1 : 0;
+
+        // 找到未排序子数组的右边界
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.empty() && nums[i] > nums[st.top()]) {
+                right = std::max(right, st.top());
+                st.pop();
+            }
+            st.push(i);
+        }
+
+        if (right > left) {
+            return right - left + 1;
+        } else {
+            return 0;
+        }
     }
 };
+
 ```
 
 #### [739. 每日温度](https://leetcode-cn.com/problems/daily-temperatures/)
