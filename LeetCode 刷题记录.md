@@ -1202,6 +1202,8 @@ vector<int> dailyTemperatures(vector<int>& T)
 
 #### [316. 去除重复字母](https://leetcode.cn/problems/remove-duplicate-letters/) todo
 
+[一招吃遍力扣四道题，妈妈再也不用担心我被套路啦～](https://leetcode.cn/problems/remove-duplicate-letters/solutions/290200/yi-zhao-chi-bian-li-kou-si-dao-ti-ma-ma-zai-ye-b-4/)
+
 ```c++
 string removeDuplicateLetters(string s) {
   vector<int> num(256, 0);//记录字母出现个数

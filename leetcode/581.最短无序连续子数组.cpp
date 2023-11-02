@@ -106,7 +106,7 @@ public:
     }
 };
 int main() {
-    std::vector<int> nums = {2,3,6,8,10, 11,15, 13,9,16,17,26,19,25,23,24,27,30,32,32};
+    std::vector<int> nums = {2,3,6,8,10,11,15,13,9,16,17,26,19,25,23,24,27,30,32,32};
     Solution solution;
 
     int result = solution.findUnsortedSubarray(nums);
