@@ -18,6 +18,10 @@
 
 [315. 计算右侧小于当前元素的个数](https://leetcode-cn.com/problems/count-of-smaller-numbers-after-self/)  todo
 
+[31. 下一个排列](https://leetcode-cn.com/problems/next-permutation/)  #todo
+
+[556. 下一个更大元素 III](https://leetcode.cn/problems/next-greater-element-iii/)
+
 
 
 ## [左神的课](https://www.bilibili.com/video/BV13g41157hK?p=5&vd_source=f740ff72b448a270a8990e020d263b59)
