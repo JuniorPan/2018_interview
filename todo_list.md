@@ -28,6 +28,12 @@
 
 [140. 单词拆分 II](https://leetcode.cn/problems/word-break-ii/)
 
+[159. 最多有两个不同字符的最长子串](https://www.cnblogs.com/grandyang/p/5185561.html)
+
+[340. 最多有K个不同字符的最长子串](https://www.cnblogs.com/grandyang/p/5351347.html)
+
+[239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)
+
 ## [左神的课](https://www.bilibili.com/video/BV13g41157hK?p=5&vd_source=f740ff72b448a270a8990e020d263b59)
 
 ### p1

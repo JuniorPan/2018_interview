@@ -164,6 +164,7 @@ string minWindow(string s, string t)
 ```c++
 int lengthOfLongestSubstringTwoDistinct(string s) {
   	// HashMap 记录每个字符的出现次数，然后如果 HashMap 中的映射数量超过两个的时候，这里需要删掉一个映射，比如此时 HashMap 中e有2个，c有1个，此时把b也存入了 HashMap，那么就有三对映射了，这时 left 是0，先从e开始，映射值减1，此时e还有1个，不删除，left 自增1。这时 HashMap 里还有三对映射，此时 left 是1，那么到c了，映射值减1，此时e映射为0，将e从 HashMap 中删除，left 自增1，然后更新结果为 i - left + 1
+  // eceba
     int res = 0, left = 0;
     unordered_map<char, int> m;
     for (int i = 0; i < s.size(); ++i) {
@@ -199,22 +200,31 @@ int lengthOfLongestSubstringKDistinct(string s, int k) {
 #### [209.长度最小的子数组](https://leetcode.cn/problems/minimum-size-subarray-sum/description/)
 
 ```c++
-int minSubArrayLen(int s, vector<int>& nums) {
-    int res = INT_MAX, left = 0, sum = 0;
-    for (int i = 0; i < nums.size(); ++i) {
-        sum += nums[i];
-        while (left <= i && sum >= s) {
-            res = min(res, i - left + 1);
-            sum -= nums[left++];
+int minSubArrayLen(int target, vector<int>& nums) {
+    int res = INT_MAX;  // 初始化结果为最大值，表示尚未找到符合条件的子数组
+    int left = 0;  // 滑动窗口的左边界
+    int cur_sum = 0;  // 当前窗口内元素的和
+
+    for (int right = 0; right < nums.size(); right++) {
+        cur_sum += nums[right];  // 将当前元素添加到当前窗口内
+
+        // 内部循环：收缩左边界以找到满足条件的子数组
+        while (left <= right && cur_sum >= target) {
+            res = min(res, right - left + 1);  // 更新结果，记录当前满足条件的子数组长度
+            cur_sum -= nums[left];  // 移除左边界元素，同时减去其值
+            left++;  // 收缩左边界
         }
     }
+
+    // 如果结果仍然是初始值 INT_MAX，表示没有找到符合条件的子数组，返回0；否则，返回 res
     return res == INT_MAX ? 0 : res;
 }
+=
 ```
 
 #### [713.乘积小于 K 的子数组](https://leetcode.cn/problems/subarray-product-less-than-k/)
 
-```
+```c++
 int numSubarrayProductLessThanK(vector<int>& nums, int k) {
     if (nums.empty())
         return 0;
@@ -232,6 +242,33 @@ int numSubarrayProductLessThanK(vector<int>& nums, int k) {
     }
     return res;
 }
+
+
+
+int numSubarrayProductLessThanK(vector<int>& nums, int k) {
+    int left = 0;      // 初始化左指针
+    int product = 1;   // 初始化当前子数组的乘积
+    int count = 0;     // 初始化满足条件的子数组数量
+
+    for (int right = 0; right < nums.size(); right++) {
+        product *= nums[right];  // 更新当前子数组的乘积
+
+        // 如果当前子数组的乘积大于等于k，需要收缩左边界
+        while (product >= k && left <= right) {
+            product /= nums[left];  // 去掉左边界元素，更新乘积
+            left++;                // 收缩左边界
+        }
+
+        // 如果当前子数组的乘积小于k，计算满足条件的子数组数量
+        if (product < k) {
+            count += (right - left + 1);
+        }
+    }
+
+    return count;  // 返回满足条件的子数组数量
+}
+
+
 ```
 
 #### [239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)
@@ -263,7 +300,7 @@ vector<int> maxSlidingWindow(vector<int> &nums, int k)
 }
 ```
 
-#### [316. 去除重复字母](https://leetcode.cn/problems/remove-duplicate-letters/)
+#### [316. 去除重复字母](https://leetcode.cn/problems/remove-duplicate-letters/)  单调栈
 
 ```c++
 string removeDuplicateLetters(string s) {
