@@ -104,29 +104,23 @@ vector<int> findSubstring(string s, vector<string>& words) {
 }
 ```
 
-
-
 #### [53. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/)
 
 ```c++
- class Solution {
-public:
-    int maxSubArray(vector<int>& nums) 
+int maxSubArray(vector<int>& nums) {
+    if (nums.empty())
+        return 0;
+    int cur_sum = 0;
+    int res = INT_MIN;
+    for(int i = 0; i < nums.size(); i++)
     {
-        if (nums.empty())
-            return 0;
-        int res = INT_MIN;
-        int n = nums.size();
-        int cur = 0;
-        for(int i = 0; i < n; i++)
-        {
-            cur += nums[i];
-            res = max(cur, res);
-            cur = cur < 0 ? 0 : cur;
-        }
-        return res;
+        cur_sum += nums[i];
+        res = max(res, cur_sum);
+        // 因为只有在 cur_sum 为正数时才能有可能对后续的子数组和产生正面影响
+        cur_sum = cur_sum > 0 ?cur_sum : 0;
     }
-};
+    return res;
+}
 ```
 
 #### [76. 最小覆盖子串](https://leetcode-cn.com/problems/minimum-window-substring/)  # todo 20210419
