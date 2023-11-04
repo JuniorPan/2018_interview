@@ -178,8 +178,6 @@ int lengthOfLongestSubstringTwoDistinct(string s) {
 }
 ```
 
-
-
 #### [340. 最多有K个不同字符的最长子串](https://www.cnblogs.com/grandyang/p/5351347.html)
 
 ```c++
@@ -197,8 +195,6 @@ int lengthOfLongestSubstringKDistinct(string s, int k) {
     return res;
 }
 ```
-
-
 
 #### [209.长度最小的子数组](https://leetcode.cn/problems/minimum-size-subarray-sum/description/)
 
@@ -297,8 +293,6 @@ string removeDuplicateLetters(string s) {
 
 }
 ```
-
-
 
 #### [346.滑动窗口的平均值](https://leetcode.cn/problems/qIsx9U/?envType=study-plan-v2&id=coding-interviews-special) todo 得熟悉下队列的stl
 
