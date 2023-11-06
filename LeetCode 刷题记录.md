@@ -274,62 +274,36 @@ int numSubarrayProductLessThanK(vector<int>& nums, int k) {
 #### [239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)
 
 ```c++
-vector<int> maxSlidingWindow(vector<int> &nums, int k)
-{
-    if (nums.empty() || nums.size() < k || k < 1)
-    {
-        vector<int> res;
-        return res;
-    }
-    deque<int> q;
-    vector<int> res;
-    // 核心是保持队列单调有序即可
-    for (int i = 0; i < nums.size(); i++)
-    {
-        while (!q.empty() && nums[i] >= nums[q.back()])
-            q.pop_back();
-        q.push_back(i);  // 入队列相当于窗口多了一个数
+// 在滑动窗口内，你可以保证队列中的元素是按降序排列的，以便在O(1)时间内找到窗口内的最大值
+vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+    vector<int> result;
+    deque<int> maxQueue;
 
-        if (q.front() <= i - k) // 检查队首元素是否过期，如果过期则弹出
-            q.pop_front();
+    for (int i = 0; i < nums.size(); i++) {
 
-        if (i >= k - 1)  // 开始形成窗口
-            res.push_back(nums[q.front()]);
-    }
-    return res;
-}
-```
 
-#### [316. 去除重复字母](https://leetcode.cn/problems/remove-duplicate-letters/)  单调栈
-
-```c++
-string removeDuplicateLetters(string s) {
-    vector<int> num(255, 0);
-
-    for(int i = 0; i < s.size(); i++)
-    {
-        num[s[i]] ++;
-    }
-    string res;
-    for(int i = 0; i < s.size(); i++)
-    {
-        if (res.find(s[i]) != -1)
-        {
-            --num[s[i]];
-            continue;
+        // 移除队列中小于当前元素的索引，保持降序
+        while (!maxQueue.empty() && nums[maxQueue.back()] < nums[i]) {
+            maxQueue.pop_back();
         }
 
-        while(!res.empty() && s[i] < res.back() && num[res.back()] > 0)
-        {
-            res.pop_back();
-        }      
-        --num[s[i]];
-        res.push_back(s[i]);
-    }
-    return res;
 
+        maxQueue.push_back(i);  // 将当前元素的索引加入队列
+
+        // 移除队列中小于等于当前元素的索引，保持降序
+        if (maxQueue.front() <= i - k) // 检查队首元素是否过期，如果过期则弹出
+            maxQueue.pop_front();
+
+        // 当窗口满足k个元素时，记录窗口内的最大值
+        if (i >= k - 1) {
+            result.push_back(nums[maxQueue.front()]);
+        }
+    }
+    return result;
 }
 ```
+
+
 
 #### [346.滑动窗口的平均值](https://leetcode.cn/problems/qIsx9U/?envType=study-plan-v2&id=coding-interviews-special) todo 得熟悉下队列的stl
 
