@@ -6217,63 +6217,59 @@ public:
 
 ##### [91. 解码方法](https://leetcode-cn.com/problems/decode-ways/)
 
-```c++
-int numDecodings(string s) {
-  			// 其中 dp[i] 表示s中前i个字符组成的子串的解码方法的个数，长度比输入数组长多多1，并将 dp[0] 初始化为1
-        if (s.empty() || s[0] == '0') return 0;
-        vector<int> dp(s.size() + 1, 0);
-        dp[0] = 1;
-        for (int i = 1; i < dp.size(); ++i) {
-            dp[i] = (s[i - 1] == '0') ? 0 : dp[i - 1];
-            if (i > 1 && (s[i - 2] == '1' || (s[i - 2] == '2' && s[i - 1] <= '6'))) {
-                dp[i] += dp[i - 2];
-            }
-        }
-        return dp.back();
-    }
-```
-
-
-
 ##### [93. 复原IP地址](https://leetcode-cn.com/problems/restore-ip-addresses/)
 
 <img src="https://img-blog.csdnimg.cn/20201123203735933.png" alt="93.复原IP地址" style="zoom: 50%;" />
 
 ```c++
-class Solution
-{
+class Solution {
 public:
-    vector<string> restoreIpAddresses(string s)
-    {
-        vector<string> result;
-        string ip;
-        dfs(s, 0, 0, ip, result); //paras:string s,start index of s,step(from0-3),intermediate ip,final result
-        return result;
-    }
-    void dfs(string s, int start, int step, string ip, vector<string> &result)
-    {
-        if (start == s.size() && step == 4)
-        {
-            ip.erase(ip.end() - 1); //remove the last '.' from the last decimal number
-            result.push_back(ip);
-            return;
+    // 判断字符串s在左闭又闭区间[start, end]所组成的数字是否合法
+    bool isValid(const string& s, int start, int end) {
+        if (start > end) {
+            return false;
         }
-        if (s.size() - start > (4 - step) * 3)
-            return;
-        if (s.size() - start < (4 - step))
-            return;
+        if (s[start] == '0' && start != end) { // 0开头的数字不合法
+                return false;
+        }
         int num = 0;
-        for (int i = start; i < start + 3; i++)
-        {
-            num = num * 10 + (s[i] - '0');
-            if (num <= 255)
-            {
-                ip += s[i];
-                dfs(s, i + 1, step + 1, ip + '.', result);
+        for (int i = start; i <= end; i++) {
+            if (s[i] > '9' || s[i] < '0') { // 遇到非数字字符不合法
+                return false;
             }
-            if (num == 0)
-                break;
+            num = num * 10 + (s[i] - '0');
+            if (num > 255) { // 如果大于255了不合法
+                return false;
+            }
         }
+        return true;
+    }
+
+    // index: 搜索的起始位置，pointNum:添加逗点的数量
+    void dfs(vector<string> &res, string& s, int index, int pointNum) {
+        if (pointNum == 3) { // 逗点数量为3时，分隔结束
+            // 判断第四段子字符串是否合法，如果合法就放进result中
+            if (isValid(s, index, s.size() - 1)) {
+                res.push_back(s);
+            }
+            return;
+        }
+        for (int i = index; i < s.size(); i++) {
+            if (isValid(s, index, i)) { // 判断 [index,i] 这个区间的子串是否合法
+                s.insert(s.begin() + i + 1 , '.');  // 在i的后面插入一个逗点
+                pointNum++;
+                dfs(res, s, i + 2, pointNum);   // 插入逗点之后下一个子串的起始位置为i+2
+                pointNum--;                         // 回溯
+                s.erase(s.begin() + i + 1);         // 回溯删掉逗点
+            }
+        }
+    }
+
+    vector<string> restoreIpAddresses(string s) {
+        vector<string> res;
+        if (s.size() < 4 || s.size() > 12) return res; // 算是剪枝了
+        dfs(res, s, 0, 0);
+        return res;
     }
 };
 ```
@@ -6397,65 +6393,96 @@ public:
 <img src="https://pic.leetcode-cn.com/1604197605-MUoIgt-image.png" alt="image.png" style="zoom:50%;" />
 
 ```c++
-// 解法一 暴力递归超时了  想改成不带返回值得形式
-vector<string> dfs(string s, unordered_set<string> &wordSet, int start)
-{
-    if (start == s.size())
-    {
-        return {""};
+// 解法一 暴力递归超时
+class Solution {
+public:
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        vector<string> result;  // 存储结果
+        vector<string> path;    // 存储当前拼接的路径
+        dfs(s, wordDict, result, path, 0);  // 调用深度优先搜索函数
+        return result;  // 返回所有可能的句子
     }
-    vector<string> res;
-    for (int i = start; i < s.size(); ++i)
-    {
-        if (wordSet.count(s.substr(start, i - start+1)) > 0)
-        {
-            vector<string> tmp = dfs(s, wordSet, i+1);
-            for (auto str : tmp)
-            {
-                res.push_back(s.substr(start, i - start + 1) + (str.empty() ? "" : " ") + str);
+
+    // 深度优先搜索函数
+    void dfs(string& s, vector<string>& wordDict, vector<string>& result, vector<string>& path, int index) {
+        if (index == s.size()) {  // 如果已经处理完整个字符串，将当前路径加入结果中
+            result.push_back(joinWords(path));
+            return;
+        }
+
+        for (int i = index; i < s.size(); i++) {  // 从当前位置开始尝试拆分
+            string word = s.substr(index, i - index + 1);  // 从index到i位置的子串
+            if (find(wordDict.begin(), wordDict.end(), word) != wordDict.end()) {
+                path.push_back(word);  // 将合法单词添加到路径
+                dfs(s, wordDict, result, path, i + 1);  // 递归处理余下部分
+                path.pop_back();  // 回溯，删除最后一个单词
             }
         }
     }
-    return res;
-}
 
-vector<string> wordBreak(string s, vector<string> &wordDict)
-{
-    unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
-    return dfs(s, wordSet, 0);
-}
+    // 辅助函数，将单词列表连接成句子
+    string joinWords(vector<string>& words) {
+        string result = words[0];
+        for (int i = 1; i < words.size(); i++) {
+            result += " " + words[i];
+        }
+        return result;
+    }
+};
 
-// 解法二: 增加记忆化搜索
-vector<string> dfs(string &s, vector<string> &wordDict, unordered_map<int, vector<string>> &memo, int index)
-{
-    if (index == s.size())
-        return {""};
 
-    if (memo.count(index) > 0)
-        return memo[index];
+// 解法二: dp+回溯
+class Solution {
+public:
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        int n = s.size();
+        vector<bool> dp(n + 1, false); // dp[i] 表示 s[0:i-1] 是否可以被拆分成词典中的单词
+        dp[0] = true;
 
-    vector<string> res;
-    for (int i = index; i < s.size();i++)  // 横向切割字符串 [index...i] 和[i+1...s.size()]
-    {
-        // 先判断字典中是否能找到子串 [index...i] 然后递归调用[i+1...s.size()]
-        if (find(wordDict.begin(),wordDict.end(), s.substr(index, i - index + 1)) != wordDict.end())
-        {
-            vector<string> temp = dfs(s, wordDict, memo, i+1);
-            for(auto str : temp)
-            {
-                res.push_back(s.substr(index, i - index + 1) +  (str.empty() ? "" : " ") + str);
+        for (int i = 1; i <= n; i++) {
+            for (string word : wordDict) {
+                int len = word.size();
+                if (i >= len && dp[i - len] && s.substr(i - len, len) == word) {
+                    dp[i] = true;
+                }
+            }
+        }
+
+        vector<string> result;
+        if (!dp[n]) {
+            return result; // 无法拆分成词典中的单词，返回空结果
+        }
+
+        vector<string> path;
+        backtrack(s, wordDict, dp, result, path, 0);
+
+        return result;
+    }
+
+    void backtrack(string& s, vector<string>& wordDict, vector<bool>& dp, vector<string>& result, vector<string>& path, int index) {
+        if (index == s.size()) {
+            result.push_back(joinWords(path));
+            return;
+        }
+
+        for (int i = index; i < s.size(); i++) {
+            string word = s.substr(index, i - index + 1);
+            if (dp[i + 1] && find(wordDict.begin(), wordDict.end(), word) != wordDict.end()) {
+                path.push_back(word);
+                backtrack(s, wordDict, dp, result, path, i + 1);
+                path.pop_back();
             }
         }
     }
-    memo[index] = res;
-    return res;
-}
 
-vector<string> wordBreak(string s, vector<string>& wordDict) 
-{
-    unordered_map<int, vector<string>> memo;
-    return dfs(s, wordDict,  memo, 0);
-}
+    string joinWords(vector<string>& words) {
+        string result = words[0];
+        for (int i = 1; i < words.size(); i++) {
+            result += " " + words[i];
+        }
+        return result;
+    }
+};
 ```
 
 ##### [332. 重新安排行程](https://leetcode.cn/problems/reconstruct-itinerary/)
