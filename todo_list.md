@@ -36,6 +36,10 @@
 
 [239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)
 
+[473. 火柴拼正方形](https://leetcode.cn/problems/matchsticks-to-square/)
+
+[491. 递增子序列](https://leetcode.cn/problems/non-decreasing-subsequences/description/)
+
 ## [左神的课](https://www.bilibili.com/video/BV13g41157hK?p=5&vd_source=f740ff72b448a270a8990e020d263b59)
 
 ### p1

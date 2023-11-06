@@ -6490,49 +6490,85 @@ public:
 ##### [473. 火柴拼正方形](https://leetcode.cn/problems/matchsticks-to-square/)
 
 ```c++
-bool dfs(vector<int>& nums, vector<int>& sums, int pos, int target) {
-    if (pos >= nums.size()) 
-    {
-        return sums[0] == target && sums[1] == target && sums[2] == target;
-    }
-    for (int i = 0; i < 4; ++i) 
-    {
-        if (sums[i] + nums[pos] > target) 
-            continue;
-        sums[i] += nums[pos];
-        if (dfs(nums, sums, pos + 1, target)) return true;
-        sums[i] -= nums[pos];
-    }
-    return false;
-}
+class Solution {
+public:
+    bool makesquare(vector<int>& matchsticks) {
+        if (matchsticks.size() < 4) {
+            return false; // 如果火柴棒数量小于4，无法构成正方形
+        }
 
-bool makesquare(vector<int>& nums) {
-    if (nums.empty() || nums.size() < 4) return false;
-    int sum = accumulate(nums.begin(), nums.end(), 0);
-    if (sum % 4 != 0) return false;
-    vector<int> sums(4, 0);
-    sort(nums.rbegin(), nums.rend());
-    return dfs(nums, sums, 0, sum / 4);
-}
+        int totalLength = 0;
+        for (int length : matchsticks) {
+            totalLength += length;
+        }
+
+        if (totalLength % 4 != 0) {
+            return false; // 总长度不是4的倍数，无法构成正方形
+        }
+
+        vector<int> sides(4, 0); // 用于表示正方形的四边
+
+        return backtrack(matchsticks, sides, 0, totalLength / 4);
+    }
+
+    bool backtrack(vector<int>& matchsticks, vector<int>& sides, int index, int target) {
+        if (index == matchsticks.size()) {
+            return sides[0] == sides[1] && sides[1] == sides[2] && sides[2] == sides[3]; // 所有火柴棒都使用完且四边长度相等
+        }
+
+        int length = matchsticks[index];
+        for (int i = 0; i < 4; i++) {
+            if (sides[i] + length <= target) {
+                sides[i] += length;
+                if (backtrack(matchsticks, sides, index + 1, target)) {
+                    return true;
+                }
+                sides[i] -= length;
+            }
+
+            if (sides[i] == 0) {
+                break; // 如果这一边为0，将会导致无意义的重复，所以跳过
+            }
+        }
+
+        return false;
+    }
+};
+
 ```
 
-##### [491. 递增子序列](https://leetcode.cn/problems/increasing-subsequences/)
+##### [491. 递增子序列](https://leetcode.cn/problems/non-decreasing-subsequences/description/)
 
 ```c++
-vector<vector<int>> findSubsequences(vector<int>& nums) {
-    set<vector<int>> res;
-    vector<int> out;
-    helper(nums, 0, out, res);
-    return vector<vector<int>>(res.begin(), res.end());
-}
-void helper(vector<int>& nums, int start, vector<int>& out, set<vector<int>>& res) {
-    if (out.size() >= 2) res.insert(out);
-    for (int i = start; i < nums.size(); ++i) {
-        if (!out.empty() && out.back() > nums[i]) continue;
-        out.push_back(nums[i]);
-        helper(nums, i + 1, out, res);
-        out.pop_back();
+void dfs(vector<int>& nums, vector<vector<int>>& result, vector<int>& path, int startIndex) {
+    if (path.size() >= 2) {
+        result.push_back(path); // 如果当前递增子序列长度大于等于2，加入结果中
+        // 注意这⾥不要加return，要取树上的节点
+        // return;
     }
+
+    unordered_set<int> used; // 用于去重
+
+    for (int i = startIndex; i < nums.size(); i++) {
+        if (!path.empty() && nums[i] < path.back()) {
+            continue; // 如果当前元素小于当前递增子序列的最后一个元素，跳过
+        }
+
+        if (used.count(nums[i]) > 0) {
+            continue; // 如果当前元素已经使用过，跳过
+        }
+
+        used.insert(nums[i]);
+        path.push_back(nums[i]); // 将当前元素加入递增子序列
+        dfs(nums, result, path, i + 1); // 递归处理下一位置
+        path.pop_back(); // 回溯，删除最后一个元素
+    }
+}
+vector<vector<int>> findSubsequences(vector<int>& nums) {
+    vector<vector<int>> result; // 用于存储结果
+    vector<int> path; // 用于存储当前递增子序列
+    dfs(nums, result, path, 0);
+    return result;
 }
 ```
 
@@ -6597,8 +6633,6 @@ bool judgePoint24(vector<int>& cards) {
     return dfs(nums);
 }
 ````
-
-
 
 ##### [698. 划分为k个相等的子集](https://leetcode-cn.com/problems/partition-to-k-equal-sum-subsets/)
 
