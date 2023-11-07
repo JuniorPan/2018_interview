@@ -443,25 +443,24 @@ int longestOnes(vector<int>& nums, int k) {
 
 ```c++
 int maxScore(vector<int>& cardPoints, int k) {
-  int cur_sum = 0;
-  int res = INT_MAX;
-  int left = 0;
-  // 求剩下的数 窗口大小为 nums.size() - k 和最小
-  for(int i = 0; i < cardPoints.size(); i++)
-  {
-      cur_sum += cardPoints[i];
-      while (i - left + 1 == cardPoints.size() - k)
-      {
-          res = min(res, cur_sum);
-          cur_sum -= cardPoints[left];
-          left++;
-      }
-  }
-  if (k == cardPoints.size())
-      return accumulate(cardPoints.begin(), cardPoints.end(), 0);
-  return accumulate(cardPoints.begin(), cardPoints.end(), 0) - res;
+    int cur_sum = 0;
+    int res = INT_MAX;
+    int left = 0;
+    // 求剩下的数 窗口大小为 nums.size() - k 和最小
+    for(int right = 0; right < cardPoints.size(); right++)
+    {
+        cur_sum += cardPoints[right];
+        while (right - left + 1 == cardPoints.size() - k)
+        {
+            res = min(res, cur_sum);
+            cur_sum -= cardPoints[left];
+            left++;
+        }
+    }
+    if (k == cardPoints.size())
+        return accumulate(cardPoints.begin(), cardPoints.end(), 0);
+    return accumulate(cardPoints.begin(), cardPoints.end(), 0) - res;
 }
-
 int maxScore(vector<int>& cardPoints, int k) {
     int n = cardPoints.size();
     // 滑动窗口大小为 n-k
