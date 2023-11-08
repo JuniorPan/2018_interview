@@ -488,17 +488,20 @@ todo: 11和42的区别
 #### [11. 盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/) #todo 20210419
 
 ```c++
-int maxArea(vector<int>& height)
-{
+int maxArea(vector<int>& height) {
     if (height.empty())
         return 0;
+
     int res = 0;
     int left = 0;
-    int right = height.size() -1;
-    while (left < right)
+    int right = height.size()-1;
+  	// 在每个状态下，无论长板或短板向中间收窄一格，都会导致水槽底边宽度 −1​ 变短
+    // 若向内 移动短板 ，水槽的短板 min(h[left],h[right])  可能变大，因此下个水槽的面积 可能增大 。
+    // 若向内 移动长板 ，水槽的短板 min(h[left],h[right])  不变或变小，因此下个水槽的面积 一定变小 。
+    while(left < right)
     {
-        res = max(res, min(height[left], height[right]) * (right - left));
-        // todo: 为什么是谁小谁移动
+        res = max(res, min(height[right], height[left]) * (right - left));
+
         if (height[left] <= height[right])
             left++;
         else
@@ -506,8 +509,32 @@ int maxArea(vector<int>& height)
     }
     return res;
 }
-
 ```
+
+#### [167. 两数之和 II - 输入有序数组](https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted/)
+
+```c++
+vector<int> twoSum(vector<int>& numbers, int target) {
+    vector<int> res;
+    if (numbers.empty())
+        return res;
+    int left = 0, right = numbers.size() - 1;
+    int i = 0;
+
+    while(left < right)
+    {
+        if (numbers[left] + numbers[right] == target)
+            return {left+1, right+1};
+        else if (numbers[left] + numbers[right] < target)
+            left++;
+        else if (numbers[left] + numbers[right] > target) 
+            right--; 
+    }
+    return {};
+}
+```
+
+
 
 #### [15. 三数之和](https://leetcode.cn/problems/3sum/)
 
@@ -683,38 +710,7 @@ int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vec
 }
 ```
 
-#### [167. 两数之和 II - 输入有序数组](https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/)
 
-```c++
-vector<int> twoSum(vector<int>& numbers, int target)
-{
-    //使用双指针，一个指针指向值较小的元素，一个指针指向值较大的元素。指向较小元素的指针从头向尾遍历，指向较大元素的指针从尾向头遍历。
-    //如果两个指针指向元素的和 sum == target，那么得到要求的结果；
-    //如果 sum > target，移动较大的元素，使 sum 变小一些；
-    //如果 sum < target，移动较小的元素，使 sum 变大一些。
-    vector<int> res;
-    int n = numbers.size();
-    if (n <= 1)
-        return res;
-    
-    int left = 0;
-    int right = n-1;
-    while(left < right)
-    {
-        if (numbers[left] + numbers[right] == target)
-        {
-            res.push_back(left+1);
-            res.push_back(right+1);
-            break;
-        }
-        else if (numbers[left] + numbers[right] < target)
-            left++;
-        else
-            right--;
-    }
-    return res;
-}
-```
 
 #### [240. 搜索二维矩阵 II](https://leetcode-cn.com/problems/search-a-2d-matrix-ii/)
 
@@ -796,9 +792,52 @@ string findLongestWord(string s, vector<string>& dictionary) {
 }
 ```
 
-[581. 最短无序连续子数组](https://leetcode-cn.com/problems/shortest-unsorted-continuous-subarray/) #todo 20210419 双指针
+#### [581. 最短无序连续子数组](https://leetcode-cn.com/problems/shortest-unsorted-continuous-subarray/) #todo 20210419 双指针
 
 ```
+
+class Solution {
+public:
+    int findUnsortedSubarray(std::vector<int>& nums) {
+        int n = nums.size();
+        std::stack<int> st;
+        int left = n, right = 0;
+
+        // 找到未排序子数组的左边界
+        for (int i = 0; i < n; i++) {
+            while (!st.empty() && nums[i] < nums[st.top()]) {
+                // 栈顶元素对应的数组元素是当前已经遍历的最大元素。
+                // 如果遇到一个元素小于栈顶元素对应的数组元素，这意味着它是无序的，
+                // 我们需要找到未排序子数组的左边界
+                // 因为当前的left 只是num[i]可以往左插入的最左边位置，后面可能还有比nums[i]更小的数字
+                left = std::min(left, st.top());
+                st.pop();
+            }
+            st.push(i);
+        }
+
+        // 清空栈
+        while (!st.empty()) {
+            st.pop();
+        }
+
+        // 找到未排序子数组的右边界
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.empty() && nums[i] > nums[st.top()]) {
+                right = std::max(right, st.top());
+                st.pop();
+            }
+            st.push(i);
+        }
+
+        if (right > left) {
+            return right - left + 1;
+        } else {
+            return 0;
+        }
+    }
+};
+
 ```
 
 
