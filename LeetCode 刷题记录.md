@@ -9864,13 +9864,16 @@ public:
 
 ```c++ 
 int maxSubArray(vector<int>& nums) {
-    int res = INT_MIN;
+    if (nums.empty())
+        return 0;
     int cur_sum = 0;
+    int res = INT_MIN;
     for(int i = 0; i < nums.size(); i++)
     {
         cur_sum += nums[i];
-        res = max(cur_sum, res);
-        cur_sum = cur_sum > 0 ? cur_sum : 0;
+        res = max(res, cur_sum);
+        // 因为只有在 cur_sum 为正数时才能有可能对后续的子数组和产生正面影响
+        cur_sum = cur_sum > 0 ?cur_sum : 0;
     }
     return res;
 }
@@ -10043,6 +10046,7 @@ int findMaxLength(vector<int>& nums) {
     unordered_map<int, int> m;
     int res = 0;
     int cur_sum = 0;
+  	// 可以通过将 0 视为 -1，然后使用前缀和（prefix sum）和哈希表来解决
     // HashMap 初始化一个 0 -> -1 的映射，这是为了当 sum 第一次出现0的时候，即这个子数组是从原数组的起始位置开始，需要计算这个子数组的长度，
     // 而不是建立当前子数组之和 sum 和其结束位置之间的映射。比如就拿例子1来说，nums = [0, 1]，当遍历0的时候，sum = -1，此时建立 -1 -> 0 的映射，
     // 当遍历到1的时候，此时 sum = 0 了，若 HashMap 中没有初始化一个 0 -> -1 的映射，此时会建立 0 -> 1 的映射，而不是去更新这个满足题意的子数组的长度
@@ -10148,10 +10152,6 @@ int maxSumTwoNoOverlap(vector<int>& nums, int L, int M) {
   return res;
 }
 ```
-
-
-
-#### [1423. 可获得的最大点数](https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/)
 
 
 
