@@ -40,6 +40,14 @@
 
 [491. 递增子序列](https://leetcode.cn/problems/non-decreasing-subsequences/description/)
 
+[443. 压缩字符串](https://leetcode.cn/problems/string-compression/)
+
+[524. 通过删除字母匹配到字典里最长单词](https://leetcode-cn.com/problems/longest-word-in-dictionary-through-deleting/)  #todo
+
+[581. 最短无序连续子数组](https://leetcode-cn.com/problems/shortest-unsorted-continuous-subarray/) #todo 20210419 双指针
+
+[977. 有序数组的平方](https://leetcode.cn/problems/squares-of-a-sorted-array/)
+
 ## [左神的课](https://www.bilibili.com/video/BV13g41157hK?p=5&vd_source=f740ff72b448a270a8990e020d263b59)
 
 ### p1

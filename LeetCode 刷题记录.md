@@ -794,49 +794,7 @@ string findLongestWord(string s, vector<string>& dictionary) {
 
 #### [581. 最短无序连续子数组](https://leetcode-cn.com/problems/shortest-unsorted-continuous-subarray/) #todo 20210419 双指针
 
-```
-
-class Solution {
-public:
-    int findUnsortedSubarray(std::vector<int>& nums) {
-        int n = nums.size();
-        std::stack<int> st;
-        int left = n, right = 0;
-
-        // 找到未排序子数组的左边界
-        for (int i = 0; i < n; i++) {
-            while (!st.empty() && nums[i] < nums[st.top()]) {
-                // 栈顶元素对应的数组元素是当前已经遍历的最大元素。
-                // 如果遇到一个元素小于栈顶元素对应的数组元素，这意味着它是无序的，
-                // 我们需要找到未排序子数组的左边界
-                // 因为当前的left 只是num[i]可以往左插入的最左边位置，后面可能还有比nums[i]更小的数字
-                left = std::min(left, st.top());
-                st.pop();
-            }
-            st.push(i);
-        }
-
-        // 清空栈
-        while (!st.empty()) {
-            st.pop();
-        }
-
-        // 找到未排序子数组的右边界
-        for (int i = n - 1; i >= 0; i--) {
-            while (!st.empty() && nums[i] > nums[st.top()]) {
-                right = std::max(right, st.top());
-                st.pop();
-            }
-            st.push(i);
-        }
-
-        if (right > left) {
-            return right - left + 1;
-        } else {
-            return 0;
-        }
-    }
-};
+```c++
 
 ```
 
