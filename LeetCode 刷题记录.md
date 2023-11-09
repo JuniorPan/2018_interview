@@ -798,8 +798,6 @@ string findLongestWord(string s, vector<string>& dictionary) {
 
 ```
 
-
-
 #### [977. 有序数组的平方](https://leetcode.cn/problems/squares-of-a-sorted-array/)
 
 ```c++
@@ -822,6 +820,19 @@ vector<int> sortedSquares(vector<int>& nums) {
   return res;
 }
 ```
+
+#### 背向双指针
+
+##### [5. 最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/)
+
+```c++
+```
+
+
+
+##### [125. 验证回文串](https://leetcode.cn/problems/valid-palindrome/)
+
+##### [409. 最长回文串](https://leetcode.cn/problems/longest-palindrome/)
 
 
 
