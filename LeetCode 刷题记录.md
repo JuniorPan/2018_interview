@@ -4156,35 +4156,6 @@ bool isSubsequence(string s, string t)
   }
 ```
 
-##### [583. 两个字符串的删除操作](https://leetcode.cn/problems/delete-operation-for-two-strings/)
-
-```c++
-int minDistance(string word1, string word2) {
-    // dp[i][j]：以i-1为结尾的字符串word1，和以j-1位结尾的字符串word2，想要达到相等，所需要删除元素的最少次数
-    vector<vector<int>> dp(word1.size() + 1, vector<int>(word2.size() + 1));
-
-    // dp[i][0]：word2为空字符串，以i-1为结尾的字符串word1要删除多少个元素，才能和word2相同呢，很明显dp[i][0] = i。
-    for (int i = 0; i <= word1.size(); i++) dp[i][0] = i;
-    for (int j = 0; j <= word2.size(); j++) dp[0][j] = j;
-    for (int i = 1; i <= word1.size(); i++) 
-    {
-        for (int j = 1; j <= word2.size(); j++) 
-        {
-            if (word1[i - 1] == word2[j - 1]) 
-            { //  当word1[i - 1] 与 word2[j - 1]相同的时候，dp[i][j] = dp[i - 1][j - 1];
-                dp[i][j] = dp[i - 1][j - 1]; 
-            } else {// 当word1[i - 1] 与 word2[j - 1]不相同的时候，有三种情况： 情况一：删word1[i - 1]，最少操作次数为dp[i - 1][j] + 1,
-                    // 情况二：删word2[j - 1]，最少操作次数为dp[i][j - 1] + 1
-                    // 情况三：同时删word1[i - 1]和word2[j - 1]，操作的最少次数为dp[i - 1][j - 1] + 2
-                    //  dp[i][j - 1] + 1 = dp[i - 1][j - 1] + 2，所以递推公式可简化为：dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1);
-                dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1);
-            }
-        }
-    }
-    return dp[word1.size()][word2.size()];
-}
-```
-
 ##### [712. 两个字符串的最小ASCII删除和](https://leetcode-cn.com/problems/minimum-ascii-delete-sum-for-two-strings/)
 
 ```c++
