@@ -4661,7 +4661,6 @@ string longestPalindrome(string s)
 {
     if (s.empty())
         return "";
-
     // dp[i][j] 表示 s[i...j]上是否为回文子串
     vector<vector<bool>> dp(s.size(), vector<bool>(s.size(), false));
     int len = 0;
@@ -4671,6 +4670,8 @@ string longestPalindrome(string s)
     {
         for(int j = 0; j <= i; j++)
         {
+            // 字符 s[i] 和 s[j] 是否相等以及内部子串 s[j+1...i-1] 是否为回文子串
+            // i - j < 2 处理长度为 1 和 2 的子串的基本情况。
             dp[j][i] = s[i] == s[j] && (i - j < 2 || dp[j+1][i-1]);
             if (dp[j][i] && i - j + 1 > len)
             {
@@ -4728,33 +4729,32 @@ vector<vector<string>> partition(string s)
 ##### [132. 分割回文串 II](https://leetcode-cn.com/problems/palindrome-partitioning-ii/)
 
 ```c++
-class Solution
-{
+class Solution {
 public:
-     // 解法1:
-    int minCut(string s)
-    {
+    int minCut(string s) {
         if (s.empty())
             return 0;
-        int n = s.size();
-        //p[i][j] 表示区间 [i, j] 内的子串是否为回文串，
-        vector<vector<bool>> p(n, vector<bool>(n, false));
-        // dp[i]表示子串 [0, i] 范围内的最小分割数
-        vector<int> dp(n);
-        for (int i = 0; i < n; ++i)
-        {
-            dp[i] = i;
-            for (int j = 0; j <= i; ++j)
-            {
-                if (s[i] == s[j] && (i - j < 2 || p[j + 1][i - 1]))
-                {
-                    p[j][i] = true;
-                    dp[i] = (j == 0) ? 0 : min(dp[i], dp[j - 1] + 1);
+        int n = s.size(); 
+        // dp[i][j] 表示 s[i...j] 是否是回文子串
+        vector<vector<bool>> dp(n, vector<bool>(n, false));
+        // p[i] 表示 s[0...i] 上的最小分割次数
+        vector<int> p(n, n);
+        // 遍历字符串s的所有子串
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j <= i; j++) {
+                // 判断s[j...i]是否是回文子串
+                // 这里 i - j < 2 要放在前面 需要提前检查 子串长度为1、2的情况
+                dp[j][i] = (s[j] == s[i]) && (i - j < 2 || dp[j+1][i-1] );
+
+                // 如果s[j...i]是回文子串，更新最小分割次数p[i]
+                if (dp[j][i]) {
+                    p[i] = (j == 0) ? 0 : min(p[i], p[j-1] + 1);
                 }
             }
         }
-        return dp[n - 1];
+        return p[n-1];
     }
+};
 
     // 解法2:
     int minCut_2(string s)
@@ -4785,7 +4785,9 @@ public:
 };
 ```
 
-##### [516. 最长回文子序列](https://leetcode-cn.com/problems/longest-palindromic-subsequence/)  后面两题 逆向遍历 为什么？？？ 重点是画图
+##### [516. 最长回文子序列](https://leetcode-cn.com/problems/longest-palindromic-subsequence/)  后面两题 逆向遍历 为什么？？？ 重点是画图 空间优化
+
+<img src="https://pic.leetcode-cn.com/3e044efa067077b64cf08c393e29d4025f26aa46eba1727c8948f3c0035a03da.jpg" alt="img" style="zoom:50%;" />
 
 <img src="https://pic.leetcode-cn.com/1600677121-aGPcPu-file_1600677121456" alt="img" style="zoom:50%;" />
 
@@ -4889,6 +4891,28 @@ int countSubstrings(string s) {
 ##### [1312. 让字符串成为回文串的最少插入次数](https://leetcode.cn/problems/minimum-insertion-steps-to-make-a-string-palindrome/)
 
 ```c++
+class Solution {
+public:
+    int minInsertions(string s) {
+        int n = s.size();
+        vector<vector<int>> dp(n, vector<int>(n, 0));
+
+        for (int len = 2; len <= n; ++len) {
+            for (int i = 0; i + len - 1 < n; ++i) {
+                int j = i + len - 1;
+                if (s[i] == s[j]) {
+                    dp[i][j] = dp[i+1][j-1];
+                } else {
+                    dp[i][j] = min(dp[i+1][j], dp[i][j-1]) + 1;
+                }
+            }
+        }
+
+        return dp[0][n-1];
+    }
+};
+
+
 int minInsertions(string s) {
   int n = s.size();
   // dp[i][j]表示[i,j]区间内的字符串的最长回文子序列

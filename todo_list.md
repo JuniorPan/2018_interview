@@ -48,6 +48,10 @@
 
 [977. 有序数组的平方](https://leetcode.cn/problems/squares-of-a-sorted-array/)
 
+[516. 最长回文子序列](https://leetcode-cn.com/problems/longest-palindromic-subsequence/)  后面两题 逆向遍历 为什么？？？ 重点是画图 空间优化
+
+[647. 回文子串](https://leetcode-cn.com/problems/palindromic-substrings/) todo: 空间优化
+
 ## [左神的课](https://www.bilibili.com/video/BV13g41157hK?p=5&vd_source=f740ff72b448a270a8990e020d263b59)
 
 ### p1
