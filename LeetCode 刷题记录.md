@@ -4345,6 +4345,12 @@ int longestCommonSubsequence(string word1, string word2)
 
 **特点: 1). 用值作为DP维度, 2). DP过程就是填写矩阵, 3). 可以滚动数组优化 状态: f\[i][S]前i个物品, 取出一些能否组成和为S; 方程: f\[i][S] = f\[i-1][S-a[i]] or f\[i-1][S]; 初始化: f\[i][0]=true; f\[0][1...target]=false; 答案: 检查所有f\[n][j]**
 
+
+
+有些代码细节 需要注意，初始化dp的时候，可以用 nums.size() 也可用 nums.size() + 1
+
+
+
 ##### [416. 分割等和子集](https://leetcode-cn.com/problems/partition-equal-subset-sum/)# todo 空间优化 
 
 ```c++
@@ -4359,77 +4365,32 @@ bool canPartition(vector<int>& nums)
     int target  = sum / 2;
     if (sum % 2 == 1)
         return false;
+
+    int n = nums.size();
     // 状态定义：dp[i][j]表示从数组的 [0, i] 这个子区间内挑选一些正整数，每个数只能用一次，使得这些数的和恰好等于 j。
     // 状态转移方程：很多时候，状态转移方程思考的角度是「分类讨论」，对于「0-1 背包问题」而言就是「当前考虑到的数字选与不选」。
     // 不选择 nums[i]，如果在 [0, i - 1] 这个子区间内已经有一部分元素，使得它们的和为 j ，那么 dp[i][j] = true；
     // 选择 nums[i]，如果在 [0, i - 1] 这个子区间内就得找到一部分元素，使得它们的和为 j - nums[i]。
-    int n = nums.size();
-    vector<vector<bool>>  dp(n + 1, vector<bool>(target + 1, false));
-    // base case
-    for (int i = 0; i <= n; i++)
+    vector<vector<bool>> dp(n, vector<bool>(target + 1, false));
+
+    // base case: 背包容量为0，无论有多少个元素，都可以选取，因此为true
+    for (int i = 0; i < n; i++)
         dp[i][0] = true;
 
-    for (int i = 1; i <= n; i++) {
+    // 动态规划过程
+    for (int i = 1; i < n; i++) {
         for (int j = 0; j <= target; j++) {
-            if (j - nums[i - 1] < 0) {
-               // 背包容量不足，不能装入第 i 个物品
-                dp[i][j] = dp[i - 1][j]; 
+            if (j - nums[i] >= 0) {
+                // 如果当前背包容量j大于等于当前数字nums[i]
+                // 可以选择装入或者不装入背包，两者只要有一个为true，dp[i][j]就为true
+                dp[i][j] = dp[i - 1][j] || dp[i - 1][j - nums[i]];
             } else {
-                // 装入或不装入背包
-                dp[i][j] = dp[i - 1][j] || dp[i - 1][j-nums[i-1]];
+                // 背包容量不足，不能装入第 i 个物品，保持上一行的状态
+                dp[i][j] = dp[i - 1][j];
             }
         }
     }
-    return dp[n][target];
-}
-
-bool canPartition(vector<int>& nums) {
-    int sum = accumulate(nums.begin(), nums.end(), 0);
-    if (sum % 2 == 1)
-        return false;
-    int target = sum / 2;
-    // dp[i][j] 表示在nums[0...i-1]任取数字其元素和为j的 最大容量
-    vector<vector<int>> dp(nums.size()+1 , vector<int>(target+1,0));
-    for (int j = 0; j <= target; j++)
-    {
-        if (j > nums[0])
-            dp[0][j] = nums[0];
-    }
-    for(int i = 1; i <= nums.size(); i++)
-    {
-        for(int j = 0; j <= target; j++)
-        {
-            if (j < nums[i-1])
-                dp[i][j] = dp[i-1][j];
-            else
-                dp[i][j] = max(dp[i-1][j], dp[i-1][j-nums[i-1]] + nums[i-1]);
-        }
-    }
-    return dp[nums.size()-1][target] == target;
-}
-
-/* 计算 nums 中有几个子集的和为 sum */
-bool canPartition(vector<int>& nums) {
-    int sum = 0;
-    for(int i = 0; i < nums.size(); i++)
-    {
-        sum += nums[i];
-    }
-    int target  = sum / 2;
-    if (sum % 2 == 1)
-        return false;
-
-    //dp[i]表⽰ 背包总容量是i，最⼤可以凑成i的⼦集总和为dp[i]。 
-    vector<int> dp(target + 1 , 0);
-
-    for(int i = 0; i < nums.size(); i++)
-    {
-        for(int j = target; j >= nums[i]; j--)
-        {
-            dp[j] = max(dp[j], dp[j-nums[i]] + nums[i]);
-        }
-    }
-    return dp[target] == target;
+    return dp[n - 1][target];
 }
 
 bool canPartition(vector<int> &nums)
@@ -4458,9 +4419,64 @@ bool canPartition(vector<int> &nums)
     return dp[targetSum];
 }
 
+bool canPartition(vector<int>& nums) {
+    int sum = accumulate(nums.begin(), nums.end(), 0);
+    if (sum % 2 == 1)
+        return false;
+    int target = sum / 2;
+    int n = nums.size();
+    // dp[i][j]表示从数组nums[0...i]中选数放进容量为j的背包的最大价值
+    vector<vector<int>> dp(n, vector<int>(target + 1, 0));
+
+    // 初始化第一行
+    for (int j = 0; j <= target; j++) {
+        dp[0][j] = (nums[0] <= j) ? nums[0] : 0;
+    }
+
+    // 初始化第一列
+    for (int i = 1; i < n; i++) {
+        dp[i][0] = 0;
+    }
+
+    for(int i = 1; i < n; i++) {
+        for(int j = 1; j <= target; j++) {
+            if (j - nums[i] < 0)
+                dp[i][j] = dp[i-1][j];
+            else
+                dp[i][j] = max(dp[i-1][j], dp[i-1][j - nums[i]] + nums[i]);
+        }
+    }
+    return dp[n-1][target] == target;
+}
+
+/* 计算 nums 中有几个子集的和为 sum */
+bool canPartition(vector<int>& nums) {
+    int sum = 0;
+    for(int i = 0; i < nums.size(); i++)
+    {
+        sum += nums[i];
+    }
+    int target  = sum / 2;
+    if (sum % 2 == 1)
+        return false;
+
+    //dp[i]表⽰ 背包总容量是i，最⼤可以凑成i的⼦集总和为dp[i]。 
+    vector<int> dp(target + 1 , 0);
+
+    for(int i = 0; i < nums.size(); i++)
+    {
+        for(int j = target; j >= nums[i]; j--)
+        {
+            dp[j] = max(dp[j], dp[j-nums[i]] + nums[i]);
+        }
+    }
+    return dp[target] == target;
+}
 
 
 ```
+
+##### [698. 划分为k个相等的子集](https://leetcode.cn/problems/partition-to-k-equal-sum-subsets/)
 
 ##### [474. 一和零](https://leetcode-cn.com/problems/ones-and-zeroes/)
 
@@ -4548,6 +4564,31 @@ public:
 ##### [1049. 最后一块石头的重量 II](https://leetcode.cn/problems/last-stone-weight-ii/)
 
 ```c++
+int lastStoneWeightII(vector<int>& stones) {
+    int sum = accumulate(stones.begin(), stones.end(), 0);
+    int target = sum / 2;  // 目标值为总重量的一半
+    int n = stones.size();
+
+    // dp[i][j] 表示前 i 个石头中挑选一些，使得它们的总重量不超过 j 时的最大总重量
+    vector<vector<int>> dp(n + 1, vector<int>(target + 1, 0));
+
+    // 动态规划过程
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j <= target; j++) {
+            if (j >= stones[i - 1]) {
+                // 如果当前石头的重量不超过 j，则可以选择装入或者不装入背包
+                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - stones[i - 1]] + stones[i - 1]);
+            } else {
+                // 当前石头的重量超过了 j，无法装入背包
+                dp[i][j] = dp[i - 1][j];
+            }
+        }
+    }
+
+    // 返回总重量减去装入背包的最大重量的两倍，即石头的最小可能重量
+    return sum - 2 * dp[n][target];
+}
+
 int lastStoneWeightII(vector<int>& stones) {
     int sum = 0;
     for (int i = 0; i < stones.size(); i++) 
