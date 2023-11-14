@@ -4518,47 +4518,6 @@ private:
             for(int j = sum; j >= nums[i]; j--)
             {
                 dp[j] += dp[j-nums[i]];
-            }
-        }
-        return dp[sum];
-    }
-    int targetSum2(vector<int> &nums, int S)
-    {
-         //滚动数组：组成的种类
-        vector<vector<int>> dp(nums.size(), vector<int>(S + 1, 0));
-        //初始化
-        dp[0][0] = 1;
-        if(nums[0] == 0) dp[0][0] += 1;  //不存放和存放0两种方案！！！
-        
-        for(int j = 1; j <= S; j++) {
-            if(j == nums[0]) dp[0][j] = 1;
-        }
-        
-        //递归思路
-        for(int i = 1; i < nums.size(); i++) 
-        {
-            for(int j = 0; j <= S; j++) 
-            {
-                if(j < nums[i]) dp[i][j] = dp[i - 1][j];
-                else dp[i][j] = dp[i - 1][j] + dp[i - 1][j - nums[i]];
-            }
-        }
-        return dp[nums.size() - 1][S];
-    }
-
-public:
-    int findTargetSumWays(vector<int>& nums, int target)
-    {
-        // sum(A) - sum(B) = target
-        // sum(A) = target + sum(B)
-        // sum(A) + sum(A) = target + sum(B) + sum(A)
-        // 2 * sum(A) = target + sum(nums)
-        int sum = accumulate(nums.begin(), nums.end(), 0);
-        if ((target + sum) / 2 < 0)
-            return 0;
-        return sum < target || (target + sum) % 2 == 1 ? 0 : targetSum2(nums, (target + sum) / 2); 
-    }
-};
 ```
 
 ##### [1049. 最后一块石头的重量 II](https://leetcode.cn/problems/last-stone-weight-ii/)
@@ -5595,6 +5554,92 @@ public:
 };
 ```
 
+##### [695.岛屿的最大面积](https://leetcode.cn/problems/max-area-of-island/)
+
+```c++
+int dfs(vector<vector<int>>& grid, int i, int j)
+{
+    if (i >= grid.size() || i < 0 || j >= grid[0].size() || j < 0 || grid[i][j] != 1)
+        return 0;
+    int res = 0;
+    if (grid[i][j] == 1)
+    {
+        grid[i][j] = 2;
+        res = 1 + dfs(grid, i + 1, j )
+                + dfs(grid, i - 1, j)
+                + dfs(grid, i, j + 1)
+                + dfs(grid, i, j - 1);
+        // grid[i][j] = 1;
+    }
+    return res;
+}
+
+int maxAreaOfIsland(vector<vector<int>>& grid) {
+    int res = 0;
+    for(int i = 0; i < grid.size(); i ++)
+    {
+        for(int j = 0; j < grid[0].size(); j++)
+        {
+            if (grid[i][j] != 1)
+                continue;
+            res = max(res, dfs(grid, i, j));
+        }
+    }
+    return res;
+}
+```
+
+##### [827. 最大人工岛](https://leetcode.cn/problems/making-a-large-island/)
+
+```c++
+int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
+int dfs(vector<vector<int>>& grid, vector<vector<bool>>& visited, int i, int j)
+{
+    int m = grid.size();
+    int n = grid[0].size();
+    if (i < 0 || i >= m || j < 0 || j >= n || visited[i][j] == true || grid[i][j] != 1 )
+        return 0;
+    visited[i][j]=true;
+    int curSize = 1;
+    
+    for(int k = 0; k < 4; k++)
+    {
+        int x = i + dirs[k][0];
+        int y = j + dirs[k][1];
+        curSize +=  dfs(grid, visited, x, y);  
+   }
+    return curSize;
+    // return 1 + dfs(grid, visited, i+1,j) + dfs(grid, visited, i-1,j) + dfs(grid, visited, i,j+1) + dfs(grid, visited, i,j-1);
+}
+int largestIsland(vector<vector<int>>& grid) 
+{
+    if (grid.empty())
+        return 0;
+    int m = grid.size();
+    int n = grid[0].size();
+    if(grid==vector<vector<int>>(m,vector<int>(n,1))) return m*n;  
+    vector<vector<bool>> visited(m, vector<bool>(n, false));
+    vector<vector<bool>> temp(m, vector<bool>(n, false));
+    int res = 0;
+    int maxSize = INT_MIN;
+    for(int i = 0; i < m; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            if (grid[i][j] == 0)
+            {
+           	    grid[i][j] = 1;    
+                res = dfs(grid, visited, i, j);
+                visited=temp;
+                maxSize = max(res, maxSize);
+                grid[i][j]=0;
+            }
+        }
+    }
+    return maxSize;
+}
+```
+
 ##### [212. 单词搜索 II](https://leetcode.cn/problems/word-search-ii/)
 
 ##### [341. 扁平化嵌套列表迭代器](https://leetcode-cn.com/problems/flatten-nested-list-iterator/)
@@ -5633,68 +5678,39 @@ public:
 ##### [547. 省份数量](https://leetcode-cn.com/problems/number-of-provinces/)
 
 ```c++
-// isConnected 邻接矩阵 
-void dfs(vector<vector<int>>& isConnected, int i, vector<bool> &visited)
-{
-    visited[i] = true;
-    for(int j = 0; j < isConnected.size();j++)
-    {
-        if (isConnected[i][j] == 0 || visited[j])
-            continue;
-        dfs(isConnected, j, visited);
-    }
-}
+class Solution {
+public:
+    // 深度优先搜索来标记与当前城市直接或间接相连的城市，然后遍历每个城市，如果某个城市未被访问过，则说明它属于一个新的省份。通过深度优先搜索标记所有与该城市直接或间接相连的城市，并增加省份数量。最后返回省份数量。
+    // 深度优先搜索，标记与当前城市直接或间接相连的城市
+    void dfs(vector<vector<int>>& isConnected, vector<bool>& visited, int index) {
+        visited[index] = true;
 
-int findCircleNum(vector<vector<int>>& isConnected) {
-
-    int res = 0;
-    int n =isConnected.size();
-    vector<bool> visited(n, false);
-    for(int i = 0; i < n; i++)
-    {
-        if (visited[i])
-            continue;
-        dfs(isConnected, i, visited);
-        res++;
-    }
-    return res;
-}
-```
-
-##### [695.岛屿的最大面积](https://leetcode.cn/problems/max-area-of-island/)
-
-```c++
-int dfs(vector<vector<int>>& grid, int i, int j)
-{
-    if (i >= grid.size() || i < 0 || j >= grid[0].size() || j < 0 || grid[i][j] != 1)
-        return 0;
-    int res = 0;
-    if (grid[i][j] == 1)
-    {
-        grid[i][j] = 2;
-        res = 1 + dfs(grid, i + 1, j )
-                + dfs(grid, i - 1, j)
-                + dfs(grid, i, j + 1)
-                + dfs(grid, i, j - 1);
-        // grid[i][j] = 1;
-    }
-    return res;
-}
-
-int maxAreaOfIsland(vector<vector<int>>& grid) {
-
-    int res = 0;
-    for(int i = 0; i < grid.size(); i ++)
-    {
-        for(int j = 0; j < grid[0].size(); j++)
-        {
-            if (grid[i][j] != 1)
+        // 遍历与当前城市直接或间接相连的城市
+        for (int i = 0; i < isConnected.size(); i++) {
+            // 如果两个城市直接相连或者已经访问过，则跳过
+            if (isConnected[index][i] == 0 || visited[i]) {
                 continue;
-            res = max(res, dfs(grid, i, j));
+            }
+            // 对于未访问过的城市，继续深度优先搜索
+            dfs(isConnected, visited, i);
         }
     }
-    return res;
-}
+    // 计算省份数量
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        int provinces = 0; // 省份数量
+        int n = isConnected.size(); // 城市数量
+        vector<bool> visited(n, false); // 标记城市是否被访问过
+        // 遍历每个城市
+        for (int i = 0; i < n; i++) {
+            // 如果当前城市未被访问过，说明它属于一个新的省份
+            if (!visited[i]) {
+                dfs(isConnected, visited, i); // 对当前城市进行深度优先搜索，标记与之相连的城市
+                provinces++; // 增加省份数量
+            }
+        }
+        return provinces;
+    }
+};
 ```
 
 ##### [785.判断二分图](https://leetcode.cn/problems/is-graph-bipartite/)
@@ -5754,13 +5770,6 @@ public:
 
     bool isBipartite(vector<vector<int>>& graph) {
         return bfs(graph);
-        // vector<int> colors(graph.size());
-        // for (int i = 0; i < graph.size(); ++i) {
-        //     if (colors[i] == 0 && !dfs(graph, 1, i, colors)) {
-        //         return false;
-        //     }
-        // }
-        // return true;
     }
 };
 ```
@@ -5787,57 +5796,6 @@ vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
     vector<int> path;
     dfs(res, graph, path, 0);
     return res;
-}
-```
-
-##### [827. 最大人工岛](https://leetcode-cn.com/problems/making-a-large-island/) 类似于回溯
-
-```c++
-int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
-int dfs(vector<vector<int>>& grid, vector<vector<bool>>& visited, int i, int j)
-{
-    int m = grid.size();
-    int n = grid[0].size();
-    if (i < 0 || i >= m || j < 0 || j >= n || visited[i][j] == true || grid[i][j] != 1 )
-        return 0;
-    visited[i][j]=true;
-    int curSize = 1;
-    
-    for(int k = 0; k < 4; k++)
-    {
-        int x = i + dirs[k][0];
-        int y = j + dirs[k][1];
-        curSize +=  dfs(grid, visited, x, y);  
-   }
-    return curSize;
-    // return 1 + dfs(grid, visited, i+1,j) + dfs(grid, visited, i-1,j) + dfs(grid, visited, i,j+1) + dfs(grid, visited, i,j-1);
-}
-int largestIsland(vector<vector<int>>& grid) 
-{
-    if (grid.empty())
-        return 0;
-    int m = grid.size();
-    int n = grid[0].size();
-    if(grid==vector<vector<int>>(m,vector<int>(n,1))) return m*n;  
-    vector<vector<bool>> visited(m, vector<bool>(n, false));
-    vector<vector<bool>> temp(m, vector<bool>(n, false));
-    int res = 0;
-    int maxSize = INT_MIN;
-    for(int i = 0; i < m; i++)
-    {
-        for(int j = 0; j < n; j++)
-        {
-            if (grid[i][j] == 0)
-            {
-           	    grid[i][j] = 1;    
-                res = dfs(grid, visited, i, j);
-                visited=temp;
-                maxSize = max(res, maxSize);
-                grid[i][j]=0;
-            }
-        }
-    }
-    return maxSize;
 }
 ```
 
