@@ -5244,7 +5244,7 @@ https://leetcode.cn/problems/pile-box-lcci/solution/ti-mu-zong-jie-zui-chang-sha
 - Leetcode 1376 Time Needed to Inform All Employees
 - Leetcode 694	Number of Distinct Islands
 
-##### [经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
+#### [经典DFS](https://github.com/JuniorPan/2018_interview/blob/master/Graph_Adj/%E7%BB%8F%E5%85%B8DFS.cpp)  
 ```c++
 int dirs[8][2] = {1,1,1,0,1,-1,0,1,0,-1,-1,1,-1,0,-1,-1};
 
@@ -5268,7 +5268,7 @@ void dfs(const vector<vector<int> >& nums, vector<vector<bool> >& visit, int i, 
 ```
 
 
-##### [36. 有效的数独](https://leetcode.cn/problems/valid-sudoku/)
+#### [36. 有效的数独](https://leetcode.cn/problems/valid-sudoku/)
 
 ```c++
 bool isValidSudoku(vector<vector<char>>& board) 
@@ -5297,7 +5297,7 @@ bool isValidSudoku(vector<vector<char>>& board)
 }
 ```
 
-##### [37. 解数独](https://leetcode.cn/problems/sudoku-solver/)
+#### [37. 解数独](https://leetcode.cn/problems/sudoku-solver/)
 
 ```c++
 class Solution {
@@ -5344,7 +5344,7 @@ public:
 };
 ```
 
-##### [51. N 皇后](https://leetcode-cn.com/problems/n-queens/)
+#### [51. N 皇后](https://leetcode-cn.com/problems/n-queens/)
 
 ```c++
 class Solution {
@@ -5384,7 +5384,7 @@ public:
 };
 ```
 
-##### [52. N皇后 II](https://leetcode-cn.com/problems/n-queens-ii/)
+#### [52. N皇后 II](https://leetcode-cn.com/problems/n-queens-ii/)
 
 ```c++
 class Solution { 
@@ -5421,7 +5421,7 @@ public:
 };
 ```
 
-##### [79. 单词搜索](https://leetcode-cn.com/problems/word-search/)
+#### [79. 单词搜索](https://leetcode-cn.com/problems/word-search/)
 
 ```c++
 class Solution {
@@ -5470,7 +5470,7 @@ public:
 };
 ```
 
-##### [130. 被围绕的区域](https://leetcode-cn.com/problems/surrounded-regions/)
+#### [130. 被围绕的区域](https://leetcode-cn.com/problems/surrounded-regions/)
 
 ```c++
 class Solution {
@@ -5514,7 +5514,7 @@ public:
 };
 ```
 
-##### [200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
+#### [200. 岛屿数量](https://leetcode-cn.com/problems/number-of-islands/)
 
 ```c++
 class Solution
@@ -5554,7 +5554,7 @@ public:
 };
 ```
 
-##### [695.岛屿的最大面积](https://leetcode.cn/problems/max-area-of-island/)
+#### [695.岛屿的最大面积](https://leetcode.cn/problems/max-area-of-island/)
 
 ```c++
 int dfs(vector<vector<int>>& grid, int i, int j)
@@ -5589,7 +5589,7 @@ int maxAreaOfIsland(vector<vector<int>>& grid) {
 }
 ```
 
-##### [827. 最大人工岛](https://leetcode.cn/problems/making-a-large-island/)
+#### [827. 最大人工岛](https://leetcode.cn/problems/making-a-large-island/)
 
 ```c++
 int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
@@ -5640,9 +5640,9 @@ int largestIsland(vector<vector<int>>& grid)
 }
 ```
 
-##### [212. 单词搜索 II](https://leetcode.cn/problems/word-search-ii/)
+#### [212. 单词搜索 II](https://leetcode.cn/problems/word-search-ii/)
 
-##### [341. 扁平化嵌套列表迭代器](https://leetcode-cn.com/problems/flatten-nested-list-iterator/)
+#### [341. 扁平化嵌套列表迭代器](https://leetcode-cn.com/problems/flatten-nested-list-iterator/)
 
 ```c++
 class NestedIterator {
@@ -5673,9 +5673,11 @@ public:
 };
 ```
 
-##### [399. 除法求值](https://leetcode-cn.com/problems/evaluate-division/)
+#### [399. 除法求值](https://leetcode-cn.com/problems/evaluate-division/)
+```c++
 
-##### [547. 省份数量](https://leetcode-cn.com/problems/number-of-provinces/)
+```
+#### [547. 省份数量](https://leetcode-cn.com/problems/number-of-provinces/)
 
 ```c++
 class Solution {
@@ -5713,7 +5715,7 @@ public:
 };
 ```
 
-##### [785.判断二分图](https://leetcode.cn/problems/is-graph-bipartite/)
+#### [785.判断二分图](https://leetcode.cn/problems/is-graph-bipartite/)
 
 ```c++
 class Solution {
@@ -5774,39 +5776,69 @@ public:
 };
 ```
 
-##### [797.所有可能的路径](https://leetcode.cn/problems/all-paths-from-source-to-target/)
+#### [797.所有可能的路径](https://leetcode.cn/problems/all-paths-from-source-to-target/)
 
 ```c++
-void dfs(vector<vector<int>> &res, vector<vector<int>> &graph, vector<int> path, int cur)
-{
-    path.push_back(cur);
-    if (cur == graph.size() - 1)
-    {
-        res.push_back(path);
-        return;
-    }
-    for(int i = 0; i < graph[cur].size(); i++)
-    {
-        dfs(res, graph, path, graph[cur][i]);
-    }
-}
+class Solution {
+public:
+    // 深度优先搜索函数 邻接表
+    // 深度优先搜索（DFS）算法，从节点 0 开始进行遍历，每次遍历都将当前节点加入路径，并继续递归遍历该节点的邻居节点。如果当前节点是终点（目标节点），则将当前路径加入结果集
+    void dfs(vector<vector<int>>& graph, vector<vector<int>>& res, vector<int> path, int cur) {
+        path.push_back(cur); // 将当前节点加入路径
 
-vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
-    vector<vector<int>> res;
-    vector<int> path;
-    dfs(res, graph, path, 0);
-    return res;
-}
+        // 如果当前节点是终点（即目标节点），将当前路径加入结果集
+        if (cur == graph.size() - 1) {
+            res.push_back(path);
+            return;
+        }
+
+        // 遍历当前节点能够到达的所有节点，进行深度优先搜索
+        for (int i = 0; i < graph[cur].size(); i++) {
+            dfs(graph, res, path, graph[cur][i]);
+        }
+    }
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        vector<vector<int>> res; // 存储结果的二维向量
+        vector<int> path; // 存储当前路径的向量
+        dfs(graph, res, path, 0); // 从节点 0 开始进行深度优先搜索
+        return res; // 返回结果集
+    }
+};
 ```
 
-##### [856. 括号的分数](https://leetcode-cn.com/problems/score-of-parentheses/)
+#### [856. 括号的分数](https://leetcode-cn.com/problems/score-of-parentheses/)
 
-##### [1376. 通知所有员工所需的时间](https://leetcode-cn.com/problems/time-needed-to-inform-all-employees/)
+```c++
+class Solution {
+public:
+    int dfs(const string& s, int& index) {
+        int score = 0;
+        while (index < s.size()) {
+            if (s[index] == '(') {
+                index++; // 跳过左括号
+                int innerScore = dfs(s, index);
+                score += (innerScore == 0 ? 1 : 2 * innerScore);
+            } else if (s[index] == ')') {
+                index++; // 跳过右括号
+                return score;
+            }
+        }
+        return score;
+    }
+
+    int scoreOfParentheses(string s) {
+        int index = 0;
+        return dfs(s, index);
+    }
+};
+```
+
+#### [1376. 通知所有员工所需的时间](https://leetcode-cn.com/problems/time-needed-to-inform-all-employees/)
 
 ### 回溯 （21）
  其实与图类DFS方法一致，但是排列组合的特征更明显
 
-##### [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
+#### [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
 
 <img src="https://pic.leetcode-cn.com/1631605288-yybwua-file_1631605288254" alt="17. 电话号码的字母组合" style="zoom:67%;" />
 
@@ -5840,7 +5872,7 @@ vector<string> letterCombinations(string digits) {
 }
 ```
 
-##### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/) todo
+#### [22. 括号生成](https://leetcode-cn.com/problems/generate-parentheses/) todo
 
  <img src="https://pic.leetcode-cn.com/a9944722e9307ade27ab98e36e3f29e4f5acd242007ae46c50e01ead122b9d45-image.png" alt="image.png" style="zoom:67%;" />
 
@@ -5865,14 +5897,14 @@ vector<string> generateParenthesis(int n) {
 }
 ```
 
-##### [301. 删除无效的括号](https://leetcode-cn.com/problems/remove-invalid-parentheses/)
+#### [301. 删除无效的括号](https://leetcode-cn.com/problems/remove-invalid-parentheses/)
 
 ```
 ```
 
 
 
-##### [39. 组合总和](https://leetcode-cn.com/problems/combination-sum/)
+#### [39. 组合总和](https://leetcode-cn.com/problems/combination-sum/)
 
 <img src="https://pic.leetcode-cn.com/1598091943-hZjibJ-file_1598091940241" alt="img" style="zoom:33%;" />
 
@@ -5915,7 +5947,7 @@ public:
 
 ```
 
-##### [40. 组合总和 II](https://leetcode-cn.com/problems/combination-sum-ii/)
+#### [40. 组合总和 II](https://leetcode-cn.com/problems/combination-sum-ii/)
 
 <img src="https://pic.leetcode-cn.com/1599718525-iXEiiy-image.png" alt="image.png" style="zoom: 50%;" />
 
@@ -5954,7 +5986,7 @@ void dfs(vector<vector<int>> &res, vector<int> path, vector<int>& candidates, in
 };
 ```
 
-##### [77. 组合](https://leetcode-cn.com/problems/combinations/)
+#### [77. 组合](https://leetcode-cn.com/problems/combinations/)
 
 <img src="/Users/panqiang/Desktop/图片来自 「代码随想录」回溯算法精讲（v2.0），第 10 页.png" alt="图片来自 「代码随想录」回溯算法精讲（v2.0），第 10 页" style="zoom:67%;" />
 
@@ -5982,7 +6014,7 @@ vector<vector<int>> combine(int n, int k) {
 }
 ```
 
-##### [216. 组合总和 III](https://leetcode.cn/problems/combination-sum-iii/)
+#### [216. 组合总和 III](https://leetcode.cn/problems/combination-sum-iii/)
 
 ```c++
 void dfs(vector<vector<int>> &res, vector<int> path, int index, int n, int k, int cur_sum)
@@ -6014,7 +6046,7 @@ vector<vector<int>> combinationSum3(int k, int n) {
 }
 ```
 
-##### [31. 下一个排列](https://leetcode-cn.com/problems/next-permutation/)  #todo
+#### [31. 下一个排列](https://leetcode-cn.com/problems/next-permutation/)  #todo
 
 ![image-20230530110054338](/Users/panqiang/Library/Application Support/typora-user-images/image-20230530110054338.png)
 
@@ -6051,7 +6083,7 @@ void nextPermutation(vector<int>& nums) {
 }
 ```
 
-##### [556. 下一个更大元素 III](https://leetcode.cn/problems/next-greater-element-iii/)
+#### [556. 下一个更大元素 III](https://leetcode.cn/problems/next-greater-element-iii/)
 
 ```c++
 int nextGreaterElement(int n) {
@@ -6073,7 +6105,7 @@ int nextGreaterElement(int n) {
 }
 ```
 
-##### [46. 全排列](https://leetcode-cn.com/problems/permutations/)
+#### [46. 全排列](https://leetcode-cn.com/problems/permutations/)
 
 <img src="https://img-blog.csdnimg.cn/20201209174225145.png" alt="46.全排列" style="zoom:50%;" />
 
@@ -6113,7 +6145,7 @@ public:
 };
 ```
 
-##### [47. 全排列 II](https://leetcode-cn.com/problems/permutations-ii/) 
+#### [47. 全排列 II](https://leetcode-cn.com/problems/permutations-ii/) 
 
 <img src="https://img-blog.csdnimg.cn/20201124201331223.png" alt="47.全排列II1" style="zoom:50%;" />
 
@@ -6158,7 +6190,7 @@ public:
 };
 ```
 
-##### [78. 子集](https://leetcode-cn.com/problems/subsets/) todo: 20211202 还不会
+#### [78. 子集](https://leetcode-cn.com/problems/subsets/) todo: 20211202 还不会
 
 <img src="https://img-blog.csdnimg.cn/202011232041348.png" alt="78.子集" style="zoom: 50%;" />
 
@@ -6190,7 +6222,7 @@ public:
 };
 ```
 
-##### [90. 子集 II](https://leetcode-cn.com/problems/subsets-ii/)
+#### [90. 子集 II](https://leetcode-cn.com/problems/subsets-ii/)
 
 <img src="https://pic.leetcode-cn.com/1604912138-sosMZx-90.%E5%AD%90%E9%9B%86II.png" alt="90.子集II.png" style="zoom:50%;" />
 
@@ -6223,9 +6255,9 @@ public:
 };
 ```
 
-##### [91. 解码方法](https://leetcode-cn.com/problems/decode-ways/)
+#### [91. 解码方法](https://leetcode-cn.com/problems/decode-ways/)
 
-##### [93. 复原IP地址](https://leetcode-cn.com/problems/restore-ip-addresses/)
+#### [93. 复原IP地址](https://leetcode-cn.com/problems/restore-ip-addresses/)
 
 <img src="https://img-blog.csdnimg.cn/20201123203735933.png" alt="93.复原IP地址" style="zoom: 50%;" />
 
@@ -6282,7 +6314,7 @@ public:
 };
 ```
 
-##### [131. 分割回文串](https://leetcode-cn.com/problems/palindrome-partitioning/)
+#### [131. 分割回文串](https://leetcode-cn.com/problems/palindrome-partitioning/)
 
 <img src="https://pic.leetcode-cn.com/1604822955-WbvWRE-131.%E5%88%86%E5%89%B2%E5%9B%9E%E6%96%87%E4%B8%B2.png" alt="131.分割回文串.png" style="zoom:50%;" />
 
@@ -6327,7 +6359,7 @@ public:
 };
 ```
 
-##### [139. 单词拆分](https://leetcode-cn.com/problems/word-break/)
+#### [139. 单词拆分](https://leetcode-cn.com/problems/word-break/)
 
 <img src="https://pic.leetcode-cn.com/78fd09b2deabeae972809c2795ddb8be96720b8e62377cf01b7f70e7fb3dbf8c-image.png" alt="image.png" style="zoom: 50%;" />
 
@@ -6396,7 +6428,7 @@ public:
 };
 ```
 
-##### [140. 单词拆分 II](https://leetcode.cn/problems/word-break-ii/)
+#### [140. 单词拆分 II](https://leetcode.cn/problems/word-break-ii/)
 
 <img src="https://pic.leetcode-cn.com/1604197605-MUoIgt-image.png" alt="image.png" style="zoom:50%;" />
 
@@ -6493,9 +6525,9 @@ public:
 };
 ```
 
-##### [332. 重新安排行程](https://leetcode.cn/problems/reconstruct-itinerary/)
+#### [332. 重新安排行程](https://leetcode.cn/problems/reconstruct-itinerary/)
 
-##### [473. 火柴拼正方形](https://leetcode.cn/problems/matchsticks-to-square/)
+#### [473. 火柴拼正方形](https://leetcode.cn/problems/matchsticks-to-square/)
 
 ```c++
 class Solution {
@@ -6545,7 +6577,7 @@ public:
 
 ```
 
-##### [491. 递增子序列](https://leetcode.cn/problems/non-decreasing-subsequences/description/)
+#### [491. 递增子序列](https://leetcode.cn/problems/non-decreasing-subsequences/description/)
 
 ```c++
 void dfs(vector<int>& nums, vector<vector<int>>& result, vector<int>& path, int startIndex) {
@@ -6580,7 +6612,7 @@ vector<vector<int>> findSubsequences(vector<int>& nums) {
 }
 ```
 
-##### [526. 优美的排列](https://leetcode-cn.com/problems/beautiful-arrangement/)
+#### [526. 优美的排列](https://leetcode-cn.com/problems/beautiful-arrangement/)
 
 ```c++
 int countArrangement(int N) {
@@ -6604,7 +6636,7 @@ void helper(int N, vector<int>& visited, int pos, int& res) {
 }
 ```
 
-##### [679. 24 点游戏](https://leetcode.cn/problems/24-game/)
+#### [679. 24 点游戏](https://leetcode.cn/problems/24-game/)
 
 ````c++
 bool dfs(vector<double>& nums){
@@ -6642,7 +6674,7 @@ bool judgePoint24(vector<int>& cards) {
 }
 ````
 
-##### [698. 划分为k个相等的子集](https://leetcode-cn.com/problems/partition-to-k-equal-sum-subsets/)
+#### [698. 划分为k个相等的子集](https://leetcode-cn.com/problems/partition-to-k-equal-sum-subsets/)
 
 ```c++
 bool canPartitionKSubsets(vector<int>& nums, int k) {
@@ -6663,8 +6695,6 @@ bool helper(vector<int>& nums, int k, int target, int start, int curSum, vector<
     return false;
 }
 ```
-
-
 
 
 
@@ -9507,6 +9537,43 @@ string decodeString(string s)
 }
 ```
 
+#### [856. 括号的分数](https://leetcode.cn/problems/score-of-parentheses/description/)
+
+```c++
+class Solution {
+public:
+    // 遍历字符串，遇到左括号时，将0入栈，表示当前层级的分数。
+    // 遇到右括号时，弹出栈顶元素，如果栈顶元素是0，说明是一对括号，将0替换成1；如果栈顶元素不是0，说明是(A)，将弹出的分数乘以2。
+    // 如果栈不为空，说明是AB，将弹出的分数加到栈顶元素上；如果栈为空，说明是最外层的括号，将分数入栈。
+    // 最终，栈中的所有分数相加即为结果。
+    int scoreOfParentheses(string s) {
+        stack<int> scores;
+        for (char c : s) {
+            if (c == '(') {
+                scores.push(0);  // 遇到左括号，将0入栈，表示当前层级的分数
+            } else {
+                int score = scores.top();  // 弹出栈顶元素，即当前层级的分数
+                scores.pop();
+
+                if (score == 0) {
+                    score = 1;  // 如果栈顶元素为0，说明是一对括号，将0替换成1
+                } else {
+                    score *= 2;  // 如果栈顶元素不为0，说明是(A)，将弹出的分数乘以2
+                }
+
+                if (!scores.empty()) {
+                    scores.top() += score;  // 如果栈不为空，说明是AB，将弹出的分数加到栈顶元素上
+                } else {
+                    scores.push(score);  // 如果栈为空，说明是最外层的括号，将分数入栈
+                }
+            }
+        }
+
+        return scores.top();  // 栈中的所有分数相加即为最终结果
+    }
+};
+```
+
 
 
 #### [480. Sliding Window Median](https://leetcode.com/problems/sliding-window-median/)
@@ -9517,25 +9584,87 @@ string decodeString(string s)
 
 #### [1.两数之和](https://leetcode.cn/problems/two-sum/)
 
-```
+```c++
+// 使用哈希表来记录已经遍历过的元素及其下标。
+// 在遍历过程中，对于每个元素，计算其与目标值的差值，然后检查差值是否在哈希表中，
+// 如果在，说明找到了答案，返回答案的下标；如果不在，将当前元素及其下标存入哈希表
 vector<int> twoSum(vector<int>& nums, int target) {
     vector<int> res;
-    if (nums.empty())
-        return res;
+    // 使用哈希表来存储已经遍历过的元素及其下标
     unordered_map<int, int> hash;
-    for(int i = 0; i < nums.size(); i++)
-    {
-        if (hash.find(target - nums[i]) != hash.end())
-        {
-            return {i, hash[target - nums[i]]};
+    for (int i = 0; i < nums.size(); i++) {
+        // 计算当前元素与目标值的差值
+        int complement = target - nums[i];
+
+        // 如果差值在哈希表中存在，说明找到了答案，返回答案的下标
+        if (hash.find(complement) != hash.end()) {
+            return {i, hash[complement]};
         }
+        // 将当前元素及其下标存入哈希表
         hash[nums[i]] = i;
     }
     return res;
 }
 ```
 
+#### [49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/) #todo
 
+```c++
+vector<vector<string>> groupAnagrams(vector<string>& strs) {
+  // 使用哈希表存储字母异位词组
+  unordered_map<string, vector<string>> anagramGroups;
+
+  // 遍历字符串数组
+  for (const string& str : strs) {
+      // 将字符串排序，作为哈希表的键
+      string key = str;
+      sort(key.begin(), key.end());
+      // 将字符串加入对应的字母异位词组
+      anagramGroups[key].push_back(str);
+  }
+
+  // 将哈希表的值转换为结果数组
+  vector<vector<string>> res;
+  for (auto& group : anagramGroups) {
+      res.push_back(group.second);
+  }
+  return res;
+}
+```
+
+#### [128. 最长连续序列](https://leetcode-cn.com/problems/longest-consecutive-sequence/) #TODO
+
+```c++
+// 遍历数组中的每个数字，对于每个数字，判断它是否是一个连续序列的起始数字。
+// 如果是起始数字，就循环查找以该数字为起点的连续序列的长度，并更新最长连续序列的长度
+int longestConsecutive(vector<int>& nums) {
+    // 如果数组为空，直接返回 0
+    if (nums.empty()) {
+        return 0;
+    }
+    // 使用哈希集合存储数组中的所有数字
+    unordered_set<int> numSet(nums.begin(), nums.end());
+    int res = 0;
+    // 遍历数组中的每个数字
+    for (int num : nums) {
+        // 当前数字是连续序列的起始数字
+        if (numSet.find(num - 1) == numSet.end()) {
+            int cur_num = num;
+            int cur_res = 1;
+
+            // 循环找到当前数字的连续序列长度
+            while (numSet.find(cur_num + 1) != numSet.end()) {
+                numSet.erase(cur_num+1); // 找到下一个数 就删除 会加速
+                cur_num++;
+                cur_res++;
+            }
+            // 更新最长连续序列的长度
+            res = max(res, cur_res);
+        }
+    }
+    return res;
+}
+```
 
 
 

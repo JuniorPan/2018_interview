@@ -68,6 +68,10 @@
 
 [827. 最大人工岛](https://leetcode.cn/problems/making-a-large-island/)
 
+**[785.判断二分图](https://leetcode.cn/problems/is-graph-bipartite/)** 一定要看
+
+[856. 括号的分数](https://leetcode-cn.com/problems/score-of-parentheses/)
+
 ## [左神的课](https://www.bilibili.com/video/BV13g41157hK?p=5&vd_source=f740ff72b448a270a8990e020d263b59)
 
 ### p1
