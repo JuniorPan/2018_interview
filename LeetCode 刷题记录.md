@@ -5465,44 +5465,51 @@ public:
 ##### [79. 单词搜索](https://leetcode-cn.com/problems/word-search/)
 
 ```c++
-class Solution
-{
-    bool dfs(vector<vector<char>> &board, string &word, int i, int j, int step)
-    {
+class Solution {
+public:
+    // 深度优先搜索函数
+    bool dfs(vector<vector<char>>& board, string &word, int i, int j, int step) {
+        // 判断是否越界或者当前位置的字符不匹配
         if (i >= board.size() || j >= board[0].size() || i < 0 || j < 0 || step >= word.size() || word[step] != board[i][j])
             return false;
+
+        // 如果已经匹配到最后一个字符，则说明找到了完整的单词
         if (step == word.size() - 1 && word[step] == board[i][j])
             return true;
-		// 这个地方修改临时值和回溯思想不一样，只是为了不重复访问，需要一个和原数组等大小的 visited 数组，是 bool 型的，用来记录当前位置是否已经被访问过，因为题目要求一个 cell 只能被访问一次
+
+        // 保存当前字符，并将其标记为已访问
         char temp = board[i][j];
         board[i][j] = '0';
-        bool flag = dfs(board, word, i, j + 1, step + 1) ||
-                    dfs(board, word, i, j - 1, step + 1) ||
-                    dfs(board, word, i + 1, j, step + 1) ||
-                    dfs(board, word, i - 1, j, step + 1);
-        board[i][j] = temp; 
-        return flag;
+
+        // 在上、下、左、右四个方向进行深度优先搜索
+        bool res = dfs(board, word, i + 1, j, step + 1) ||
+                   dfs(board, word, i - 1, j, step + 1) ||
+                   dfs(board, word, i, j + 1, step + 1) ||
+                   dfs(board, word, i, j - 1, step + 1);
+
+        // 恢复当前位置的字符，并返回搜索结果
+        board[i][j] = temp;
+        return res;
     }
 
-public:
-    bool exist(vector<vector<char>> &board, string word)
-    {
+    bool exist(vector<vector<char>>& board, string word) {
+        // 首先检查输入矩阵是否为空
         if (board.size() == 0)
             return false;
-        for (int i = 0; i < board.size(); i++)
-        {
-            for (int j = 0; j < board[0].size(); j++)
-            {
+
+        // 遍历整个矩阵
+        for(int i = 0; i < board.size(); i++) {
+            for(int j = 0; j < board[0].size(); j++) {
+                // 对于每一个起始位置，调用深度优先搜索函数
                 if (dfs(board, word, i, j, 0))
                     return true;
             }
         }
+        // 如果遍历完整个矩阵都没有找到符合条件的单词，则返回 false
         return false;
     }
 };
 ```
-
-
 
 ##### [130. 被围绕的区域](https://leetcode-cn.com/problems/surrounded-regions/)
 

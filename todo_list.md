@@ -54,6 +54,14 @@
 
 [474. 一和零](https://leetcode.cn/problems/ones-and-zeroes/)
 
+[36. 有效的数独](https://leetcode.cn/problems/valid-sudoku/)
+
+[37. 解数独](https://leetcode.cn/problems/sudoku-solver/)
+
+[51. N 皇后](https://leetcode.cn/problems/n-queens/)
+
+[52. N皇后 II](https://leetcode-cn.com/problems/n-queens-ii/)
+
 ## [左神的课](https://www.bilibili.com/video/BV13g41157hK?p=5&vd_source=f740ff72b448a270a8990e020d263b59)
 
 ### p1
