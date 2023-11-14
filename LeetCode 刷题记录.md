@@ -5998,7 +5998,7 @@ void dfs(vector<vector<int>> &res, vector<int> path, int index, int n, int k)
         res.push_back(path);
         return;
     }
-		// todo: 这个地方的n 还是有优化空间的
+	// todo: 这个地方的n 还是有优化空间的
     for(int i = index; i <= n; i++)
     {
         path.push_back(i);
@@ -6027,7 +6027,7 @@ void dfs(vector<vector<int>> &res, vector<int> path, int index, int n, int k, in
         res.push_back(path);
         return;
     }
-        // todo: 这个地方的n 还是有优化空间的
+    // todo: 这个地方的n 还是有优化空间的
     for(int i = index; i <= 9; i++)
     {
         path.push_back(i);
