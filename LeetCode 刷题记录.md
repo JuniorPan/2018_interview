@@ -6854,7 +6854,7 @@ vector<string> wordBreak(string s, vector<string> &wordDict)
 
 ##### [329. 矩阵中的最长递增路径](https://leetcode-cn.com/problems/longest-increasing-path-in-a-matrix/)  记忆化搜索
 
-```
+```c++
 int dirs[4][2] = {0, 1, 1, 0, 0, -1, -1, 0};
 
 // 表示从（i，j）出发的最长路径长度
@@ -6978,7 +6978,7 @@ int findPaths(int m, int n, int N, int i, int j)
 
 ##### [688. “马”在棋盘上的概率](https://leetcode-cn.com/problems/knight-probability-in-chessboard/)    记忆化搜索
 
-```
+```c++
 vector<vector<int>> dirs{{-1,-2},{-2,-1},{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2}};
 double dfs(vector<vector<vector<double>>> &dp, int i, int j, int k, int N)
 {
@@ -9303,11 +9303,9 @@ public:
                 }
             }
         }
-
         return maxLen;
     }
 };
-
 ```
 
 这个算法的主要思想是使用栈来跟踪左括号的索引位置，如果遇到右括号，则尝试与栈顶元素匹配。如果栈不为空，说明有匹配的括号，计算当前位置与栈顶位置之间的距离，更新最大长度。如果栈为空，说明当前右括号无法与前面的括号匹配，将当前位置作为新的起始点。
@@ -9325,8 +9323,7 @@ public:
 
 #### [150.逆波兰表达式求值](https://leetcode.cn/problems/evaluate-reverse-polish-notation/)
 
-```
-
+```c++
 int evalRPN(vector<string>& tokens) {
   // 前往后遍历数组，遇到数字则压入栈中，遇到符号，则把栈顶的两个数字拿出来运算，
   // 把结果再压入栈中，直到遍历完整个数组，栈顶数字即为最终答案
