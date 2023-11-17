@@ -72,6 +72,20 @@
 
 [856. 括号的分数](https://leetcode-cn.com/problems/score-of-parentheses/)
 
+#### [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/) #todo
+
+#### [238. 除自身以外数组的乘积](https://leetcode-cn.com/problems/product-of-array-except-self/) #todo
+
+下面 三题 套路差不多
+
+[41. 缺失的第一个正数](https://leetcode-cn.com/problems/first-missing-positive/)#todo
+
+[442. 数组中重复的数据](https://leetcode.cn/problems/find-all-duplicates-in-an-array/)
+
+[448. 找到所有数组中消失的数字](https://leetcode-cn.com/problems/find-all-numbers-disappeared-in-an-array/)
+
+[160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/) # todo 双指针 虚假的easy
+
 ## [左神的课](https://www.bilibili.com/video/BV13g41157hK?p=5&vd_source=f740ff72b448a270a8990e020d263b59)
 
 ### p1
