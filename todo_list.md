@@ -86,6 +86,12 @@
 
 [160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/) # todo 双指针 虚假的easy
 
+
+
+[235. 二叉搜索树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/) todo
+
+[236. 二叉树的最近公共祖先](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/) todo
+
 ## [左神的课](https://www.bilibili.com/video/BV13g41157hK?p=5&vd_source=f740ff72b448a270a8990e020d263b59)
 
 ### p1
