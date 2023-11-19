@@ -105,7 +105,6 @@ public:
                 TreeNode* node = q.front();
                 q.pop();
                 level.push_back(node->val);
-
                 if (node->left) {
                     q.push(node->left);
                 }
