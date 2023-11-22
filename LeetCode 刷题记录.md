@@ -8410,7 +8410,7 @@ public:
 };
 ```
 
-#### [543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/) # todo其实和124套路一样 
+#### [543. 二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/) # todo其实和124套路一样 虚假的easy
 
 ```c++
 int dfs(TreeNode* node, int& res)
@@ -8524,7 +8524,40 @@ TreeNode* mergeTrees(TreeNode* t1, TreeNode* t2) {
 #### [剑指 Offer 33. 二叉搜索树的后序遍历序列](https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/)
 
 ```c++
+class Solution {
+public:
+    // 判断一个整数数组是否是二叉搜索树的后序遍历结果，可以利用二叉搜索树的性质。在后序遍历中，最后一个元素是根节点，而根据二叉搜索树的性质，左子树的值都小于根节点的值，右子树的值都大于根节点的值。
+    // 因此，我们可以利用这个性质，递归地判断数组是否满足这个条件。具体步骤如下：
+    // 找到根节点的值（数组的最后一个元素）。
+    // 在数组中找到第一个大于根节点值的元素，该元素之前的部分是左子树的后序遍历结果，之后的部分是右子树的后序遍历结果。
+    // 递归地判断左子树和右子树是否是二叉搜索树的后序遍历结果。
+    bool dfs(vector<int>& postorder, int start, int end) {
+        if (start >= end) {
+            return true;
+        }
+        // 根节点的值为数组最后一个元素
+        int rootValue = postorder[end];
 
+        // 在数组中找到第一个大于根节点值的元素
+        int splitIndex = start;
+        while (splitIndex < end && postorder[splitIndex] < rootValue) {
+            splitIndex++;
+        }
+
+        // 检查右子树的元素是否都大于根节点值
+        for (int i = splitIndex; i < end; i++) {
+            if (postorder[i] < rootValue) {
+                return false;
+            }
+        }
+        // 递归判断左右子树
+        return dfs(postorder, start, splitIndex - 1) &&
+               dfs(postorder, splitIndex, end - 1);
+    }
+    bool verifyTreeOrder(vector<int>& postorder) {
+        return dfs(postorder, 0, postorder.size() - 1);
+    }
+};
 ```
 
 
@@ -8568,34 +8601,80 @@ bool isValidBST(TreeNode* root) {
 #### [99. 恢复二叉搜索树](https://leetcode.cn/problems/recover-binary-search-tree/) todo
 
 ```c++
-void recoverTree(TreeNode* root) {
-    if (root == nullptr)
-        return;
+class Solution {
+public:
+    // 恢复二叉搜索树的思路一般是通过中序遍历，找到那两个被错误交换的节点，然后交换它们的值。在中序遍历过程中，节点的值应该是递增的。如果存在两个节点被错误地交换，那么在中序遍历的序列中就会出现两次降序。
+    // 具体步骤如下：
+    // 中序遍历二叉搜索树，找到两次降序的节点，分别记为 first 和 second。
+    // 交换 first 和 second 的值，恢复正确的二叉搜索树。
 
-    stack<TreeNode *> s;
-    TreeNode *pre = nullptr;
-    TreeNode *first = nullptr;
-    TreeNode *second = nullptr;
-    while(!s.empty() || root) {
-        if (root) {
-            s.push(root);
-            root = root->left;
-        } else {
-            root = s.top();s.pop();
-            if (pre && pre->val>root->val)
-            {		
-              	second = root;
-                if (first == nullptr) 
-                    first = pre;
-             		else 
-                  	break;  
+    void recoverTree(TreeNode* root) {
+        TreeNode *first = nullptr, *second = nullptr; // 用于记录需要交换的两个节点
+        TreeNode *prev = nullptr; // 用于记录中序遍历的前一个节点
+
+        stack<TreeNode*> s;
+
+        while (root || !s.empty()) {
+            while (root) {
+                s.push(root);
+                root = root->left;
             }
-            pre = root;
+
+            root = s.top();
+            s.pop();
+
+            // 判断当前节点值与前一个节点值的关系
+            if (!first && prev && prev->val >= root->val) {
+                first = prev;
+            }
+            if (first && prev && prev->val >= root->val) {
+                second = root;
+            }
+            // 更新前一个节点
+            prev = root;
             root = root->right;
         }
+        // 交换两个节点的值
+        if (first && second) {
+            swap(first->val, second->val);
+        }
     }
-    swap(first->val, second->val);
-}
+
+    void recoverTree_v1(TreeNode* root) {
+        TreeNode *first = nullptr, *second = nullptr; // 用于记录需要交换的两个节点
+        TreeNode *prev = nullptr; // 用于记录中序遍历的前一个节点
+
+        // 中序遍历
+        inorderTraversal(root, first, second, prev);
+
+        // 交换两个节点的值
+        if (first && second) {
+            swap(first->val, second->val);
+        }
+    }
+
+private:
+    void inorderTraversal(TreeNode* node, TreeNode*& first, TreeNode*& second, TreeNode*& prev) {
+        if (node) {
+            // 遍历左子树
+            inorderTraversal(node->left, first, second, prev);
+
+            // 判断当前节点值与前一个节点值的关系
+            if (!first && prev && prev->val >= node->val) {
+                first = prev;
+            }
+            if (first && prev && prev->val >= node->val) {
+                second = node;
+            }
+
+            // 更新前一个节点
+            prev = node;
+
+            // 遍历右子树
+            inorderTraversal(node->right, first, second, prev);
+        }
+    }
+};
 ```
 
 #### 99_2[找到搜索二叉树中两个错误的节点](https://www.nowcoder.com/practice/4582efa5ffe949cc80c136eeb78795d6)
@@ -8677,26 +8756,35 @@ TreeNode* sortedArrayToBST(vector<int>& nums)
 ```c++
 class Solution {
 public:
-    TreeNode *sortedListToBST(ListNode* head) {
-        if (head == nullptr) return nullptr;
-        if (head->next == nullptr) 
-            return new TreeNode(head->val);
-        ListNode *slow = head, *fast = head, *last = slow;
-      	// slow 中间节点, last 是中间节点的上一个
-        while (fast->next && fast->next->next) {
-            last = slow;
-            slow = slow->next;
-            fast = fast->next->next;
-        }
-        fast = slow->next;
-        last->next = nullptr;
-        TreeNode *cur = new TreeNode(slow->val);
-        if (head != slow) 
-            cur->left = sortedListToBST(head);
-        cur->right = sortedListToBST(fast);
-        return cur;
+TreeNode* sortedListToBST(ListNode* head) {
+    if (head == nullptr)
+        return nullptr;
+
+    if (head->next == nullptr)
+        return new TreeNode(head->val);
+
+    // 快慢指针找链表中点
+    ListNode *fast = head, *slow = head;
+    ListNode *pre = nullptr; // 记录链表中点的前一个
+    while(fast->next && fast->next->next)
+    {
+        pre = slow;
+        fast = fast->next->next;
+        slow = slow->next;
     }
-};
+    // 断开链表
+    if (pre)
+        pre->next = nullptr;
+    else
+        head = nullptr;
+    // 中点作为根节点
+    TreeNode *root = new TreeNode(slow->val);
+
+    // 递归处理左右两个子链表
+    root->left = sortedListToBST(head);
+    root->right = sortedListToBST(slow->next);
+    return root;
+}
 ```
 
 #### [173.二叉搜索树迭代器](https://leetcode.cn/problems/binary-search-tree-iterator/)
@@ -10386,32 +10474,6 @@ bool canJump(vector<int>& nums) {
 
 
 
-#### [56. 合并区间](https://leetcode.cn/problems/merge-intervals/)
-
-```c++
-vector<vector<int>> merge(vector<vector<int>>& intervals) {
-    if (intervals.size() == 0)
-    {
-        return {};
-    }
-    // 首先将列表中的区间按左端点排序, 然后将第一个区间加入到merged数组中
-    // 1: 如果当前区间的左端点在merged数组中最后一个区间的右端点之后,那么他们不会重合,则直接将该区间加入数组merged中
-    // 2: 如果当前区间的左端点在merged数组中最后一个区间的右端点之前, 需要更新当前区间的右端点更新数组中merged中最后一个区间的右端点，取二者的最大值
-    sort(intervals.begin(), intervals.end());
-    vector<vector<int>> merged;
-    for(int i = 0; i < intervals.size(); i++)
-    {
-        int left = intervals[i][0];
-        int right = intervals[i][1];
-        if(!merged.size() || merged.back()[1] < left) // 条件1
-            merged.push_back({left, right});
-        else // 条件2
-            merged.back()[1] = max(merged.back()[1], right);
-    }
-    return merged;
-}
-```
-
 #### [134. 加油站](https://leetcode.cn/problems/gas-station/)
 
 ```c++
@@ -10700,8 +10762,6 @@ int removeDuplicates(vector<int>& nums)
     return k;
 }
 ```
-
-
 
 #### [41. 缺失的第一个正数](https://leetcode-cn.com/problems/first-missing-positive/)#todo
 
@@ -12000,32 +12060,6 @@ string validIPAddress(string IP) {
         }
         return (cnt == 8 && IP.back() != ':') ? "IPv6" : "Neither";
     }
-}
-```
-
-
-
-#### [49. 字母异位词分组](https://leetcode-cn.com/problems/group-anagrams/) #todo
-
-```c++
-// 有点巧妙
-vector<vector<string>> groupAnagrams(vector<string>& strs) 
-{
-   
-      unordered_map<string, vector<string>> mp; // 字典 排序
-      for(int i = 0; i < strs.size(); i ++)
-      {
-          string key = strs[i];
-          sort(key.begin(), key.end());
-          mp[key].push_back(strs[i]);
-      }
-      vector<vector<string>> res;
-      for (auto it : mp)
-      {
-          res.push_back(it.second);
-      }
-      return res;
-  }
 }
 ```
 
