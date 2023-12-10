@@ -1393,6 +1393,8 @@ int searchInsert(vector<int>& nums, int target) {
 
 ```c++
 // 实际上返回的还是 插入的位置(在没有找到target的情况下)
+// 当 nums[m] == target 时，说明小于 target 的元素在区间 [left, 𝑚 − 1] 中，因此采用 right = 𝑚 − 1 来缩
+//小区间，从而使指针 right 向小于 target 的元素靠近
 int lower_bound(vector<int>& nums, int target)
 {
     int left = 0, right = nums.size() -1 ;
@@ -1401,6 +1403,7 @@ int lower_bound(vector<int>& nums, int target)
         int mid = left + (right - left) / 2;
         if (nums[mid] == target)  // 如果当前位置就是第一个target的时候 那么接下来的判断都会是left=mid+1,终止条件就是left来带right+1位置，所以没有问题, 如果当前位置 不是第一个target的时候， right 一直往左边缩，知道right 来到 第一个位置的前一个，那么这个时候 [left...right]区间的上的数都会小于 target，那么left 就会一直+1, 直到跳出循环
             right = mid - 1;
+      	// 当 nums[mid] < target 时 left 移动，这意味着指针 left 在向大于等于 target 的元素靠近
         else if (nums[mid] < target)
             left = mid + 1;
         else if (nums[mid] > target)
