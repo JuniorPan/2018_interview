@@ -361,6 +361,25 @@ int characterReplacement(string s, int k)
 }
 ```
 
+#### [205. 同构字符串](https://leetcode.cn/problems/isomorphic-strings/)
+
+```c++
+bool isIsomorphic(std::string s, std::string t) {
+    // int m1[256] = {-1}, m2[256] = {-1}, n = s.size();
+    vector<int> m1(256,-1);
+    vector<int> m2(256,-1);
+    int n = s.size();
+    for (int i = 0; i < n; ++i) {
+        if (m1[s[i]] != m2[t[i]]) return false;
+        m1[s[i]] = i;
+        m2[t[i]] = i;
+    }
+    return true;
+}
+```
+
+
+
 #### [438. 找到字符串中所有字母异位词](https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/) todo
 
 ```c++
