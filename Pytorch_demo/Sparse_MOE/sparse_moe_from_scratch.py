@@ -151,6 +151,7 @@ class SparseMoE(nn.Module):
             if flat_mask.any():
                 expert_input = flat_x[flat_mask]
                 print('expert_input: ', expert_input)
+                print('expert_input.shape: ', expert_input.shape)
                 expert_output = expert(expert_input)
                 # Extract and apply gating scores
                 gating_scores = flat_gating_output[flat_mask, i].unsqueeze(1)
@@ -168,7 +169,7 @@ top_k = 3
 n_embd = 4
 dropout=0.1
 
-mh_output = torch.randn(1, 8, n_embd)  # Example multi-head attention output
+mh_output = torch.randn(2, 8, n_embd)  # Example multi-head attention output
 sparse_moe = SparseMoE(n_embd, num_experts, top_k)
 final_output = sparse_moe(mh_output)
 print("Shape of the final output:", final_output.shape)
