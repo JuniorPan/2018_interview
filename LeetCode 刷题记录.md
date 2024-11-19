@@ -12832,3 +12832,67 @@ TreeNode* pruneTree(TreeNode* root) {
 
 ```
 
+
+
+# MultiHeadAttention
+
+```python
+class MultiHeadAttention(nn.Module):
+    def __init__(self, d_model: int = 512, n_heads: int = 8, dropout: float = 0.1):
+        """
+        Args:
+            d_model:      嵌入的维度
+            n_heads:      自注意力头的数量
+            dropout:      丢弃概率
+        """
+        super().__init__()
+        assert d_model % n_heads == 0            # 确保头的数量可以整除嵌入的维度
+        self.d_model = d_model                   # 512 维度
+        self.n_heads = n_heads                   # 8 个头
+        self.d_key = d_model // n_heads          # 假设 d_value 等于 d_key | 512/8=64
+
+        self.Wq = nn.Linear(d_model, d_model)    # 查询权重
+        self.Wk = nn.Linear(d_model, d_model)    # 键权重
+        self.Wv = nn.Linear(d_model, d_model)    # 值权重
+        self.Wo = nn.Linear(d_model, d_model)    # 输出权重
+
+        self.dropout = nn.Dropout(p=dropout)     # 初始化 dropout 层
+
+    def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor, mask: torch.Tensor = None):
+
+        batch_size = key.size(0)                  
+        # 计算查询、键和值张量
+        Q = self.Wq(query)                       # (32, 10, 512) x (512, 512) = (32, 10, 512)
+        K = self.Wk(key)                         # (32, 10, 512) x (512, 512) = (32, 10, 512)
+        V = self.Wv(value)                       # (32, 10, 512) x (512, 512) = (32, 10, 512)
+
+        # 将每个张量分割为 n 个头以计算注意力
+        # 查询张量
+        Q = Q.view(batch_size,  -1, self.n_heads, self.d_key ).permute(0, 2, 1, 3)         
+        # 键张量
+        K = K.view(batch_size, -1, self.n_heads, self.d_key ).permute(0, 2, 1, 3)         
+        # 值张量
+        V = V.view(batch_size, -1, self.n_heads,self.d_key ).permute(0, 2, 1, 3)         
+        
+        # 计算注意力
+        # 缩放点积 -> QK^{T}
+        scaled_dot_prod = torch.matmul(Q, K.permute(0, 1, 3, 2) ) / math.sqrt(self.d_key)      
+
+        # 将掩码位置为 0 的位置填充为 (-1e10)
+        if mask is not None:
+            scaled_dot_prod = scaled_dot_prod.masked_fill(mask == 0, -1e10)
+        # 应用 softmax 
+        attn_probs = torch.softmax(scaled_dot_prod, dim=-1)
+        # 乘以值以获得注意力
+        A = torch.matmul(self.dropout(attn_probs), V)       
+                                                       
+        # 将注意力重塑回 (32, 10, 512)
+        A = A.permute(0, 2, 1, 3).contiguous()              
+        A = A.view(batch_size, -1, self.n_heads*self.d_key) 
+        
+        # 通过最终权重层
+        output = self.Wo(A)                                 
+
+        return output, attn_probs    
+```
+
