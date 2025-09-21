@@ -520,7 +520,6 @@ int maxArea(vector<int>& height) {
     while(left < right)
     {
         res = max(res, min(height[right], height[left]) * (right - left));
-
         if (height[left] <= height[right])
             left++;
         else
@@ -1803,8 +1802,6 @@ int search(vector<int> &nums, int target)
     }
     return -1;
 }
-
-// while(left < right) 的终止条件是 left == right，写成区间的形式就是 [left, right]，或者带个具体的数字进去 [2, 2]，这时候区间非空，还有一个数 2，但此时 while 循环终止了。也就是说这区间 [2, 2] 被漏掉了，索引 2 没有被搜索，如果这时候直接返回 -1 就是错误的。
 ```
 
 ### 排序 (11)
@@ -4498,7 +4495,57 @@ bool canPartition(vector<int>& nums) {
 
 ```
 
-##### [698. 划分为k个相等的子集](https://leetcode.cn/problems/partition-to-k-equal-sum-subsets/)
+##### [698. 划分为k个相等的子集 todo](https://leetcode.cn/problems/partition-to-k-equal-sum-subsets/)
+
+```c++
+class Solution {
+public:
+    bool canPartitionKSubsets(vector<int>& nums, int k) {
+        int n = nums.size();
+        int total = accumulate(nums.begin(), nums.end(), 0);
+        if (total % k != 0) return false;  // 总和不能整除 k，直接 false
+        
+        int target = total / k;
+        
+        // 排序（从大到小），有利于剪枝
+        sort(nums.rbegin(), nums.rend());
+        
+        // 如果最大数比 target 还大，不可能划分
+        if (nums[0] > target) return false;
+        
+        vector<int> bucket(k, 0);  // 每个桶的当前和
+        return backtrack(nums, 0, bucket, target);
+    }
+    
+    bool backtrack(vector<int>& nums, int index, vector<int>& bucket, int target) {
+        if (index == nums.size()) {
+            // 如果所有数都放完了，检查每个桶是否都达到 target
+            for (int b : bucket) {
+                if (b != target) return false;
+            }
+            return true;
+        }
+        
+        int num = nums[index];
+        
+        for (int i = 0; i < bucket.size(); i++) {
+            // 如果放进去不超过目标
+            if (bucket[i] + num <= target) {
+                bucket[i] += num;  // 尝试放进第 i 个桶
+                if (backtrack(nums, index + 1, bucket, target)) return true;
+                bucket[i] -= num;  // 回溯
+                
+                // 剪枝：如果当前桶是空的，说明失败后其他空桶也会失败
+                if (bucket[i] == 0) break;
+            }
+        }
+        
+        return false;
+    }
+};
+```
+
+
 
 ##### [474. 一和零](https://leetcode-cn.com/problems/ones-and-zeroes/)
 
@@ -9325,6 +9372,7 @@ vector<vector<int>> insert(vector<vector<int>> &intervals, vector<int> &newInter
     return res;
 }
 ```
+
 
 #### [632. 最小区间](https://leetcode.cn/problems/smallest-range-covering-elements-from-k-lists/)
 
