@@ -1,6 +1,6 @@
 #  	LeetCode 刷题记录
 
-### 滑动窗口问题(14)
+### 滑动窗口问题
 
 核心思想: 我们可以用滑动窗口的思想解决这个问题，在滑动窗口类型的问题中都会有两个指针。一个用于「延伸」现有窗口的 r 指针，和一个用于「收缩」窗口的 l 指针。**在任意时刻，只有一个指针运动，而另一个保持静止。**我们在 ss上滑动窗口，通过移动 r 指针不断扩张窗口。当窗口包含 t 全部所需的字符后，如果能收缩，我们就收缩窗口直到得到最小窗口。
 <img src="https://assets.leetcode-cn.com/solution-static/76/76_fig1.gif" alt="滑动窗口示意"  />
@@ -500,7 +500,7 @@ int maxScore(vector<int>& cardPoints, int k) {
 // 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
-### 双指针问题(8)
+### 双指针问题
 
 todo: 11和42的区别
 
@@ -888,7 +888,7 @@ vector<int> sortedSquares(vector<int>& nums) {
 
 
 
-### 单调栈系列问题 (12)
+### 单调栈系列问题
 
 **单调栈的两种写法**   [LeetCode Monotone Stack Summary 单调栈小结](https://www.cnblogs.com/grandyang/p/8887985.html)
 
@@ -1381,7 +1381,7 @@ int maxChunksToSorted(vector<int>& arr) {
 }
 ```
 
-### 二分查找  (15)
+### 二分查找
 
 https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/solution/yi-wen-dai-ni-gao-ding-er-fen-cha-zhao-j-ymwl/
 
@@ -1804,7 +1804,7 @@ int search(vector<int> &nums, int target)
 }
 ```
 
-### 排序 (11)
+### 排序
 
 #### 快排模板
 
@@ -5937,7 +5937,7 @@ public:
 
 #### [1376. 通知所有员工所需的时间](https://leetcode-cn.com/problems/time-needed-to-inform-all-employees/)
 
-### 回溯 （21）
+### 回溯
  其实与图类DFS方法一致，但是排列组合的特征更明显
 
 #### [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
@@ -11599,7 +11599,7 @@ int partitionDisjoint(vector<int>& A)
     }
 ```
 
-### 字符串(6)
+### 字符串
 
 #### [7. 整数反转](https://leetcode-cn.com/problems/reverse-integer/)
 
