@@ -2490,56 +2490,60 @@ ListNode* deleteDuplicates(ListNode* head)
 ##### [2. 两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
 
 ```c++
-ListNode* addTwoNumbers(ListNode* l1, ListNode* l2)
-{
-    ListNode *fakeHead = new ListNode(-1), *cur = fakeHead;
-    int carry = 0;
-    while (l1 || l2) 
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+    ListNode *fake_head = new ListNode(-1), *cur  = fake_head;
+    int carry_num = 0;
+    while(l1 || l2)
     {
-        int val1 = l1 ? l1->val : 0;
-        int val2 = l2 ? l2->val : 0;
-        int sum = val1 + val2 + carry;
-        carry = sum / 10;
-        // 尾插法
+        int val_1 = l1 ? l1->val : 0;
+        int val_2 = l2 ? l2->val : 0;
+        int sum = val_1 + val_2 + carry_num;
+        carry_num = sum / 10;
+        // 护了一个指针 cur，每次 cur->next = new ListNode(...)，再把 cur 后移。新节点会接在链表尾部
         cur->next = new ListNode(sum % 10);
         cur = cur->next;
         if (l1) l1 = l1->next;
         if (l2) l2 = l2->next;
     }
-    if (carry) cur->next = new ListNode(1);
-    return fakeHead->next;
+    if (carry_num)
+        cur->next = new ListNode(1);
+    return fake_head->next;
 }
 ```
 
 ##### [445. 两数相加 II](https://leetcode.cn/problems/add-two-numbers-ii/)
 
 ```c++
-class Solution {
-public:
-    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        stack<int> s1, s2;
-        while (l1) {
-            s1.push(l1->val);
-            l1 = l1->next;
-        }
-        while (l2) {
-            s2.push(l2->val);
-            l2 = l2->next;
-        }
-        int sum = 0;
-        ListNode *res = new ListNode(0);
-        while (!s1.empty() || !s2.empty()) {
-            if (!s1.empty()) {sum += s1.top(); s1.pop();}
-            if (!s2.empty()) {sum += s2.top(); s2.pop();}
-            res->val = sum % 10;
-            ListNode *head = new ListNode(sum / 10);
-            head->next = res;
-            res = head;
-            sum /= 10;
-        }
-        return res->val == 0 ? res->next : res;
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+    stack<int> s1, s2;
+
+    // 把两个链表的数字压栈
+    while (l1) {
+        s1.push(l1->val);
+        l1 = l1->next;
     }
-};
+    while (l2) {
+        s2.push(l2->val);
+        l2 = l2->next;
+    }
+
+    int carry = 0;
+  	ListNode *fake_head = new ListNode(-1);
+    fake_head->next = nullptr;
+
+    // 逐位相加
+    while (!s1.empty() || !s2.empty() || carry) {
+        int sum = carry;
+        if (!s1.empty()) { sum += s1.top(); s1.pop(); }
+        if (!s2.empty()) { sum += s2.top(); s2.pop(); }
+        carry = sum / 10;
+        // 头插法：新节点放到前面
+        ListNode *cur = new ListNode(sum % 10);
+        cur->next = fake_head->next;
+        fake_head->next = cur;
+    }
+    return fake_head->next;
+}
 ```
 
 ##### [24. 两两交换链表中的节点](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)  #todo
@@ -2570,25 +2574,27 @@ ListNode* swapPairs(ListNode* head) {
 
 ```c++
 ListNode* deleteDuplicates(ListNode* head) {
-    if (head == nullptr || head->next == nullptr)
-        return head;
-    // 删掉所有的重复项，由于链表开头可能会有重复项被删掉的话头指针会改变，而最终却还需要返回链表的头指针
-    ListNode *fake_head = new ListNode(-1), *pre = fake_head;
-    // 定义一个pre指针和一个cur指针，每当pre指针指向新的节点，cur指针从下一个位置开始往下遍历，遇到相同的则继续往下，
-    // 直到遇到不同项时，把pre指针的next指向下面那个不同的元素。
-    // 如果cur指针遍历的第一个元素就不相同，则把前驱指针向下移一位
+    // 虚拟头节点，方便处理头部重复元素
+    ListNode* fake_head = new ListNode(-1);
     fake_head->next = head;
-    while(pre->next)
-    {
-        ListNode *cur = pre->next;
-        while(cur->next && cur->next->val == cur->val)
-        {
+    ListNode* prev = fake_head; // 指向最后一个不重复的节点
+    ListNode* cur = head;   // 当前遍历节点
+
+    while (cur) {
+        // 如果当前节点和下一个节点值相同，说明有重复
+        if (cur->next && cur->val == cur->next->val) {
+            int dup_val = cur->val;
+            // 跳过所有重复节点
+            while (cur && cur->val == dup_val) {
+                cur = cur->next;
+            }
+            // 上一个不重复节点指向下一个不重复节点
+            prev->next = cur;
+        } else {
+            // 当前节点不重复，prev 后移
+            prev = cur;
             cur = cur->next;
         }
-        if (cur != pre->next)
-            pre->next = cur->next;
-        else
-            pre = cur;
     }
     return fake_head->next;
 }
@@ -2597,15 +2603,18 @@ ListNode* deleteDuplicates(ListNode* head) {
 ##### [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/) todo
 
 ```c++
+// 链表有序，所以重复节点一定是连续的，可以用 单指针遍历 + 判断下一个节点值 来做
 ListNode* deleteDuplicates(ListNode* head) {
-    if (head == nullptr || head->next == nullptr)
-        return head;
-    // 遍历这个链表，每个结点和其后面的结点比较，如果结点值相同了，只要将前面结点的 next 指针跳过紧挨着的相同值的结点，指向后面一个结点
-    ListNode *cur = head;
+    ListNode* cur = head;
+    // 遍历链表
     while (cur && cur->next) {
         if (cur->val == cur->next->val) {
+            // 删除重复节点
+            ListNode* temp = cur->next;
             cur->next = cur->next->next;
+            delete temp; // 可选，释放内存
         } else {
+            // 不重复，指针后移
             cur = cur->next;
         }
     }
@@ -2663,6 +2672,7 @@ Node* copyRandomList(Node* head)
 
 ```C++
 ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+    // 迭代 + 尾插法
     if (list1 == nullptr && list2 == nullptr)
         return nullptr;
     ListNode *fake_head = new ListNode(-1);
