@@ -19,6 +19,7 @@ while (right < s.size()) {
         left++;
     }
 }
+
 ```
 
 #### [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/) #todo
@@ -27,7 +28,7 @@ while (right < s.size()) {
 int lengthOfLongestSubstring(string s) {
     vector<int> hash(256, -1); // hash 记录每一个字符出现的位置
     int res = 0;
-    int pre = -1; // pre 表示前一个字符 无重复子串左边的起始位置的前一个
+    int pre = -1; // pre 总是指向当前窗口左边界的前一个位置。 [pre+1, i]
     for(int i = 0; i < s.size(); i++)
     {
         pre = max(pre, hash[s[i]]);
@@ -36,48 +37,23 @@ int lengthOfLongestSubstring(string s) {
     }
     return res;
 }
+// 1.	pre 总是指向当前窗口左边界的前一个位置。
+// 2.	窗口实际范围 = [pre+1, i]
+// 3.	当遇到重复字符 s[i] 且它在窗口内时，直接把 pre 移到 hash[s[i]]，窗口左边界同时右移。
+// 4.	当前窗口长度 = i - pre → 用于更新 res。
 
-int lengthOfLongestSubstring(string s) {
-    int n = s.length();
-    int maxLength = 0;
-    int left = 0;
-    vector<int> charIndex(256, -1);  // 初始化一个大小为256的数组，用于存储字符的最后一次出现的位置
+// s = "abcabcbb"
+// i=0:  pre=-1  窗口: [a]
+// i=1:  pre=-1  窗口: [a b]
+// i=2:  pre=-1  窗口: [a b c]
+// i=3:  pre=0   窗口: [b c a]   ← 'a' 重复, pre 移到 hash['a']=0
+// i=4:  pre=1   窗口: [c a b]   ← 'b' 重复, pre 移到 hash['b']=1
+// i=5:  pre=2   窗口: [a b c]   ← 'c' 重复, pre 移到 hash['c']=2
+// i=6:  pre=4   窗口: [c b]     ← 'b' 重复, pre 移到 hash['b']=4
+// i=7:  pre=6   窗口: [b]       ← 'b' 重复, pre 移到 hash['b']=6
 
-    for (int right = 0; right < n; right++) {
-        if (charIndex[s[right]] != -1 && charIndex[s[right]] + 1 > left) {
-            // 如果字符已经在当前窗口中出现过，将左边界移动到上次出现的位置的右边
-            // 当发现一个重复字符时，我们希望将 left 移动到该重复字符上一次出现的位置的右边，以确保窗口中的字符都是唯一的
-            left =  charIndex[s[right]] + 1;
-        }
-        charIndex[s[right]] = right; // 更新字符的最新位置
-        maxLength = max(maxLength, right - left + 1);
-    }
-    return maxLength;
-}
 
-// 维护了一个滑动窗口，窗口内的都是没有重复的字符，需要尽可能的扩大窗口的大小。由于窗口在不停向右滑动，所以只关心每个字符最后出现的位置，并建立映射。窗口的右边界就是当前遍历到的字符的位置，为了求出窗口的大小，需要一个变量 left 来指向滑动窗口的左边界，这样，如果当前遍历到的字符从未出现过，那么直接扩大右边界，如果之前出现过，那么就分两种情况，在或不在滑动窗口内，如果不在滑动窗口内，那么就没事，当前字符可以加进来，如果在的话，就需要先在滑动窗口内去掉这个已经出现过的字符了，去掉的方法并不需要将左边界 left 一位一位向右遍历查找，由于 HashMap 已经保存了该重复字符最后出现的位置，所以直接移动 left 指针就可以了。维护一个结果 res，每次用出现过的窗口大小来更新结果 res，就可以得到最终结果
-int lengthOfLongestSubstring(string s) 
-{
-    int res = 0, n = s.size();
-    //窗口的右边界就是当前遍历到的字符的位置，为了求出窗口的大小，需要一个变量 left 来指向滑动窗口的左边界
-    int left = -1; // left 指向该无重复子串左边的起始位置的前一个
-    //如果当前遍历到的字符从未出现过，那么直接扩大右边界，如果之前出现过，那么就分两种情况，在或不在滑动窗口内，如果不在滑动窗口内，那么就没事，当前字符可以加进来，如果在的话，就需要先在滑动窗口内去掉这个已经出现过的字符了，去掉的方法并不需要将左边界 left 一位一位向右遍历查找，由于 HashMap 已经保存了该重复字符最后出现的位置，所以直接移动 left 指针就可以了
-    unordered_map<int, int> m; // 建立每个字符和其最后出现位置之间的映射
-    for (int i = 0; i < n; ++i) 
-    {
-        //两个条件 m.count(s[i]) && m[s[i]] > left，因为一旦当前字符 s[i] 在 HashMap 已经存在映射，说明当前的字符已经出现过了，而若 m[s[i]] > left 成立，说明之前出现过的字符在窗口内，那么如果要加上当前这个重复的字符，就要移除之前的那个，所以让 left 赋值为 m[s[i]]，由于 left 是窗口左边界的前一个位置
-        if (m.count(s[i]) && m[s[i]] > left) 
-        {
-            left = m[s[i]];  
-        }
-        m[s[i]] = i;
-        res = max(res, i - left);            
-    }
-    return res;
-}
 ```
-
-参考 https://www.cnblogs.com/grandyang/p/4480780.html
 
 #### [30. 串联所有单词的子串](https://leetcode.cn/problems/substring-with-concatenation-of-all-words/)
 
