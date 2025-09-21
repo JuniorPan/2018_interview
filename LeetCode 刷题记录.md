@@ -4545,8 +4545,6 @@ public:
 };
 ```
 
-
-
 ##### [474. 一和零](https://leetcode-cn.com/problems/ones-and-zeroes/)
 
 ```c++
@@ -4576,17 +4574,42 @@ int findMaxForm(vector<string> &strs, int m, int n)
 
 ```c++
 class Solution {
-private:
-    int targetSum(vector<int> & nums, int sum)
+public:
+
+    int target_sum(vector<int> &nums, int sum)
     {
-        // int dp[sum+1] = {0};
-        vector<int> dp(sum+1, 0);
-        dp[0] = 1;
-        for(int i = 0; i < nums.size(); i++)
+        int n = nums.size();
+        
+        // dp[i][j] 表示 数组中nums[0...i]数字 放进背包容量为j的其价值等于j的组合数;
+        vector<vector<int>> dp(n, vector<int>(sum+1, 0));
+
+        dp[0][0] = 1;
+        if(nums[0] == 0) dp[0][0] += 1;
+        for(int j = 1; j <= sum; j++) {
+            if(j == nums[0]) dp[0][j] = 1;
+        }
+
+        for (int i = 1; i < n; i++)
         {
-            for(int j = sum; j >= nums[i]; j--)
+            for(int j = 0; j <= sum; j++)
             {
-                dp[j] += dp[j-nums[i]];
+                if (j - nums[i] < 0)
+                    dp[i][j] = dp[i-1][j];
+                else
+                    dp[i][j] = dp[i-1][j] + dp[i-1][j- nums[i]];
+            }
+        }
+        return dp[n-1][sum];
+        
+    }
+
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        if ((target + sum) / 2 < 0)
+            return 0;
+        return sum < target || (target + sum) % 2 == 1 ? 0 : target_sum(nums, (target + sum) / 2); 
+    }
+};
 ```
 
 ##### [1049. 最后一块石头的重量 II](https://leetcode.cn/problems/last-stone-weight-ii/)
