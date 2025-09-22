@@ -12,18 +12,15 @@ while (right < s.size()) {
     // 增大窗口
     window.add(s[right]);
     right++;
-    
     while (window needs shrink) {
         // 缩小窗口
         window.remove(s[left]);
         left++;
     }
 }
-
 ```
 
 #### [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/) #todo
-
 ```c++
 int lengthOfLongestSubstring(string s) {
     vector<int> hash(256, -1); // hash 记录每一个字符出现的位置
