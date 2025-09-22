@@ -703,8 +703,6 @@ int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vec
 }
 ```
 
-
-
 #### [240. 搜索二维矩阵 II](https://leetcode-cn.com/problems/search-a-2d-matrix-ii/)
 
 ```c++
@@ -755,8 +753,6 @@ int compress(vector<char>& chars) {
     return len;
 }
 ```
-
-
 
 #### [524. 通过删除字母匹配到字典里最长单词](https://leetcode-cn.com/problems/longest-word-in-dictionary-through-deleting/)  #todo
 
@@ -826,8 +822,6 @@ vector<int> sortedSquares(vector<int>& nums) {
 ##### [125. 验证回文串](https://leetcode.cn/problems/valid-palindrome/)
 
 ##### [409. 最长回文串](https://leetcode.cn/problems/longest-palindrome/)
-
-
 
 #### **双指针（2 Pointer）：**
 
