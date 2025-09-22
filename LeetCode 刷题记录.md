@@ -96,8 +96,7 @@ int maxSubArray(vector<int>& nums) {
 
 #### [76. 最小覆盖子串](https://leetcode-cn.com/problems/minimum-window-substring/)  # todo 20210419
 ```c++
-string minWindow(string s, string t) 
-{
+string minWindow(string s, string t) {
     vector<int> m(128,0);  // m 可以理解 需要多少个 如m[a] = -1,说明多了一个a, m[a] = 0,正好， m[a]=1说明缺一个a
     // 记录t中每个字符出现的次数
     for (char c : t)
@@ -106,16 +105,16 @@ string minWindow(string s, string t)
     int left = 0;
     int min_len = INT_MAX; // 记录窗口的最小值，
     int min_left = -1; // 记录窗口的最小值对应的左边界
-    for(int i = 0; i < s.size(); i++)
+    for(int right = 0; right < s.size(); right++)
     {   
         //减1后的映射值仍大于等于0，说明当前遍历到的字母是T串中的字母
-        if (--m[s[i]] >= 0) 
+        if (--m[s[right]] >= 0) 
             count ++;
         while (count == t.size()) // 形成窗口了, 并且当前窗口包含t中的所有字符
         {
-            if (i - left + 1 < min_len)
+            if (right - left + 1 < min_len)
             {
-                min_len = i - left + 1;
+                min_len = right - left + 1;
                 min_left = left;
             } 
             // 开始收缩左边界
@@ -197,9 +196,27 @@ int minSubArrayLen(int target, vector<int>& nums) {
 
 ```c++
 int numSubarrayProductLessThanK(vector<int>& nums, int k) {
+    int left = 0;      // 初始化左指针
+    int product = 1;   // 初始化当前子数组的乘积
+    int count = 0;     // 初始化满足条件的子数组数量
+
+    for (int right = 0; right < nums.size(); right++) {
+        product *= nums[right];  // 更新当前子数组的乘积
+        // 如果当前子数组的乘积大于等于k，需要收缩左边界
+        while (product >= k && left <= right) {
+            product /= nums[left];  // 去掉左边界元素，更新乘积
+            left++;                // 收缩左边界
+        }
+        // 如果当前子数组的乘积小于k，计算满足条件的子数组数量
+        if (product < k) {
+            count += (right - left + 1);
+        }
+    }
+    return count;  // 返回满足条件的子数组数量
+}
+int numSubarrayProductLessThanK(vector<int>& nums, int k) {
     if (nums.empty())
         return 0;
-
     int res = 0;
     int prod = 1;
     int left = 0;
@@ -214,32 +231,6 @@ int numSubarrayProductLessThanK(vector<int>& nums, int k) {
     return res;
 }
 
-
-
-int numSubarrayProductLessThanK(vector<int>& nums, int k) {
-    int left = 0;      // 初始化左指针
-    int product = 1;   // 初始化当前子数组的乘积
-    int count = 0;     // 初始化满足条件的子数组数量
-
-    for (int right = 0; right < nums.size(); right++) {
-        product *= nums[right];  // 更新当前子数组的乘积
-
-        // 如果当前子数组的乘积大于等于k，需要收缩左边界
-        while (product >= k && left <= right) {
-            product /= nums[left];  // 去掉左边界元素，更新乘积
-            left++;                // 收缩左边界
-        }
-
-        // 如果当前子数组的乘积小于k，计算满足条件的子数组数量
-        if (product < k) {
-            count += (right - left + 1);
-        }
-    }
-
-    return count;  // 返回满足条件的子数组数量
-}
-
-
 ```
 
 #### [239. 滑动窗口最大值](https://leetcode-cn.com/problems/sliding-window-maximum/)
@@ -249,22 +240,16 @@ int numSubarrayProductLessThanK(vector<int>& nums, int k) {
 vector<int> maxSlidingWindow(vector<int>& nums, int k) {
     vector<int> result;
     deque<int> maxQueue;
-
     for (int i = 0; i < nums.size(); i++) {
-
-
         // 移除队列中小于当前元素的索引，保持降序
         while (!maxQueue.empty() && nums[maxQueue.back()] < nums[i]) {
             maxQueue.pop_back();
         }
-
-
         maxQueue.push_back(i);  // 将当前元素的索引加入队列
 
         // 移除队列中小于等于当前元素的索引，保持降序
         if (maxQueue.front() <= i - k) // 检查队首元素是否过期，如果过期则弹出
             maxQueue.pop_front();
-
         // 当窗口满足k个元素时，记录窗口内的最大值
         if (i >= k - 1) {
             result.push_back(nums[maxQueue.front()]);
@@ -273,7 +258,6 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k) {
     return result;
 }
 ```
-
 
 
 #### [346.滑动窗口的平均值](https://leetcode.cn/problems/qIsx9U/?envType=study-plan-v2&id=coding-interviews-special) todo 得熟悉下队列的stl
@@ -348,7 +332,6 @@ bool isIsomorphic(std::string s, std::string t) {
     return true;
 }
 ```
-
 
 
 #### [438. 找到字符串中所有字母异位词](https://leetcode-cn.com/problems/find-all-anagrams-in-a-string/) todo
@@ -499,7 +482,6 @@ int maxArea(vector<int>& height) {
     return res;
 }
 ```
-
 #### [167. 两数之和 II - 输入有序数组](https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted/)
 
 ```c++
@@ -522,9 +504,6 @@ vector<int> twoSum(vector<int>& numbers, int target) {
     return {};
 }
 ```
-
-
-
 #### [15. 三数之和](https://leetcode.cn/problems/3sum/)
 
 ```c++
@@ -869,6 +848,10 @@ vector<int> sortedSquares(vector<int>& nums) {
 3.使用单调栈可以找到元素向左遍历第一个比他小的元素，也可以找到元素向左遍历第一个比他大的元素。
 单调递增栈，利用波谷剔除栈中的波峰，留下波谷； 单调递增 结算波峰
 单调递减栈，利用波峰剔除栈中的波谷，留下波峰。 单调递减，结算波谷
+
+口诀：
+    • 要找小 → 递增栈
+    • 要找大 → 递减栈
 ```
 
 ```c++
@@ -1153,7 +1136,6 @@ public:
         while (!st.empty()) {
             st.pop();
         }
-
         // 找到未排序子数组的右边界
         for (int i = n - 1; i >= 0; i--) {
             while (!st.empty() && nums[i] > nums[st.top()]) {
