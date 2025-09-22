@@ -4,7 +4,6 @@
 
 核心思想: 我们可以用滑动窗口的思想解决这个问题，在滑动窗口类型的问题中都会有两个指针。一个用于「延伸」现有窗口的 r 指针，和一个用于「收缩」窗口的 l 指针。**在任意时刻，只有一个指针运动，而另一个保持静止。**我们在 s上滑动窗口，通过移动 r 指针不断扩张窗口。当窗口包含 t 全部所需的字符后，如果能收缩，我们就收缩窗口直到得到最小窗口。
 <img src="https://assets.leetcode-cn.com/solution-static/76/76_fig1.gif" alt="滑动窗口示意"  />
-
 ```c++
 // 基本框架
 int left = 0, right = 0;
@@ -26,9 +25,9 @@ int lengthOfLongestSubstring(string s) {
     vector<int> hash(256, -1); // hash 记录每一个字符出现的位置
     int res = 0;
     int pre = -1; // pre 总是指向当前窗口左边界的前一个位置。 [pre+1, i]
-    for(int i = 0; i < s.size(); i++)
+    for(int i = 0; i < s.size(); i++) 
     {
-        pre = max(pre, hash[s[i]]);
+        pre = max(pre, hash[s[i]]); // 保证窗口左边界始终在「上一次重复字符位置」之后，避免窗口内出现重复字符。
         hash[s[i]] = i;
         res = max(res, i - pre);
     }
