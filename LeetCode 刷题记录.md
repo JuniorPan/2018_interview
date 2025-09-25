@@ -1410,6 +1410,30 @@ double myPow(double x, int n) {
 #### [69. Sqrt(x)](https://leetcode-cn.com/problems/sqrtx/)  #todo
 
 ```c++
+int mySqrt(int x) {
+    // 特殊情况：0 和 1 的平方根就是它本身
+    if (x < 2) return x;
+
+    // 初始化二分区间：
+    // sqrt(x) 在 [1, x/2] 之间（因为 x>=2 时，sqrt(x) 一定 <= x/2）
+    int left = 1, right = x / 2, ans = 0;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;  // 防止溢出写法
+        if (mid <= x / mid) { 
+            // 说明 mid*mid <= x，mid 是一个可行解
+            ans = mid;        
+            left = mid + 1;   // 继续尝试往右边找更大的平方根
+        } else {
+            // 说明 mid*mid > x，mid 太大了
+            right = mid - 1;  
+        }
+    }
+
+    // 最终 ans 保存的是最大的 mid，使得 mid*mid <= x
+    return ans;
+}
+
 int mySqrt(int x) 
 {
   if (x == 0)
