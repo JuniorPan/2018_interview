@@ -1356,10 +1356,11 @@ int searchInsert(vector<int>& nums, int target) {
 
 #### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)  重点看下边界问题
 
+https://claude.ai/public/artifacts/f5d5e286-53ff-451c-889b-00ddb0362d72
+
 ```c++
 // 实际上返回的还是 插入的位置(在没有找到target的情况下)
-// 当 nums[m] == target 时，说明小于 target 的元素在区间 [left, 𝑚 − 1] 中，因此采用 right = 𝑚 − 1 来缩
-//小区间，从而使指针 right 向小于 target 的元素靠近
+// 当 nums[m] == target 时，说明小于 target 的元素在区间 [left, 𝑚 − 1] 中，因此采用 right = 𝑚 − 1 来缩小区间，从而使指针 right 向小于 target 的元素靠近
 int lower_bound(vector<int>& nums, int target)
 {
     int left = 0, right = nums.size() -1 ;
@@ -1388,6 +1389,8 @@ vector<int> searchRange(vector<int>& nums, int target) {
     return vector<int> {left, right - 1};
 }
 ```
+
+
 
 #### [50. Pow(x, n)](https://leetcode-cn.com/problems/powx-n/) todo
 
