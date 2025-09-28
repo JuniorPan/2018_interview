@@ -1661,25 +1661,31 @@ int findDuplicate(vector<int>& nums)
 
 ```c++
 bool searchMatrix(vector<vector<int>>& matrix, int target) {
-    int m = matrix.size();
-    int n = matrix[0].size();
-
     if (matrix.empty() || matrix[0].empty()) 
-        return false;
-    int left = m - 1;
-    int right = 0;
+        return false; 
+    int m = matrix.size();      // 矩阵行数
+    int n = matrix[0].size();   // 矩阵列数
+    // 2. 搜索起点选择：左下角
+    // 这里选择左下角 (row = m-1, col = 0) 作为起点
+    // 左下角的特点：
+    // - 上方的数比它小
+    // - 右方的数比它大
+    int left = m - 1; // 行索引
+    int right = 0;    // 列索引
 
     while(left >= 0 && right < n)
     {
         if (matrix[left][right] == target)
-            return true;
+            return true; // 找到目标值，返回 true
+
+        // 当前元素 < target → 目标值在右边
         if (matrix[left][right] < target)
-            right++;
+            right ++; // 列索引右移
         else
-            left--;
+            left --;  // 当前元素 > target → 目标值在上方，行索引上移
     }
     return false;
-  }
+}
 ```
 
 #### [378. 有序矩阵中第K小的元素](https://leetcode-cn.com/problems/kth-smallest-element-in-a-sorted-matrix/)
@@ -1691,31 +1697,37 @@ class Solution {
 public:
     // 计算矩阵中有多少个数字小于target
     int search_less_equal(vector<vector<int>>& matrix, int target) {
-        int n = matrix.size(), i = n - 1, j = 0, res = 0;
+        int n = matrix.size();
+        int i = n - 1; // 从左下角开始
+        int j = 0;
+        int res = 0;   // 计数器
+
         while (i >= 0 && j < n) {
             if (matrix[i][j] <= target) {
-                res += i + 1;
-                ++j;
+                res += i + 1; // 当前列的 i+1 个数 <= target
+                ++j;           // 移动到下一列
             } else {
-                --i;
+                --i;           // 上移到更小的元素
             }
         }
         return res;
     }
-    int kthSmallest(vector<vector<int>>& matrix, int k) 
-    {
-        int left = matrix[0][0], 
-        right = matrix.back().back();
-        while (left < right) 
-        {
+
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int left = matrix[0][0];            // 最小值
+        int right = matrix.back().back();   // 最大值
+
+        while (left < right) {
             int mid = left + (right - left) / 2;
             int cnt = search_less_equal(matrix, mid);
+
             if (cnt < k) 
-                left = mid + 1;
+                left = mid + 1; // 第 k 小在右边
             else 
-                right = mid;
+                right = mid;    // 第 k 小在左边或就是 mid
         }
-        return left;
+
+        return left; // left == right，就是第 k 小元素
     }
 };
 ```
