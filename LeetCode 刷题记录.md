@@ -2985,32 +2985,33 @@ ListNode* removeNthFromEnd(ListNode* head, int n) {
 
 ```c++
 ListNode* rotateRight(ListNode* head, int k) {
-    if (head == nullptr)
-        return head;
-    int node_num = 0;
+    if (head == nullptr) return nullptr;
+    // 1. 统计链表长度
+    int count = 0;
     ListNode *cur = head;
-    while(cur)
-    {
+    while (cur) {
         cur = cur->next;
-        node_num++ ;
+        count++;
     }
-    int last_n = k % node_num;
-    if (last_n == 0)
-        return head;
-    ListNode *fast = head, *slow = head, *pre = head;
-    for(int i =0; i < last_n; i++)
-    {
+    // 2. 取模，避免无效的整圈旋转
+    int last_n = k % count;
+    if (last_n == 0) return head; // 旋转整圈等于不变
+    // 3. 快慢指针，让 fast 先走 last_n 步
+    ListNode *fast = head, *slow = head;
+    for (int i = 0; i < last_n; i++) {
         fast = fast->next;
     }
-    while(fast->next)
-    {
+    // 4. 同时移动 fast 和 slow，直到 fast 到达链表末尾
+    //    此时 slow 正好停在“新头节点的前一个节点”
+    while (fast->next) {
+        fast = fast->next;
         slow = slow->next;
-        fast = fast->next;
     }
-    fast->next = head;
-    fast = slow->next;
-    slow->next = nullptr;
-    return fast;
+    // 5. 断开并重连
+    fast->next = head;       // 尾部连到原头部，形成环
+    ListNode *new_head = slow->next; // 新头节点
+    slow->next = nullptr;    // 断开环
+    return new_head;
 }
 ```
 
@@ -3025,50 +3026,50 @@ L1 + D = n(L2 + D)
 这意味着在相遇点时，如果从链表头部开始走L1的距离，慢指针也刚好会到达环的入口，而从相遇点继续走n(L2 + D)的距离也会到达环的入口。
 
 ```c++
-bool hasCycle(ListNode *head) 
-{
-    if (head == nullptr || head->next == nullptr || head->next->next == nullptr)
+bool hasCycle(ListNode *head) {
+    if (head == nullptr || head->next == nullptr) {
         return false;
-    
-    ListNode *slow =  head->next;
-    ListNode *fast = head->next->next;
-    
-    while(slow != fast)
-    {
-        if (fast->next == nullptr || fast->next->next == nullptr)
-            return false;
-        slow = slow->next;
-        fast =  fast->next->next;         
     }
-    return true;
+    ListNode *slow = head;
+    ListNode *fast = head;
+    while (fast != nullptr && fast->next != nullptr) {
+        slow = slow->next;           // 慢指针走一步
+        fast = fast->next->next;     // 快指针走两步
+
+        if (slow == fast) {          // 相遇说明有环
+            return true;
+        }
+    }
+    return false; // fast 到了链表末尾 -> 没环
 }
 ```
 
 ##### [142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/)
 
 ```c++
- ListNode *detectCycle(ListNode *head) 
-{
-    if (head == nullptr || head->next == nullptr || head->next->next == nullptr)
+ListNode *detectCycle(ListNode *head) {
+    if (head == nullptr || head->next == nullptr) {
         return nullptr;
-    
-    ListNode *slow = head->next;
-    ListNode *fast = head->next->next;
-    
-    while(slow != fast)
-    {
-        if (fast->next == nullptr || fast->next->next == nullptr)
-            return nullptr; 
-        slow = slow->next;
-        fast = fast->next->next;    
     }
-    fast = head;
-    while(slow != fast)
-    {
+    ListNode *slow = head;
+    ListNode *fast = head;
+    // 第一步：判断是否有环
+    while (fast != nullptr && fast->next != nullptr) {
         slow = slow->next;
-        fast = fast->next;
+        fast = fast->next->next;
+
+        if (slow == fast) {
+            // 第二步：找到环的入口
+            ListNode *ptr1 = head;
+            ListNode *ptr2 = slow; // 相遇点
+            while (ptr1 != ptr2) {
+                ptr1 = ptr1->next;
+                ptr2 = ptr2->next;
+            }
+            return ptr1; // 或者 return ptr2;
+        }
     }
-    return slow;
+    return nullptr; // 无环
 }
 ```
 
@@ -3081,38 +3082,39 @@ bool hasCycle(ListNode *head)
 2. 将第二个链翻转。
 3. 将第二个链表的元素间隔地插入第一个链表中。
 */
-void reorderList_1(ListNode *head)
-{
-    if (!head || !head->next || !head->next->next)
-        return;
-    ListNode *fast = head, *slow = head;
-    while (fast->next && fast->next->next)
-    {
+void reorderList(ListNode* head) {
+    if (!head || !head->next) return;
+
+    // 1. 找到中点
+    ListNode *slow = head, *fast = head;
+    while (fast->next && fast->next->next) {
         slow = slow->next;
         fast = fast->next->next;
     }
-    ListNode *mid = slow->next;
-    slow->next = NULL;
-    // 反转链表
-    ListNode *last = mid, *pre = NULL;
-    while (last)
-    {
-        ListNode *temp = last->next;
-        last->next = pre;
-        pre = last;
-        last = temp;
+
+    // 2. 反转后半部分
+    ListNode *prev = nullptr, *cur = slow->next;
+    slow->next = nullptr; // 切断前半部分和后半部分
+    while (cur) {
+        ListNode *tmp = cur->next;
+        cur->next = prev;
+        prev = cur;
+        cur = tmp;
     }
-  	// 依次摘下后半个链表的节点 采用头插法的
-    while (head && pre)
-    {
-        ListNode *temp = head->next;
-        ListNode *temp2 = pre->next;
-        pre->next = head->next;
-        head->next = pre;
-        head = temp;
-        pre = temp2;
+
+    // 3. 合并两个链表
+    ListNode *l1 = head, *l2 = prev;
+    while (l1 && l2) {
+        ListNode *n1 = l1->next;
+        ListNode *n2 = l2->next;
+
+        l1->next = l2;
+        if (n1 == nullptr) break; // 避免尾部成环
+        l2->next = n1;
+        l1 = n1;
+        l2 = n2;
     }
-}
+}  
 /**
  * 解法二:
  * 其实可以借助栈的后进先出的特性来做，如果我们按顺序将所有的结点压入栈，那么出栈的时候就可以倒序了，实际上就相当于翻转了链表。由于只需将后半段链表翻转，那么我们就要控制出栈结点的个数，还好栈可以直接得到结点的个数，我们减1除以2，就是要出栈结点的个数了。
@@ -3179,60 +3181,35 @@ ListNode *getIntersectionNode(ListNode *headA, ListNode *headB)
 ##### [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/)
 
 ```c++
-/**
- * struct ListNode {
- *	int val;
- *	struct ListNode *next;
- * };
- */
+bool isPalindrome(ListNode* head) {
+    if (!head || !head->next) return true;
 
-class Solution {
-public:
-    /**
-     * 
-     * @param head ListNode类 the head
-     * @return bool布尔型
-     */
-    ListNode * reverse(ListNode *head)
-    {
-        ListNode *pre = nullptr;
-        ListNode *cur = head;
-        while(cur)
-        {
-            ListNode *temp = cur->next;
-            cur->next = pre;
-            pre = cur;
-            cur = temp;
-        }
-        return pre;
+    // 1. 找中点
+    ListNode *slow = head, *fast = head;
+    while(fast->next && fast->next->next) {
+        slow = slow->next;
+        fast = fast->next->next;
     }
-    bool isPalindrome(ListNode* head) {
-        if (head == nullptr || head->next == nullptr )
-            return true;
-        if (head->next->next == nullptr)
-            return head->val == head->next->val;
-        ListNode *slow = head;
-        ListNode *fast = head;
 
-        while(fast->next && fast->next->next)
-        {
-            fast = fast->next->next;
-            slow = slow->next;
-        }
-        ListNode *mid = reverse(slow->next);
-        slow->next = nullptr;
-        while(mid && head)
-        {
-            if (mid->val != head->val)
-                return false;
-            else{
-                mid = mid->next;
-                head = head->next;
-            }
-        }
-        return true;
+    // 2. 反转后半部分
+    ListNode *cur = slow->next, *pre = nullptr;
+    slow->next = nullptr; // 切断前半部分
+    while(cur) {
+        ListNode *tmp = cur->next;
+        cur->next = pre;
+        pre = cur;
+        cur = tmp;
     }
-};
+
+    // 3. 比较前后半部分
+    ListNode *p1 = head, *p2 = pre;
+    while(p2) {
+        if(p1->val != p2->val) return false;
+        p1 = p1->next;
+        p2 = p2->next;
+    }
+    return true;
+}
 ```
 
 #### 链表排序  
@@ -3622,6 +3599,13 @@ public:
 ```c++
 // 空间优化: https://leetcode-cn.com/problems/unique-paths/solution/san-chong-shi-xian-xiang-xi-tu-jie-62-bu-4jz1/
 int uniquePaths(int m, int n) {
+  	// 观察依赖关系：
+        // dp[i][j] 只依赖 上一行的同一列 (dp[i-1][j]) 和 当前行的左边 (dp[i][j-1])。
+    // 因此，不需要整个 m x n 的二维数组：
+        // 用一维数组 dp[j] 保存当前行的路径数。
+        // dp[j] 更新时：dp[j] = dp[j] + dp[j-1]：
+        // dp[j]（原值）代表上一行的 dp[i-1][j]
+        // dp[j-1] 代表当前行左边的 dp[i][j-1]
     vector<int> dp(n, 1);
     for(int i = 1; i < m; i++)
     {
