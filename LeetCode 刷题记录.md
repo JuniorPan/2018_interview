@@ -2657,8 +2657,6 @@ while(slow != fast)
 }
 ```
 
-
-
 https://www.nowcoder.com/practice/71cef9f8b5564579bf7ed93fbe0b2024?tpId=117&tqId=37729&companyId=665&rp=1&ru=%2Fcompany%2Fhome%2Fcode%2F665&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey
 
 ```c++
@@ -2900,21 +2898,33 @@ class Solution {
 public:
     // 利用了最小堆这种数据结构，首先把k个链表的首元素都加入最小堆中，它们会自动排好序。然后每次取出最小的那个元素加入最终结果的链表中，然后把取出元素的下一个元素再加入堆中，下次仍从堆中取出最小的元素做相同的操作，以此类推，直到堆中没有元素了，此时k个链表也合并为了一个链表，返回首节点即可
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        auto cmp = [](ListNode*& a, ListNode*& b) {
+        // 自定义比较函数（用于小顶堆）
+        // 如果 a->val > b->val，则返回 true，表示 a 的优先级比 b 低
+        // priority_queue 默认是大顶堆，加这个 cmp 后变成小顶堆
+        auto cmp = [] (ListNode *&a, ListNode *&b) {
             return a->val > b->val;
         };
-      	// 小根堆
-        priority_queue<ListNode*, vector<ListNode*>, decltype(cmp) > q(cmp);
+        priority_queue<ListNode*, vector<ListNode*>, decltype(cmp)> min_heap(cmp);
+        // 初始化：将每个链表的头节点加入堆中（如果不为空）
         for (auto node : lists) {
-            if (node) q.push(node);
+            if (node)
+                min_heap.push(node);
         }
-        ListNode *fake_head = new ListNode(-1), *cur = fake_head;
-        while (!q.empty()) {
-            auto t = q.top(); q.pop();
+        ListNode *fake_head = new ListNode(-1);
+        ListNode *cur = fake_head;
+
+        // 当堆不为空时，持续取出当前最小的节点
+        while (!min_heap.empty()) {
+            // 取出堆顶（当前所有节点中值最小的）
+            auto t = min_heap.top(); 
+            min_heap.pop();
+            // 将该最小节点接到结果链表尾部
             cur->next = t;
             cur = cur->next;
-            if (cur->next) q.push(cur->next);
+            if (t->next)
+                min_heap.push(t->next);
         }
+
         return fake_head->next;
     }
 };
@@ -2949,28 +2959,26 @@ ListNode* getKthFromEnd(ListNode* head, int k)
 ##### [19. 删除链表的倒数第 N 个结点](https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/) # todo 注意细节
 
 ```c++
-ListNode* removeNthFromEnd(ListNode* head, int n) 
-{
+ListNode* removeNthFromEnd(ListNode* head, int n) {
     if (head == nullptr)
-        return head;
-    ListNode *fast = head;
-    ListNode *slow = head;
-    for(int i = 0; i < n; i++)
-    {
+        return nullptr;
+    ListNode *fast = head, *slow = head;
+    // 让 fast 先走 n 步，这样 fast 和 slow 之间相隔 n 个节点
+    for (int i = 0; i < n; i++) {
         fast = fast->next;
     }
-    // todo: 注意细节
-    if (fast == nullptr) // 防止n等链表长度 正好删除第一个节点 
+    // 如果 fast 走到头，说明要删除的是第一个节点
+    if (fast == nullptr)
         return head->next;
-    while(fast->next) // 这样用来控制slow 找到倒数第n个节点的前一个
-    {
+    // fast 和 slow 同时前进，直到 fast 到达最后一个节点
+    // 此时 slow 停在待删除节点的前一个位置
+    while (fast->next) {
         fast = fast->next;
         slow = slow->next;
     }
-    slow->next= slow->next->next;
+    slow->next = slow->next->next;
     return head;
 }
-
 ```
 
 ##### [61. 旋转链表](https://leetcode-cn.com/problems/rotate-list/) 
