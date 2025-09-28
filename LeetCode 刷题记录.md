@@ -1425,58 +1425,41 @@ int mySqrt(int x) {
             ans = mid;        
             left = mid + 1;   // 继续尝试往右边找更大的平方根
         } else {
-            // 说明 mid*mid > x，mid 太大了
-            right = mid - 1;  
+            right = mid - 1;   // 说明 mid*mid > x，mid 太大了
         }
     }
-
     // 最终 ans 保存的是最大的 mid，使得 mid*mid <= x
     return ans;
-}
-
-int mySqrt(int x) 
-{
-  if (x == 0)
-      return 0;
-  int left = 1, right = x;
-  while(left <= right)
-  {
-      int mid = left + (right - left) / 2;
-      int res = x / mid;
-      if (res == mid)  // x = mid * mid
-          return mid;
-      else if (res < mid)  // x < mid * mid 
-          right = mid - 1;
-      else if (res > mid)  // x > mid * mid 
-          left = mid + 1;
-  }
-  return right; // 为啥一定是right???
 }
 ```
 
 #### [367. 有效的完全平方数](https://leetcode.cn/problems/valid-perfect-square/description/) todo
 
 ```c++
-https://leetcode.cn/problems/valid-perfect-square/solutions/1082926/gong-shui-san-xie-yi-ti-shuang-jie-er-fe-g5el/
 bool isPerfectSquare(int num) {
-  long left = 1, right = num;
-  while (left <= right)
-  {
-      long mid = left + (right - left) / 2;
-      if(mid * mid  == num)
-          return true;
-      else if (mid * mid < num) 
-          left = mid + 1;
-      else 
-          right = mid - 1;
-  }
-  return false;
+    if (num < 2) return true;  // 0 和 1 都是完全平方数
+    long left = 2, right = num / 2; // 平方根一定在 [2, num/2] 之间
+    while (left <= right) {
+        long mid = left + (right - left) / 2;
+        long sq = mid * mid;
+
+        if (sq == num) {
+            return true;  // 找到刚好平方数
+        } else if (mid * mid < num) {
+            left = mid + 1;  // 平方太小，往右找
+        } else if (mid *mid > num){
+            right = mid - 1; // 平方太大，往左找
+        }
+    }
+    return false; // 没找到就是 false
 }
 ```
 
 #### [33. 搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/) #todo
 
 ```c++
+// 即便数组被旋转了，对于任意中间点 mid，将整个数组切成两半，至少有一半是有序的。
+
 int search(vector<int>& nums, int target) 
 {
     int left = 0, right = nums.size() -1;
@@ -1507,32 +1490,44 @@ int search(vector<int>& nums, int target)
 #### [81. 搜索旋转排序数组 II](https://leetcode-cn.com/problems/search-in-rotated-sorted-array-ii/)  #todo
 
 ```c++
+// 核心点：旋转数组里至少有一边是有序的（如果不考虑重复元素的话）。
+// 难点：重复元素会导致无法直接判断哪边有序，所以加了 nums[left] == nums[mid] 的处理。
 bool search(vector<int>& nums, int target) {
-    int left = 0, right = nums.size()-1;
-    while (left <= right)
+    int left = 0, right = nums.size() - 1;
+    while(left <= right)
     {
         int mid = left + (right - left) / 2;
+        // 1. 如果中点刚好等于目标，直接返回 true
         if (nums[mid] == target)
             return true;
+        // 2. 如果左半部分是有序的
         else if (nums[left] < nums[mid])
         {
+            // 判断 target 是否在 [nums[left], nums[mid]) 这个有序区间里
             if (nums[left] <= target && target < nums[mid])
-                right = mid - 1;
-            else 
-                left = mid + 1;
+                right = mid - 1;   // 在左半区间，缩小右边界
+            else
+                left = mid + 1;    // 否则去右半区间
         }
+        // 3. 如果右半部分是有序的
         else if (nums[left] > nums[mid])
         {
+            // 判断 target 是否在 (nums[mid], nums[right]] 这个有序区间里
             if (nums[mid] < target && target <= nums[right])
-                left = mid + 1;
-            else 
-                right = mid - 1;
+                left = mid + 1;    // 在右半区间，缩小左边界
+            else
+                right = mid - 1;   // 否则去左半区间
         }
+        // 4. 处理 nums[left] == nums[mid] 的情况
+        //    无法判断哪一边有序（因为有重复元素）
+        //    例如 [1,0,1,1,1]，mid = 2 时就会卡住
+        //    这里我们只能安全地缩小搜索范围：left++
         else if (nums[left] == nums[mid])
         {
-            left++;
+            left ++;
         }
     }
+    // 如果循环结束还没找到，返回 false
     return false;
 }
 ```
@@ -1547,7 +1542,7 @@ bool search(vector<int>& nums, int target) {
 // 若 nums[left] <= nums[mid]，说明区间 [left,mid] 连续递增，则最小元素一定不在这个区间里，可以直接排除。因此，令 left = mid+1，在 [mid+1,right] 继续查找
 //否则，说明区间 [left,mid] 不连续，则最小元素一定在这个区间里。因此，令 right = mid，在 [left,mid] 继续查找
 //[left,right] 表示当前搜索的区间。注意 right 更新时会被设为 mid 而不是 mid-1，因为 mid 无法被排除。这一点和「33 题 查找特定元素」是不同的
-
+// 有序扔掉，无序保留
 int findMin(vector<int> &nums)
 {
     int left = 0;
@@ -1617,6 +1612,30 @@ int firstBadVersion(int n) {
 #### [287. 寻找重复数](https://leetcode-cn.com/problems/find-the-duplicate-number/) #TODO
 
 ```c++
+//把数组看成链表：nums[i] 表示节点 i 指向的下一个节点。
+// 重复数字导致环：相同的数字会让两个不同下标指向同一个节点 → 形成环。
+// Floyd 判圈算法：
+    // 阶段一找到环内相遇点
+    // 阶段二从头和相遇点同时走，找到环入口 → 即重复数
+int findDuplicate(vector<int>& nums) {
+    // 寻找相遇点（环内）
+    int slow = nums[0];
+    int fast = nums[nums[0]]; // fast 先走一步，保证和 slow 不相等
+
+    while (slow != fast) {
+        slow = nums[slow];         // slow 每次走一步
+        fast = nums[nums[fast]];   // fast 每次走两步
+    }
+    // 阶段二：找到环的入口（重复数）
+    fast = 0; // fast 从头开始，注意这里是索引 0
+    while (slow != fast) {
+        slow = nums[slow];
+        fast = nums[fast];
+    }
+    return slow;
+}
+
+
 // 解法一: 二分查找
 // 给定一个包含 n + 1 个整数的数组 nums ，其数字都在 [1, n] 范围内（包括 1 和 n），可知至少存在一个重复的整数。
 int findDuplicate(vector<int>& nums) 
