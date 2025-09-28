@@ -1818,12 +1818,18 @@ int search(vector<int> &nums, int target)
 ```c++
 [912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
 int partition(vector<int> &nums, int left, int right)
-{
-    int small = left; // small 指向小于区域的下一个元素  用最后一个元素作为枢轴元素
+{   
+
+    // small指针：指向下一个应该放置小于基准值元素的位置
+    int small = left;
     for(int i = left; i < right; i++)
     {
         if (nums[i] < nums[right])
-            swap(nums[i], nums[small++]);
+        {
+            //将当前元素与small位置的元素交换, 保证small左边的元素都小于基准值
+            swap(nums[i], nums[small]);
+            small++; // // small指针右移，为下一个小元素预留位置
+        }
     }
     swap(nums[small], nums[right]);
     return small;
@@ -1847,39 +1853,55 @@ vector<int> sortArray(vector<int>& nums) {
 
 #### 归并排序模板
 
-<img src="/Users/panqiang/Downloads/1651123691-dEdJgZ-meger_sort.png" alt="1651123691-dEdJgZ-meger_sort" style="zoom: 25%;" />
-
 ```c++
-void merge(vector<int> &nums, int left, int mid, int right)
-{
-   vector<int> temp; // 注意这个地方 如果这样写 就不用指定数组的大小了
+class Solution {
+public:
+    // 将数组不断拆分成左右两半，直到每个区间只有一个元素。
+    // 再将小区间两两合并，保证每次合并都是有序的。
+    //         [8, 4, 5, 7, 1, 3, 6, 2]
+    //          /                    \
+    // [8, 4, 5, 7]              [1, 3, 6, 2]
+    //    /       \                 /       \
+    // [8,4]    [5,7]            [1,3]    [6,2]
+    //  /   \    /   \            /   \    /   \
+    // [8] [4]  [5] [7]         [1] [3]   [6] [2]
+    void merge(vector<int> &nums, int left, int mid, int right)
+    {
+        vector<int> temp;
 
-    int i = left, j = mid + 1;
-    int index = 0;
-    while(i <= mid && j <= right)
-    {
-        temp.push_back(nums[i] < nums[j] ? nums[i++] :nums[j++]);
+        int i = left, j = mid + 1;
+        while(i <= mid && j <= right)
+        {
+            temp.push_back(nums[i] < nums[j] ? nums[i++] : nums[j++]);
+        }
+        while(i <= mid)
+            temp.push_back(nums[i++]);
+        while(j <= right)
+            temp.push_back(nums[j++]);
+
+        for(int i = 0; i < temp.size(); i++)
+        {
+            nums[i+left] = temp[i];
+        }
     }
-    while(i <= mid)
-        temp.push_back(nums[i++]);
-    while(j <= right)
-       temp.push_back(nums[j++]);
-    for(int i = 0; i < temp.size(); i++)
+    void merge_sort(vector<int> &nums, int left, int right)
     {
-        nums[i+left] = temp[i];
+        if (left == right)
+        {
+            return;
+        }
+        int mid = left + (right - left) / 2;
+        merge_sort(nums, left, mid);
+        merge_sort(nums, mid+1, right);
+        merge(nums, left, mid, right);
     }
-}
-void merge_sort(vector<int> &nums, int left, int right)
-{
-    if (left == right)
-    {
-        return;
+
+    vector<int> sortArray(vector<int>& nums) {
+        merge_sort(nums, 0, nums.size()-1);
+        return nums;
     }
-    int mid = left + (right - left) / 2;
-    merge_sort(nums, left, mid);
-    merge_sort(nums, mid+1, right);
-    merge(nums, left, mid, right);
-}
+};
+
 ```
 
 #### 堆排序模板
@@ -2060,27 +2082,35 @@ int removeElement(vector<int>& nums, int val)
 #### [75. 颜色分类](https://leetcode-cn.com/problems/sort-colors/) 
 
 ```c++
-void sortColors(vector<int>& nums) 
-{     
-    if (nums.empty())
-        return;
+// 区间划分
+    // [0, small-1] → 0
+    // [small, index-1] → 1
+    // [index, large] → 未处理
+    // [large+1, n-1] → 2
+// 遍历逻辑
+    // 如果是 0 → 交换到左边（small 区），index++
+    // 如果是 1 → 正确位置，index++
+    // 如果是 2 → 交换到右边（large 区），index 不++，因为新交换进来的元素还未处理
+void sortColors(vector<int>& nums) {
+    if (nums.empty()) return;
 
-    int small = 0; // 小于区域的下一个元素位置
-    int large = nums.size() - 1; // 大于区域的上一个位置
-    int index = 0;
-    while(index <= large) // TODO：这个地方需要注意一下
-    {
-        if (nums[index] < 1)
-        {
-            swap(nums[index++], nums[small++]);
-        }
-        else if (nums[index] == 1)
-        {   
+    int small = 0;                 // 指向“0区”下一个位置
+    int large = nums.size() - 1;   // 指向“2区”下一个位置
+    int index = 0;                 // 当前遍历元素位置
+
+    while(index <= large) {
+        if (nums[index] < 1) {     // 当前元素是0
+            swap(nums[index], nums[small]); 
             index++;
-        }
-        else 
-        {
-            swap(nums[index], nums[large--]);
+            small++;
+        } 
+        else if (nums[index] == 1) { // 当前元素是1
+            index++;
+        } 
+        else {                      // 当前元素是2
+            swap(nums[index], nums[large]);
+            large--;
+            // 注意这里 index 不自增，因为交换过来的元素还没处理
         }
     }
 }
