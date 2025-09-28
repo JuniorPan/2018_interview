@@ -2119,6 +2119,41 @@ void sortColors(vector<int>& nums) {
 #### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/) todo
 
 ```c++
+int findKthLargest(vector<int>& nums, int k) {
+    // 第 k 大 = 前 k 大元素中最小的那个
+    // 用一个大小为 k 的最小堆维护数组中当前遇到的 k 个最大元素，堆顶就是第 k 大元素。
+    // 1.初始化：把数组前 k 个元素放入最小堆。
+    // 2.遍历剩余元素：如果当前元素比堆顶大，就替换堆顶（保证堆里始终是最大的 k 个元素）。
+    // 3.返回结果：遍历结束后，堆顶就是第 k 大的数。
+    priority_queue<int, vector<int>, greater<int>> min_heap;
+
+    for (int i = 0; i < k; i++)
+    {
+        min_heap.push(nums[i]);
+    }
+
+    for (int i = k; i < nums.size(); i++)
+    {
+        if (nums[i] > min_heap.top())
+        {
+            min_heap.pop();
+            min_heap.push(nums[i]);
+        }
+    }
+    return min_heap.top();
+}
+// 为什么要替换堆顶？
+// 假设堆顶是 x，堆里元素是当前最大的 k 个数。
+    // 如果新来的元素 y <= x：
+    // y 比堆里最小的还小。
+    // 那么它连前 k 大都进不去 → 丢掉就行。
+// 如果新来的元素 y > x：
+    // y 至少比堆里最小的一个大。
+    // 所以 y 有资格进入前 k 大。
+    // 那么就应该把最小的那个（x）踢掉，用 y 替换。
+// 这样堆里继续保持“最大的 k 个数”。
+
+
 class Solution {
 public:
     int partition(vector<int> &nums, int left, int right)
@@ -2144,29 +2179,30 @@ public:
 
     }
 };
+```
+#### [347. 前 K 个高频元素](https://leetcode.cn/problems/top-k-frequent-elements/)
 
-
-int findKthLargest(vector<int>& nums, int k) {
-    // 使用最小堆来维护前k个最大的元素
-    priority_queue<int, vector<int>, greater<int>> min_heap;
-
-    // 遍历数组并将前k个元素加入最小堆
-    for (int i = 0; i < k; i++) {
-        min_heap.push(nums[i]);
+```c++
+vector<int> topKFrequent(vector<int>& nums, int k) {
+    unordered_map<int, int> m;
+    priority_queue<pair<int, int>> q;
+    vector<int> res;
+    // 先统计每个数字出现的次数
+    for (auto a : nums)
+        ++m[a];
+    // 然后将次数 和数字 放到大根堆里面去, 然后从大根堆里面一次弹出k个数字
+    for (auto it : m) q.push({it.second, it.first});
+    for (int i = 0; i < k; ++i) 
+    {
+        res.push_back(q.top().second);
+        q.pop();
     }
-
-    // 继续遍历数组，将大于堆顶元素的元素加入堆，并弹出堆顶元素
-    for (int i = k; i < nums.size(); i++) {
-        if (nums[i] > min_heap.top()) {
-            min_heap.pop();
-            min_heap.push(nums[i]);
-        }
-    }
-
-    // 最终堆顶元素就是第k个最大的元素
-    return min_heap.top();
+    return res;
 }
 ```
+
+
+
 #### [324. 摆动排序 II](https://leetcode-cn.com/problems/wiggle-sort-ii/)  #todo
 
 核心思想， 如果当前数小于num,当前数和小于区域的下一个数交换, 如果当前数大于num,当前数和大于区域的前一
@@ -2324,68 +2360,197 @@ public:
 
 ```c++
 class Solution {
+public:
     int merge(vector<int> &nums, int left, int mid, int right)
     {
-        int index = 0, count = 0;
-        vector<int> help(right - left + 1); // 开辟一个辅助数组
-        int i = left;
-        int j = mid+1;
-        // 按照升序的方式处理
-        while( i <= mid && j <= right)
+        int i = left, j = mid + 1;  // i指向左子数组，j指向右子数组
+        vector<int> temp;           // 临时数组存储合并结果
+        int count = 0;              // 统计逆序对数量
+        
+        // 第一阶段：统计满足 nums[i] > 2 * nums[j] 的逆序对
+        // 这里利用了两个子数组都已经有序的性质
+        while(i <= mid && j <= right)
         {
-            if (nums[i] > 2LL * nums[j])
+            // 如果 nums[i] > 2 * nums[j]，说明找到了逆序对
+            // 由于左子数组是有序的，从i到mid的所有元素都满足条件
+            if (nums[i] > 2LL * nums[j])  // 使用2LL避免整数溢出
             {
-                count += mid - i + 1;
-                j++;
+                count += mid - i + 1;  // 一次性统计从i到mid的所有逆序对
+                j++;                   // 移动右指针继续查找
             }
             else
             {
-                i++;
+                i++;                   // 当前nums[i]不满足条件，移动左指针
             }
         }
-        // 真正的归并排序从这里开始
-        i = left;
-        j = mid+1;
-        while( i <= mid && j <= right)
+        
+        // 第二阶段：标准归并排序，合并两个有序子数组
+        i = left, j = mid + 1;  // 重置指针
+        
+        // 比较两个子数组的元素，将较小的放入临时数组
+        while(i <= mid && j <= right)
         {
-           help[index++] = nums[i] < nums[j] ? nums[i++] :nums[j++];
+            temp.push_back(nums[i] < nums[j] ? nums[i++] : nums[j++]);
         }
+
         while(i <= mid)
-        {
-            help[index++] = nums[i++]; 
-        }
+            temp.push_back(nums[i++]);
+   
         while(j <= right)
-        {
-            help[index++] = nums[j++]; 
-        }
-        for(int i = 0; i < help.size(); i++)
-        {
-            nums[i+left] = help[i];
-        }
-        return count;
+            temp.push_back(nums[j++]);
+        for (int i = 0; i < temp.size(); i++)
+            nums[i + left] = temp[i];
+        
+        return count;  // 返回跨越两个子数组的逆序对数量
     }
 
-
-    int mergeSort(vector<int> &nums, int left, int right)
+    int merge_sort(vector<int> &nums, int left, int right)
     {
+        // 递归终止条件：只有一个元素或区间为空
         if (left == right)
-        {
             return 0;
-        }
-        int mid = left + ((right -left ) >> 1);
-        return mergeSort(nums, left, mid) +  mergeSort(nums, mid+1, right) + merge(nums, left, mid, right);
+        
+        // 计算中点，避免整数溢出
+        int mid = left + (right - left) / 2;
+        
+        // 递归处理左半部分，统计左半部分内部的逆序对
+        int left_count = merge_sort(nums, left, mid);
+        
+        // 递归处理右半部分，统计右半部分内部的逆序对
+        int right_count = merge_sort(nums, mid + 1, right);
+        // 合并两部分，并统计跨越两部分的逆序对
+        // 总的逆序对数 = 左半部分逆序对 + 右半部分逆序对 + 跨越两部分的逆序对
+        return left_count + right_count + merge(nums, left, mid, right);
     }
 
-public:
     int reversePairs(vector<int>& nums) {
+        // 边界情况处理：数组长度小于等于1时，不存在逆序对
         if (nums.size() <= 1)
             return 0;
-        return mergeSort(nums, 0, nums.size()-1);
+        
+        // 调用归并排序函数，统计整个数组的逆序对
+        return merge_sort(nums, 0, nums.size() - 1);
     }
 };
+
+/*
+算法思路总结：
+1. 使用分治思想，将数组分为左右两部分
+2. 递归统计左半部分和右半部分内部的逆序对
+3. 在合并过程中统计跨越左右两部分的逆序对
+4. 利用归并排序保持数组有序，为后续统计提供便利
+
+时间复杂度：O(n log n)
+空间复杂度：O(n)
+
+关键优化点：
+- 在统计阶段利用数组有序性质，一次性统计多个逆序对
+- 使用2LL避免整数乘法溢出
+- 分离统计和合并两个阶段，逻辑清晰
+*/
 ```
 
-#### [969. 煎饼排序](https://leetcode.cn/problems/pancake-sorting/)
+#### [LCR 170. 交易逆序对的总数](https://leetcode.cn/problems/shu-zu-zhong-de-ni-xu-dui-lcof/)
+
+```c++
+class Solution {
+public:
+    int merge(vector<int>& nums, int left, int mid, int right)
+    {
+        vector<int> temp;           
+        int i = left, j = mid + 1;
+        int count = 0;              // 统计逆序对数量
+
+        while(i <= mid && j <= right)
+        {
+            // 关键逻辑：当左子数组元素大于右子数组元素时
+            if (nums[i] > nums[j])
+            {
+                // 由于左右子数组都是有序的，如果nums[i] > nums[j]
+                // 那么从i到mid的所有元素都大于nums[j]，形成逆序对
+                count += mid - i + 1;  // 一次性统计多个逆序对
+                temp.push_back(nums[j++]);
+            }
+            else
+            {
+                temp.push_back(nums[i++]);
+            }
+        }
+
+        while(i <= mid)
+            temp.push_back(nums[i++]);
+
+        while(j <= right)
+            temp.push_back(nums[j++]);
+
+        // 将排序后的临时数组复制回原数组的对应位置
+        // 这样确保了子数组在下次合并时是有序的
+        for(int i = 0; i < temp.size(); i++)
+        {
+            nums[i + left] = temp[i];
+        }
+
+        return count;  // 返回本次合并过程中统计到的逆序对数量
+    }
+
+    int merge_sort(vector<int>& nums, int left, int right)
+    {
+        // 递归终止条件：当区间只包含一个元素时，不存在逆序对
+        if (left == right)
+            return 0;
+        int mid = left + (right - left) / 2;
+
+        // 分治策略：
+        // 1. 递归处理左半部分，统计左半部分内部的逆序对
+        int left_count = merge_sort(nums, left, mid);
+        
+        // 2. 递归处理右半部分，统计右半部分内部的逆序对
+        int right_count = merge_sort(nums, mid + 1, right);
+        
+        // 3. 合并两部分，统计跨越左右两部分的逆序对
+        int count = merge(nums, left, mid, right);
+    
+        // 返回三部分逆序对的总和
+        return left_count + right_count + count;
+    }
+    int reversePairs(vector<int>& nums) {
+        // 边界情况处理：空数组没有逆序对
+        if (nums.empty())
+            return 0;
+        
+        // 调用归并排序函数处理整个数组
+        return merge_sort(nums, 0, nums.size() - 1);
+    }
+};
+
+/*
+算法核心思想：
+这是经典的逆序对问题，与之前的问题不同，这里统计的是满足 i < j 且 nums[i] > nums[j] 的数对。
+
+关键创新点：
+1. 将逆序对统计与归并排序过程完美结合
+2. 在归并过程中，当发现 nums[i] > nums[j] 时，利用数组有序性
+   一次性统计从 i 到 mid 的所有逆序对
+3. 通过分治将 O(n²) 的暴力解法优化为 O(n log n)
+
+算法流程：
+1. 分治：将数组递归分为左右两部分
+2. 征服：分别统计左右部分内部的逆序对
+3. 合并：在合并有序数组的过程中统计跨越两部分的逆序对
+
+时间复杂度：O(n log n) - 与归并排序相同
+空间复杂度：O(n) - 需要临时数组存储合并结果
+
+应用场景：
+- 数组排序程度的衡量
+- 排序算法的交换次数计算
+- 某些动态规划问题的子问题
+*/
+```
+
+
+
+#### [969. 煎饼排序](https://leetcode.cn/problems/pancake-sorting/)  todo
 
 ```c++
 vector<int> pancakeSort(vector<int>& arr) {
