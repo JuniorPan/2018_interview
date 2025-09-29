@@ -3217,101 +3217,83 @@ bool isPalindrome(ListNode* head) {
 ##### [86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)  # todo
 
 ```c++
- // 将所有小于给定值的节点取出组成一个新的链表，此时原链表中剩余的节点的值都大于或等于给定值，只要将原链表直接接在新链表后
-ListNode* partition(ListNode* head, int x) {
-        // 如果链表为空，直接返回原始链表
-        if (head == nullptr)
-            return head;
-        // 创建两个新的头节点，用于构建小分区和大分区
-        ListNode* large_head = new ListNode(-1);
-        ListNode* small_head = new ListNode(-1);
-        // 将大分区的头节点指向原始链表的头
-        large_head->next = head;
-        // 创建两个指针，cur 用于遍历原始链表，p 用于构建小分区
-        ListNode* cur = large_head;
-        ListNode* p = small_head;
-        // 遍历原始链表
-        while (cur->next) {
-            if (cur->next->val < x) {
-                // 如果当前节点的值小于 x，将其添加到小分区
-                p->next = cur->next;
-                p = p->next;
-                cur->next = cur->next->next; // 当前节点从原始链表中移除，并将它的下一个节点链接到当前节点的下一个节点
-            } else {
-                // 如果当前节点的值大于等于 x，继续遍历
-                cur = cur->next;
-            }
-        }
-        // 连接两个分区，将小分区连接到大分区的后面
-        p->next = large_head->next;
+ ListNode* partition(ListNode* head, int x) {
+    if (!head) return nullptr;
+    // small_head 用来存放小于 x 的节点
+    // large_head 用来存放大于等于 x 的节点
+    ListNode* small_head = new ListNode(-1);
+    ListNode* large_head = new ListNode(-1);
 
-        // 返回小分区的头节点，它是分隔后的链表
-        return small_head->next;
+    ListNode* small = small_head;  // small 链表的尾指针
+    ListNode* large = large_head;  // large 链表的尾指针
+
+    // 遍历原链表
+    while (head) {
+        if (head->val < x) {
+            small->next = head;   // 挂到 small 链表
+            small = small->next;  // 更新 small 尾指针
+        } else {
+            large->next = head;   // 挂到 large 链表
+            large = large->next;  // 更新 large 尾指针
+        }
+        head = head->next;  // 遍历下一个节点
     }
+    // 拼接两个链表：small 的尾巴指向 large_head->next
+    small->next = large_head->next;
+    // large 的尾巴必须断开，否则可能出现环
+    large->next = nullptr;
+    return small_head->next;
+}
 ```
 
 ##### [147. 对链表进行插入排序](https://leetcode.cn/problems/insertion-sort-list/) todo 
 
 ```c++
 ListNode* insertionSortList(ListNode* head) {
-    // 如果链表为空或只有一个节点，直接返回原始链表
     if (!head || !head->next) {
-        return head;
+        return head; // 链表为空或只有一个节点，直接返回
     }
-
-    // 创建一个虚拟头节点，简化插入操作
     ListNode* dummy = new ListNode(0);
     dummy->next = head;
-
-    // 初始化两个指针，current指向已排序部分的尾部，pre指向未排序部分的头部
-    ListNode* current = head;
-    ListNode* pre = head->next;
-
-    while (pre) {
-        // 如果当前节点的值小于已排序部分的尾部节点值，需要将其插入到合适的位置
-        if (pre->val < current->val) {
-            // 从头开始查找插入位置
-            ListNode* temp = dummy;
-            while (temp->next->val < pre->val) {
-                temp = temp->next;
-            }
-            // 将pre节点插入到合适的位置
-            current->next = pre->next;
-            pre->next = temp->next;
-            temp->next = pre;
-
-            // 更新pre指针，继续下一个未排序节点的处理
-            pre = current->next;
+    // lastSorted 指向当前已排序链表的最后一个节点
+    // cur 指向待插入的节点
+    ListNode* lastSorted = head;
+    ListNode* cur = head->next;
+    while (cur) {
+        if (cur->val >= lastSorted->val) {
+            // 当前节点已经在正确位置，无需移动
+            lastSorted = cur;
         } else {
-            // 如果当前节点的值不小于已排序部分的尾部节点值，直接更新current和pre指针
-            current = pre;
-            pre = pre->next;
+            // 需要将 cur 插入到前面合适位置
+            ListNode* prev = dummy;
+            // 从头开始找插入位置
+            while (prev->next->val < cur->val) {
+                prev = prev->next;
+            }
+            // 把 cur 插入到 prev 和 prev->next 之间
+            lastSorted->next = cur->next;
+            cur->next = prev->next;
+            prev->next = cur;
         }
+        cur = lastSorted->next; // 更新 cur（注意：cur 是否更新取决于是否插入）
     }
-    // 释放虚拟头节点，返回排序后的链表头部
-    ListNode* sortedHead = dummy->next;
-    delete dummy;
-    return sortedHead;
+    return dummy->next;
 }
 ```
 
 ##### [148. 排序链表](https://leetcode.cn/problems/sort-list/)  对链表使用归并的方式排序
 
 ```c++
-ListNode* merge_list(ListNode *l1, ListNode *l2)
+ListNode *merge_list(ListNode *l1, ListNode *l2)
 {
     ListNode *fake_head = new ListNode(-1);
     ListNode *cur = fake_head;
-
-    while(l1 && l2)
-    {
-        if (l1->val < l2->val)
-        {
+    while(l1 && l2) {
+        if (l1->val < l2->val) {
             cur->next = l1;
             l1 = l1->next;
         }
-        else 
-        {
+        else {
             cur->next = l2;
             l2 = l2->next;
         }
@@ -3320,21 +3302,22 @@ ListNode* merge_list(ListNode *l1, ListNode *l2)
     cur->next = l1 ? l1 : l2;
     return fake_head->next;
 }
-
 ListNode* sortList(ListNode* head) {
-
     if (head == nullptr || head->next == nullptr)
         return head;
-    ListNode *fast = head;
     ListNode *slow = head;
-    while(fast->next && fast->next->next)
-    {
-        fast = fast->next->next;
+    ListNode *fast = head;
+    while(fast->next && fast->next->next) {
         slow = slow->next;
+        fast = fast->next->next;
     }
-    fast = slow->next;
+    // 分割链表
+    ListNode* mid = slow->next;
     slow->next = nullptr;
-    return merge_list(sortList(head), sortList(fast));
+    // 递归排序两部分并合并
+    ListNode* left = sortList(head);
+    ListNode* right = sortList(mid);
+    return merge_list(left, right);
 }
 ```
 
@@ -3450,56 +3433,66 @@ public:
 ##### [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)  #todo
 
 ```c++
-// 每k组翻转
-ListNode* reverseKGroup(ListNode* head, int k) 
-{
-    ListNode *fakeHead = new ListNode(-1);
-    fakeHead->next = head;
+ListNode* reverseKGroup(ListNode* head, int k) {
+    if (!head || k <= 1) return head;
 
-    ListNode *pre = fakeHead;
-    ListNode *cur = fakeHead;
+    // 创建虚拟头节点，方便处理头部翻转
+    ListNode* dummy = new ListNode(-1);
+    dummy->next = head;
 
-    int num = 0;
-    while(cur->next)
-    {
-        ++num;
+    ListNode* pre = dummy; // pre 指向每组翻转的前一个节点
+    ListNode* cur = dummy; // cur 用于统计链表长度
+
+    // 统计链表长度
+    int n = 0;
+    while (cur->next) {
+        ++n;
         cur = cur->next;
-    }   
-    while(num >= k)
-    {
-        cur = pre->next;
-        for(int i = 1; i < k; i++)
-        {
-            // 把cur后面的一个节点temp摘下来，然后用头插法插入到pre后面
-            ListNode *temp = cur->next;
+    }
+
+    // 逐组翻转
+    while (n >= k) {
+        cur = pre->next; // cur 指向本组的第一个节点
+        // 从第二个节点开始，逐个摘下来放到 pre 后面（头插法）
+        for (int i = 1; i < k; i++) {
+            ListNode* temp = cur->next;
             cur->next = temp->next;
             temp->next = pre->next;
             pre->next = temp;
         }
+        // 更新 pre 指针，指向这一组的尾节点
         pre = cur;
-        num -= k;
+        n -= k;
     }
-    return fakeHead->next;
+    return dummy->next;
 }
 ```
 
 ##### [92. 反转链表 II](https://leetcode-cn.com/problems/reverse-linked-list-ii/) 
 
 ```c++
-ListNode *reverseBetween(ListNode *head, int m, int n)
-{
-    ListNode *dummy = new ListNode(-1), *pre = dummy;
+ListNode* reverseBetween(ListNode* head, int m, int n) {
+    if (!head || m == n) return head; // 无需翻转
+
+    // 创建虚拟头节点，方便统一处理边界
+    ListNode* dummy = new ListNode(-1);
     dummy->next = head;
-    for (int i = 0; i < m - 1; ++i)
+
+    // 1. 找到第 m-1 个节点 pre
+    ListNode* pre = dummy;
+    for (int i = 0; i < m - 1; ++i) {
         pre = pre->next;
-    ListNode *cur = pre->next;
-    for (int i = m; i < n; ++i)
-    {
-    	// 这个地方依然是头插法
-        ListNode *t = cur->next;
-        cur->next = t->next;
-        t->next = pre->next;
-        pre->next = t;
+    }
+
+    // 2. cur 指向第 m 个节点（即翻转区间的第一个节点）
+    ListNode* cur = pre->next;
+
+    // 3. 头插法：逐个把 cur->next 插到 pre 后面
+    for (int i = m; i < n; ++i) {
+        ListNode* temp = cur->next;   // 待插入节点
+        cur->next = temp->next;       // 从原链表摘下
+        temp->next = pre->next;       // 插入到 pre 后面
+        pre->next = temp;             // 更新 pre->next
     }
     return dummy->next;
 }
