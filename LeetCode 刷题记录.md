@@ -3502,12 +3502,10 @@ ListNode* reverseBetween(ListNode* head, int m, int n) {
 
 ```c++
 // 非递归
-ListNode *reverseList(ListNode *head)  // 没有额外使用头结点的方式
-{
-    if(!head)
-        return nullptr;
-    ListNode *pre = nullptr;
-    ListNode *cur = head;
+ListNode* reverseList(ListNode* head) {
+    if (head == nullptr || head->next == nullptr)
+        return head;
+    ListNode *cur = head, *pre = nullptr;
     while(cur)
     {
         ListNode *temp = cur->next;
@@ -3517,7 +3515,6 @@ ListNode *reverseList(ListNode *head)  // 没有额外使用头结点的方式
     }
     return pre;
 }
-
 // 递归
 ListNode* reverseList(ListNode* head) 
 {
@@ -3532,51 +3529,27 @@ ListNode* reverseList(ListNode* head)
 ##### [328. 奇偶链表](https://leetcode-cn.com/problems/odd-even-linked-list/) todo
 
 ```c++
-class Solution
-{
-public:
-    /*
-    * 解法一:
-    * 可以使用两个指针来做，pre指向奇节点，cur指向偶节点，然后把偶节点cur后面的那个奇节点提前到pre的后面，然后pre和cur各自前进一步，此时cur又指向偶节点，pre指向当前奇节点的末尾，以此类推直至把所有的偶节点都提前了即可
-    */
-    ListNode *oddEvenList_1(ListNode *head)
-    {
-        if (!head || !head->next)
-            return head;
-        ListNode *pre = head, *cur = head->next;
-        while (cur && cur->next)
-        {
-            ListNode *tmp = pre->next;
-            pre->next = cur->next;
-            cur->next = cur->next->next;
-            pre->next->next = tmp;
-            cur = cur->next;
-            pre = pre->next;
-        }
-        return head;
+// 将链表按奇偶索引重新排序
+// 奇数位置的节点在前，偶数位置的节点在后
+ListNode* oddEvenList(ListNode* head) {
+    // 边界情况：空链表或单节点链表，直接返回
+    if (!head || !head->next) return head;
+
+    ListNode* odd = head; // odd 指向奇数链表的头（即 head）
+    ListNode* even = head->next; // even 指向偶数链表的头（即 head->next）
+    ListNode* evenHead = even;  // 保存偶数链表的头，最后需要拼接
+
+    // 迭代处理：奇偶链表分别向前推进
+    while (even && even->next) {
+        odd->next = even->next;   // 奇数节点指向下一个奇数节点
+        odd = odd->next;          // odd 指针前进
+        even->next = odd->next;   // 偶数节点指向下一个偶数节点
+        even = even->next;        // even 指针前进
     }
-    /*
-    * 解法二:
-    * 用两个奇偶指针分别指向奇偶节点的起始位置，另外需要一个单独的指针even_head来保存偶节点的起点位置，然后把奇节点的指向偶节点的下一个(一定是奇节点)，此奇节点后移一步，再把偶节点指向下一个奇节点的下一个(一定是偶节点)，此偶节点后移一步，以此类推直至末尾，此时把分开的偶节点的链表连在奇节点的链表后即可
-    */
-    ListNode *oddEvenList(ListNode *head)
-    {
-        if (!head || !head->next)
-            return head;
-        ListNode *odd = head, *even = head->next, *even_head = even;
-        while (even && even->next)
-        {
-            // odd = odd->next = even->next;
-            // even = even->next = odd->next;
-            odd->next = even->next;
-            odd = odd->next;
-            even->next = odd->next;
-            even = even->next;
-        }
-        odd->next = even_head;
-        return head;
-    }
-};
+    // 拼接：奇数链表的尾部接上偶数链表的头
+    odd->next = evenHead;
+    return head;
+}
 ```
 
 ### 动态规划 
