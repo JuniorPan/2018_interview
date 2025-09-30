@@ -4234,33 +4234,32 @@ bool isMatch(string s, string p)
 ##### [72. 编辑距离](https://leetcode-cn.com/problems/edit-distance/)  #todo
 
 ```c++
-int minDistance(string word1, string word2)
-{
+int minDistance(string word1, string word2) {
     int m = word1.size();
     int n = word2.size();
-    // dp[i][j] 表示word1[0...i-1] 变换到word2[0...j-1]所需要的最小步骤
-    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0)); // 二维dp数组初始化大小为[m+1][n+1] 是为了初始化第0行和第0列
+    // dp[i][j] 表示将 word1[0..i-1] 转换成 word2[0..j-1] 的最少操作次数
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+    // 初始化边界情况
+    for (int i = 0; i <= m; i++)
+        dp[i][0] = i; // word2 为空，需要删除 i 个字符
+    for (int j = 0; j <= n; j++)
+        dp[0][j] = j; // word1 为空，需要插入 j 个字符
 
-   for(int i = 0; i <= m; i++)
-        dp[i][0] = i;
-   for(int j = 0; j <=n; j++)
-   		dp[0][j] = j;
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (word1[i - 1] == word2[j - 1]) // 当前字符相同，无需操作，继承 dp[i-1][j-1]
 
-    for (int i = 1; i <= m; i++)
-    {
-        for (int j = 1; j <= n; j++)
-        {
-            if (word1[i - 1] == word2[j - 1])
-            {
                 dp[i][j] = dp[i - 1][j - 1];
-            }
             else
-            {
-                dp[i][j] = min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1])) + 1; //dp[i-1][j-1] 表示替换操作，dp[i-1][j] 表示删除操作，dp[i][j-1] 表示插入操作。
-            }
+                // 当前字符不同，三种操作取最小 +1：
+                // 1. 替换：dp[i-1][j-1] + 1
+                // 2. 删除 word1[i-1]：dp[i-1][j] + 1
+                // 3. 插入 word2[j-1]：dp[i][j-1] + 1
+                dp[i][j] = min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1])) +
+                    1;
         }
     }
-    return dp[m][n];
+    return dp[m][n]; // 返回将 word1 转换为 word2 的最少操作数
 }
 ```
 
@@ -4268,25 +4267,30 @@ int minDistance(string word1, string word2)
 
 ```c++
 int minDistance(string word1, string word2) {
-    // dp[i][j]：以i-1为结尾的字符串word1，和以j-1位结尾的字符串word2，想要达到相等，所需要删除元素的最少次数
-    vector<vector<int>> dp(word1.size() + 1, vector<int>(word2.size() + 1));
+    int m = word1.size();
+    int n = word2.size();
+    // dp[i][j] 表示将 word1[0..i-1] 转换为 word2[0..j-1] 的最少操作次数
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+    // 初始化边界情况
+    for (int i = 0; i <= m; i++)
+        dp[i][0] = i; // word2 为空，需要删除 i 个字符
+    for (int j = 0; j <= n; j++)
+        dp[0][j] = j; // word1 为空，需要插入 j 个字符
 
-    // dp[i][0]：word2为空字符串，以i-1为结尾的字符串word1要删除多少个元素，才能和word2相同呢，很明显dp[i][0] = i。
-    for (int i = 0; i <= word1.size(); i++) dp[i][0] = i;
-    for (int j = 0; j <= word2.size(); j++) dp[0][j] = j;
-    for (int i = 1; i <= word1.size(); i++) {
-        for (int j = 1; j <= word2.size(); j++) {
-            if (word1[i - 1] == word2[j - 1]) { //  当word1[i - 1] 与 word2[j - 1]相同的时候，dp[i][j] = dp[i - 1][j - 1];
-                dp[i][j] = dp[i - 1][j - 1]; 
-            } else {// 当word1[i - 1] 与 word2[j - 1]不相同的时候，有三种情况： 情况一：删word1[i - 1]，最少操作次数为dp[i - 1][j] + 1,
-                    // 情况二：删word2[j - 1]，最少操作次数为dp[i][j - 1] + 1
-                    // 情况三：同时删word1[i - 1]和word2[j - 1]，操作的最少次数为dp[i - 1][j - 1] + 2
-                    //  dp[i][j - 1] + 1 = dp[i - 1][j - 1] + 2，所以递推公式可简化为：dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1);
-                dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1);
-            }
+    // 填充 dp 表
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (word1[i - 1] == word2[j - 1])
+                // 当前字符相同，无需操作，继承 dp[i-1][j-1]
+                dp[i][j] = dp[i - 1][j - 1];
+            else
+                // 当前字符不同，允许操作为： 1. 删除 word1[i-1]：dp[i-1][j] + 1
+                // 2. 插入 word2[j-1]：dp[i][j-1] + 1
+                // 不考虑替换操作，所以只取删除和插入的最小值 +1
+                dp[i][j] = min(dp[i - 1][j], dp[i][j - 1]) + 1;
         }
     }
-    return dp[word1.size()][word2.size()];
+    return dp[m][n]; // 返回将 word1 转换为 word2 的最少操作数
 }
 ```
 
@@ -4297,25 +4301,26 @@ int numDistinct(string s, string t) {
     int m = s.size();
     int n = t.size();
 
-    // 使用 编辑距离的思路来理解，不断在s中删掉某个字符就行
-    // dp[i][j]：以i-1为结尾的s子序列中出现以j-1为结尾的t的个数为dp[i][j], 
+    // dp[i][j] 表示 s[0..i-1] 中 t[0..j-1] 的不同子序列个数
     vector<vector<unsigned long long>> dp(m + 1, vector<unsigned long long>(n + 1, 0));
-    for (int j = 0; j <= m; j++)
-    {
+
+    // 边界情况：空字符串 t 的子序列个数为 1（什么都不选）
+    for (int j = 0; j <= m; j++) {
         dp[j][0] = 1;
     }
-
-    for (int i = 1; i <= m; i++)
-    {
-        for (int j = 1; j <= n; j++)
-        {
-            if (s[i - 1] != t[j - 1])
+    // 填充 dp 表
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (s[i - 1] != t[j - 1]) // 当前字符不匹配：只能跳过 s[i-1]
                 dp[i][j] = dp[i - 1][j];
             else
+                // 当前字符匹配：1. 使用 s[i-1] 匹配 t[j-1] → dp[i-1][j-1]
+                // 2. 不使用 s[i-1] → dp[i-1][j]  总数为两种情况之和
                 dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
         }
     }
-    return dp[m][n];
+
+    return dp[m][n]; // 返回 s 中 t 的不同子序列个数
 }
 ```
 
@@ -4324,53 +4329,55 @@ int numDistinct(string s, string t) {
 <img src="https://img-blog.csdnimg.cn/2021030317364166.jpg" alt="392.判断子序列2" style="zoom:50%;" />
 
 ```c++
-bool isSubsequence(string s, string t) 
-{
-    // dp[i][j] 表示以下标i-1为结尾的字符串s，和以下标j-1为结尾的字符串t，相同子序列的长度为dp[i][j]
-    vector<vector<int>> dp(s.size() + 1, vector<int>(t.size() + 1, 0));
-    for (int i = 1; i <= s.size(); i++) 
-    {
-        for (int j = 1; j <= t.size(); j++) 
-        {
-            if (s[i - 1] == t[j - 1])  // 因为找到了一个相同的字符，相同子序列长度自然要在dp[i-1][j-1]的基础上加1
+bool isSubsequence(string s, string t) {
+    int m = s.size();
+    int n = t.size();
+    // dp[i][j] 表示 s[0..i-1] 和 t[0..j-1] 的最长公共子序列长度
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+
+    // 填充 dp 表
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (s[i - 1] == t[j - 1])
+                // 当前字符相同：把当前字符加入最长公共子序列
+                // 长度 = 前一段的最长公共子序列长度 + 1
                 dp[i][j] = dp[i - 1][j - 1] + 1;
-            else  // 此时相当于t要删除元素，t如果把当前元素t[j - 1]删除，那么dp[i][j] 的数值就是 看s[i - 1]与 t[j - 2]的比较结果了
+            else
+                // 当前字符不同：忽略 t[j-1]，保持 s[0..i-1] 与 t[0..j-2]
+                // 的最长公共子序列长度
                 dp[i][j] = dp[i][j - 1];
         }
     }
-    if (dp[s.size()][t.size()] == s.size()) return true;
-    return false;
-  }
+    // 如果 s 的长度等于 dp[m][n]，说明 s 完全匹配 t 中的某个子序列
+    return dp[m][n] == m;
+}
 ```
 
 ##### [712. 两个字符串的最小ASCII删除和](https://leetcode-cn.com/problems/minimum-ascii-delete-sum-for-two-strings/)
 
 ```c++
-int minimumDeleteSum(string s1, string s2) 
-{   
+int minimumDeleteSum(string s1, string s2) {
     int m = s1.size();
     int n = s2.size();
+    // dp[i][j] 表示 s1[0..i-1] 和 s2[0..j-1]
+    // 变成相同字符串需要删除字符的最小 ASCII 和
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
 
-    //dp[i][j]表示s1[0...i-1]和s2[0...j-1]需要的最小cost
-    vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
-    for(int i = 1; i <= m; i++)
-    {
-        dp[i][0] = dp[i-1][0] + s1[i-1];
-    }
-    for(int j = 1; j <= n; j++)
-    {
-        dp[0][j] = dp[0][j-1] + s2[j-1];
-    }
-    for(int i = 1; i <= m; i++)
-    {
-        for(int j = 1; j <= n; j++)
-        {
-            if (s1[i-1] == s2[j-1]) // 表示不需要删除
-                dp[i][j] = dp[i-1][j-1];
+    // 边界情况：s2 为空时，需要删除 s1 的所有字符
+    for (int i = 1; i <= m; i++)
+        dp[i][0] = dp[i - 1][0] + s1[i - 1];
+
+    // 边界情况：s1 为空时，需要删除 s2 的所有字符
+    for (int j = 1; j <= n; j++)
+        dp[0][j] = dp[0][j - 1] + s2[j - 1];
+
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (s1[i - 1] == s2[j - 1]) // 当前字符相同，不需要删除，继承 dp[i-1][j-1]
+                dp[i][j] = dp[i - 1][j - 1];
             else
-            {
-                dp[i][j] = min(dp[i-1][j] + s1[i-1], dp[i][j-1] + s2[j-1]);
-            }
+                // 当前字符不同：删除 s1[i-1] 或删除 s2[j-1]，取最小值
+                dp[i][j] = min(dp[i - 1][j] + s1[i - 1], dp[i][j - 1] + s2[j - 1]);
         }
     }
     return dp[m][n];
@@ -4380,77 +4387,90 @@ int minimumDeleteSum(string s1, string s2)
 ##### [97. 交错字符串](https://leetcode-cn.com/problems/interleaving-string/)
 
 ```c++
-bool isInterleave(string s1, string s2, string s3)
-{
+bool isInterleave(string s1, string s2, string s3) {
     int m = s1.size();
     int n = s2.size();
     int k = s3.size();
 
+    // 如果长度不匹配，s3 不可能是交错组成
     if (m + n != k)
         return false;
 
-    // dp[i][j] 表示s1[0...i-1] 和s2[0...j-1]能否交替表示成s3[0...i+j-1]
+    // dp[i][j] 表示 s1[0..i-1] 和 s2[0..j-1] 能否交错组成 s3[0..i+j-1]
     vector<vector<bool>> dp(m + 1, vector<bool>(n + 1, false));
-    dp[0][0] = true;
-    for (int i = 1; i <= m; i++)
-    {
-        dp[i][0] = dp[i - 1][0] & (s1[i - 1] == s3[i - 1]);
-    }
 
+    dp[0][0] = true; // 空字符串交错组成空字符串
+
+    // 初始化边界情况：s2 为空，只能由 s1 构成 s3
+    for (int i = 1; i <= m; i++)
+        dp[i][0] = dp[i - 1][0] && (s1[i - 1] == s3[i - 1]);
+
+    // 初始化边界情况：s1 为空，只能由 s2 构成 s3
     for (int j = 1; j <= n; j++)
-    {
-        dp[0][j] = dp[0][j - 1] & (s2[j - 1] == s3[j - 1]);
-    }
+        dp[0][j] = dp[0][j - 1] && (s2[j - 1] == s3[j - 1]);
 
-    for (int i = 1; i <= m; i++)
-    {
-        for (int j = 1; j <= n; j++)
-        {
-            if ((s1[i - 1] == s3[i + j - 1] && dp[i - 1][j]) || (s2[j - 1] == s3[i + j - 1] && dp[i][j - 1]))
+    // 填充 dp 表
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            // 两种情况只要有一种满足即可：
+            // 1. s1[i-1] 匹配 s3[i+j-1] 且 dp[i-1][j] 为 true
+            // 2. s2[j-1] 匹配 s3[i+j-1] 且 dp[i][j-1] 为 true
+            if ((s1[i - 1] == s3[i + j - 1] && dp[i - 1][j]) ||
+                (s2[j - 1] == s3[i + j - 1] && dp[i][j - 1]))
                 dp[i][j] = true;
         }
     }
-    return dp[m][n];
+    return dp[m][n]; 
 }
 ```
 
 ##### [718. 最长重复子数组](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/) todo 滚动数组
 
 ```c++
-
 // 利用滚动数组优化成一维
 int findLength(vector<int>& nums1, vector<int>& nums2) {
-    // dp[i][j] 表示 nums1[0...i-1] 和nums2[0...j-1]上的最长重复子数组长度
-    vector<int> dp(nums2.size() + 1,  0);
-    int res = 0;
-    for(int i = 1; i <= nums1.size(); i++)
-    {
+    // dp[j] 表示以 nums1[i-1] 和 nums2[j-1] 结尾的最长公共子数组长度
+    // 由于只依赖上一行的 dp[j-1]，可以用一维数组滚动优化
+    vector<int> dp(nums2.size() + 1, 0);
+
+    int res = 0; // 记录最长公共子数组长度
+
+    for (int i = 1; i <= nums1.size(); i++) {
+        // 注意：从后往前遍历 nums2，保证 dp[j-1] 是上一行的值
         for (int j = nums2.size(); j > 0; j--) {
             if (nums1[i - 1] == nums2[j - 1]) {
+                // 当前元素相等，可以延长公共子数组长度
                 dp[j] = dp[j - 1] + 1;
-            } else dp[j] = 0; // 注意这里不相等的时候要有赋0的操作
-            res = max(res,dp[j]);
+            } else {
+                // 当前元素不等，公共子数组断开
+                dp[j] = 0; 
+            }
+            // 更新全局最大长度
+            res = max(res, dp[j]);
         }
     }
-    return res;
+    return res; // 返回最长公共子数组长度
 }
-
 // 二维数组
-int findLength_1(vector<int>& nums1, vector<int>& nums2) {
-    // dp[i][j] 表示 nums1[0...i-1] 和nums2[0...j-1]上的最长重复子数组长度
-    vector<vector<int>> dp(nums1.size() + 1, vector<int>(nums2.size() + 1 , 0));
-    int res = 0;
-    for(int i = 1; i <= nums1.size(); i++)
-    {
-        for(int j = 1; j <= nums2.size(); j++)
-        {
-            if (nums1[i-1] == nums2[j-1])
-                dp[i][j] = dp[i-1][j-1] + 1;
-            res = max(dp[i][j], res);
+int findLength(vector<int>& nums1, vector<int>& nums2) {
+        int m = nums1.size();
+        int n = nums2.size();
+        // dp[i][j] 表示以 nums1[i-1] 和 nums2[j-1] 结尾的最长公共子数组长度
+        vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+        int res = 0; // 记录最长公共子数组长度
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (nums1[i - 1] == nums2[j - 1])
+                    // 当前元素相等，可以延长前面的公共子数组长度
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                else
+                    // 当前元素不等，连续公共子数组断开
+                    dp[i][j] = 0;
+                res = max(res, dp[i][j]);
+            }
         }
+        return res; // 返回最长公共子数组长度
     }
-    return res;
-}
 
 ```
 
@@ -4499,26 +4519,26 @@ int longestCommonSubsequence(string text1, string text2) {
     return dp[m];
 }
 
-int longestCommonSubsequence(string word1, string word2)
-{
+int longestCommonSubsequence(string word1, string word2) {
     int m = word1.size();
     int n = word2.size();
     if (m == 0 && n == 0)
-        return 0;
-    // dp[i][j] 表示word1[0...i-1]和word2[0...j-1]上的最长公共子序列长度
-    // 这里dp数组初始化长度为m+1,n+1,为了初始化方便考虑第0行和第0列
+        return 0; // 两个空字符串的最长公共子序列长度为0
+    // dp[i][j] 表示 word1[0..i-1] 和 word2[0..j-1] 的最长公共子序列长度
+    // 初始化 dp 长度为 m+1 和 n+1，方便处理第0行和第0列（空串情况）
     vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
-    for (int i = 1; i <= m; i++)
-    {
-        for (int j = 1; j <= n; j++)
-        {
+    // 填充 dp 表
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
             if (word1[i - 1] == word2[j - 1])
+                // 当前字符相同，可以延长前一段最长公共子序列长度
                 dp[i][j] = dp[i - 1][j - 1] + 1;
             else
+                // 当前字符不同，最长公共子序列长度取舍前一个字符的最大值
                 dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
         }
     }
-    return dp[m][n];
+    return dp[m][n]; 
 }
 ```
 
