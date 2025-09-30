@@ -3606,23 +3606,27 @@ int uniquePaths(int m, int n)
 int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
     int m = obstacleGrid.size();
     int n = obstacleGrid[0].size();
-    if (obstacleGrid.empty() || obstacleGrid[0].empty() || obstacleGrid[0][0] == 1)
-        return 0;
+
+    // 边界情况：起点就是障碍物
+    if (obstacleGrid[0][0] == 1) return 0;
+
+    // dp[j] 表示当前行第 j 列的路径数
     vector<int> dp(n, 0);
-    dp[0] = obstacleGrid[0][0] == 1 ? 0 :1;
-    for(int i = 0; i < m; i++)
-    {
-        for(int j = 0; j < n; j++)
-        {
-            if (obstacleGrid[i][j] == 1)
-                dp[j] = 0;
-            else if (obstacleGrid[i][j] == 0 && j - 1 >= 0)
-                dp[j] = dp[j] + dp[j-1];
+    dp[0] = 1; // 起点路径数 = 1
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (obstacleGrid[i][j] == 1) {
+                dp[j] = 0; // 遇到障碍物，无法到达
+            } else if (j > 0) {
+                dp[j] += dp[j - 1]; 
+                // 状态转移：当前格子 = 来自上方(dp[j]) + 来自左方(dp[j-1])
+                // 注意：这里的 dp[j] 已经是上一行的值
+            }
         }
     }
-    return dp[n-1];
+    return dp[n - 1];
 }
-
 
 int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
 {
@@ -3648,10 +3652,6 @@ int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
         else
             break;
     }
-  
-  	for (int i = 0; i < m && obstacleGrid[i][0] == 0; i++) dp[i][0] = 1;
-    for (int j = 0; j < n && obstacleGrid[0][j] == 0; j++) dp[0][j] = 1;	
-
     // dp[i][j] 表示从[0][0]--->[i][j] 有多少种走法
     for (int i = 1; i < m; i++)
     {
@@ -3673,6 +3673,25 @@ int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid)
 int minPathSum(vector<vector<int>>& grid) {
     int m = grid.size();
     int n = grid[0].size();
+    // 初始化第一列
+    for (int i = 1; i < m; i++) {
+        grid[i][0] += grid[i-1][0];
+    }
+    // 初始化第一行
+    for (int j = 1; j < n; j++) {
+        grid[0][j] += grid[0][j-1];
+    }
+    // 状态转移：直接在 grid 上累加
+    for (int i = 1; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            grid[i][j] += min(grid[i-1][j], grid[i][j-1]);
+        }
+    }
+    return grid[m-1][n-1];
+}
+int minPathSum(vector<vector<int>>& grid) {
+    int m = grid.size();
+    int n = grid[0].size();
     // dp[i][j] 表示从[0][0]-->[i][j]的最短路径和
     vector<int> dp(n, 0);
     dp[0] = grid[0][0];
@@ -3690,31 +3709,26 @@ int minPathSum(vector<vector<int>>& grid) {
     }
     return dp[n - 1];
 }
-int minPathSum(vector<vector<int>> &grid)
-{
+int minPathSum(vector<vector<int>>& grid) {
     int m = grid.size();
     int n = grid[0].size();
-
-    // dp[i][j] 表示从[0][0]-->[i][j]的最短路径和
-    vector<vector<int>> dp(grid); // 这里使用grid直接初始化是为了累加数组方便
-
-    for (int j = 1; j < n; ++j)
-    {
-        dp[0][j] += dp[0][j - 1];
+    // dp[i][j] 表示从 (0,0) 到 (i,j) 的最小路径和
+    vector<vector<int>> dp(grid);   // 初始化为 grid 的副本，避免覆盖原数据
+    // 初始化第一列： 只能从上往下走，所以每一格只能累加上方的路径和
+    for (int i = 1; i < m; i++) {
+        dp[i][0] += dp[i-1][0];
     }
-    for (int j = 1; j < m; ++j)
-    {
-        dp[j][0] += dp[j - 1][0];
+    // 初始化第一行： 只能从左往右走，所以每一格只能累加左边的路径和
+    for (int j = 1; j < n; j++) {
+        dp[0][j] += dp[0][j-1];
     }
-
-    for (int i = 1; i < m; i++)
-    {
-        for (int j = 1; j < n; j++)
-        {
-            dp[i][j] = min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+    // 状态转移： 到达 (i,j) 的最小路径和 = min(来自上方, 来自左方) + 当前格子值
+    for (int i = 1; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + grid[i][j];
         }
     }
-    return dp[m - 1][n - 1];
+    return dp[m-1][n-1];
 }
 ```
 
@@ -3770,9 +3784,7 @@ vector<vector<int>> generate(int numRows) {
     }
     return result;
 }
-
-
-
+ 
 vector<vector<int>> generate(int numRows) 
 {
     vector<vector<int>> res(numRows, vector<int>());
@@ -3791,14 +3803,23 @@ vector<vector<int>> generate(int numRows)
 ##### [120. 三角形最小路径和](https://leetcode-cn.com/problems/triangle/) #todo 2023 1027
 
 ```c++
-int minimumTotal(vector<vector<int>>& triangle) 
-{
+int minimumTotal(vector<vector<int>>& triangle) {
     int n = triangle.size();
-    for (int i = n-2; i >=0; --i)
-    {
-        for (int j = 0; j <= i;  j++)
-        {
-            triangle[i][j] += min(triangle[i+1][j+1], triangle[i+1][j]);
+    vector<int> dp = triangle.back(); // 初始化为最后一行
+    for (int i = n - 2; i >= 0; i--) {
+        for (int j = 0; j <= i; j++) {
+            dp[j] = triangle[i][j] + min(dp[j], dp[j+1]);
+        }
+    }
+    return dp[0];
+}
+
+int minimumTotal(vector<vector<int>>& triangle) {
+    int n = triangle.size();
+    // 从倒数第二层开始往上更新
+    for (int i = n - 2; i >= 0; i--) {
+        for (int j = 0; j < triangle[i].size(); j++) {
+            triangle[i][j] += min(triangle[i+1][j], triangle[i+1][j+1]);
         }
     }
     return triangle[0][0];
@@ -3869,34 +3890,26 @@ bool canJump(vector<int>& nums) {
 
 ```c++
 int numDecodings(string s) {
-  int n = s.size();
-  if (n <= 0  || s[0] == '0')
-      return 0;
+    int n = s.size();
+    if (n == 0 || s[0] == '0') return 0;
 
-  // dp[i] 表示 s[0...i-1]数字的组合数目
-  vector<int> dp(n+1, 0);
+    vector<int> dp(n + 1, 0);
+    dp[0] = 1;           // 空字符串有 1 种解码方式
+    dp[1] = 1;           // 第一个字符不是 '0'，就有 1 种解码方式
 
-  dp[0] = 1;
-  dp[1] = s[0] != '0' ? 1 : 0;
+    for (int i = 2; i <= n; i++) {
+        int oneDigit = s[i - 1] - '0';              // 单个数字
+        int twoDigits = (s[i - 2] - '0') * 10 + oneDigit; // 两位数字
 
-  for(int i = 2; i <= n; i++)
-  {
-      int d1 = s[i-1] - '0';
-      int d2 = s[i-2] - '0';
-      int num = d2*10 + d1;
-      // 前两个可以构成数字 前一个不行
-      if ((num >= 10 && num <= 26) && (d1 < 1 ||  d1 >9))
-          dp[i] = dp[i-2];
+        // 如果单个数字合法（1~9），加上 dp[i-1]
+        if (oneDigit >= 1 && oneDigit <= 9)
+            dp[i] += dp[i - 1];
 
-      // 前两个不可以可以构成数字 前一个可以
-      if ((num < 10 || num > 26) && (d1 >= 1 && d1 <= 9))
-          dp[i] = dp[i-1];
-
-      // 都可以
-      if ((num >= 10 && num <= 26) && (d1 >= 1 && d1 <= 9))
-          dp[i] = dp[i-1] + dp[i-2];
-  }
-  return dp[n];
+        // 如果两位数字合法（10~26），加上 dp[i-2]
+        if (twoDigits >= 10 && twoDigits <= 26)
+            dp[i] += dp[i - 2];
+    }
+    return dp[n];
 }
 ```
 
@@ -3906,26 +3919,30 @@ int numDecodings(string s) {
 // 解法1:
 int minCut(string s)
 {
-  if (s.empty())
-  return 0;
-  int n = s.size();
-  vector<vector<bool>> p(n, vector<bool>(n)); //p[i][j] 表示区间 [i, j] 内的子串是否为回文串，
-  vector<int> dp(n, INT_MAX); // dp[i]表示子串 [0...i] 范围内的最小分割数
-  // 两个for循环 子串
-  for (int j = 0; j < n; j++)
-  {
-      // dp[j] = j;
-      for(int i = 0; i <= j; i++)
-      {
-          p[i][j] = s[i] == s[j] && (j - i < 2 || p[i+1][j-1]);
-
-          if (p[i][j])
-          {
-              dp[j] = (i == 0) ? 0 : min(dp[i-1] + 1, dp[j]);
-          }
-      }
-  }
-  return dp[n-1];
+    if (s.empty())
+        return 0; // 空字符串不需要分割
+    int n = s.size();
+    vector<vector<bool>> p(n, vector<bool>(n, false)); // p[i][j] 表示子串 s[i..j] 是否是回文
+    vector<int> dp(n, INT_MAX); // dp[i] 表示子串 s[0..i] 的最少分割次数
+    for (int j = 0; j < n; j++) // 枚举右端点 j
+    { 
+        for (int i = 0; i <= j; i++) // 枚举左端点 i，判断 s[i..j] 是否是回文
+        {
+            // 回文判断： 1. 首尾字符相等 s[i] == s[j]
+            // 2. 子串长度 <=2 或者中间子串 s[i+1..j-1] 是回文
+            p[i][j] = (s[i] == s[j]) && (j - i < 2 || p[i + 1][j - 1]);
+            if (p[i][j]) // 如果 s[i..j] 是回文
+            {
+                if (i == 0)
+                    dp[j] = 0; // 整段回文，从开头到 j 不需要切割
+                else
+                    // dp[i-1] 表示 s[0..i-1] 的最少分割次数
+                    // 加上当前回文 s[i..j] 之后，可能需要一次分割
+                    dp[j] = min(dp[j], dp[i - 1] + 1); 
+            }
+        }
+    }
+    return dp[n - 1]; // 返回整个字符串 s[0..n-1] 的最少分割次数
 }
 
 
@@ -3960,33 +3977,26 @@ int minCut_2(string s)
 ##### [139. 单词拆分](https://leetcode-cn.com/problems/word-break/) #TODO 20210415
 
 ```c++
-bool wordBreak(string s, vector<string> &wordDict)
-{
+bool wordBreak(string s, vector<string>& wordDict) {   
     if (wordDict.size() == 0)
-        return false;
-
+        return false; // 字典为空，无法拆分
     int n = s.size();
-    // bool dp[n+1];
-    vector<bool> dp(n + 1, false);
-    dp[0] = true;
-    //其中 dp[i] 表示子串 s[0...i-1] 内的子串是否可以拆分
-    // 子串
-  	//要遍历所有的子串，
-    // 用j把 [0, i) 范围内的子串分为了两部分，
-    // [0, j) 和 [j, i)，其中范围 [0, j) 就是 dp[j]，
-    // 范围 [j, i) 就是 s.substr(j, i-j)，其中 dp[j] 是之前的状态
-    for (int i = 1; i <= n; i++)
+    // dp[i] 表示子串 s[0..i-1] 是否可以拆分成字典中的单词
+    vector<int> dp(n+1, false);
+    dp[0] = true; // 空字符串可以拆分
+    for(int i = 1; i <= n; i++) // 枚举右端点 i
     {
-        for (int j = 0; j < i; j++)
+        for(int j = 0; j < i; j++) // 枚举分割点 j，判断 s[0..i-1] 是否可以拆分
         {
-            if (dp[j] && count(wordDict.begin(), wordDict.end(), s.substr(j, i - j)) != 0)
-            {
-                dp[i] = true;
-                break;
+            // 条件： 1. s[0..j-1] 可以拆分 (dp[j] == true)
+            // 2. s[j..i-1] 在字典中
+            if (dp[j] && count(wordDict.begin(), wordDict.end(), s.substr(j, i - j)) != 0)						{
+                dp[i] = true; // s[0..i-1] 可以拆分
+                break; // 找到一种拆分即可，不需要继续枚举 j
             }
         }
     }
-    return dp[n];
+    return dp[n]; // 整个字符串是否可以拆分
 }
 ```
 
@@ -3997,17 +4007,18 @@ int numSquares(int n)
 {
     if (n <= 0)
         return 0;
-    // dp[i] 表示数字i最少有几个平方数的和
+    // dp[i] 表示数字 i 最少由几个完全平方数组成
     vector<int> dp(n + 1, INT_MAX);
-    dp[0] = 0;
-    for (int i = 1; i <= n; i++)
+    dp[0] = 0; // 0 可以表示为 0 个平方数
+    for (int i = 1; i <= n; i++)  // 枚举从 1 到 n 的每个数字 i
     {
-        for (int j = 1; j * j <= i; j++)
+        for (int j = 1; j * j <= i; j++) // 枚举所有小于等于 i 的平方数 j*j
         {
+            // 状态转移：  用平方数 j*j 加上剩余数字 i - j*j 的最少平方数个数
             dp[i] = min(dp[i], dp[i - j * j] + 1);
         }
     }
-    return dp[n];
+    return dp[n]; // 返回数字 n 的最少平方数个数
 }
 ```
 
@@ -4017,26 +4028,28 @@ int numSquares(int n)
 int lengthOfLIS(vector<int>& nums) 
 {
     if (nums.empty())
-            return 0;
-  	// dp[i] 为考虑前 i 个元素，以第 i 个数字结尾的最长上升子序列的长度，注意 nums[i]必须被选取。
+        return 0;
+    // dp[i] 表示考虑前 i 个元素，以 nums[i] 结尾的最长上升子序列长度
     vector<int> dp(nums.size(), 0);
-    // dp[0] =0;
-    int res= INT_MIN;
+    int res = INT_MIN; // 最终结果，整个数组的最长上升子序列长度
+    // 枚举每个元素作为子序列的结尾
     for(int i = 0; i < nums.size(); i++)
     {
-        dp[i] = 1;
+        dp[i] = 1; // 至少包含自己，长度为 1
+        // 枚举 i 前面的所有元素，寻找比 nums[i] 小的元素
         for(int j = 0; j < i; j++)
         {
-            if(nums[i] > nums[j])
+            if(nums[j] < nums[i])
             {
-                dp[i] = max(dp[i], dp[j]+1);
+                // 如果 nums[i] 可以接在 nums[j] 后面，更新 dp[i]
+                dp[i] = max(dp[i], dp[j] + 1);
             }
         }
+        // 更新全局最长子序列长度
         res = max(res, dp[i]);
     }
-    return res;
+    return res; // 返回整个数组的最长上升子序列长度
 }
-
 ```
 
 ##### [343. 整数拆分](https://leetcode.cn/problems/integer-break/)
@@ -4044,21 +4057,25 @@ int lengthOfLIS(vector<int>& nums)
 ```c++
 int integerBreak(int n) {
     if (n <= 2)
-    return 1;
+        return 1; // n=2 时只能拆分为 1+1，乘积为 1
 
-    // dp[i] 表示分拆数字i能得到的最大乘积
-    vector<int> dp(n+1, 0);
-        // 对于每个i，需要遍历所有小于i的数字，因为这些都是潜在的拆分情况，对于任意小于i的数字j，首先计算拆分为两个数字的乘积，即j乘以 i-j
-  // 拆分为多个数字的情况，这里就要用到 dp[i-j] 了，这个值表示数字 i-j 任意拆分可得到的最大乘积，再乘以j就是数字i可拆分得到的乘积，取二者的较大值来更新 dp[i]
-    for(int i = 3; i <= n; i++)
+    // dp[i] 表示整数 i 拆分后的最大乘积
+    vector<int> dp(n + 1, 0);
+
+    // 从 3 开始计算每个数字的最大乘积
+    for (int i = 3; i <= n; i++)
     {
-        for (int j = 0; j < i; j++)
+        // 枚举拆分点 j，表示将 i 拆分为 j + (i-j)
+        for (int j = 1; j < i; j++)
         {
-            dp[i] = max(max(dp[i], j*dp[i-j]), j*(i-j)); //dp[i] = max(dp[i], j*dp[i-j],j*(i-j) )
+            // 有两种情况: 1. 拆分为两个数字：j * (i-j)
+            // 2. 拆分为 j + 其他数字的最优拆分：j * dp[i-j]
+            // 取二者的最大值，再与 dp[i] 比较，更新 dp[i]
+            dp[i] = max(dp[i], max(j * dp[i - j], j * (i - j)));
         }
     }
-    return dp[n];
-  }
+    return dp[n]; // 返回 n 拆分后的最大乘积
+}
 ```
 
 ##### [674. 最长连续递增序列](https://leetcode.cn/problems/longest-continuous-increasing-subsequence/)
@@ -4124,29 +4141,6 @@ int maxCoins(vector<int>& nums)
 }
 ```
 
-##### [343. 整数拆分](https://leetcode-cn.com/problems/integer-break/) #todo 20210415
-
-```c++
-int cuttingRope(int n)
-{
-    if (n <= 2)
-        return 1;
-
-    // dp[i] 表示分拆数字i能得到的最大乘积
-    vector<int> dp(n+1, 0);
-		// 对于每个i，需要遍历所有小于i的数字，因为这些都是潜在的拆分情况，对于任意小于i的数字j，首先计算拆分为两个数字的乘积，即j乘以 i-j
-   // 拆分为多个数字的情况，这里就要用到 dp[i-j] 了，这个值表示数字 i-j 任意拆分可得到的最大乘积，再乘以j就是数字i可拆分得到的乘积，取二者的较大值来更新 dp[i]
-    for(int i = 3; i <= n; i++)
-    {
-        for (int j = 0; j < i; j++)
-        {
-            dp[i] = max(max(dp[i], j*dp[i-j]), j*(i-j)); //dp[i] = max(dp[i], j*dp[i-j],j*(i-j) )
-        }
-    }
-    return dp[n];
-}
-```
-
 #### 3.双序列动态规划
 
 **状态: f\[i][j]表示第一个sequence的前i个数字/字符, 配上第二个sequence的前j个;**
@@ -4160,35 +4154,41 @@ int cuttingRope(int n)
 ##### [10. 正则表达式匹配](https://leetcode-cn.com/problems/regular-expression-matching/)
 
 ```c++
-bool isMatch(string s, string p) 
-{
+bool isMatch(string s, string p) {
     int m = s.length();
     int n = p.length();
-    // dp[i][j] 表示 s[0...i-1]和p[0...j-1] 匹配
+
+    // dp[i][j] 表示 s[0..i-1] 与 p[0..j-1] 是否匹配
     vector<vector<bool>> dp(m + 1, vector<bool>(n + 1, false));
-    
-    dp[0][0] = true;
-    for (int i = 1; i <= m; i++)
-        dp[i][0] = false;
-    
-    for(int j = 1; j <= n; j++)
-    {
-        dp[0][j] = j > 1 && '*' == p[j - 1] && dp[0][j - 2];
-    }
-    
+
+    dp[0][0] = true; // 空字符串与空模式匹配
+
+    // s 不为空，p 为空 → 不匹配
     for(int i = 1; i <= m; i++)
-    {
-        for(int j = 1; j <= n; j++)
-        {
-            if (p[j-1] != '*') // 如果p[j-1]的位置不是*的情况下， 如果s[i-1] == p[j-1] || p[j-1] == '.'， 则dp[i][j] 匹配
+        dp[i][0] = false;
+
+    // s 为空，p 不为空
+    for(int j = 1; j <= n; j++)
+        // p[j-1] 是 '*' 且前面模式能匹配空字符串（dp[0][j-2]）
+        dp[0][j] = j > 1 && p[j-1] == '*' && dp[0][j-2];
+
+    // 枚举字符串 s 的每个字符
+    for(int i = 1; i <= m; i++) {
+        // 枚举模式 p 的每个字符
+        for(int j = 1; j <= n; j++) {
+            if (p[j-1] != '*') {
+                // 当前字符不是 '*'，匹配条件: 1. 前面部分匹配 dp[i-1][j-1] 
+                // 2. 当前字符相等或者模式是 '.' 
                 dp[i][j] = dp[i-1][j-1] && (s[i-1] == p[j-1] || p[j-1] == '.');
-            else  // // (s[i-1] == p[j-2] || '.' == p[j-2]) && dp[i-1][j]; 可以认为p[j-1]直接丢掉
-            {
-                dp[i][j] = dp[i][j-2] || (s[i-1] == p[j-2] || '.' == p[j-2]) && dp[i-1][j];
-            }            
+            }
+            else {
+                // 当前字符是 '*'，匹配条件: 1. '*' 表示出现 0 次：dp[i][j-2]
+                // 2. '*' 表示出现 >=1 次，且前一个字符匹配：dp[i-1][j] && (s[i-1] == p[j-2] || p[j-2] == '.')
+                dp[i][j] = dp[i][j-2] || ((s[i-1] == p[j-2] || p[j-2] == '.') && dp[i-1][j]);
+            }
         }
     }
-    return dp[m][n];
+    return dp[m][n]; // 整个字符串是否与整个模式匹配
 }
 ```
 
@@ -5479,10 +5479,6 @@ for (int i = 2; i <= K; ++i) {
 return dp[K][N];
 }
 ```
-
-
-
-
 
 https://leetcode.cn/problems/pile-box-lcci/solution/ti-mu-zong-jie-zui-chang-shang-sheng-zi-7jfd3/
 
