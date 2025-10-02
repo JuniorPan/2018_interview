@@ -4052,6 +4052,82 @@ int lengthOfLIS(vector<int>& nums)
 }
 ```
 
+[1626. 无矛盾的最佳球队](https://leetcode.cn/problems/best-team-with-no-conflicts/)
+
+```c++
+int bestTeamScore(vector<int>& scores, vector<int>& ages) {
+    int n = scores.size();
+    vector<pair<int,int>> people(n);
+    for (int i = 0; i < n; i++) {
+        people[i] = {ages[i], scores[i]};
+    }
+    // 按年龄升序；如果年龄一样，按分数升序
+    sort(people.begin(), people.end(), [](const pair<int,int>& a, const pair<int,int>& b){
+        if (a.first != b.first) return a.first < b.first;
+        return a.second < b.second;
+    });
+
+    vector<int> dp(n, 0);
+    int answer = 0;
+
+    for (int i = 0; i < n; i++) {
+        int age_i = people[i].first;
+        int score_i = people[i].second;
+        dp[i] = score_i;  // 至少可以自己做团队
+        for (int j = 0; j < i; j++) {
+            int age_j = people[j].first;
+            int score_j = people[j].second;
+            // 因为排序保证 age_j ≤ age_i，
+            // 我们只需要确保 score_j ≤ score_i 才不会冲突
+            if (score_j <= score_i) {
+                dp[i] = max(dp[i], dp[j] + score_i);
+            }
+        }
+        answer = max(answer, dp[i]);
+    }
+    return answer;
+}
+```
+
+##### [两个长度相同的数组score和weight](重点中的重点)
+
+```c++
+class Solution {
+public:
+    int maxIncreasingScore(vector<int>& score, vector<int>& weight) {
+        int n = score.size();
+        vector<int> dp(n, 0);  // dp[i] = 以 i 结尾的最大 score 和
+        int ans = 0;           // 最终答案
+
+        for (int i = 0; i < n; i++) {
+            dp[i] = score[i];  // 至少可以选自己
+            // 枚举前面所有元素，尝试接在它们后面
+            for (int j = 0; j < i; j++) {
+                // 必须严格递增：score[j] < score[i] 且 weight[j] < weight[i]
+                if (score[j] < score[i] && weight[j] < weight[i]) {
+                    dp[i] = max(dp[i], dp[j] + score[i]);
+                }
+            }
+            ans = max(ans, dp[i]); // 更新全局最大值
+        }
+        return ans;
+    }
+};
+int main() {
+    Solution sol;
+
+    // 示例
+    vector<int> score = {6, 7, 8, 3, 5};
+    vector<int> weight = {4, 5, 3, 1, 2};
+
+    cout << sol.maxIncreasingScore(score, weight) << endl; 
+    // 输出 13，对应选择 (6,4) 和 (7,5)
+
+    return 0;
+}
+
+```
+
 ##### [343. 整数拆分](https://leetcode.cn/problems/integer-break/)
 
 ```c++
