@@ -4092,6 +4092,25 @@ int bestTeamScore(vector<int>& scores, vector<int>& ages) {
 ##### [两个长度相同的数组score和weight](重点中的重点)
 
 ```c++
+#include <bits/stdc++.h>
+using namespace std;
+
+/*
+题目：
+- 给两个数组 score 和 weight，长度相同
+- 选择若干元素，要求选出的元素在 score 和 weight 两个维度都严格递增
+  (即如果 score[i] > score[j]，那么必须有 weight[i] > weight[j])
+- 目标：最大化所选元素的 score 之和
+
+思路：
+- 这是一个二维 LIS (Longest Increasing Subsequence) 问题的“最大和”变体
+- 我们需要在原顺序上挑选子序列（不能排序打乱）
+- 用 DP 求解：
+    dp[i] = 以第 i 个元素结尾的合法子序列的最大 score 和
+    转移：dp[i] = score[i] + max(dp[j])，其中 j < i 且 score[j] < score[i] 且 weight[j] < weight[i]
+- 答案 = max(dp[i])
+*/
+
 class Solution {
 public:
     int maxIncreasingScore(vector<int>& score, vector<int>& weight) {
@@ -4113,6 +4132,7 @@ public:
         return ans;
     }
 };
+
 int main() {
     Solution sol;
 
